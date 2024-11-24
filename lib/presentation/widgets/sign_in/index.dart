@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../core/locales/localizations.dart';
-import '../../core/routes/route.dart';
+import '../../../core/locales/localizations.dart';
+import '../../../core/routes/route.dart';
 
-class IndexPage extends StatelessWidget {
+class IndexWidget extends StatelessWidget {
+  const IndexWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -14,12 +17,12 @@ class IndexPage extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context).translate('index_title'),
-                style: Theme.of(context).textTheme.titleLarge,
+                style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 30),
               Text(
                 AppLocalizations.of(context).translate('index_description'),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),

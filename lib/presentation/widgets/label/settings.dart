@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
-class LabelWidget extends StatelessWidget {
+class SettingsLabelWidget extends StatelessWidget {
   final List<Map<String, dynamic>> label;
 
-  const LabelWidget({Key? key, required this.label}) : super(key: key);
+  const SettingsLabelWidget({
+    Key? key,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +16,13 @@ class LabelWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildTitle(context: context, text: category['title'] as String),
+            buildTitle(context, category['title'] as String),
             ...category['content'].map<Widget>((item) {
               return buildContent(
-                context: context,
-                icon: item['icon'] as IconData,
-                text: item['text'] as String,
-                onTap: item['onTap'],
+                context,
+                item['icon'] as IconData,
+                item['text'] as String,
+                item['onTap'],
               );
             }).toList(),
           ],
@@ -28,25 +31,28 @@ class LabelWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTitle({required BuildContext context, required String text}) {
+  Widget buildTitle(
+    BuildContext context,
+    String text,
+  ) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 16, bottom: 8),
       child: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .bodyMedium
-            ?.copyWith(color: Theme.of(context).secondaryHeaderColor),
+        style: theme.textTheme.bodyMedium
+            ?.copyWith(color: theme.secondaryHeaderColor),
       ),
     );
   }
 
-  Widget buildContent({
-    required BuildContext context,
-    required dynamic icon,
-    required String text,
+  Widget buildContent(
+    BuildContext context,
+    dynamic icon,
+    String text,
     dynamic onTap,
-  }) {
+  ) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
         if (onTap != null) {
@@ -60,7 +66,7 @@ class LabelWidget extends StatelessWidget {
       child: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Theme.of(context).appBarTheme.backgroundColor,
+          color: theme.appBarTheme.backgroundColor,
           border: Border(
             bottom: BorderSide(
               color: Colors.white.withOpacity(0.6),
@@ -74,7 +80,7 @@ class LabelWidget extends StatelessWidget {
             children: [
               icon != null ? Icon(icon) : const SizedBox.shrink(),
               const SizedBox(width: 12),
-              Text(text, style: Theme.of(context).textTheme.bodySmall),
+              Text(text, style: theme.textTheme.bodySmall),
             ],
           ),
         ),

@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/locales/localizations.dart';
-import '../../core/routes/route.dart';
-import '../../data/datasources/remote/api_config.dart';
-import '../blocs/bottom_nav_cubit.dart';
-import '../blocs/locale_cubit.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/label.dart';
-import '../widgets/nar_bar.dart';
+import '../../../core/locales/localizations.dart';
+import '../../../core/routes/route.dart';
+import '../../../data/datasources/remote/api_config.dart';
+import '../../blocs/bottom_nav.dart';
+import '../../blocs/locale.dart';
+import '../../widgets/bar/app.dart';
+import '../../widgets/bar/bottom_navigation.dart';
+import '../../widgets/label/settings.dart';
 
 class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    context.read<BottomNavCubit>().updateIndex(2);
-
     return Scaffold(
       appBar: AppBarWidget(
         menu: {
           AppLocalizations.of(context).translate('setting_title'): null,
         },
       ),
-      body: LabelWidget(
+      body: SettingsLabelWidget(
         label: [
           {
             'title': AppLocalizations.of(context)
@@ -102,7 +100,10 @@ class SettingPage extends StatelessWidget {
           },
         ],
       ),
-      bottomNavigationBar: BottomNavigationBarWidget(),
+      bottomNavigationBar: BlocProvider(
+        create: (context) => BottomNavCubit(2),
+        child: BottomNavigationBarWidget(),
+      ),
     );
   }
 }

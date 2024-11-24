@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/locales/localizations.dart';
-import '../../domain/usecases/fetch_cards.dart';
-import '../blocs/search_bloc.dart';
-import '../blocs/game_selection_cubit.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/card_label.dart';
+import '../../../core/locales/localizations.dart';
+import '../../../domain/usecases/fetch_cards.dart';
+import '../../blocs/search.dart';
+import '../../widgets/bar/app.dart';
+import '../../widgets/label/card.dart';
 
 class SearchPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
@@ -14,15 +13,17 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentGame = context.watch<GameSelectionCubit>().state;
-    final fetchCardsPageUseCase = FetchCardsPageUseCase(currentGame);
-
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final game = arguments?['game'] ?? '';
+    final isAdd = arguments?['isAdd'] ?? false;
+    final isCustom = arguments?['isCustom'] ?? false;
+    final fetchCardsPageUseCase = FetchCardsPageUseCase(game);
     return BlocProvider(
       create: (_) => SearchBloc(fetchCardsPageUseCase),
       child: Builder(
         builder: (context) {
           final searchBloc = context.read<SearchBloc>();
-
           _scrollController.addListener(() {
             if (_scrollController.position.pixels >=
                     _scrollController.position.maxScrollExtent - 200 &&
@@ -31,7 +32,6 @@ class SearchPage extends StatelessWidget {
               searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
             }
           });
-
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
@@ -59,6 +59,8 @@ class SearchPage extends StatelessWidget {
                             if (index < state.cards.length) {
                               return CardLabelWidget(
                                 card: state.cards[index],
+                                isAdd: isAdd,
+                                isCustom: isCustom,
                               );
                             } else {
                               return const Padding(

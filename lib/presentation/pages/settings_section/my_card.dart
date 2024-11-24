@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../core/locales/localizations.dart';
-import '../widgets/app_bar.dart';
+import '../../../core/locales/localizations.dart';
+import '../../widgets/bar/app.dart';
 
 class MyCardPage extends StatelessWidget {
   @override

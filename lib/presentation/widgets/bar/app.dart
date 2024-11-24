@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Map<dynamic, dynamic> menu;
 
-  const AppBarWidget({Key? key, required this.menu}) : super(key: key);
+  const AppBarWidget({
+    Key? key,
+    required this.menu,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,13 +14,13 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: menu.length == 1
           ? Center(
-              child: buildMenuItem(menu.keys.first, menu.values.first, context),
+              child: buildMenuItem(context, menu.keys.first, menu.values.first),
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: menu.entries
                   .map(
-                    (entry) => buildMenuItem(entry.key, entry.value, context),
+                    (entry) => buildMenuItem(context, entry.key, entry.value),
                   )
                   .toList(),
             ),
@@ -25,36 +28,47 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget buildMenuItem(
-      dynamic menu, dynamic onTapFunction, BuildContext context) {
+    BuildContext context,
+    dynamic menu,
+    dynamic onTapFunction,
+  ) {
+    final theme = Theme.of(context);
     final isTitle = menu == this.menu.keys.elementAt(this.menu.length ~/ 2);
-
     return GestureDetector(
       onTap: () {
         if (onTapFunction != null) {
           if (onTapFunction is String) {
-            (onTapFunction == '/back')
-                ? Navigator.pop(context)
-                : Navigator.pushNamed(context, onTapFunction);
+            if (onTapFunction.startsWith('/back')) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushNamed(
+                context,
+                onTapFunction,
+              );
+            }
+          } else if (onTapFunction is Map<String, dynamic>) {
+            Navigator.pushNamed(
+              context,
+              onTapFunction['route'],
+              arguments: onTapFunction['arguments'],
+            );
           } else if (onTapFunction is VoidCallback) {
             onTapFunction();
           }
         }
       },
       child: Container(
-        width: isTitle ? 140 : 36,
+        width: isTitle ? 140 : 42,
         child: menu is IconData
             ? Icon(menu)
             : menu is String
                 ? Text(
                     menu,
                     style: isTitle
-                        ? Theme.of(context).textTheme.titleMedium
-                        : Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context)
-                                  .appBarTheme
-                                  .iconTheme!
-                                  .color,
-                            ),
+                        ? theme.textTheme.titleMedium
+                        : theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.appBarTheme.iconTheme!.color,
+                          ),
                     textAlign: TextAlign.center,
                   )
                 : menu,

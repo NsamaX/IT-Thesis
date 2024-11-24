@@ -1,19 +1,24 @@
+import 'card.dart';
+
 class DeckModel {
   final String deckId;
   final String deckName;
-  final List<String> tagIds;
+  final List<CardModel> cards;
 
   DeckModel({
     required this.deckId,
     required this.deckName,
-    required this.tagIds,
+    required this.cards,
   });
 
   factory DeckModel.fromJson(Map<String, dynamic> json) {
     return DeckModel(
-      deckId: json['deckId'],
-      deckName: json['deckName'],
-      tagIds: List<String>.from(json['tagIds'] ?? []),
+      deckId: json['deckId'] as String,
+      deckName: json['deckName'] as String,
+      cards: (json['cards'] as List<dynamic>?)
+              ?.map((card) => CardModel.fromJson(card as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
@@ -21,7 +26,7 @@ class DeckModel {
     return {
       'deckId': deckId,
       'deckName': deckName,
-      'tagIds': tagIds,
+      'cards': cards.map((card) => card.toJson()).toList(),
     };
   }
 }

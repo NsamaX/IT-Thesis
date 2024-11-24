@@ -1,6 +1,5 @@
 {
   "baseUrls": {
-    "pokemon": "https://pokemon-api.example.com",
     "vanguard": "https://card-fight-vanguard-api.ue.r.appspot.com/api/v1"
   }
 }

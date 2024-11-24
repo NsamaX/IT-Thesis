@@ -2,11 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/routes/route.dart';
 
 class BottomNavCubit extends Cubit<int> {
-  BottomNavCubit() : super(0);
-
-  void updateIndex(int newIndex) {
-    emit(newIndex);
-  }
+  BottomNavCubit(int initialIndex) : super(initialIndex);
 
   String getRouteForIndex(int index) {
     switch (index) {

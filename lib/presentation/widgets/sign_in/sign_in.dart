@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../core/locales/localizations.dart';
-import '../../core/routes/route.dart';
+import '../../../core/locales/localizations.dart';
+import '../../../core/routes/route.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -14,7 +15,7 @@ class SignInPage extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context).translate('sign_in_title'),
-                style: Theme.of(context).textTheme.titleLarge,
+                style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 52),
               Container(

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../core/locales/localizations.dart';
-import '../widgets/app_bar.dart';
+import '../../../core/locales/localizations.dart';
+import '../../widgets/bar/app.dart';
+import '../../widgets/dialog/tracker.dart';
 
 class TrackPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      showiOSPopup(context);
+    });
+
     return Scaffold(
       appBar: AppBarWidget(
         menu: {
