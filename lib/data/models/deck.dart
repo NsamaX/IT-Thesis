@@ -3,7 +3,7 @@ import 'card.dart';
 class DeckModel {
   final String deckId;
   final String deckName;
-  final List<CardModel> cards;
+  final Map<CardModel, int> cards;
 
   DeckModel({
     required this.deckId,
@@ -15,10 +15,12 @@ class DeckModel {
     return DeckModel(
       deckId: json['deckId'] as String,
       deckName: json['deckName'] as String,
-      cards: (json['cards'] as List<dynamic>?)
-              ?.map((card) => CardModel.fromJson(card as Map<String, dynamic>))
-              .toList() ??
-          [],
+      cards: (json['cards'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(
+          CardModel.fromJson(key as Map<String, dynamic>),
+          value as int,
+        ),
+      ),
     );
   }
 
@@ -26,7 +28,9 @@ class DeckModel {
     return {
       'deckId': deckId,
       'deckName': deckName,
-      'cards': cards.map((card) => card.toJson()).toList(),
+      'cards': cards.map(
+        (key, value) => MapEntry(key.toJson(), value),
+      ),
     };
   }
 }

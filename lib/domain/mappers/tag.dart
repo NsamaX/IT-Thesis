@@ -5,8 +5,8 @@ class TagMapper {
   static TagEntity toEntity(TagModel model) {
     return TagEntity(
       tagId: model.tagId,
-      game: model.game,
       cardId: model.cardId,
+      game: model.game,
       timestamp: model.timestamp,
     );
   }
@@ -14,8 +14,8 @@ class TagMapper {
   static TagModel toModel(TagEntity entity) {
     return TagModel(
       tagId: entity.tagId,
-      game: entity.game,
       cardId: entity.cardId,
+      game: entity.game,
       timestamp: entity.timestamp,
     );
   }

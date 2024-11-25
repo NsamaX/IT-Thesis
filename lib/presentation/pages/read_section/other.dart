@@ -19,7 +19,7 @@ class OtherPage extends StatelessWidget {
       appBar: AppBarWidget(
         menu: {
           Icons.arrow_back_ios_new_rounded: '/back',
-          AppLocalizations.of(context).translate('other_title'): null,
+          AppLocalizations.of(context).translate('other.title'): null,
           null: null,
         },
       ),

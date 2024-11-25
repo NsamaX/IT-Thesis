@@ -35,9 +35,8 @@ class SearchPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
-                Icons.arrow_back_ios_new_rounded: () =>
-                    Navigator.of(context).pop(),
-                AppLocalizations.of(context).translate('search_title'): null,
+                Icons.arrow_back_ios_new_rounded: '/back',
+                AppLocalizations.of(context).translate('search.title'): null,
                 null: null,
               },
             ),
@@ -47,33 +46,29 @@ class SearchPage extends StatelessWidget {
                   searchBloc.add(FetchPageEvent(1));
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is SearchLoaded) {
-                  return Column(
-                    children: [
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount:
-                              state.cards.length + (state.hasNextPage ? 1 : 0),
-                          itemBuilder: (context, index) {
-                            if (index < state.cards.length) {
-                              return CardLabelWidget(
-                                card: state.cards[index],
-                                isAdd: isAdd,
-                                isCustom: isCustom,
-                              );
-                            } else {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 12.0),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                    ],
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount:
+                          state.cards.length + (state.hasNextPage ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index < state.cards.length) {
+                          return CardLabelWidget(
+                            card: state.cards[index],
+                            isAdd: isAdd,
+                            isCustom: isCustom,
+                          );
+                        } else {
+                          return const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   );
                 } else if (state is SearchError) {
                   return Center(

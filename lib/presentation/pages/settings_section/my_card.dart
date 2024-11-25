@@ -9,7 +9,7 @@ class MyCardPage extends StatelessWidget {
       appBar: AppBarWidget(
         menu: {
           Icons.arrow_back_ios_new_rounded: '/back',
-          AppLocalizations.of(context).translate('my_card_title'): null,
+          AppLocalizations.of(context).translate('my_card.title'): null,
           null: null,
         },
       ),

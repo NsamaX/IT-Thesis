@@ -1,40 +1,85 @@
 {
-  "index_title": "デッキトラッカー",
-  "index_description": "NFC技術とこのアプリでカードの管理が簡単になります！スキャンするだけで、デッキ内のカードを追跡し整理できます。デッキの内容を常に把握できるので、ゲームに集中してもっと楽しめます！",
-  "index_button_start": "スタート",
-  "sign_in_title": "ログイン方法を選択",
-  "sign_in_google": "Googleでログイン",
-  "sign_in_guest": "Go",
-  "my_deck_title": "私のデッキ",
-  "new_deck_title": "新しいデッキ",
-  "card_name": "カード名",
-  "card_description": "説明",
-  "card_info_title": "カード情報",
-  "no_card_name": "カード名がありません",
-  "no_card_description": "説明がありません",
-  "no_card_info": "情報がありません",
-  "no_card_image": "画像がありません",
-  "upload_image": "画像をアップロード",
-  "save": "保存",
-  "track_title": "追跡",
-  "dialog_tracker_title": "カード追跡",
-  "dialog_tracker_content": "このページでプレイ中にカードをスキャンできます。カードをスキャンすると、デッキから取り除かれたとカウントされます。同じカードを再度スキャンすると、デッキに戻されます。内容を読んだら「OK」をクリックしてください。",
-  "dialog_tracker_button": "OK",
-  "read_title": "読み取り",
-  "search_title": "検索",
-  "other_title": "その他",
-  "custom_title": "カスタム",
-  "setting_title": "設定",
-  "setting_account_section": "アカウント",
-  "setting_account_email": "ゲスト",
-  "setting_account_my_card": "私のカード",
-  "setting_general_section": "一般",
-  "setting_general_about": "アプリについて",
-  "setting_general_privacy": "プライバシー",
-  "setting_general_sign_in": "ログイン",
-  "setting_general_sign_out": "ログアウト",
-  "setting_support_section": "サポート",
-  "setting_support_language": "言語",
-  "setting_support_donate": "寄付",
-  "my_card_title": "私のカード"
+  "index": {
+    "title": "デッキトラッカー",
+    "description": "NFC技術とこのアプリを使えば、カード管理が簡単に！カードをスキャンしてトラックし、デッキを整理しましょう。デッキの中身が常に分かるので、ゲームに集中してもっと楽しむことができます！",
+    "button": "スタート"
+  },
+  "sign_in": {
+    "title": "次の方法でサインイン",
+    "button": "ゲスト"
+  },
+  "my_deck": {
+    "title": "マイデッキ"
+  },
+  "new_deck": {
+    "title": "新しいデッキ",
+    "dialog": {
+      "share": "デッキログがクリップボードにコピーされました",
+      "delete": {
+        "title": "デッキの削除",
+        "content": "このデッキを本当に削除しますか？",
+        "success": "デッキが正常に削除されました"
+      }
+    }
+  },
+  "track": {
+    "title": "トラック",
+    "dialog": {
+      "title": "カードトラッキング",
+      "content": "このページでプレイ中にカードをスキャンできます。スキャンされたカードはデッキから削除されたと見なされます。同じカードを再度スキャンすると、デッキに戻されます。内容を確認したら「OK」をクリックしてください。"
+    }
+  },
+  "dialog": {
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "ok": "OK"
+  },
+  "card_info": {
+    "title": "カード情報",
+    "add": "追加",
+    "save": "保存",
+    "description": "説明",
+    "no_name": "カード名がありません",
+    "no_description": "説明がありません",
+    "no_image": "画像がありません",
+    "upload_image": "画像をアップロード",
+    "dialog": {
+      "add": "カードが正常に追加されました"
+    }
+  },
+  "read": {
+    "title": "読み取り"
+  },
+  "search": {
+    "title": "検索"
+  },
+  "other": {
+    "title": "その他"
+  },
+  "custom": {
+    "title": "カスタム"
+  },
+  "setting": {
+    "title": "設定",
+    "account": {
+      "title": "アカウント",
+      "email": "メール",
+      "my_card": "私のカード"
+    },
+    "general": {
+      "title": "一般",
+      "about": "アプリについて",
+      "privacy": "プライバシー",
+      "sign_in": "サインイン",
+      "sign_out": "サインアウト"
+    },
+    "support": {
+      "title": "サポート",
+      "language": "言語",
+      "donate": "寄付"
+    }
+  },
+  "my_card": {
+    "title": "マイカード"
+  }
 }

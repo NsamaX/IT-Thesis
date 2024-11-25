@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/card.dart';
 import '../../domain/entities/deck.dart';
@@ -9,6 +10,7 @@ class DeckMangerState {
   final bool isShareEnabled;
   final bool isNfcReadEnabled;
   final bool isDeleteEnabled;
+  final CardEntity? selectedCard;
 
   DeckMangerState({
     required this.deck,
@@ -16,6 +18,7 @@ class DeckMangerState {
     this.isShareEnabled = false,
     this.isNfcReadEnabled = false,
     this.isDeleteEnabled = false,
+    this.selectedCard,
   });
 
   DeckMangerState copyWith({
@@ -24,6 +27,7 @@ class DeckMangerState {
     bool? isShareEnabled,
     bool? isNfcReadEnabled,
     bool? isDeleteEnabled,
+    CardEntity? selectedCard,
   }) {
     return DeckMangerState(
       deck: deck ?? this.deck,
@@ -31,6 +35,7 @@ class DeckMangerState {
       isShareEnabled: isShareEnabled ?? this.isShareEnabled,
       isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
       isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
+      selectedCard: selectedCard ?? this.selectedCard,
     );
   }
 }
@@ -45,7 +50,7 @@ class DeckMangerCubit extends Cubit<DeckMangerState> {
             deck: DeckEntity(
               deckId: 'default',
               deckName: 'Default Deck',
-              cards: [],
+              cards: {},
             ),
           ),
         );
@@ -66,17 +71,41 @@ class DeckMangerCubit extends Cubit<DeckMangerState> {
 
   void toggleEditMode() {
     emit(state.copyWith(isEditMode: !state.isEditMode));
+    emit(state.copyWith(isNfcReadEnabled: false));
   }
 
   void toggleShare() {
-    emit(state.copyWith(isShareEnabled: !state.isShareEnabled));
+    final deck = state.deck;
+
+    final StringBuffer clipboardContent = StringBuffer()
+      ..writeln('Game: ${deck.games.join(", ")}')
+      ..writeln('Deck Name: ${deck.deckName}')
+      ..writeln('Deck ID: ${deck.deckId}')
+      ..writeln('Total Cards: ${deck.totalCards}')
+      ..writeln('\nCards:');
+
+    deck.cards.forEach((card, count) {
+      clipboardContent
+        ..writeln('- ${card.name} (ID: ${card.cardId}) x$count')
+        ..writeln('  Description: ${card.description ?? "N/A"}');
+    });
+
+    Clipboard.setData(ClipboardData(text: clipboardContent.toString()));
+
+    emit(state.copyWith(isShareEnabled: true));
   }
 
   void toggleNfcRead() {
     emit(state.copyWith(isNfcReadEnabled: !state.isNfcReadEnabled));
   }
 
+  void toggleSelectedCard(CardEntity card) {
+    emit(
+        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+  }
+
   void toggleDelete() {
-    emit(state.copyWith(isDeleteEnabled: !state.isDeleteEnabled));
+    final clearedDeck = state.deck.copyWith(cards: {});
+    emit(state.copyWith(deck: clearedDeck, isDeleteEnabled: false));
   }
 }

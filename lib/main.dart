@@ -1,37 +1,50 @@
-// flutter packages
+// Flutter packages
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// project packages
+// Project packages
 import 'core/locales/localizations.dart';
 import 'core/routes/route.dart';
 import 'core/themes/@theme.dart';
 import 'data/datasources/remote/api_config.dart';
+import 'presentation/blocs/deck_manager.dart';
 import 'presentation/blocs/locale.dart';
 
 void main() async {
+  // เตรียม Widgets ก่อนเริ่มแอป
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ล็อคหน้าจอแนวตั้ง
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
+  // โหลดการตั้งค่าของ API
   await ApiConfig.loadConfig();
+
+  // เริ่มต้นแอปพลิเคชัน
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => LocaleCubit(),
+    return MultiBlocProvider(
+      // กำหนด Bloc ที่จะใช้ในแอป
+      providers: [
+        BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()), // ภาษา
+        BlocProvider(create: (context) => DeckMangerCubit()), // การจัดการเด็ค
+      ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, state) {
           return MaterialApp(
+            // แสดง debug banner ในแอปสำหรับช่วงพัฒนา
             debugShowCheckedModeBanner: true,
+
+            // การตั้งค่าภาษา
             locale: state.locale,
             supportedLocales: [
               Locale('en'),
@@ -43,9 +56,12 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+
+            // การตั้งค่าธีม
             theme: themeData(),
-            onGenerateRoute: AppRoutes.generateRoute,
-            initialRoute: AppRoutes.index,
+
+            onGenerateRoute: AppRoutes.generateRoute, // การตั้งค่าเส้นทาง
+            initialRoute: AppRoutes.index, // เส้นทางเริ่มต้น
           );
         },
       ),

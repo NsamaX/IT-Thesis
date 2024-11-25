@@ -30,7 +30,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
           buildItem(
             context,
             null,
-            AppLocalizations.of(context).translate('other_title'),
+            AppLocalizations.of(context).translate('other.title'),
             () {
               Navigator.of(context).pushNamed(AppRoutes.other);
             },
@@ -38,10 +38,10 @@ class FeaturesDrawerWidget extends StatelessWidget {
           buildItem(
             context,
             null,
-            AppLocalizations.of(context).translate('custom_title'),
+            AppLocalizations.of(context).translate('custom.title'),
             () {
               Navigator.of(context).pushNamed(
-                AppRoutes.cardDetail,
+                AppRoutes.cardInfo,
                 arguments: {'isCustom': true},
               );
             },

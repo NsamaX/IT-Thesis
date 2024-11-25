@@ -1,41 +1,85 @@
 {
-  "index_title": "Deck Tracker",
-  "index_description": "With NFC technology and this app, managing your cards is easy! Simply scan, track, and organize the cards in your deck with ease. You'll always know what's in your deck, allowing you to focus and enjoy the game more!",
-  "index_button_start": "Start",
-  "sign_in_title": "Sign in with",
-  "sign_in_google": "Google",
-  "sign_in_guest": "Guest",
-  "my_deck_title": "My Deck",
-  "new_deck_title": "New Deck",
-  "card_name": "Card name",
-  "card_description": "Description",
-  "card_info_title": "Card info",
-  "no_card_name": "No card name",
-  "no_card_description": "No card description",
-  "no_card_info": "No card info",
-  "no_card_image": "No card image",
-  "upload_image": "Upload image",
-  "save": "Save",
-  "track_title": "Track",
-  "dialog_tracker_title": "Card tracking",
-  "dialog_tracker_content":
-      "You can scan cards while playing on this page. When a card is scanned, it will be counted as removed from the deck. If you scan a previously scanned card, it will be added back to the deck. Click OK once you've read this.",
-  "dialog_tracker_button": "OK",
-  "read_title": "Read",
-  "search_title": "Search",
-  "other_title": "Other",
-  "custom_title": "Custom",
-  "setting_title": "Setting",
-  "setting_account_section": "Account",
-  "setting_account_email": "Guess",
-  "setting_account_my_card": "My card",
-  "setting_general_section": "General",
-  "setting_general_about": "About",
-  "setting_general_privacy": "Privacy",
-  "setting_general_sign_in": "Sign in",
-  "setting_general_sign_out": "Sign out",
-  "setting_support_section": "Support",
-  "setting_support_language": "Language",
-  "setting_support_donate": "Donate",
-  "my_card_title": "My Card"
+  "index": {
+    "title": "Deck Tracker",
+    "description": "With NFC technology and this app, managing your cards is easy! Simply scan, track, and organize the cards in your deck with ease. You'll always know what's in your deck, allowing you to focus and enjoy the game more!",
+    "button": "Start"
+  },
+  "sign_in": {
+    "title": "Sign in with",
+    "button": "Guest"
+  },
+  "my_deck": {
+    "title": "My Deck"
+  },
+  "new_deck": {
+    "title": "New Deck",
+    "dialog": {
+      "share": "Deck log copied to clipboard",
+      "delete": {
+        "title": "Delete Deck",
+        "content": "Are you sure you want to delete this deck?",
+        "success": "Deck deleted successfully"
+      }
+    }
+  },
+  "track": {
+    "title": "Track",
+    "dialog": {
+      "title": "Card tracking",
+      "content": "You can scan cards while playing on this page. When a card is scanned, it will be counted as removed from the deck. If you scan a previously scanned card, it will be added back to the deck. Click OK once you've read this."
+    }
+  },
+  "dialog": {
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
+  "card_info": {
+    "title": "Card info",
+    "add": "Add",
+    "save": "Save",
+    "description": "Description",
+    "no_name": "No card name",
+    "no_description": "No card description",
+    "no_image": "No card image",
+    "upload_image": "Upload image",
+    "dialog": {
+      "add": "Card added successfully"
+    }
+  },
+  "read": {
+    "title": "Read"
+  },
+  "search": {
+    "title": "Search"
+  },
+  "other": {
+    "title": "Other"
+  },
+  "custom": {
+    "title": "Custom"
+  },
+  "setting": {
+    "title": "Setting",
+    "account": {
+      "title": "Account",
+      "email": "Email",
+      "my_card": "My card"
+    },
+    "general": {
+      "title": "General",
+      "about": "About",
+      "privacy": "Privacy",
+      "sign_in": "Sign in",
+      "sign_out": "Sign out"
+    },
+    "support": {
+      "title": "Support",
+      "language": "Language",
+      "donate": "Donate"
+    }
+  },
+  "my_card": {
+    "title": "My Card"
+  }
 }

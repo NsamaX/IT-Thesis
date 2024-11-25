@@ -4,6 +4,8 @@ import '../../../core/locales/localizations.dart';
 import '../../blocs/bottom_nav.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
+  const BottomNavigationBarWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BottomNavCubit, int>(
@@ -22,15 +24,15 @@ class BottomNavigationBarWidget extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.web_stories_rounded),
-              label: AppLocalizations.of(context).translate('my_deck_title'),
+              label: AppLocalizations.of(context).translate('my_deck.title'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.insert_page_break_outlined),
-              label: AppLocalizations.of(context).translate('read_title'),
+              label: AppLocalizations.of(context).translate('read.title'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              label: AppLocalizations.of(context).translate('setting_title'),
+              label: AppLocalizations.of(context).translate('setting.title'),
             ),
           ],
           selectedItemColor: theme.secondaryHeaderColor,

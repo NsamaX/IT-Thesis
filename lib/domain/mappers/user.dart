@@ -5,7 +5,7 @@ class UserMapper {
   static UserEntity toEntity(UserModel model) {
     return UserEntity(
       userId: model.userId,
-      userName: model.userName,
+      email: model.email,
       tagIds: model.tagIds,
       deckIds: model.deckIds,
       recordIds: model.recordIds,
@@ -15,7 +15,7 @@ class UserMapper {
   static UserModel toModel(UserEntity entity) {
     return UserModel(
       userId: entity.userId,
-      userName: entity.userName,
+      email: entity.email,
       tagIds: entity.tagIds,
       deckIds: entity.deckIds,
       recordIds: entity.recordIds,

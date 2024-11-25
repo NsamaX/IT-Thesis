@@ -3,25 +3,25 @@ import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
 
 class IndexWidget extends StatelessWidget {
-  const IndexWidget({super.key});
+  const IndexWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                AppLocalizations.of(context).translate('index_title'),
+                AppLocalizations.of(context).translate('index.title'),
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 30),
               Text(
-                AppLocalizations.of(context).translate('index_description'),
+                AppLocalizations.of(context).translate('index.description'),
                 style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -33,8 +33,7 @@ class IndexWidget extends StatelessWidget {
                     Navigator.pushNamed(context, AppRoutes.signIn);
                   },
                   child: Text(
-                    AppLocalizations.of(context)
-                        .translate('index_button_start'),
+                    AppLocalizations.of(context).translate('index.button'),
                   ),
                 ),
               ),

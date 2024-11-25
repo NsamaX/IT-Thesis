@@ -7,73 +7,91 @@ import '../../blocs/deck_manager.dart';
 
 class CardWidget extends StatelessWidget {
   final CardEntity card;
+  final int count;
 
   const CardWidget({
     Key? key,
     required this.card,
+    required this.count,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isSelected =
+        context.watch<DeckMangerCubit>().state.selectedCard == card;
+    final isNfcReadEnabled =
+        context.watch<DeckMangerCubit>().state.isNfcReadEnabled;
     return Stack(
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed(
-              AppRoutes.cardDetail,
-              arguments: {'card': card},
-            );
+            if (isNfcReadEnabled) {
+              context.read<DeckMangerCubit>().toggleSelectedCard(card);
+            } else {
+              Navigator.of(context).pushNamed(
+                AppRoutes.cardInfo,
+                arguments: {'card': card},
+              );
+            }
           },
           child: AspectRatio(
             aspectRatio: 3 / 4,
-            child: Card(
-              elevation: 4,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: card.imageUrl != null
-                    ? Image.network(card.imageUrl!)
-                    : Container(
-                        color: theme.appBarTheme.backgroundColor,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.image_not_supported,
-                                size: 36,
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                AppLocalizations.of(context)
-                                    .translate('no_card_image'),
-                                style: theme.textTheme.bodySmall,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+            child: Opacity(
+              opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
+              child: Card(
+                elevation: 4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: card.imageUrl != null
+                      ? Image.network(card.imageUrl!, fit: BoxFit.cover)
+                      : Container(
+                          color: theme.appBarTheme.backgroundColor,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.image_not_supported,
+                                  size: 36,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  AppLocalizations.of(context)
+                                      .translate('no_card_image'),
+                                  style: theme.textTheme.bodySmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                ),
               ),
             ),
           ),
         ),
-        if (!context.watch<DeckMangerCubit>().state.isEditMode)
+        if (context.watch<DeckMangerCubit>().state.isEditMode &&
+            !isNfcReadEnabled)
           Positioned(
             top: 0,
             right: 0,
             child: Column(
               children: [
-                buildCardCountDisplay(context, 1),
-                buildCircleButton(
+                buildCount(context, count),
+                buildButton(
                   context,
                   Icons.add,
-                  () {},
+                  () {
+                    context.read<DeckMangerCubit>().addCard(card);
+                  },
                 ),
-                buildCircleButton(
+                buildButton(
                   context,
                   Icons.remove,
-                  () {},
+                  () {
+                    context.read<DeckMangerCubit>().removeCard(card);
+                  },
                 ),
               ],
             ),
@@ -82,7 +100,7 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCardCountDisplay(
+  Widget buildCount(
     BuildContext context,
     int count,
   ) {
@@ -106,7 +124,7 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCircleButton(
+  Widget buildButton(
     BuildContext context,
     IconData icon,
     VoidCallback onPressed,

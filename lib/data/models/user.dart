@@ -1,13 +1,13 @@
 class UserModel {
   final String userId;
-  final String userName;
+  final String email;
   final List<String> tagIds;
   final List<String> deckIds;
   final List<String> recordIds;
 
   UserModel({
     required this.userId,
-    required this.userName,
+    required this.email,
     required this.tagIds,
     required this.deckIds,
     required this.recordIds,
@@ -16,7 +16,7 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       userId: json['userId'],
-      userName: json['userName'],
+      email: json['email'],
       tagIds: List<String>.from(json['tagIds'] ?? []),
       deckIds: List<String>.from(json['deckIds'] ?? []),
       recordIds: List<String>.from(json['recordIds'] ?? []),
@@ -26,7 +26,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
-      'userName': userName,
+      'email': email,
       'tagIds': tagIds,
       'deckIds': deckIds,
       'recordIds': recordIds,

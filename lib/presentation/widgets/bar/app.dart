@@ -14,20 +14,20 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: menu.length == 1
           ? Center(
-              child: buildMenuItem(context, menu.keys.first, menu.values.first),
+              child: buildMenu(context, menu.keys.first, menu.values.first),
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: menu.entries
                   .map(
-                    (entry) => buildMenuItem(context, entry.key, entry.value),
+                    (entry) => buildMenu(context, entry.key, entry.value),
                   )
                   .toList(),
             ),
     );
   }
 
-  Widget buildMenuItem(
+  Widget buildMenu(
     BuildContext context,
     dynamic menu,
     dynamic onTapFunction,

@@ -14,21 +14,30 @@ class AppLocalizations {
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();
 
-  Map<String, String> _localizedStrings = {};
+  late Map<String, dynamic> localizedStrings;
 
   Future<bool> load() async {
     String jsonString = await rootBundle
         .loadString('assets/locales/${locale.languageCode}.json');
-    Map<String, dynamic> jsonMap = json.decode(jsonString);
-
-    _localizedStrings =
-        jsonMap.map((key, value) => MapEntry(key, value.toString()));
-
+    localizedStrings = json.decode(jsonString);
     return true;
   }
 
   String translate(String key) {
-    return _localizedStrings[key] ?? key;
+    try {
+      List<String> keys = key.split('.');
+      dynamic value = localizedStrings;
+      for (String k in keys) {
+        if (value is Map<String, dynamic> && value.containsKey(k)) {
+          value = value[k];
+        } else {
+          return key;
+        }
+      }
+      return value.toString();
+    } catch (e) {
+      return key;
+    }
   }
 }
 

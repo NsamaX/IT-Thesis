@@ -20,22 +20,20 @@ class CardDetailsWidget extends StatelessWidget {
       padding: const EdgeInsets.all(40),
       child: ListView(
         children: [
-          isCustom
-              ? _buildDottedBorder(context)
-              : _buildCardImage(context, card),
+          isCustom ? buildDottedBorder(context) : buildImage(context, card),
           const SizedBox(height: 26),
           Text(
-            AppLocalizations.of(context).translate('card_description'),
+            AppLocalizations.of(context).translate('card_info.description'),
             style: theme.textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
-          _buildDescription(context, card, isCustom),
+          buildDescription(context, card, isCustom),
         ],
       ),
     );
   }
 
-  Widget _buildDottedBorder(BuildContext context) {
+  Widget buildDottedBorder(BuildContext context) {
     final theme = Theme.of(context);
     return AspectRatio(
       aspectRatio: 3 / 4,
@@ -52,7 +50,8 @@ class CardDetailsWidget extends StatelessWidget {
               const Icon(Icons.upload_rounded, size: 36),
               const SizedBox(height: 12),
               Text(
-                AppLocalizations.of(context).translate('upload_image'),
+                AppLocalizations.of(context)
+                    .translate('card_info.upload_image'),
                 style: theme.textTheme.titleSmall,
               ),
             ],
@@ -62,7 +61,7 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCardImage(
+  Widget buildImage(
     BuildContext context,
     CardEntity? card,
   ) {
@@ -92,7 +91,7 @@ class CardDetailsWidget extends StatelessWidget {
             const Icon(Icons.image_not_supported, size: 36),
             const SizedBox(height: 8),
             Text(
-              AppLocalizations.of(context).translate('no_card_image'),
+              AppLocalizations.of(context).translate('card_info.no_image'),
               style: theme.textTheme.titleSmall,
             ),
           ],
@@ -101,7 +100,7 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(
+  Widget buildDescription(
     BuildContext context,
     CardEntity? card,
     bool isCustom,
@@ -120,17 +119,14 @@ class CardDetailsWidget extends StatelessWidget {
     }
 
     if (card == null) {
-      return _buildDescriptionText(
-        context,
-        AppLocalizations.of(context).translate('no_card_info'),
-      );
+      return Container();
     }
 
     if (card.additionalData == null) {
       return _buildDescriptionText(
         context,
         card.description ??
-            AppLocalizations.of(context).translate('no_card_description'),
+            AppLocalizations.of(context).translate('card_info.no_description'),
       );
     }
 

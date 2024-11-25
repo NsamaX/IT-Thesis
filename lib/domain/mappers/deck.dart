@@ -7,7 +7,12 @@ class DeckMapper {
     return DeckEntity(
       deckId: model.deckId,
       deckName: model.deckName,
-      cards: model.cards.map(CardMapper.toEntity).toList(),
+      cards: model.cards.map(
+        (key, value) => MapEntry(
+          CardMapper.toEntity(key),
+          value,
+        ),
+      ),
     );
   }
 
@@ -15,7 +20,12 @@ class DeckMapper {
     return DeckModel(
       deckId: entity.deckId,
       deckName: entity.deckName,
-      cards: entity.cards.map(CardMapper.toModel).toList(),
+      cards: entity.cards.map(
+        (key, value) => MapEntry(
+          CardMapper.toModel(key),
+          value,
+        ),
+      ),
     );
   }
 }

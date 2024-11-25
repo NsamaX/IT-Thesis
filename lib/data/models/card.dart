@@ -1,5 +1,6 @@
 class CardModel {
   final String cardId;
+  final String game;
   final String name;
   final String? description;
   final String? imageUrl;
@@ -7,6 +8,7 @@ class CardModel {
 
   CardModel({
     required this.cardId,
+    required this.game,
     required this.name,
     this.description,
     this.imageUrl,
@@ -16,6 +18,7 @@ class CardModel {
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
       cardId: json['cardId'],
+      game: json['game'],
       name: json['name'],
       description: json['description'],
       imageUrl: json['imageUrl'],
@@ -28,6 +31,7 @@ class CardModel {
   Map<String, dynamic> toJson() {
     return {
       'cardId': cardId,
+      'game': game,
       'name': name,
       'description': description,
       'imageUrl': imageUrl,

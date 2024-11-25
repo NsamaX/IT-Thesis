@@ -24,6 +24,7 @@ class VanguardApi implements GameApi {
   Map<String, dynamic> _parseCardData(Map<String, dynamic> cardData) {
     return {
       'cardId': cardData['id']?.toString() ?? '',
+      'game': 'vanguard',
       'name': cardData['name'] ?? '',
       'description': cardData['format'] ?? '',
       'imageUrl': cardData['imageurljp'] ?? '',

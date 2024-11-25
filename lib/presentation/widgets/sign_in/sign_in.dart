@@ -3,18 +3,20 @@ import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
 
 class SignInWidget extends StatelessWidget {
+  const SignInWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                AppLocalizations.of(context).translate('sign_in_title'),
+                AppLocalizations.of(context).translate('sign_in.title'),
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 52),
@@ -47,7 +49,7 @@ class SignInWidget extends StatelessWidget {
                     );
                   },
                   child: Text(
-                    AppLocalizations.of(context).translate('sign_in_guest'),
+                    AppLocalizations.of(context).translate('sign_in.button'),
                   ),
                 ),
               ),

@@ -5,6 +5,7 @@ import '../../../domain/entities/card.dart';
 
 class CardLabelWidget extends StatelessWidget {
   final CardEntity? card;
+  final int? count;
   final bool isAdd;
   final bool isCustom;
   final bool lightTheme;
@@ -12,6 +13,7 @@ class CardLabelWidget extends StatelessWidget {
   const CardLabelWidget({
     Key? key,
     this.card,
+    this.count,
     this.isAdd = false,
     this.isCustom = false,
     this.lightTheme = false,
@@ -25,8 +27,8 @@ class CardLabelWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
-          AppRoutes.cardDetail,
-          arguments: {'card': card, 'isAdd': isAdd},
+          AppRoutes.cardInfo,
+          arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
         );
       },
       child: Container(
@@ -83,7 +85,7 @@ class CardLabelWidget extends StatelessWidget {
                     Text(
                       card?.name ??
                           AppLocalizations.of(context)
-                              .translate('no_card_name'),
+                              .translate('card_info.no_name'),
                       style: theme.textTheme.bodyMedium
                           ?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
@@ -93,7 +95,7 @@ class CardLabelWidget extends StatelessWidget {
                     Text(
                       card?.description ??
                           AppLocalizations.of(context)
-                              .translate('no_card_description'),
+                              .translate('card_info.no_description'),
                       style:
                           theme.textTheme.bodySmall?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
@@ -102,6 +104,15 @@ class CardLabelWidget extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(width: 8),
+              if (count != null) ...[
+                Text(
+                  count.toString(),
+                  style:
+                      theme.textTheme.titleMedium?.copyWith(color: textColor),
+                ),
+              ],
+              const SizedBox(width: 8),
             ],
           ),
         ),

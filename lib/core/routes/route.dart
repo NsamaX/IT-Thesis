@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import '../../presentation/pages/export.dart';
 
 class AppRoutes {
+  // Index Tree
   static const String index = '/';
   static const String signIn = '/sign_in';
+  // Deck Tree
   static const String myDeck = '/my_deck';
-  static const String deck = '/deck';
-  static const String cardDetail = '/card_detail';
+  static const String newDeck = '/new_deck';
   static const String track = '/track';
+  // Read Tree
   static const String read = '/read';
   static const String search = '/search';
   static const String other = '/other';
+  static const String cardInfo = '/card_info';
+  // Setting Tree
   static const String setting = '/setting';
   static const String myCard = '/my_card';
 
@@ -24,13 +28,8 @@ class AppRoutes {
       // Deck Tree
       case myDeck:
         return MaterialPageRoute(builder: (_) => MyDeckPage());
-      case deck:
-        return MaterialPageRoute(builder: (_) => DeckPage());
-      case cardDetail:
-        return MaterialPageRoute(
-          builder: (_) => CardDetailPage(),
-          settings: settings,
-        );
+      case newDeck:
+        return MaterialPageRoute(builder: (_) => NewDeckPage());
       case track:
         return MaterialPageRoute(builder: (_) => TrackPage());
       // Read Tree
@@ -44,6 +43,11 @@ class AppRoutes {
       case other:
         return MaterialPageRoute(
           builder: (_) => OtherPage(),
+          settings: settings,
+        );
+      case cardInfo:
+        return MaterialPageRoute(
+          builder: (_) => CardInfoPage(),
           settings: settings,
         );
       // Setting Tree

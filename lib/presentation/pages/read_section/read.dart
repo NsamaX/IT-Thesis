@@ -23,7 +23,7 @@ class ReadPage extends StatelessWidget {
               menu: {
                 Icons.history_rounded: () =>
                     context.read<DrawerCubit>().toggleDrawer('history'),
-                AppLocalizations.of(context).translate('read_title'): null,
+                AppLocalizations.of(context).translate('read.title'): null,
                 Icons.search_rounded: () =>
                     context.read<DrawerCubit>().toggleDrawer('feature'),
               },

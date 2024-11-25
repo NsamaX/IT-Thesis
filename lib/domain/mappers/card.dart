@@ -5,6 +5,7 @@ class CardMapper {
   static CardEntity toEntity(CardModel model) {
     return CardEntity(
       cardId: model.cardId,
+      game: model.game,
       name: model.name,
       description: model.description,
       imageUrl: model.imageUrl,
@@ -15,6 +16,7 @@ class CardMapper {
   static CardModel toModel(CardEntity entity) {
     return CardModel(
       cardId: entity.cardId,
+      game: entity.game,
       name: entity.name,
       description: entity.description,
       imageUrl: entity.imageUrl,

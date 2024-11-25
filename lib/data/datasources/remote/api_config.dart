@@ -6,7 +6,7 @@ class ApiConfig {
 
   static Future<void> loadConfig() async {
     final String jsonString =
-        await rootBundle.loadString('assets/configs/api_config.json');
+        await rootBundle.loadString('assets/configs/api.json');
     final Map<String, dynamic> config = json.decode(jsonString);
     baseUrls = Map<String, String>.from(config['baseUrls']);
   }

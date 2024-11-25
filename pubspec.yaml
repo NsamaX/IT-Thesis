@@ -63,7 +63,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/configs/api_config.json
+    - assets/configs/api.json
     - assets/images/google.png
     - assets/images/vanguard.png
     - assets/locales/en.json
