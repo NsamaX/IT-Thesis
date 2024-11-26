@@ -25,7 +25,7 @@ class CardInfoPage extends StatelessWidget {
               if (isAdd)
                 AppLocalizations.of(context).translate('card_info.add'): () {
                   if (card != null) {
-                    context.read<DeckMangerCubit>().addCard(card);
+                    context.read<DeckManagerCubit>().addCard(card);
                     Navigator.pop(context);
                     showSnackBar(
                       context,

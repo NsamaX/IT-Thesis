@@ -10,7 +10,7 @@ import '../../widgets/label/card.dart';
 class TrackPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final deck = context.read<DeckMangerCubit>().state.deck;
+    final deck = context.read<DeckManagerCubit>().state.deck;
     return BlocProvider(
       create: (context) => TrackCubit(deck),
       child: BlocBuilder<TrackCubit, TrackState>(
@@ -33,7 +33,10 @@ class TrackPage extends StatelessWidget {
                 totalCards.toString(): null,
                 AppLocalizations.of(context).translate('track.title'): null,
                 Icons.refresh_rounded: null,
-                Icons.wifi_tethering_rounded: null,
+                context.watch<TrackCubit>().state.isNfcReadEnabled
+                        ? Icons.wifi_tethering_rounded
+                        : Icons.wifi_tethering_off_rounded:
+                    context.read<TrackCubit>().toggleNfcRead,
               },
             ),
             body: Padding(

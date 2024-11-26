@@ -9,6 +9,8 @@ import 'core/locales/localizations.dart';
 import 'core/routes/route.dart';
 import 'core/themes/@theme.dart';
 import 'data/datasources/remote/api_config.dart';
+import 'data/repositories/deck.dart';
+import 'domain/usecases/deck_manager.dart';
 import 'presentation/blocs/deck_manager.dart';
 import 'presentation/blocs/locale.dart';
 
@@ -36,7 +38,14 @@ class MyApp extends StatelessWidget {
       // กำหนด Bloc ที่จะใช้ในแอป
       providers: [
         BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()), // ภาษา
-        BlocProvider(create: (context) => DeckMangerCubit()), // การจัดการเด็ค
+        BlocProvider(
+            create: (context) => DeckManagerCubit(
+                  addCardUseCase: AddCardUseCase(),
+                  removeCardUseCase: RemoveCardUseCase(),
+                  saveDeckUseCase: SaveDeckUseCase(DeckRepository()),
+                  deleteDeckUseCase: DeleteDeckUseCase(DeckRepository()),
+                  loadDecksUseCase: LoadDecksUseCase(DeckRepository()),
+                )), // การจัดการเด็ค
       ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, state) {

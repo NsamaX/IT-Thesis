@@ -5,19 +5,23 @@ import '../../../domain/entities/deck.dart';
 class TrackState {
   final DeckEntity deck;
   final bool isDialogShown;
+  final bool isNfcReadEnabled;
 
   TrackState({
     required this.deck,
     this.isDialogShown = false,
+    this.isNfcReadEnabled = false,
   });
 
   TrackState copyWith({
     DeckEntity? deck,
     bool? isDialogShown,
+    bool? isNfcReadEnabled,
   }) {
     return TrackState(
       deck: deck ?? this.deck,
       isDialogShown: isDialogShown ?? this.isDialogShown,
+      isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
     );
   }
 }
@@ -27,6 +31,10 @@ class TrackCubit extends Cubit<TrackState> {
 
   void showDialog() {
     emit(state.copyWith(isDialogShown: true));
+  }
+
+  void toggleNfcRead() {
+    emit(state.copyWith(isNfcReadEnabled: !state.isNfcReadEnabled));
   }
 
   int get totalCards =>

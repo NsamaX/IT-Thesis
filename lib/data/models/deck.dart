@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'card.dart';
 
 class DeckModel {
@@ -16,10 +17,13 @@ class DeckModel {
       deckId: json['deckId'] as String,
       deckName: json['deckName'] as String,
       cards: (json['cards'] as Map<String, dynamic>).map(
-        (key, value) => MapEntry(
-          CardModel.fromJson(key as Map<String, dynamic>),
-          value as int,
-        ),
+        (key, value) {
+          final cardJson = value['card'] as Map<String, dynamic>;
+          return MapEntry(
+            CardModel.fromJson(cardJson),
+            value['count'] as int,
+          );
+        },
       ),
     );
   }
@@ -29,7 +33,10 @@ class DeckModel {
       'deckId': deckId,
       'deckName': deckName,
       'cards': cards.map(
-        (key, value) => MapEntry(key.toJson(), value),
+        (key, value) => MapEntry(
+          jsonEncode(key.toJson()),
+          {'card': key.toJson(), 'count': value},
+        ),
       ),
     };
   }

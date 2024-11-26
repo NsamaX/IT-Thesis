@@ -1,23 +1,40 @@
-// import '../datasources/remote/deck.dart';
-// import '../../domain/entities/deck.dart';
-// import '../../domain/mappers/deck.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/deck.dart';
 
-// class DeckRepository {
-//   final DeckRemoteDataSource remoteDataSource;
+class DeckRepository {
+  static const String _deckKey = "user_decks";
+  Future<Map<String, dynamic>> getDecks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedDecks = prefs.getString(_deckKey);
+    if (storedDecks != null) {
+      return Map<String, dynamic>.from(jsonDecode(storedDecks));
+    }
+    return {};
+  }
 
-//   DeckRepository({required this.remoteDataSource});
+  Future<void> saveDeck(DeckModel deck) async {
+    final prefs = await SharedPreferences.getInstance();
+    final decks = await getDecks();
+    final serializedCards = deck.cards.map(
+      (key, value) => MapEntry(key.cardId, {
+        'card': key.toJson(),
+        'count': value,
+      }),
+    );
+    final deckData = {
+      'deckId': deck.deckId,
+      'deckName': deck.deckName,
+      'cards': serializedCards,
+    };
+    decks[deck.deckId] = deckData;
+    await prefs.setString(_deckKey, jsonEncode(decks));
+  }
 
-//   Future<Deck> fetchDeck(String deckId) async {
-//     final deckModel = await remoteDataSource.fetchDeck(deckId);
-//     return DeckMapper.toEntity(deckModel);
-//   }
-
-//   Future<void> saveDeck(Deck deck) async {
-//     final deckModel = DeckMapper.toModel(deck);
-//     await remoteDataSource.saveDeck(deckModel);
-//   }
-
-//   Future<void> deleteDeck(String deckId) async {
-//     await remoteDataSource.deleteDeck(deckId);
-//   }
-// }
+  Future<void> deleteDeck(String deckId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final decks = await getDecks();
+    decks.remove(deckId);
+    await prefs.setString(_deckKey, jsonEncode(decks));
+  }
+}

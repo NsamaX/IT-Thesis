@@ -19,15 +19,15 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isSelected =
-        context.watch<DeckMangerCubit>().state.selectedCard == card;
+        context.watch<DeckManagerCubit>().state.selectedCard == card;
     final isNfcReadEnabled =
-        context.watch<DeckMangerCubit>().state.isNfcReadEnabled;
+        context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
     return Stack(
       children: [
         GestureDetector(
           onTap: () {
             if (isNfcReadEnabled) {
-              context.read<DeckMangerCubit>().toggleSelectedCard(card);
+              context.read<DeckManagerCubit>().toggleSelectedCard(card);
             } else {
               Navigator.of(context).pushNamed(
                 AppRoutes.cardInfo,
@@ -71,7 +71,7 @@ class CardWidget extends StatelessWidget {
             ),
           ),
         ),
-        if (context.watch<DeckMangerCubit>().state.isEditMode &&
+        if (context.watch<DeckManagerCubit>().state.isEditMode &&
             !isNfcReadEnabled)
           Positioned(
             top: 0,
@@ -83,14 +83,14 @@ class CardWidget extends StatelessWidget {
                   context,
                   Icons.add,
                   () {
-                    context.read<DeckMangerCubit>().addCard(card);
+                    context.read<DeckManagerCubit>().addCard(card);
                   },
                 ),
                 buildButton(
                   context,
                   Icons.remove,
                   () {
-                    context.read<DeckMangerCubit>().removeCard(card);
+                    context.read<DeckManagerCubit>().removeCard(card);
                   },
                 ),
               ],

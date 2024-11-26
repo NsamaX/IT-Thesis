@@ -1,10 +1,11 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uuid/uuid.dart';
 import '../../domain/entities/card.dart';
 import '../../domain/entities/deck.dart';
 import '../../domain/usecases/deck_manager.dart';
 
-class DeckMangerState {
+class DeckManagerState {
+  final List<DeckEntity> allDecks;
   final DeckEntity deck;
   final bool isEditMode;
   final bool isShareEnabled;
@@ -12,7 +13,8 @@ class DeckMangerState {
   final bool isDeleteEnabled;
   final CardEntity? selectedCard;
 
-  DeckMangerState({
+  DeckManagerState({
+    required this.allDecks,
     required this.deck,
     this.isEditMode = false,
     this.isShareEnabled = false,
@@ -21,7 +23,8 @@ class DeckMangerState {
     this.selectedCard,
   });
 
-  DeckMangerState copyWith({
+  DeckManagerState copyWith({
+    List<DeckEntity>? allDecks,
     DeckEntity? deck,
     bool? isEditMode,
     bool? isShareEnabled,
@@ -29,7 +32,8 @@ class DeckMangerState {
     bool? isDeleteEnabled,
     CardEntity? selectedCard,
   }) {
-    return DeckMangerState(
+    return DeckManagerState(
+      allDecks: allDecks ?? this.allDecks,
       deck: deck ?? this.deck,
       isEditMode: isEditMode ?? this.isEditMode,
       isShareEnabled: isShareEnabled ?? this.isShareEnabled,
@@ -40,23 +44,73 @@ class DeckMangerState {
   }
 }
 
-class DeckMangerCubit extends Cubit<DeckMangerState> {
-  final AddCardUseCase addCardUseCase = AddCardUseCase();
-  final RemoveCardUseCase removeCardUseCase = RemoveCardUseCase();
+class DeckManagerCubit extends Cubit<DeckManagerState> {
+  final AddCardUseCase addCardUseCase;
+  final RemoveCardUseCase removeCardUseCase;
+  final SaveDeckUseCase saveDeckUseCase;
+  final LoadDecksUseCase loadDecksUseCase;
+  final DeleteDeckUseCase deleteDeckUseCase;
 
-  DeckMangerCubit()
-      : super(
-          DeckMangerState(
+  DeckManagerCubit({
+    required this.addCardUseCase,
+    required this.removeCardUseCase,
+    required this.saveDeckUseCase,
+    required this.loadDecksUseCase,
+    required this.deleteDeckUseCase,
+  }) : super(
+          DeckManagerState(
+            allDecks: [],
             deck: DeckEntity(
-              deckId: 'default',
+              deckId: Uuid().v4(),
               deckName: 'Default Deck',
               cards: {},
             ),
           ),
         );
 
+  Future<void> loadDecks() async {
+    final decks = await loadDecksUseCase.call();
+    emit(state.copyWith(allDecks: decks));
+  }
+
+  Future<void> saveDeck() async {
+    if (state.deck.cards.isEmpty) {
+      await deleteDeck();
+      return;
+    }
+    await saveDeckUseCase(state.deck);
+    final updatedDecks = List<DeckEntity>.from(state.allDecks);
+    final existingIndex =
+        updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
+
+    if (existingIndex != -1) {
+      updatedDecks[existingIndex] = state.deck;
+    } else {
+      updatedDecks.add(state.deck);
+    }
+    emit(state.copyWith(allDecks: updatedDecks));
+  }
+
+  Future<void> deleteDeck() async {
+    final deckId = state.deck.deckId;
+    await deleteDeckUseCase(deckId);
+    final updatedDecks =
+        state.allDecks.where((deck) => deck.deckId != deckId).toList();
+    emit(state.copyWith(
+      allDecks: updatedDecks,
+      deck: updatedDecks.isNotEmpty
+          ? updatedDecks.first
+          : DeckEntity(deckId: Uuid().v4(), deckName: 'New Deck', cards: {}),
+    ));
+  }
+
   void setDeck(DeckEntity deck) {
     emit(state.copyWith(deck: deck));
+  }
+
+  void renameDeck(String newDeckName) {
+    final updatedDeck = state.deck.copyWith(deckName: newDeckName);
+    emit(state.copyWith(deck: updatedDeck));
   }
 
   void addCard(CardEntity card) {
@@ -71,14 +125,11 @@ class DeckMangerCubit extends Cubit<DeckMangerState> {
 
   void toggleEditMode() {
     emit(state.copyWith(isEditMode: !state.isEditMode));
-    emit(state.copyWith(isNfcReadEnabled: false));
   }
 
   void toggleShare() {
     final deck = state.deck;
-
     final StringBuffer clipboardContent = StringBuffer()
-      ..writeln('Game: ${deck.games.join(", ")}')
       ..writeln('Deck Name: ${deck.deckName}')
       ..writeln('Deck ID: ${deck.deckId}')
       ..writeln('Total Cards: ${deck.totalCards}')
@@ -89,9 +140,6 @@ class DeckMangerCubit extends Cubit<DeckMangerState> {
         ..writeln('- ${card.name} (ID: ${card.cardId}) x$count')
         ..writeln('  Description: ${card.description ?? "N/A"}');
     });
-
-    Clipboard.setData(ClipboardData(text: clipboardContent.toString()));
-
     emit(state.copyWith(isShareEnabled: true));
   }
 
@@ -106,6 +154,6 @@ class DeckMangerCubit extends Cubit<DeckMangerState> {
 
   void toggleDelete() {
     final clearedDeck = state.deck.copyWith(cards: {});
-    emit(state.copyWith(deck: clearedDeck, isDeleteEnabled: false));
+    emit(state.copyWith(deck: clearedDeck));
   }
 }
