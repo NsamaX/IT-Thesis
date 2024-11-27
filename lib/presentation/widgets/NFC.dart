@@ -9,32 +9,33 @@ class NFCWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NFCCubit, bool>(
-      builder: (context, NFCDetected) {
+    return BlocBuilder<NFCCubit, NFCState>(
+      builder: (context, state) {
         final theme = Theme.of(context);
         final double icon = 40;
+        final bool isNFCEnabled = state.isNFCEnabled;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildNFCIcon(context, -90, Offset(icon + 6, 0), NFCDetected),
+            buildNFCIcon(context, -90, Offset(icon + 6, 0), isNFCEnabled),
             const SizedBox(width: 4),
             GestureDetector(
-              onTap: () => context.read<NFCCubit>().toggleNFCStatus(),
+              onTap: () => context.read<NFCCubit>().toggleNFC(),
               child: AnimatedContainer(
                 duration: animationDuration,
                 width: icon / 1.2,
                 height: icon / 1.2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: NFCDetected
+                  color: isNFCEnabled
                       ? theme.secondaryHeaderColor
                       : theme.appBarTheme.backgroundColor,
                 ),
               ),
             ),
             const SizedBox(width: 4),
-            buildNFCIcon(context, 90, Offset(-icon - 6, 0), NFCDetected),
+            buildNFCIcon(context, 90, Offset(-icon - 6, 0), isNFCEnabled),
           ],
         );
       },
@@ -45,11 +46,11 @@ class NFCWidget extends StatelessWidget {
     BuildContext context,
     double angle,
     Offset offset,
-    bool NFCDetected,
+    bool isNFCEnabled,
   ) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () => context.read<NFCCubit>().toggleNFCStatus(),
+      onTap: () => context.read<NFCCubit>().toggleNFC(),
       child: Transform.translate(
         offset: offset,
         child: Transform.rotate(
@@ -59,7 +60,7 @@ class NFCWidget extends StatelessWidget {
             child: Icon(
               Icons.wifi_rounded,
               size: 120,
-              color: NFCDetected
+              color: isNFCEnabled
                   ? theme.secondaryHeaderColor
                   : theme.appBarTheme.backgroundColor,
             ),

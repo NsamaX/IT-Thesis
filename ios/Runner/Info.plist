@@ -45,5 +45,8 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- NFC Permission -->
+	<key>NFCReaderUsageDescription</key>
+	<string>This app uses NFC to read and write data from NFC tags.</string>
 </dict>
 </plist>

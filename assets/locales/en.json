@@ -44,7 +44,9 @@
     "no_image": "No card image",
     "upload_image": "Upload image",
     "dialog": {
-      "add": "Card added successfully"
+      "add": "Card added to deck.",
+      "write_success": "Card written successfully.",
+      "write_error": "Failed to write card."
     }
   },
   "read": {

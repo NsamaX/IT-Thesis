@@ -125,6 +125,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
 
   void toggleEditMode() {
     emit(state.copyWith(isEditMode: !state.isEditMode));
+    emit(state.copyWith(isNfcReadEnabled: false));
   }
 
   void toggleShare() {

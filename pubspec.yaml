@@ -34,8 +34,9 @@ dependencies:
     sdk: flutter
   
   flutter_bloc: ^8.1.6
-  uuid: ^4.5.1
   shared_preferences: ^2.3.3
+  uuid: ^4.5.1
+  nfc_manager: ^3.5.0
   
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.8

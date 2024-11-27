@@ -13,21 +13,15 @@ import 'data/repositories/deck.dart';
 import 'domain/usecases/deck_manager.dart';
 import 'presentation/blocs/deck_manager.dart';
 import 'presentation/blocs/locale.dart';
+import 'presentation/blocs/NFC.dart';
 
 void main() async {
-  // เตรียม Widgets ก่อนเริ่มแอป
   WidgetsFlutterBinding.ensureInitialized();
-
-  // ล็อคหน้าจอแนวตั้ง
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  // โหลดการตั้งค่าของ API
   await ApiConfig.loadConfig();
-
-  // เริ่มต้นแอปพลิเคชัน
   runApp(MyApp());
 }
 
@@ -35,25 +29,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      // กำหนด Bloc ที่จะใช้ในแอป
       providers: [
-        BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()), // ภาษา
+        BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()),
+        BlocProvider(create: (context) => NFCCubit()),
         BlocProvider(
-            create: (context) => DeckManagerCubit(
-                  addCardUseCase: AddCardUseCase(),
-                  removeCardUseCase: RemoveCardUseCase(),
-                  saveDeckUseCase: SaveDeckUseCase(DeckRepository()),
-                  deleteDeckUseCase: DeleteDeckUseCase(DeckRepository()),
-                  loadDecksUseCase: LoadDecksUseCase(DeckRepository()),
-                )), // การจัดการเด็ค
+          create: (context) => DeckManagerCubit(
+            addCardUseCase: AddCardUseCase(),
+            removeCardUseCase: RemoveCardUseCase(),
+            saveDeckUseCase: SaveDeckUseCase(DeckRepository()),
+            deleteDeckUseCase: DeleteDeckUseCase(DeckRepository()),
+            loadDecksUseCase: LoadDecksUseCase(DeckRepository()),
+          ),
+        ),
       ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, state) {
           return MaterialApp(
-            // แสดง debug banner ในแอปสำหรับช่วงพัฒนา
             debugShowCheckedModeBanner: true,
-
-            // การตั้งค่าภาษา
             locale: state.locale,
             supportedLocales: [
               Locale('en'),
@@ -65,12 +57,9 @@ class MyApp extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-
-            // การตั้งค่าธีม
             theme: themeData(),
-
-            onGenerateRoute: AppRoutes.generateRoute, // การตั้งค่าเส้นทาง
-            initialRoute: AppRoutes.index, // เส้นทางเริ่มต้น
+            onGenerateRoute: AppRoutes.generateRoute,
+            initialRoute: AppRoutes.index,
           );
         },
       ),
