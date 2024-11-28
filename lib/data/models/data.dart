@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 enum ActionModel {
+  unknown,
   draw,
   returnToDeck,
 }
@@ -20,13 +21,19 @@ class DataModel {
 
   factory DataModel.fromJson(Map<String, dynamic> json) {
     return DataModel(
-      tagId: json['tagId'],
-      location: json['location'],
+      tagId: json['tagId'] ?? '',
+      location: json['location'] ?? '',
       action: ActionModel.values.firstWhere(
+        // ignore: deprecated_member_use
         (e) => describeEnum(e) == json['action'],
-        orElse: () => ActionModel.draw,
+        orElse: () {
+          print('Unknown action: ${json['action']}');
+          return ActionModel.unknown;
+        },
       ),
-      timestamp: DateTime.parse(json['timestamp']),
+      timestamp: json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'])
+          : DateTime.now(),
     );
   }
 
@@ -34,6 +41,7 @@ class DataModel {
     return {
       'tagId': tagId,
       'location': location,
+      // ignore: deprecated_member_use
       'action': describeEnum(action),
       'timestamp': timestamp.toIso8601String(),
     };

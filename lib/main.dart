@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/locales/localizations.dart';
 import 'core/routes/route.dart';
 import 'core/themes/@theme.dart';
+import 'data/datasources/local/deck.dart';
 import 'data/datasources/remote/api_config.dart';
 import 'data/repositories/deck.dart';
 import 'domain/usecases/deck_manager.dart';
@@ -21,24 +22,36 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await ApiConfig.loadConfig();
-  runApp(MyApp());
+  try {
+    await ApiConfig.loadConfig();
+    runApp(MyApp());
+  } catch (e) {
+    print('Error initializing API Config: $e');
+  }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final DeckLocalDataSource localDataSource = DeckLocalDataSourceImpl();
+    final DeckRepository deckRepository =
+        DeckRepositoryImpl(localDataSource: localDataSource);
+    final addCardUseCase = AddCardUseCase();
+    final removeCardUseCase = RemoveCardUseCase();
+    final saveDeckUseCase = SaveDeckUseCase(deckRepository);
+    final deleteDeckUseCase = DeleteDeckUseCase(deckRepository);
+    final loadDecksUseCase = LoadDecksUseCase(deckRepository);
     return MultiBlocProvider(
       providers: [
         BlocProvider<LocaleCubit>(create: (context) => LocaleCubit()),
         BlocProvider(create: (context) => NFCCubit()),
         BlocProvider(
           create: (context) => DeckManagerCubit(
-            addCardUseCase: AddCardUseCase(),
-            removeCardUseCase: RemoveCardUseCase(),
-            saveDeckUseCase: SaveDeckUseCase(DeckRepository()),
-            deleteDeckUseCase: DeleteDeckUseCase(DeckRepository()),
-            loadDecksUseCase: LoadDecksUseCase(DeckRepository()),
+            addCardUseCase: addCardUseCase,
+            removeCardUseCase: removeCardUseCase,
+            saveDeckUseCase: saveDeckUseCase,
+            deleteDeckUseCase: deleteDeckUseCase,
+            loadDecksUseCase: loadDecksUseCase,
           ),
         ),
       ],

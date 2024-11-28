@@ -13,9 +13,11 @@ class RecordModel {
 
   factory RecordModel.fromJson(Map<String, dynamic> json) {
     return RecordModel(
-      recordId: json['recordId'],
-      createdAt: DateTime.parse(json['createdAt']),
-      data: (json['data'] as List<dynamic>)
+      recordId: json['recordId'] ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
+          : DateTime.now(),
+      data: (json['data'] as List<dynamic>? ?? [])
           .map((item) => DataModel.fromJson(item))
           .toList(),
     );

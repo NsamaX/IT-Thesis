@@ -16,12 +16,15 @@ class VanguardApi implements GameApi {
 
   void _validateResponse(http.Response response) {
     if (response.statusCode != 200) {
-      throw Exception(
+      throw ApiException(
           'API Error: ${response.statusCode}, ${response.reasonPhrase}');
     }
   }
 
   Map<String, dynamic> _parseCardData(Map<String, dynamic> cardData) {
+    if (cardData.isEmpty) {
+      throw ApiException('Card data is empty or invalid.');
+    }
     return {
       'cardId': cardData['id']?.toString() ?? '',
       'game': 'vanguard',
@@ -45,37 +48,59 @@ class VanguardApi implements GameApi {
 
   @override
   Future<Map<String, dynamic>> fetchCard(String cardId) async {
-    final url = _buildUrl('card', {'id': cardId});
-    final response = await http.get(url);
-
-    _validateResponse(response);
-
-    final data = json.decode(response.body) as Map<String, dynamic>;
-    return _parseCardData(data);
+    try {
+      final url = _buildUrl('card', {'id': cardId});
+      final response = await http.get(url);
+      _validateResponse(response);
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      if (data.isEmpty) {
+        throw ApiException('No card found with id $cardId.');
+      }
+      return _parseCardData(data);
+    } catch (e) {
+      throw ApiException('Failed to fetch card with id $cardId: $e');
+    }
   }
 
   @override
   Future<List<Map<String, dynamic>>> fetchCardsPage(int page) async {
-    final url = _buildUrl('cards', {'page': page.toString()});
-    final response = await http.get(url);
-
-    _validateResponse(response);
-
-    final body = json.decode(response.body) as Map<String, dynamic>;
-    final data = body['data'] as List<dynamic>;
-
-    return data.map((cardData) => _parseCardData(cardData)).toList();
+    try {
+      final url = _buildUrl('cards', {'page': page.toString()});
+      final response = await http.get(url);
+      _validateResponse(response);
+      final body = json.decode(response.body) as Map<String, dynamic>;
+      final data = body['data'] as List<dynamic>?;
+      if (data == null || data.isEmpty) {
+        throw ApiException('No cards found for page $page.');
+      }
+      return data.map((cardData) => _parseCardData(cardData)).toList();
+    } catch (e) {
+      throw ApiException('Failed to fetch cards on page $page: $e');
+    }
   }
 
   @override
   Future<List<Map<String, dynamic>>> fetchAllCards() async {
-    final url = _buildUrl('cards');
-    final response = await http.get(url);
-
-    _validateResponse(response);
-
-    final body = json.decode(response.body) as Map<String, dynamic>;
-    final data = body['data'] as List<dynamic>;
-    return data.map((cardData) => _parseCardData(cardData)).toList();
+    try {
+      final url = _buildUrl('cards');
+      final response = await http.get(url);
+      _validateResponse(response);
+      final body = json.decode(response.body) as Map<String, dynamic>;
+      final data = body['data'] as List<dynamic>?;
+      if (data == null || data.isEmpty) {
+        throw ApiException('No cards available.');
+      }
+      return data.map((cardData) => _parseCardData(cardData)).toList();
+    } catch (e) {
+      throw ApiException('Failed to fetch all cards: $e');
+    }
   }
+}
+
+class ApiException implements Exception {
+  final String message;
+  ApiException(this.message);
+
+  @override
+  String toString() => 'ApiException: $message';
 }

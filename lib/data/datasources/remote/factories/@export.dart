@@ -1,1 +1,1 @@
-export 'vanguard.dart';
+export 'vanguard.dart' show VanguardApi;

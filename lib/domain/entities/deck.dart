@@ -11,11 +11,6 @@ class DeckEntity {
     required this.cards,
   });
 
-  int get totalCards => cards.values.fold(0, (total, count) => total + count);
-  List<String> get games {
-    return cards.keys.map((card) => card.game).toSet().toList();
-  }
-
   DeckEntity copyWith({
     String? deckId,
     String? deckName,
@@ -27,4 +22,10 @@ class DeckEntity {
       cards: cards ?? this.cards,
     );
   }
+
+  List<String> get games {
+    return cards.keys.map((card) => card.game).toSet().toList();
+  }
+
+  int get totalCards => cards.values.fold(0, (total, count) => total + count);
 }

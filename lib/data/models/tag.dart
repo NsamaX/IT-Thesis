@@ -13,10 +13,12 @@ class TagModel {
 
   factory TagModel.fromJson(Map<String, dynamic> json) {
     return TagModel(
-      tagId: json['tagId'],
-      cardId: json['cardId'],
-      game: json['game'],
-      timestamp: DateTime.parse(json['timestamp']),
+      tagId: json['tagId'] ?? '',
+      cardId: json['cardId'] ?? '',
+      game: json['game'] ?? '',
+      timestamp: json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'])
+          : DateTime.now(),
     );
   }
 

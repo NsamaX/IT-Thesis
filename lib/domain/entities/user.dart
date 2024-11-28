@@ -12,4 +12,25 @@ class UserEntity {
     required this.deckIds,
     required this.recordIds,
   });
+
+  UserEntity copyWith({
+    String? userId,
+    String? email,
+    List<String>? tagIds,
+    List<String>? deckIds,
+    List<String>? recordIds,
+  }) {
+    return UserEntity(
+      userId: userId ?? this.userId,
+      email: email ?? this.email,
+      tagIds: tagIds ?? this.tagIds,
+      deckIds: deckIds ?? this.deckIds,
+      recordIds: recordIds ?? this.recordIds,
+    );
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+    return emailRegex.hasMatch(email);
+  }
 }

@@ -1,4 +1,5 @@
 enum Action {
+  unknown,
   draw,
   returnToDeck,
 }

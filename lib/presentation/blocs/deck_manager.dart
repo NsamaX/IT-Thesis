@@ -7,6 +7,7 @@ import '../../domain/usecases/deck_manager.dart';
 class DeckManagerState {
   final List<DeckEntity> allDecks;
   final DeckEntity deck;
+  final bool isLoading;
   final bool isEditMode;
   final bool isShareEnabled;
   final bool isNfcReadEnabled;
@@ -16,6 +17,7 @@ class DeckManagerState {
   DeckManagerState({
     required this.allDecks,
     required this.deck,
+    this.isLoading = false,
     this.isEditMode = false,
     this.isShareEnabled = false,
     this.isNfcReadEnabled = false,
@@ -26,6 +28,7 @@ class DeckManagerState {
   DeckManagerState copyWith({
     List<DeckEntity>? allDecks,
     DeckEntity? deck,
+    bool? isLoading,
     bool? isEditMode,
     bool? isShareEnabled,
     bool? isNfcReadEnabled,
@@ -35,6 +38,7 @@ class DeckManagerState {
     return DeckManagerState(
       allDecks: allDecks ?? this.allDecks,
       deck: deck ?? this.deck,
+      isLoading: isLoading ?? this.isLoading,
       isEditMode: isEditMode ?? this.isEditMode,
       isShareEnabled: isShareEnabled ?? this.isShareEnabled,
       isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
@@ -74,21 +78,27 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   }
 
   Future<void> saveDeck() async {
-    if (state.deck.cards.isEmpty) {
-      await deleteDeck();
-      return;
+    emit(state.copyWith(isLoading: true));
+    try {
+      if (state.deck.cards.isEmpty) {
+        await deleteDeck();
+      } else {
+        await saveDeckUseCase(state.deck);
+        final updatedDecks = List<DeckEntity>.from(state.allDecks);
+        final existingIndex =
+            updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
+        if (existingIndex != -1) {
+          updatedDecks[existingIndex] = state.deck;
+        } else {
+          updatedDecks.add(state.deck);
+        }
+        emit(state.copyWith(allDecks: updatedDecks));
+      }
+    } catch (e) {
+      print("Error saving deck: $e");
+    } finally {
+      emit(state.copyWith(isLoading: false));
     }
-    await saveDeckUseCase(state.deck);
-    final updatedDecks = List<DeckEntity>.from(state.allDecks);
-    final existingIndex =
-        updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
-
-    if (existingIndex != -1) {
-      updatedDecks[existingIndex] = state.deck;
-    } else {
-      updatedDecks.add(state.deck);
-    }
-    emit(state.copyWith(allDecks: updatedDecks));
   }
 
   Future<void> deleteDeck() async {

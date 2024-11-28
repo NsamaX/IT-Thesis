@@ -17,9 +17,9 @@ class CardModel {
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
-      cardId: json['cardId'],
-      game: json['game'],
-      name: json['name'],
+      cardId: json['cardId'] ?? '',
+      game: json['game'] ?? '',
+      name: json['name'] ?? '',
       description: json['description'],
       imageUrl: json['imageUrl'],
       additionalData: json['additionalData'] is Map<String, dynamic>
