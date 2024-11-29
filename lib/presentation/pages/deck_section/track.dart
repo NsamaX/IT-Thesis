@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_project/presentation/blocs/NFC.dart';
 import '../../../core/locales/localizations.dart';
 import '../../blocs/deck_manager.dart';
 import '../../blocs/tracker.dart';
@@ -33,10 +34,10 @@ class TrackPage extends StatelessWidget {
                 totalCards.toString(): null,
                 AppLocalizations.of(context).translate('track.title'): null,
                 Icons.refresh_rounded: null,
-                context.watch<TrackCubit>().state.isNfcReadEnabled
+                context.watch<NFCCubit>().state.isNFCEnabled
                         ? Icons.wifi_tethering_rounded
                         : Icons.wifi_tethering_off_rounded:
-                    context.read<TrackCubit>().toggleNfcRead,
+                    context.read<NFCCubit>().toggleNFC,
               },
             ),
             body: Padding(

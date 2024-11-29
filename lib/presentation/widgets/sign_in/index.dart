@@ -30,7 +30,7 @@ class IndexWidget extends StatelessWidget {
                 width: 120,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.signIn);
+                    Navigator.of(context).pushNamed(AppRoutes.signIn);
                   },
                   child: Text(
                     AppLocalizations.of(context).translate('index.button'),

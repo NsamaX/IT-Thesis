@@ -21,27 +21,43 @@ class _CardInfoPageState extends State<CardInfoPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _nfcCubit = context.read<NFCCubit>();
+    debugPrint('CardInfoPage: initState');
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _nfcCubit = context.read<NFCCubit>();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached ||
+        state == AppLifecycleState.inactive) {
+      try {
+        if (_nfcCubit.state.isNFCEnabled) {
+          _nfcCubit.stopSession();
+          debugPrint('NFC Session stopped due to lifecycle state: $state');
+        }
+      } catch (e) {
+        debugPrint('Error stopping NFC session: $e');
+      }
+    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _nfcCubit.stopSession();
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached ||
-        state == AppLifecycleState.paused) {
-      _nfcCubit.stopSession();
+    try {
+      if (_nfcCubit.state.isNFCEnabled) {
+        _nfcCubit.stopSession();
+        debugPrint('NFC Session stopped in dispose');
+      }
+    } catch (e) {
+      debugPrint('Error during NFC session stop in dispose: $e');
     }
+    super.dispose();
   }
 
   @override
@@ -98,7 +114,7 @@ class _CardInfoPageState extends State<CardInfoPage>
                 final nfcCubit = context.read<NFCCubit>();
                 nfcCubit.toggleNFC();
                 if (nfcCubit.state.isNFCEnabled && card != null) {
-                  nfcCubit.startWrite(card);
+                  nfcCubit.start(card: card);
                 }
               },
           },

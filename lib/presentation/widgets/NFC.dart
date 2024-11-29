@@ -21,7 +21,16 @@ class NFCWidget extends StatelessWidget {
             buildNFCIcon(context, -90, Offset(icon + 6, 0), isNFCEnabled),
             const SizedBox(width: 4),
             GestureDetector(
-              onTap: () => context.read<NFCCubit>().toggleNFC(),
+              onTap: () async {
+                final nfcCubit = context.read<NFCCubit>();
+                if (!state.isNFCEnabled) {
+                  nfcCubit.toggleNFC();
+                  await nfcCubit.startRead();
+                } else {
+                  nfcCubit.toggleNFC();
+                  nfcCubit.stopSession();
+                }
+              },
               child: AnimatedContainer(
                 duration: animationDuration,
                 width: icon / 1.2,
@@ -50,7 +59,16 @@ class NFCWidget extends StatelessWidget {
   ) {
     final theme = Theme.of(context);
     return GestureDetector(
-      onTap: () => context.read<NFCCubit>().toggleNFC(),
+      onTap: () async {
+        final nfcCubit = context.read<NFCCubit>();
+        if (!isNFCEnabled) {
+          nfcCubit.toggleNFC();
+          await nfcCubit.startRead();
+        } else {
+          nfcCubit.toggleNFC();
+          nfcCubit.stopSession();
+        }
+      },
       child: Transform.translate(
         offset: offset,
         child: Transform.rotate(

@@ -7,7 +7,7 @@ class FetchCardUseCase {
   FetchCardUseCase(this.game);
 
   Future<CardEntity> call(String cardId) async {
-    return await CardRepository(game).fetchCard(cardId);
+    return await CardRepositoryImpl(game).fetchCard(cardId);
   }
 }
 
@@ -17,7 +17,7 @@ class FetchCardsPageUseCase {
   FetchCardsPageUseCase(this.game);
 
   Future<List<CardEntity>> call(int page) async {
-    return await CardRepository(game).fetchCardsPage(page);
+    return await CardRepositoryImpl(game).fetchCardsPage(page);
   }
 }
 
@@ -27,6 +27,6 @@ class FetchAllCardsUseCase {
   FetchAllCardsUseCase(this.game);
 
   Future<List<CardEntity>> call() async {
-    return await CardRepository(game).fetchAllCards();
+    return await CardRepositoryImpl(game).fetchAllCards();
   }
 }

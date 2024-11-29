@@ -34,8 +34,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DeckLocalDataSource localDataSource = DeckLocalDataSourceImpl();
-    final DeckRepository deckRepository =
-        DeckRepositoryImpl(localDataSource: localDataSource);
+    final DeckRepository deckRepository = DeckRepositoryImpl(
+      localDataSource: localDataSource,
+    );
     final addCardUseCase = AddCardUseCase();
     final removeCardUseCase = RemoveCardUseCase();
     final saveDeckUseCase = SaveDeckUseCase(deckRepository);

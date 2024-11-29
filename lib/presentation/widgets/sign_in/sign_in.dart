@@ -42,8 +42,7 @@ class SignInWidget extends StatelessWidget {
                 width: 120,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
+                    Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRoutes.read,
                       (_) => false,
                     );

@@ -25,13 +25,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- NFC Intent Filter -->
+            <!-- NFC Avoid system notifications -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.example.card" />
+            </intent-filter>
+
+            <!-- NFC Intent filter -->
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- NFC Tag Type Metadata -->
+            <!-- NFC Tag type metadata -->
             <meta-data 
                 android:name="android.nfc.action.TECH_DISCOVERED" 
                 android:resource="@xml/nfc_tech_filter" />
@@ -58,6 +65,7 @@
 
     <!-- NFC Permission -->
     <uses-permission android:name="android.permission.NFC" />
+
     <!-- NFC Hardware Requirement -->
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
 </manifest>

@@ -3,10 +3,16 @@ import '../models/card.dart';
 import '../../domain/entities/card.dart';
 import '../../domain/mappers/card.dart';
 
-class CardRepository {
+abstract class CardRepository {
+  Future<CardEntity> fetchCard(String cardId);
+  Future<List<CardEntity>> fetchCardsPage(int page);
+  Future<List<CardEntity>> fetchAllCards();
+}
+
+class CardRepositoryImpl {
   final GameApi gameApi;
 
-  CardRepository(String game) : gameApi = GameApiFactory.createApi(game);
+  CardRepositoryImpl(String game) : gameApi = GameApiFactory.createApi(game);
 
   Future<CardEntity> fetchCard(String cardId) async {
     final cardData = await gameApi.fetchCard(cardId);
