@@ -11,6 +11,7 @@ import 'core/routes/route.dart';
 import 'core/themes/@theme.dart';
 import 'core/service_locator.dart';
 import 'data/datasources/remote/api_config.dart';
+import 'presentation/blocs/app_state.dart';
 import 'presentation/blocs/deck_manager.dart';
 import 'presentation/blocs/locale.dart';
 import 'presentation/blocs/NFC.dart';
@@ -34,7 +35,8 @@ void main() async {
   try {
     // await clearLocalStorage();
     await ApiConfig.loadConfig(environment: 'development');
-    setupLocator();
+    await setupLocator();
+    await locator<LocaleCubit>().loadLanguage();
     runApp(MyApp());
   } catch (e) {
     print('Error initializing API Config: $e');
@@ -46,9 +48,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
-        BlocProvider(create: (_) => NFCCubit()),
-        BlocProvider(create: (_) => locator<DeckManagerCubit>()),
+        BlocProvider<DeckManagerCubit>(create: (_) => locator<DeckManagerCubit>()),
+        BlocProvider<NFCCubit>(create: (_) => locator<NFCCubit>()),
+        BlocProvider<AppStateCubit>(create: (_) => AppStateCubit()),
+        BlocProvider<LocaleCubit>(create: (_) => locator<LocaleCubit>()),
       ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, state) {

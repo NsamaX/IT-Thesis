@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../domain/usecases/settings.dart';
 
 class LocaleState {
   final Locale locale;
 
-  LocaleState(this.locale);
+  const LocaleState({required this.locale});
 }
 
 class LocaleCubit extends Cubit<LocaleState> {
-  LocaleCubit() : super(LocaleState(const Locale('en', 'US')));
+  final SaveSetting saveSetting;
+  final LoadSetting loadSetting;
 
-  void changeLocale(String languageCode) {
-    emit(LocaleState(Locale(languageCode)));
+  LocaleCubit({
+    required this.saveSetting,
+    required this.loadSetting,
+  }) : super(const LocaleState(locale: Locale('en')));
+
+  Future<void> updateLanguage(String languageCode) async {
+    await saveSetting('language', languageCode);
+    emit(LocaleState(locale: Locale(languageCode)));
+  }
+
+  Future<void> loadLanguage() async {
+    final languageCode = await loadSetting('language') ?? 'en';
+    emit(LocaleState(locale: Locale(languageCode)));
   }
 }

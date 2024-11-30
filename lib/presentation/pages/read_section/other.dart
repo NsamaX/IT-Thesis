@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/image.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../data/datasources/remote/api_config.dart';
-import '../../blocs/game_selection.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/label/supported_game.dart';
 
@@ -24,19 +22,16 @@ class OtherPage extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: BlocProvider(
-          create: (context) => GameSelectionCubit(),
-          child: ListView.builder(
-            itemCount: gameKeys.length - 1,
-            itemBuilder: (context, index) {
-              return SupportedGameLabelWidget(
-                game: gameKeys[index + 1],
-                description: ApiConfig.baseUrls?[gameKeys[index + 1]] ?? '',
-                imagePath: gameImages[index + 1],
-                isAdd: isAdd,
-              );
-            },
-          ),
+        child: ListView.builder(
+          itemCount: gameKeys.length - 1,
+          itemBuilder: (context, index) {
+            return SupportedGameLabelWidget(
+              game: gameKeys[index + 1],
+              description: ApiConfig.baseUrls?[gameKeys[index + 1]] ?? '',
+              imagePath: gameImages[index + 1],
+              isAdd: isAdd,
+            );
+          },
         ),
       ),
     );

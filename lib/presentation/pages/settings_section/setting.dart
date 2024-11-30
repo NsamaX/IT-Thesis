@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
-import '../../blocs/bottom_nav.dart';
 import '../../blocs/locale.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/bar/bottom_navigation.dart';
@@ -61,11 +60,11 @@ class SettingPage extends StatelessWidget {
                 'icon': Icons.language_rounded,
                 'text': AppLocalizations.of(context).translate('setting.support.language'),
                 'onTap': () {
-                  final currentLocale = context.read<LocaleCubit>().state.locale;
-                  if (currentLocale.languageCode == 'en') {
-                    context.read<LocaleCubit>().changeLocale('ja');
+                  final currentLocale = context.read<LocaleCubit>().state;
+                  if (currentLocale.locale.languageCode == 'en') {
+                    context.read<LocaleCubit>().updateLanguage('ja');
                   } else {
-                    context.read<LocaleCubit>().changeLocale('en');
+                    context.read<LocaleCubit>().updateLanguage('en');
                   }
                 },
               },
@@ -78,10 +77,7 @@ class SettingPage extends StatelessWidget {
           },
         ],
       ),
-      bottomNavigationBar: BlocProvider(
-        create: (context) => BottomNavCubit(2),
-        child: BottomNavigationBarWidget(),
-      ),
+      bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/routes/route.dart';
-import '../../blocs/game_selection.dart';
+import '../../blocs/app_state.dart';
 
 class SupportedGameLabelWidget extends StatelessWidget {
   final String game;
@@ -22,7 +22,7 @@ class SupportedGameLabelWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
-        context.read<GameSelectionCubit>().selectGame(game);
+        context.read<AppStateCubit>().updateSelectedGame(game);
         Navigator.of(context).pushReplacementNamed(
           AppRoutes.search,
           arguments: {'game': game, 'isAdd': isAdd},

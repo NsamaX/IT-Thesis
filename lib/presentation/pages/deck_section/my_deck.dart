@@ -4,7 +4,6 @@ import 'package:uuid/uuid.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
 import '../../../domain/entities/deck.dart';
-import '../../blocs/bottom_nav.dart';
 import '../../blocs/deck_manager.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/bar/bottom_navigation.dart';
@@ -21,7 +20,8 @@ class MyDeckPage extends StatelessWidget {
             context.read<DeckManagerCubit>().setDeck(
                   DeckEntity(
                     deckId: Uuid().v4(),
-                    deckName: AppLocalizations.of(context).translate('new_deck.title'),
+                    deckName: AppLocalizations.of(context)
+                        .translate('new_deck.title'),
                     cards: {},
                   ),
                 );
@@ -33,10 +33,6 @@ class MyDeckPage extends StatelessWidget {
           AppLocalizations.of(context).translate('my_deck.title'): null,
           Icons.edit_rounded: context.read<DeckManagerCubit>().toggleEditMode,
         },
-      ),
-      bottomNavigationBar: BlocProvider(
-        create: (context) => BottomNavCubit(0),
-        child: BottomNavigationBarWidget(),
       ),
       body: BlocBuilder<DeckManagerCubit, DeckManagerState>(
         builder: (context, state) {
@@ -60,6 +56,7 @@ class MyDeckPage extends StatelessWidget {
           );
         },
       ),
+      bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
 }

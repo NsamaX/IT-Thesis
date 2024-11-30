@@ -2,18 +2,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import '../../domain/entities/card.dart';
 import '../../domain/entities/tag.dart';
+import '../../domain/usecases/tag.dart';
 
 class NFCState {
   final bool isNFCEnabled;
   final TagEntity? lastReadTag;
   final String? errorMessage;
   final bool isOperationSuccessful;
+  final List<TagEntity>? savedTags;
 
   NFCState({
     required this.isNFCEnabled,
     this.lastReadTag,
     this.errorMessage,
     this.isOperationSuccessful = false,
+    this.savedTags,
   });
 
   NFCState copyWith({
@@ -21,18 +24,27 @@ class NFCState {
     TagEntity? lastReadTag,
     String? errorMessage,
     bool? isOperationSuccessful,
+    List<TagEntity>? savedTags,
   }) {
     return NFCState(
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
-      lastReadTag: lastReadTag,
-      errorMessage: errorMessage,
-      isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
+      lastReadTag: lastReadTag ?? this.lastReadTag,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isOperationSuccessful:
+          isOperationSuccessful ?? this.isOperationSuccessful,
+      savedTags: savedTags ?? this.savedTags,
     );
   }
 }
 
 class NFCCubit extends Cubit<NFCState> {
-  NFCCubit() : super(NFCState(isNFCEnabled: false));
+  final SaveTagUseCase saveTagUseCase;
+  final LoadTagsUseCase loadTagsUseCase;
+
+  NFCCubit({
+    required this.saveTagUseCase,
+    required this.loadTagsUseCase,
+  }) : super(NFCState(isNFCEnabled: false, savedTags: []));
 
   void toggleNFC() {
     emit(state.copyWith(isNFCEnabled: !state.isNFCEnabled));
@@ -100,9 +112,7 @@ class NFCCubit extends Cubit<NFCState> {
                 }
               }
             }
-            final tagId = (tag.data['nfca']?['identifier'] as List<dynamic>?)
-                ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
-                .join(':');
+            final tagId = (tag.data['nfca']?['identifier'] as List<dynamic>?)?.map((e) => e.toRadixString(16).padLeft(2, '0')).join(':');
             if (tagId == null) {
               print('Error: Unable to read Tag id');
             } else {
@@ -159,14 +169,20 @@ class NFCCubit extends Cubit<NFCState> {
             print('Size of data to write: ${ndefMessage.byteLength} bytes');
             if (ndefMessage.byteLength > ndef.maxSize) {
               print('Error: Data exceeds the tag\'s capacity.');
-              emit(state.copyWith(
-                  errorMessage: 'Data exceeds the tag\'s capacity.'));
+              emit(state.copyWith(errorMessage: 'Data exceeds the tag\'s capacity.'));
               return;
             }
             print('Writing to tag...');
             await ndef.write(ndefMessage);
-            emit(state.copyWith(
-                isOperationSuccessful: true, errorMessage: null));
+            final tagId = (tag.data['nfca']?['identifier'] as List<dynamic>?)?.map((e) => e.toRadixString(16).padLeft(2, '0')).join(':');
+            final tagEntity = TagEntity(
+              tagId: tagId ?? '',
+              cardId: card.cardId,
+              game: card.game,
+              timestamp: DateTime.now(),
+            );
+            await saveTag(tagEntity);
+            emit(state.copyWith(isOperationSuccessful: true, errorMessage: null));
             print('NFC Write Successful.');
           } catch (e) {
             print('Error during NFC write: $e');
@@ -180,5 +196,31 @@ class NFCCubit extends Cubit<NFCState> {
       print('Error initializing NFC session: $e');
       emit(state.copyWith(errorMessage: e.toString()));
     }
+  }
+
+  Future<void> saveTag(TagEntity tagEntity) async {
+    try {
+      await saveTagUseCase(tagEntity);
+      print('Tag saved successfully.');
+    } catch (e) {
+      print('Error saving tag: $e');
+      emit(state.copyWith(errorMessage: 'Error saving tag: $e'));
+    }
+  }
+
+  Future<void> loadTags() async {
+    try {
+      final tags = await loadTagsUseCase();
+      if (isClosed) return;
+      emit(state.copyWith(savedTags: tags));
+    } catch (e) {
+      if (isClosed) return;
+      emit(state.copyWith(errorMessage: 'Error loading tags: $e'));
+    }
+  }
+
+  Future<void> handleSuccessfulWrite(TagEntity tagEntity) async {
+    await saveTag(tagEntity);
+    emit(state.copyWith(isOperationSuccessful: true));
   }
 }

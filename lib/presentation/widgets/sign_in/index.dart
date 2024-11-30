@@ -18,6 +18,7 @@ class IndexWidget extends StatelessWidget {
               Text(
                 AppLocalizations.of(context).translate('index.title'),
                 style: theme.textTheme.titleLarge,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
               Text(
@@ -25,9 +26,10 @@ class IndexWidget extends StatelessWidget {
                 style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 38),
               SizedBox(
-                width: 120,
+                width: 132,
+                height: 46,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamed(AppRoutes.signIn);

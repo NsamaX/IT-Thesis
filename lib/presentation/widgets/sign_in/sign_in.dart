@@ -17,7 +17,8 @@ class SignInWidget extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context).translate('sign_in.title'),
-                style: theme.textTheme.titleLarge,
+                style: theme.textTheme.titleMedium,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 84),
               Container(
@@ -39,7 +40,8 @@ class SignInWidget extends StatelessWidget {
               ),
               const SizedBox(height: 82),
               SizedBox(
-                width: 120,
+                width: 132,
+                height: 46,
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(

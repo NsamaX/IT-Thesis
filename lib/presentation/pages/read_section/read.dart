@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_project/core/service_locator.dart';
 import '../../../core/locales/localizations.dart';
-import '../../blocs/bottom_nav.dart';
-import '../../blocs/drawer_cubit.dart';
-import '../../blocs/game_selection.dart';
+import '../../blocs/drawer.dart';
 import '../../blocs/NFC.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/bar/bottom_navigation.dart';
@@ -18,6 +17,7 @@ class ReadPage extends StatelessWidget {
       create: (context) => DrawerCubit(),
       child: Builder(
         builder: (context) {
+          context.read<NFCCubit>().loadTags();
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
@@ -33,7 +33,7 @@ class ReadPage extends StatelessWidget {
                 children: [
                   Center(
                     child: BlocProvider(
-                    create: (context) => NFCCubit(),
+                    create: (context) => locator<NFCCubit>(),
                     child: NFCWidget(),
                   )),
                   BlocBuilder<DrawerCubit, Map<String, bool>>(
@@ -52,20 +52,14 @@ class ReadPage extends StatelessWidget {
                         duration: Duration(milliseconds: 200),
                         top: 20,
                         right: state['feature']! ? 0 : -200,
-                        child: BlocProvider(
-                          create: (context) => GameSelectionCubit(),
-                          child: FeaturesDrawerWidget(),
-                        ),
+                        child: FeaturesDrawerWidget(),
                       );
                     },
                   ),
                 ],
               ),
             ),
-            bottomNavigationBar: BlocProvider(
-              create: (context) => BottomNavCubit(1),
-              child: BottomNavigationBarWidget(),
-            ),
+            bottomNavigationBar: BottomNavigationBarWidget(),
           );
         },
       ),

@@ -3,51 +3,55 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/image.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
-import '../../blocs/game_selection.dart';
+import '../../blocs/app_state.dart';
 
 class FeaturesDrawerWidget extends StatelessWidget {
   const FeaturesDrawerWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final currentGame = context.watch<GameSelectionCubit>().state;
-    return Padding(
-      padding: const EdgeInsets.only(right: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          buildItem(
-            context,
-            AppImages.game[currentGame],
-            null,
-            () {
-              Navigator.of(context).pushNamed(
-                AppRoutes.search,
-                arguments: {'game': currentGame},
-              );
-            },
+    return BlocBuilder<AppStateCubit, AppState>(
+      builder: (context, state) {
+        final currentGame = state.selectedGame;
+        return Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildItem(
+                context,
+                AppImages.game[currentGame],
+                null,
+                () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.search,
+                    arguments: {'game': currentGame},
+                  );
+                },
+              ),
+              buildItem(
+                context,
+                null,
+                AppLocalizations.of(context).translate('other.title'),
+                () {
+                  Navigator.of(context).pushNamed(AppRoutes.other);
+                },
+              ),
+              buildItem(
+                context,
+                null,
+                AppLocalizations.of(context).translate('custom.title'),
+                () {
+                  Navigator.of(context).pushNamed(
+                    AppRoutes.cardInfo,
+                    arguments: {'isCustom': true},
+                  );
+                },
+              ),
+            ],
           ),
-          buildItem(
-            context,
-            null,
-            AppLocalizations.of(context).translate('other.title'),
-            () {
-              Navigator.of(context).pushNamed(AppRoutes.other);
-            },
-          ),
-          buildItem(
-            context,
-            null,
-            AppLocalizations.of(context).translate('custom.title'),
-            () {
-              Navigator.of(context).pushNamed(
-                AppRoutes.cardInfo,
-                arguments: {'isCustom': true},
-              );
-            },
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/locales/localizations.dart';
-import '../../blocs/bottom_nav.dart';
+import '../../blocs/app_state.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   const BottomNavigationBarWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavCubit, int>(
-      builder: (context, currentIndex) {
+    return BlocBuilder<AppStateCubit, AppState>(
+      builder: (context, state) {
         final theme = Theme.of(context);
         return BottomNavigationBar(
-          currentIndex: currentIndex,
+          currentIndex: state.currentPageIndex,
           onTap: (index) {
-            index != currentIndex
-                ? Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    context.read<BottomNavCubit>().getRouteForIndex(index),
-                    (_) => false)
-                : null;
+            if (index != state.currentPageIndex) {
+              context.read<AppStateCubit>().updatePageIndex(index);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                context.read<AppStateCubit>().getRouteForIndex(index),
+                (_) => false,
+              );
+            }
           },
           items: [
             BottomNavigationBarItem(
