@@ -17,10 +17,8 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isSelected =
-        context.watch<DeckManagerCubit>().state.selectedCard == card;
-    final isNfcReadEnabled =
-        context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
+    final isSelected = context.watch<DeckManagerCubit>().state.selectedCard == card;
+    final isNfcReadEnabled = context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
     return Stack(
       children: [
         GestureDetector(
@@ -72,8 +70,7 @@ class CardWidget extends StatelessWidget {
             ),
           ),
         ),
-        if (context.watch<DeckManagerCubit>().state.isEditMode &&
-            !isNfcReadEnabled)
+        if (context.watch<DeckManagerCubit>().state.isEditMode && !isNfcReadEnabled)
           Positioned(
             top: 0,
             right: 0,

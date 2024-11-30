@@ -83,21 +83,15 @@ class CardLabelWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      card?.name ??
-                          AppLocalizations.of(context)
-                              .translate('card_info.no_name'),
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: textColor),
+                      card?.name ?? AppLocalizations.of(context).translate('card_info.no_name'),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      card?.description ??
-                          AppLocalizations.of(context)
-                              .translate('card_info.no_description'),
-                      style:
-                          theme.textTheme.bodySmall?.copyWith(color: textColor),
+                      card?.description ?? AppLocalizations.of(context).translate('card_info.no_description'),
+                      style: theme.textTheme.bodySmall?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -108,8 +102,7 @@ class CardLabelWidget extends StatelessWidget {
               if (count != null) ...[
                 Text(
                   count.toString(),
-                  style:
-                      theme.textTheme.titleMedium?.copyWith(color: textColor),
+                  style: theme.textTheme.titleMedium?.copyWith(color: textColor),
                 ),
               ],
               const SizedBox(width: 8),

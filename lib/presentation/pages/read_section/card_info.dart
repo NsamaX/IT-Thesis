@@ -13,8 +13,7 @@ class CardInfoPage extends StatefulWidget {
   _CardInfoPageState createState() => _CardInfoPageState();
 }
 
-class _CardInfoPageState extends State<CardInfoPage>
-    with WidgetsBindingObserver {
+class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver {
   late NFCCubit _nfcCubit;
 
   @override
@@ -62,20 +61,19 @@ class _CardInfoPageState extends State<CardInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
     final TextEditingController deckNameController = TextEditingController(
-        text: AppLocalizations.of(context).translate('card_info.card_name'));
+      text: AppLocalizations.of(context).translate('card_info.card_name'),
+    );
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
         if (state.isOperationSuccessful) {
           showSnackBar(
             context,
-            AppLocalizations.of(context)
-                .translate('card_info.dialog.write_success'),
+            AppLocalizations.of(context).translate('card_info.dialog.write_success'),
           );
           context
               .read<NFCCubit>()
@@ -84,8 +82,7 @@ class _CardInfoPageState extends State<CardInfoPage>
         } else if (state.errorMessage != null) {
           showSnackBar(
             context,
-            AppLocalizations.of(context)
-                .translate('card_info.dialog.write_error'),
+            AppLocalizations.of(context).translate('card_info.dialog.write_error'),
           );
           // ignore: invalid_use_of_visible_for_testing_member
           context.read<NFCCubit>().emit(state.copyWith(errorMessage: null));
@@ -103,14 +100,12 @@ class _CardInfoPageState extends State<CardInfoPage>
                     style: Theme.of(context).textTheme.titleMedium,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: AppLocalizations.of(context)
-                          .translate('card_info.card_name'),
+                      hintText: AppLocalizations.of(context).translate('card_info.card_name'),
                     ),
                     onSubmitted: (value) {
                       final newName = value.trim().isNotEmpty
                           ? value.trim()
-                          : AppLocalizations.of(context)
-                              .translate('card_info.card_name');
+                          : AppLocalizations.of(context).translate('card_info.card_name');
                       null;
                       deckNameController.text = newName;
                     },
@@ -122,8 +117,7 @@ class _CardInfoPageState extends State<CardInfoPage>
                   Navigator.pop(context);
                   showSnackBar(
                     context,
-                    AppLocalizations.of(context)
-                        .translate('card_info.dialog.add'),
+                    AppLocalizations.of(context).translate('card_info.dialog.add'),
                   );
                 }
               },

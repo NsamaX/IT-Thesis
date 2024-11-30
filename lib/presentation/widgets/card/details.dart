@@ -50,8 +50,7 @@ class CardDetailsWidget extends StatelessWidget {
               const Icon(Icons.upload_rounded, size: 36),
               const SizedBox(height: 12),
               Text(
-                AppLocalizations.of(context)
-                    .translate('card_info.upload_image'),
+                AppLocalizations.of(context).translate('card_info.upload_image'),
                 style: theme.textTheme.titleSmall,
               ),
             ],
@@ -125,8 +124,7 @@ class CardDetailsWidget extends StatelessWidget {
     if (card.additionalData == null) {
       return _buildDescriptionText(
         context,
-        card.description ??
-            AppLocalizations.of(context).translate('card_info.no_description'),
+        card.description ?? AppLocalizations.of(context).translate('card_info.no_description'),
       );
     }
 

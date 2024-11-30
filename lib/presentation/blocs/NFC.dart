@@ -26,8 +26,7 @@ class NFCState {
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
       lastReadTag: lastReadTag,
       errorMessage: errorMessage,
-      isOperationSuccessful:
-          isOperationSuccessful ?? this.isOperationSuccessful,
+      isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
     );
   }
 }

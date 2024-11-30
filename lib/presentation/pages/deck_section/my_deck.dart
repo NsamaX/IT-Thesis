@@ -21,8 +21,7 @@ class MyDeckPage extends StatelessWidget {
             context.read<DeckManagerCubit>().setDeck(
                   DeckEntity(
                     deckId: Uuid().v4(),
-                    deckName: AppLocalizations.of(context)
-                        .translate('new_deck.title'),
+                    deckName: AppLocalizations.of(context).translate('new_deck.title'),
                     cards: {},
                   ),
                 );

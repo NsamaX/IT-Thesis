@@ -20,58 +20,48 @@ class SettingPage extends StatelessWidget {
       body: SettingsLabelWidget(
         label: [
           {
-            'title':
-                AppLocalizations.of(context).translate('setting.account.title'),
+            'title': AppLocalizations.of(context).translate('setting.account.title'),
             'content': [
               {
                 'icon': Icons.account_circle,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.account.email'),
+                'text': AppLocalizations.of(context).translate('setting.account.email'),
                 'onTap': () {},
               },
               {
                 'icon': Icons.bookmark_added_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.account.my_card'),
+                'text': AppLocalizations.of(context).translate('setting.account.my_card'),
                 'onTap': AppRoutes.myCard,
               },
             ]
           },
           {
-            'title':
-                AppLocalizations.of(context).translate('setting.general.title'),
+            'title': AppLocalizations.of(context).translate('setting.general.title'),
             'content': [
               {
                 'icon': Icons.auto_stories_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.general.about'),
+                'text': AppLocalizations.of(context).translate('setting.general.about'),
                 'onTap': () {},
               },
               {
                 'icon': Icons.privacy_tip_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.general.privacy'),
+                'text': AppLocalizations.of(context).translate('setting.general.privacy'),
                 'onTap': () {},
               },
               {
                 'icon': Icons.logout_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.general.sign_out'),
+                'text': AppLocalizations.of(context).translate('setting.general.sign_out'),
                 'onTap': AppRoutes.signIn,
               },
             ]
           },
           {
-            'title':
-                AppLocalizations.of(context).translate('setting.support.title'),
+            'title': AppLocalizations.of(context).translate('setting.support.title'),
             'content': [
               {
                 'icon': Icons.language_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.support.language'),
+                'text': AppLocalizations.of(context).translate('setting.support.language'),
                 'onTap': () {
-                  final currentLocale =
-                      context.read<LocaleCubit>().state.locale;
+                  final currentLocale = context.read<LocaleCubit>().state.locale;
                   if (currentLocale.languageCode == 'en') {
                     context.read<LocaleCubit>().changeLocale('ja');
                   } else {
@@ -81,8 +71,7 @@ class SettingPage extends StatelessWidget {
               },
               {
                 'icon': Icons.coffee_rounded,
-                'text': AppLocalizations.of(context)
-                    .translate('setting.support.donate'),
+                'text': AppLocalizations.of(context).translate('setting.support.donate'),
                 'onTap': () {},
               },
             ]

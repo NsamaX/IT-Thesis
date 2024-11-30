@@ -18,8 +18,7 @@ class VanguardApi implements GameApi {
 
   void _validateResponse(http.Response response) {
     if (response.statusCode != 200) {
-      throw ApiException(
-          'API Error: ${response.statusCode}, ${response.reasonPhrase}');
+      throw ApiException('API Error: ${response.statusCode}, ${response.reasonPhrase}');
     }
   }
 

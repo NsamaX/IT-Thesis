@@ -13,8 +13,7 @@ class GameApiFactory {
     try {
       final baseUrl = ApiConfig.getBaseUrl(game);
       if (baseUrl.isEmpty) {
-        throw Exception(
-            'Base URL for game "$game" is not configured properly.');
+        throw Exception('Base URL for game "$game" is not configured properly.');
       }
       final apiRegistry = {
         'vanguard': () => VanguardApi(baseUrl),

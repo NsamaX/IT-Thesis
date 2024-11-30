@@ -12,8 +12,7 @@ class OtherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final gameKeys = AppImages.game.keys.toList();
     final gameImages = AppImages.game.values.toList();
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final isAdd = arguments?['isAdd'] ?? false;
     return Scaffold(
       appBar: AppBarWidget(

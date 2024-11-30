@@ -21,11 +21,9 @@ class ReadPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
-                Icons.history_rounded: () =>
-                    context.read<DrawerCubit>().toggleDrawer('history'),
+                Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
                 AppLocalizations.of(context).translate('read.title'): null,
-                Icons.search_rounded: () =>
-                    context.read<DrawerCubit>().toggleDrawer('feature'),
+                Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
               },
             ),
             body: GestureDetector(
@@ -34,7 +32,7 @@ class ReadPage extends StatelessWidget {
               child: Stack(
                 children: [
                   Center(
-                      child: BlocProvider(
+                    child: BlocProvider(
                     create: (context) => NFCCubit(),
                     child: NFCWidget(),
                   )),

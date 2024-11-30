@@ -29,8 +29,7 @@ class TrackCubit extends Cubit<TrackState> {
     emit(state.copyWith(isDialogShown: true));
   }
 
-  int get totalCards =>
-      state.deck.cards.values.fold(0, (sum, count) => sum + count);
+  int get totalCards => state.deck.cards.values.fold(0, (sum, count) => sum + count);
 
   void draw() {}
 

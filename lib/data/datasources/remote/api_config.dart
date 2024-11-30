@@ -7,8 +7,7 @@ class ApiConfig {
 
   static Future<void> loadConfig({String environment = 'development'}) async {
     try {
-      final String jsonString =
-          await rootBundle.loadString('assets/configs/api.json');
+      final String jsonString = await rootBundle.loadString('assets/configs/api.json');
       final Map<String, dynamic> config = json.decode(jsonString);
       final environments = config['environments'] as Map<String, dynamic>?;
 
@@ -25,10 +24,8 @@ class ApiConfig {
 
   static String getBaseUrl(String key) {
     if (baseUrls == null) {
-      throw Exception(
-          'API Config not loaded. Please call loadConfig() before using getBaseUrl().');
+      throw Exception('API Config not loaded. Please call loadConfig() before using getBaseUrl().');
     }
-    return baseUrls?[key] ??
-        (throw Exception('Base URL for key "$key" not found in environment "$currentEnvironment".'));
+    return baseUrls?[key] ?? (throw Exception('Base URL for key "$key" not found in environment "$currentEnvironment".'));
   }
 }

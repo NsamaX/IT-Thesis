@@ -102,8 +102,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   }
 
   void toggleSelectedCard(CardEntity card) {
-    emit(
-        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+    emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
   }
 
   void toggleDelete() {

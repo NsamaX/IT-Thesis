@@ -14,15 +14,11 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final game = arguments?['game'] ?? '';
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-
-    final fetchCardsPageUseCase =
-        GetIt.instance<FetchCardsPageUseCase>(param1: game);
-
+    final fetchCardsPageUseCase = GetIt.instance<FetchCardsPageUseCase>(param1: game);
     return BlocProvider(
       create: (_) => SearchBloc(fetchCardsPageUseCase),
       child: Builder(

@@ -48,9 +48,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<LocaleCubit>(create: (_) => LocaleCubit()),
         BlocProvider(create: (_) => NFCCubit()),
-        BlocProvider(
-          create: (_) => locator<DeckManagerCubit>(),
-        ),
+        BlocProvider(create: (_) => locator<DeckManagerCubit>()),
       ],
       child: BlocBuilder<LocaleCubit, LocaleState>(
         builder: (context, state) {

@@ -81,8 +81,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
               : Center(
                   child: Text(
                     label ?? '',
-                    style: theme.textTheme.bodySmall
-                        ?.copyWith(color: Colors.black),
+                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
                   ),
                 ),
         ),
