@@ -95,7 +95,7 @@ class NewDeckPage extends StatelessWidget {
                       'route': AppRoutes.other,
                       'arguments': {'isAdd': true},
                     },
-                    Icons.build_outlined: () =>
+                    Icons.build_rounded: () =>
                         context.read<DeckManagerCubit>().toggleEditMode(),
                   },
           ),

@@ -10,7 +10,7 @@ class IndexWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -36,6 +36,7 @@
   },
   "card_info": {
     "title": "カード情報",
+    "card_name": "カード名",
     "add": "追加",
     "save": "保存",
     "description": "説明",
@@ -53,7 +54,8 @@
     "title": "読み取り"
   },
   "search": {
-    "title": "検索"
+    "title": "検索",
+    "error": "カードが見つかりません"
   },
   "other": {
     "title": "その他"

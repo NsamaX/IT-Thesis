@@ -1,10 +1,11 @@
 import 'factories/@export.dart';
 import 'api_config.dart';
+import '../../models/card.dart';
 
 abstract class GameApi {
-  Future<Map<String, dynamic>> fetchCard(String cardId);
-  Future<List<Map<String, dynamic>>> fetchCardsPage(int page);
-  Future<List<Map<String, dynamic>>> fetchAllCards();
+  Future<CardModel> fetchCard(String cardId);
+  Future<List<CardModel>> fetchCardsPage(int page);
+  Future<List<CardModel>> fetchAllCards();
 }
 
 class GameApiFactory {

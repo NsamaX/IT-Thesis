@@ -5,6 +5,6 @@ import 'text.dart';
 class AppButtonStyles {
   static ButtonStyle elevatedButton = ElevatedButton.styleFrom(
     textStyle: AppTextStyles.bodyLarge,
-    backgroundColor: AppColors.textWhite,
+    backgroundColor: AppColors.DarkModeText,
   );
 }

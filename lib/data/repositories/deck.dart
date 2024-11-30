@@ -2,7 +2,7 @@ import '../datasources/local/deck.dart';
 import '../models/deck.dart';
 
 abstract class DeckRepository {
-  Future<Map<String, dynamic>> getDecks();
+  Future<List<DeckModel>> getDecks();
   Future<void> saveDeck(DeckModel deck);
   Future<void> deleteDeck(String deckId);
 }
@@ -10,10 +10,10 @@ abstract class DeckRepository {
 class DeckRepositoryImpl implements DeckRepository {
   final DeckLocalDataSource localDataSource;
 
-  DeckRepositoryImpl({required this.localDataSource});
+  DeckRepositoryImpl(this.localDataSource);
 
   @override
-  Future<Map<String, dynamic>> getDecks() async {
+  Future<List<DeckModel>> getDecks() async {
     return await localDataSource.getDecks();
   }
 

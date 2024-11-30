@@ -10,7 +10,7 @@ class SignInWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -19,7 +19,7 @@ class SignInWidget extends StatelessWidget {
                 AppLocalizations.of(context).translate('sign_in.title'),
                 style: theme.textTheme.titleLarge,
               ),
-              const SizedBox(height: 52),
+              const SizedBox(height: 84),
               Container(
                 width: 60,
                 height: 60,
@@ -37,7 +37,7 @@ class SignInWidget extends StatelessWidget {
                 ),
                 child: Image.asset('assets/images/google.png'),
               ),
-              const SizedBox(height: 52),
+              const SizedBox(height: 82),
               SizedBox(
                 width: 120,
                 child: ElevatedButton(

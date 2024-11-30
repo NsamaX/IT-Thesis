@@ -1,38 +1,29 @@
 import '../datasources/remote/game_api_factory.dart';
 import '../models/card.dart';
-import '../../domain/entities/card.dart';
-import '../../domain/mappers/card.dart';
 
 abstract class CardRepository {
-  Future<CardEntity> fetchCard(String cardId);
-  Future<List<CardEntity>> fetchCardsPage(int page);
-  Future<List<CardEntity>> fetchAllCards();
+  Future<CardModel> fetchCard(String cardId);
+  Future<List<CardModel>> fetchCardsPage(int page);
+  Future<List<CardModel>> fetchAllCards();
 }
 
-class CardRepositoryImpl {
+class CardRepositoryImpl implements CardRepository {
   final GameApi gameApi;
 
-  CardRepositoryImpl(String game) : gameApi = GameApiFactory.createApi(game);
+  CardRepositoryImpl(this.gameApi);
 
-  Future<CardEntity> fetchCard(String cardId) async {
-    final cardData = await gameApi.fetchCard(cardId);
-    final cardModel = CardModel.fromJson(cardData);
-    return CardMapper.toEntity(cardModel);
+  @override
+  Future<CardModel> fetchCard(String cardId) async {
+    return await gameApi.fetchCard(cardId);
   }
 
-  Future<List<CardEntity>> fetchCardsPage(int page) async {
-    final cardsData = await gameApi.fetchCardsPage(page);
-    return cardsData.map((cardData) {
-      final cardModel = CardModel.fromJson(cardData);
-      return CardMapper.toEntity(cardModel);
-    }).toList();
+  @override
+  Future<List<CardModel>> fetchCardsPage(int page) async {
+    return await gameApi.fetchCardsPage(page);
   }
 
-  Future<List<CardEntity>> fetchAllCards() async {
-    final cardsData = await gameApi.fetchAllCards();
-    return cardsData.map((cardData) {
-      final cardModel = CardModel.fromJson(cardData);
-      return CardMapper.toEntity(cardModel);
-    }).toList();
+  @override
+  Future<List<CardModel>> fetchAllCards() async {
+    return await gameApi.fetchAllCards();
   }
 }

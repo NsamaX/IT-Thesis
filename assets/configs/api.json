@@ -1,5 +1,10 @@
 {
-  "baseUrls": {
-    "vanguard": "https://card-fight-vanguard-api.ue.r.appspot.com/api/v1"
+  "environments": {
+    "development": {
+      "vanguard": "https://card-fight-vanguard-api.ue.r.appspot.com/api/v1"
+    },
+    "production": {
+      "vanguard": ""
+    }
   }
 }

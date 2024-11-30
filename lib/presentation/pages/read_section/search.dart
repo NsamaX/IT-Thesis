@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../domain/usecases/fetch_cards.dart';
 import '../../blocs/search.dart';
@@ -18,7 +19,10 @@ class SearchPage extends StatelessWidget {
     final game = arguments?['game'] ?? '';
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final fetchCardsPageUseCase = FetchCardsPageUseCase(game);
+
+    final fetchCardsPageUseCase =
+        GetIt.instance<FetchCardsPageUseCase>(param1: game);
+
     return BlocProvider(
       create: (_) => SearchBloc(fetchCardsPageUseCase),
       child: Builder(
@@ -72,7 +76,9 @@ class SearchPage extends StatelessWidget {
                   );
                 } else if (state is SearchError) {
                   return Center(
-                    child: Text('Error: ${state.message}'),
+                    child: Text(
+                      AppLocalizations.of(context).translate('search.error'),
+                    ),
                   );
                 } else {
                   return const Center(child: CircularProgressIndicator());

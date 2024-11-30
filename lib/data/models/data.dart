@@ -24,7 +24,6 @@ class DataModel {
       tagId: json['tagId'] ?? '',
       location: json['location'] ?? '',
       action: ActionModel.values.firstWhere(
-        // ignore: deprecated_member_use
         (e) => describeEnum(e) == json['action'],
         orElse: () {
           print('Unknown action: ${json['action']}');
@@ -41,7 +40,6 @@ class DataModel {
     return {
       'tagId': tagId,
       'location': location,
-      // ignore: deprecated_member_use
       'action': describeEnum(action),
       'timestamp': timestamp.toIso8601String(),
     };

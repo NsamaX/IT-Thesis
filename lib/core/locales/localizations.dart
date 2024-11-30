@@ -11,14 +11,12 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   late Map<String, dynamic> localizedStrings;
 
   Future<bool> load() async {
-    String jsonString = await rootBundle
-        .loadString('assets/locales/${locale.languageCode}.json');
+    String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
     localizedStrings = json.decode(jsonString);
     return true;
   }
@@ -41,8 +39,7 @@ class AppLocalizations {
   }
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override

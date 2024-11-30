@@ -67,7 +67,8 @@ class _CardInfoPageState extends State<CardInfoPage>
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-
+    final TextEditingController deckNameController = TextEditingController(
+        text: AppLocalizations.of(context).translate('card_info.card_name'));
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
         if (state.isOperationSuccessful) {
@@ -94,7 +95,26 @@ class _CardInfoPageState extends State<CardInfoPage>
         appBar: AppBarWidget(
           menu: {
             Icons.arrow_back_ios_new_rounded: '/back',
-            AppLocalizations.of(context).translate('card_info.title'): null,
+            isAdd
+                ? AppLocalizations.of(context).translate('card_info.title')
+                : TextField(
+                    controller: deckNameController,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: AppLocalizations.of(context)
+                          .translate('card_info.card_name'),
+                    ),
+                    onSubmitted: (value) {
+                      final newName = value.trim().isNotEmpty
+                          ? value.trim()
+                          : AppLocalizations.of(context)
+                              .translate('card_info.card_name');
+                      null;
+                      deckNameController.text = newName;
+                    },
+                  ): null,
             if (isAdd)
               AppLocalizations.of(context).translate('card_info.add'): () {
                 if (card != null) {
@@ -107,6 +127,8 @@ class _CardInfoPageState extends State<CardInfoPage>
                   );
                 }
               },
+            if (isCustom)
+              AppLocalizations.of(context).translate('card_info.save'): null,
             if (!isAdd && !isCustom)
               context.watch<NFCCubit>().state.isNFCEnabled
                   ? Icons.wifi_tethering_rounded

@@ -1,8 +1,7 @@
-import '../../data/models/deck.dart';
 import '../../data/repositories/deck.dart';
 import '../entities/card.dart';
 import '../entities/deck.dart';
-import '../mappers/card.dart';
+import '../mappers/deck.dart';
 
 class AddCardUseCase {
   DeckEntity call(DeckEntity deck, CardEntity card) {
@@ -34,18 +33,24 @@ class RemoveCardUseCase {
   }
 }
 
+class LoadDecksUseCase {
+  final DeckRepository repository;
+
+  LoadDecksUseCase(this.repository);
+
+  Future<List<DeckEntity>> call() async {
+    final decksModel = await repository.getDecks();
+    return decksModel.map((deckModel) => DeckMapper.toEntity(deckModel)).toList();
+  }
+}
+
 class SaveDeckUseCase {
   final DeckRepository repository;
 
   SaveDeckUseCase(this.repository);
 
   Future<void> call(DeckEntity deck) async {
-    final deckModel = DeckModel(
-      deckId: deck.deckId,
-      deckName: deck.deckName,
-      cards: deck.cards
-          .map((key, value) => MapEntry(CardMapper.toModel(key), value)),
-    );
+    final deckModel = DeckMapper.toModel(deck);
     await repository.saveDeck(deckModel);
   }
 }
@@ -57,26 +62,5 @@ class DeleteDeckUseCase {
 
   Future<void> call(String deckId) async {
     await repository.deleteDeck(deckId);
-  }
-}
-
-class LoadDecksUseCase {
-  final DeckRepository repository;
-
-  LoadDecksUseCase(this.repository);
-
-  Future<List<DeckEntity>> call() async {
-    final decksData = await repository.getDecks();
-    final decks = decksData.entries.map((entry) {
-      final deckModel = DeckModel.fromJson(entry.value);
-      return DeckEntity(
-        deckId: deckModel.deckId,
-        deckName: deckModel.deckName,
-        cards: deckModel.cards.map(
-          (key, value) => MapEntry(CardMapper.toEntity(key), value),
-        ),
-      );
-    }).toList();
-    return decks;
   }
 }

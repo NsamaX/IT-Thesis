@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
 import '../../../domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
@@ -44,25 +43,27 @@ class CardWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: card.imageUrl != null
-                      ? Image.network(card.imageUrl!, fit: BoxFit.cover)
-                      : Container(
-                          color: theme.appBarTheme.backgroundColor,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
+                      ? Image.network(
+                          card.imageUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: theme.appBarTheme.backgroundColor,
+                              child: Center(
+                                child: const Icon(
                                   Icons.image_not_supported,
                                   size: 36,
                                 ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  AppLocalizations.of(context)
-                                      .translate('no_card_image'),
-                                  style: theme.textTheme.bodySmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          color: theme.appBarTheme.backgroundColor,
+                          child: Center(
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              size: 36,
                             ),
                           ),
                         ),

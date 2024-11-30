@@ -8,20 +8,20 @@ class DeckManagerState {
   final List<DeckEntity> allDecks;
   final DeckEntity deck;
   final bool isLoading;
-  final bool isEditMode;
   final bool isShareEnabled;
   final bool isNfcReadEnabled;
   final bool isDeleteEnabled;
+  final bool isEditMode;
   final CardEntity? selectedCard;
 
   DeckManagerState({
     required this.allDecks,
     required this.deck,
     this.isLoading = false,
-    this.isEditMode = false,
     this.isShareEnabled = false,
     this.isNfcReadEnabled = false,
     this.isDeleteEnabled = false,
+    this.isEditMode = false,
     this.selectedCard,
   });
 
@@ -29,20 +29,20 @@ class DeckManagerState {
     List<DeckEntity>? allDecks,
     DeckEntity? deck,
     bool? isLoading,
-    bool? isEditMode,
     bool? isShareEnabled,
     bool? isNfcReadEnabled,
     bool? isDeleteEnabled,
+    bool? isEditMode,
     CardEntity? selectedCard,
   }) {
     return DeckManagerState(
       allDecks: allDecks ?? this.allDecks,
       deck: deck ?? this.deck,
       isLoading: isLoading ?? this.isLoading,
-      isEditMode: isEditMode ?? this.isEditMode,
       isShareEnabled: isShareEnabled ?? this.isShareEnabled,
       isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
       isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
+      isEditMode: isEditMode ?? this.isEditMode,
       selectedCard: selectedCard ?? this.selectedCard,
     );
   }
@@ -51,15 +51,15 @@ class DeckManagerState {
 class DeckManagerCubit extends Cubit<DeckManagerState> {
   final AddCardUseCase addCardUseCase;
   final RemoveCardUseCase removeCardUseCase;
-  final SaveDeckUseCase saveDeckUseCase;
   final LoadDecksUseCase loadDecksUseCase;
+  final SaveDeckUseCase saveDeckUseCase;
   final DeleteDeckUseCase deleteDeckUseCase;
 
   DeckManagerCubit({
     required this.addCardUseCase,
     required this.removeCardUseCase,
-    required this.saveDeckUseCase,
     required this.loadDecksUseCase,
+    required this.saveDeckUseCase,
     required this.deleteDeckUseCase,
   }) : super(
           DeckManagerState(
@@ -71,6 +71,60 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
             ),
           ),
         );
+
+  void setDeck(DeckEntity deck) {
+    emit(state.copyWith(deck: deck));
+  }
+
+  void toggleShare() {
+    final deck = state.deck;
+    final StringBuffer clipboardContent = StringBuffer()
+      ..writeln('Deck Name: ${deck.deckName}')
+      ..writeln('Deck ID: ${deck.deckId}')
+      ..writeln('Total Cards: ${deck.totalCards}')
+      ..writeln('\nCards:');
+
+    deck.cards.forEach((card, count) {
+      clipboardContent
+        ..writeln('- ${card.name} (ID: ${card.cardId}) x$count')
+        ..writeln('  Description: ${card.description ?? "N/A"}');
+    });
+    emit(state.copyWith(isShareEnabled: true));
+  }
+
+  void renameDeck(String newDeckName) {
+    final updatedDeck = state.deck.copyWith(deckName: newDeckName);
+    emit(state.copyWith(deck: updatedDeck));
+  }
+
+  void toggleNfcRead() {
+    emit(state.copyWith(isNfcReadEnabled: !state.isNfcReadEnabled));
+  }
+
+  void toggleSelectedCard(CardEntity card) {
+    emit(
+        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+  }
+
+  void toggleDelete() {
+    final clearedDeck = state.deck.copyWith(cards: {});
+    emit(state.copyWith(deck: clearedDeck));
+  }
+
+  void toggleEditMode() {
+    emit(state.copyWith(isEditMode: !state.isEditMode));
+    emit(state.copyWith(isNfcReadEnabled: false));
+  }
+
+  void addCard(CardEntity card) {
+    final updatedDeck = addCardUseCase(state.deck, card);
+    emit(state.copyWith(deck: updatedDeck));
+  }
+
+  void removeCard(CardEntity card) {
+    final updatedDeck = removeCardUseCase(state.deck, card);
+    emit(state.copyWith(deck: updatedDeck));
+  }
 
   Future<void> loadDecks() async {
     final decks = await loadDecksUseCase.call();
@@ -112,59 +166,5 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
           ? updatedDecks.first
           : DeckEntity(deckId: Uuid().v4(), deckName: 'New Deck', cards: {}),
     ));
-  }
-
-  void setDeck(DeckEntity deck) {
-    emit(state.copyWith(deck: deck));
-  }
-
-  void renameDeck(String newDeckName) {
-    final updatedDeck = state.deck.copyWith(deckName: newDeckName);
-    emit(state.copyWith(deck: updatedDeck));
-  }
-
-  void addCard(CardEntity card) {
-    final updatedDeck = addCardUseCase(state.deck, card);
-    emit(state.copyWith(deck: updatedDeck));
-  }
-
-  void removeCard(CardEntity card) {
-    final updatedDeck = removeCardUseCase(state.deck, card);
-    emit(state.copyWith(deck: updatedDeck));
-  }
-
-  void toggleEditMode() {
-    emit(state.copyWith(isEditMode: !state.isEditMode));
-    emit(state.copyWith(isNfcReadEnabled: false));
-  }
-
-  void toggleShare() {
-    final deck = state.deck;
-    final StringBuffer clipboardContent = StringBuffer()
-      ..writeln('Deck Name: ${deck.deckName}')
-      ..writeln('Deck ID: ${deck.deckId}')
-      ..writeln('Total Cards: ${deck.totalCards}')
-      ..writeln('\nCards:');
-
-    deck.cards.forEach((card, count) {
-      clipboardContent
-        ..writeln('- ${card.name} (ID: ${card.cardId}) x$count')
-        ..writeln('  Description: ${card.description ?? "N/A"}');
-    });
-    emit(state.copyWith(isShareEnabled: true));
-  }
-
-  void toggleNfcRead() {
-    emit(state.copyWith(isNfcReadEnabled: !state.isNfcReadEnabled));
-  }
-
-  void toggleSelectedCard(CardEntity card) {
-    emit(
-        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
-  }
-
-  void toggleDelete() {
-    final clearedDeck = state.deck.copyWith(cards: {});
-    emit(state.copyWith(deck: clearedDeck));
   }
 }

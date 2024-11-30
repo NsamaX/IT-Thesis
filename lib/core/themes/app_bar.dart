@@ -5,8 +5,8 @@ import 'text.dart';
 
 class AppBarStyles {
   static AppBarTheme appBarTheme = AppBarTheme(
-    backgroundColor: AppColors.backgroundLight,
+    backgroundColor: AppColors.DarkModeBackground_lv3,
     iconTheme: AppIconThemes.appBarIcon,
-    titleTextStyle: AppTextStyles.textStyle(AppColors.accentBlue, 16, true),
+    titleTextStyle: AppTextStyles.textStyle(AppColors.PrimaryColor, 16, true),
   );
 }

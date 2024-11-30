@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/deck.dart';
 
 abstract class DeckLocalDataSource {
-  Future<Map<String, dynamic>> getDecks();
+  Future<List<DeckModel>> getDecks();
   Future<void> saveDeck(DeckModel deck);
   Future<void> deleteDeck(String deckId);
 }
@@ -12,14 +12,17 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   static const String _deckKey = "user_decks";
 
   @override
-  Future<Map<String, dynamic>> getDecks() async {
+  Future<List<DeckModel>> getDecks() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final storedDecks = prefs.getString(_deckKey);
       if (storedDecks != null) {
-        return Map<String, dynamic>.from(jsonDecode(storedDecks));
+        final decksData = Map<String, dynamic>.from(jsonDecode(storedDecks));
+        return decksData.values.map((deck) {
+          return DeckModel.fromJson(deck);
+        }).toList();
       }
-      return {};
+      return [];
     } catch (e) {
       throw Exception('Failed to load decks: $e');
     }
@@ -30,19 +33,11 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final decks = await getDecks();
-      final serializedCards = deck.cards.map(
-        (key, value) => MapEntry(key.cardId, {
-          'card': key.toJson(),
-          'count': value,
-        }),
-      );
-      final deckData = {
-        'deckId': deck.deckId,
-        'deckName': deck.deckName,
-        'cards': serializedCards,
+      final updatedDecks = {
+        for (var existingDeck in decks) existingDeck.deckId: existingDeck.toJson(),
+        deck.deckId: deck.toJson(),
       };
-      decks[deck.deckId] = deckData;
-      await prefs.setString(_deckKey, jsonEncode(decks));
+      await prefs.setString(_deckKey, jsonEncode(updatedDecks));
     } catch (e) {
       throw Exception('Failed to save deck: $e');
     }
@@ -53,11 +48,11 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final decks = await getDecks();
-      if (!decks.containsKey(deckId)) {
-        throw Exception('Deck with ID $deckId not found.');
-      }
-      decks.remove(deckId);
-      await prefs.setString(_deckKey, jsonEncode(decks));
+      final updatedDecks = decks.where((deck) => deck.deckId != deckId).toList();
+      final serializedDecks = {
+        for (var deck in updatedDecks) deck.deckId: deck.toJson(),
+      };
+      await prefs.setString(_deckKey, jsonEncode(serializedDecks));
     } catch (e) {
       throw Exception('Failed to delete deck: $e');
     }

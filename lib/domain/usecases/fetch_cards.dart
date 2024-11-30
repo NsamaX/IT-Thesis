@@ -1,32 +1,36 @@
 import '../../data/repositories/card.dart';
-import '../../domain/entities/card.dart';
+import '../entities/card.dart';
+import '../mappers/card.dart';
 
 class FetchCardUseCase {
-  final String game;
+  final CardRepository cardRepository;
 
-  FetchCardUseCase(this.game);
+  FetchCardUseCase(this.cardRepository);
 
   Future<CardEntity> call(String cardId) async {
-    return await CardRepositoryImpl(game).fetchCard(cardId);
+    final cardModel = await cardRepository.fetchCard(cardId);
+    return CardMapper.toEntity(cardModel);
   }
 }
 
 class FetchCardsPageUseCase {
-  final String game;
+  final CardRepository cardRepository;
 
-  FetchCardsPageUseCase(this.game);
+  FetchCardsPageUseCase(this.cardRepository);
 
   Future<List<CardEntity>> call(int page) async {
-    return await CardRepositoryImpl(game).fetchCardsPage(page);
+    final cardModels = await cardRepository.fetchCardsPage(page);
+    return cardModels.map((model) => CardMapper.toEntity(model)).toList();
   }
 }
 
 class FetchAllCardsUseCase {
-  final String game;
+  final CardRepository cardRepository;
 
-  FetchAllCardsUseCase(this.game);
+  FetchAllCardsUseCase(this.cardRepository);
 
   Future<List<CardEntity>> call() async {
-    return await CardRepositoryImpl(game).fetchAllCards();
+    final cardModels = await cardRepository.fetchAllCards();
+    return cardModels.map((model) => CardMapper.toEntity(model)).toList();
   }
 }

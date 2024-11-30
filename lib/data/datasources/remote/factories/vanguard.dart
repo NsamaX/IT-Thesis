@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../../../../core/utils/exceptions.dart';
+import '../../../models/card.dart';
 import '../game_api_factory.dart';
 
 class VanguardApi implements GameApi {
@@ -21,17 +23,17 @@ class VanguardApi implements GameApi {
     }
   }
 
-  Map<String, dynamic> _parseCardData(Map<String, dynamic> cardData) {
+  CardModel _parseCardData(Map<String, dynamic> cardData) {
     if (cardData.isEmpty) {
       throw ApiException('Card data is empty or invalid.');
     }
-    return {
-      'cardId': cardData['id']?.toString() ?? '',
-      'game': 'vanguard',
-      'name': cardData['name'] ?? '',
-      'description': cardData['format'] ?? '',
-      'imageUrl': cardData['imageurljp'] ?? '',
-      'additionalData': {
+    return CardModel(
+      cardId: cardData['id']?.toString() ?? '',
+      game: 'vanguard',
+      name: cardData['name'] ?? '',
+      description: cardData['format'] ?? '',
+      imageUrl: cardData['imageurljp'] ?? '',
+      additionalData: {
         'cardType': cardData['cardtype'] ?? '',
         'clan': cardData['clan'] ?? '',
         'effect': cardData['effect'] ?? '',
@@ -42,12 +44,12 @@ class VanguardApi implements GameApi {
         'race': cardData['race'] ?? '',
         'sets': cardData['sets'] ?? [],
         'skill': cardData['skill'] ?? '',
-      }
-    };
+      },
+    );
   }
 
   @override
-  Future<Map<String, dynamic>> fetchCard(String cardId) async {
+  Future<CardModel> fetchCard(String cardId) async {
     try {
       final url = _buildUrl('card', {'id': cardId});
       final response = await http.get(url);
@@ -63,7 +65,7 @@ class VanguardApi implements GameApi {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchCardsPage(int page) async {
+  Future<List<CardModel>> fetchCardsPage(int page) async {
     try {
       final url = _buildUrl('cards', {'page': page.toString()});
       final response = await http.get(url);
@@ -80,7 +82,7 @@ class VanguardApi implements GameApi {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchAllCards() async {
+  Future<List<CardModel>> fetchAllCards() async {
     try {
       final url = _buildUrl('cards');
       final response = await http.get(url);
@@ -95,12 +97,4 @@ class VanguardApi implements GameApi {
       throw ApiException('Failed to fetch all cards: $e');
     }
   }
-}
-
-class ApiException implements Exception {
-  final String message;
-  ApiException(this.message);
-
-  @override
-  String toString() => 'ApiException: $message';
 }

@@ -9,9 +9,9 @@ import 'text.dart';
 
 ThemeData themeData() {
   return ThemeData(
-    scaffoldBackgroundColor: AppColors.backgroundMedium,
-    primaryColor: AppColors.backgroundDark,
-    secondaryHeaderColor: AppColors.accentBlue,
+    scaffoldBackgroundColor: AppColors.DarkModeBackground_lv2,
+    primaryColor: AppColors.DarkModeBackground_lv1,
+    secondaryHeaderColor: AppColors.PrimaryColor,
     iconTheme: AppIconThemes.defaultIcon,
     textTheme: TextTheme(
       titleLarge: AppTextStyles.titleLarge,
@@ -23,8 +23,9 @@ ThemeData themeData() {
     ),
     appBarTheme: AppBarStyles.appBarTheme,
     bottomNavigationBarTheme: AppBottomNavBarStyles.bottomNavBarTheme,
-    elevatedButtonTheme:
-        ElevatedButtonThemeData(style: AppButtonStyles.elevatedButton),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: AppButtonStyles.elevatedButton,
+    ),
     progressIndicatorTheme: AppProgressIndicatorStyles.progressIndicatorTheme,
   );
 }

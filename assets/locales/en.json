@@ -36,6 +36,7 @@
   },
   "card_info": {
     "title": "Card info",
+    "card_name": "Card name",
     "add": "Add",
     "save": "Save",
     "description": "Description",
@@ -53,7 +54,8 @@
     "title": "Read"
   },
   "search": {
-    "title": "Search"
+    "title": "Search",
+    "error": "No cards found."
   },
   "other": {
     "title": "Other"
