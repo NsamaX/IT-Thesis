@@ -82,7 +82,7 @@ class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver
         } else if (state.errorMessage != null) {
           showSnackBar(
             context,
-            AppLocalizations.of(context).translate('card_info.dialog.write_error'),
+            AppLocalizations.of(context).translate('card_info.dialog.write_faile'),
           );
           // ignore: invalid_use_of_visible_for_testing_member
           context.read<NFCCubit>().emit(state.copyWith(errorMessage: null));

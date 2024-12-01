@@ -47,7 +47,7 @@
     "dialog": {
       "add": "Card added to deck.",
       "write_success": "Card written successfully.",
-      "write_error": "Failed to write card."
+      "write_fail": "Failed to write card."
     }
   },
   "read": {
