@@ -13,7 +13,8 @@ class CardInfoPage extends StatefulWidget {
   _CardInfoPageState createState() => _CardInfoPageState();
 }
 
-class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver {
+class _CardInfoPageState extends State<CardInfoPage>
+    with WidgetsBindingObserver {
   late NFCCubit _nfcCubit;
 
   @override
@@ -25,73 +26,70 @@ class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||
         state == AppLifecycleState.inactive) {
-      try {
-        if (_nfcCubit.state.isNFCEnabled) {
-          _nfcCubit.stopSession();
-          debugPrint('NFC Session stopped due to lifecycle state: $state');
-        }
-      } catch (e) {
-        debugPrint('Error stopping NFC session: $e');
-      }
+      _stopNFCSession('App moved to background: $state');
     }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _stopNFCSession('Page disposed');
+    super.dispose();
+  }
+
+  void _stopNFCSession(String reason) {
     try {
-      if (_nfcCubit.state.isNFCEnabled) {
-        _nfcCubit.stopSession();
-        debugPrint('NFC Session stopped in dispose');
+      final nfcCubit = context.read<NFCCubit>();
+      if (!nfcCubit.isClosed && nfcCubit.state.isNFCEnabled) {
+        nfcCubit.stopSession();
+        debugPrint('NFC session stopped: $reason');
       }
     } catch (e) {
-      debugPrint('Error during NFC session stop in dispose: $e');
+      debugPrint('Error stopping NFC session: $e');
     }
-    super.dispose();
+  }
+
+  void _handleSnackBar(BuildContext context, NFCState state) {
+    if (state.isOperationSuccessful) {
+      showSnackBar(
+        context,
+        AppLocalizations.of(context)
+            .translate('card_info.dialog.write_success'),
+      );
+      _nfcCubit.resetOperationStatus();
+    } else if (state.errorMessage != null) {
+      showSnackBar(
+        context,
+        AppLocalizations.of(context).translate('card_info.dialog.write_fail'),
+      );
+      _nfcCubit.clearErrorMessage();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
     final TextEditingController deckNameController = TextEditingController(
       text: AppLocalizations.of(context).translate('card_info.card_name'),
     );
+
     return BlocListener<NFCCubit, NFCState>(
-      listener: (context, state) {
-        if (state.isOperationSuccessful) {
-          showSnackBar(
-            context,
-            AppLocalizations.of(context).translate('card_info.dialog.write_success'),
-          );
-          context
-              .read<NFCCubit>()
-              // ignore: invalid_use_of_visible_for_testing_member
-              .emit(state.copyWith(isOperationSuccessful: false));
-        } else if (state.errorMessage != null) {
-          showSnackBar(
-            context,
-            AppLocalizations.of(context).translate('card_info.dialog.write_faile'),
-          );
-          // ignore: invalid_use_of_visible_for_testing_member
-          context.read<NFCCubit>().emit(state.copyWith(errorMessage: null));
-        }
-      },
+      listener: (context, state) => _handleSnackBar(context, state),
       child: Scaffold(
         appBar: AppBarWidget(
           menu: {
-            Icons.arrow_back_ios_new_rounded: '/back',
+            Icons.arrow_back_ios_new_rounded: () {
+              _stopNFCSession('Navigating back');
+              Navigator.of(context).pop();
+            },
             isAdd
                 ? AppLocalizations.of(context).translate('card_info.title')
                 : TextField(
@@ -100,13 +98,14 @@ class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver
                     style: Theme.of(context).textTheme.titleMedium,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: AppLocalizations.of(context).translate('card_info.card_name'),
+                      hintText: AppLocalizations.of(context)
+                          .translate('card_info.card_name'),
                     ),
                     onSubmitted: (value) {
                       final newName = value.trim().isNotEmpty
                           ? value.trim()
-                          : AppLocalizations.of(context).translate('card_info.card_name');
-                      null;
+                          : AppLocalizations.of(context)
+                              .translate('card_info.card_name');
                       deckNameController.text = newName;
                     },
                   ): null,
@@ -117,7 +116,8 @@ class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver
                   Navigator.pop(context);
                   showSnackBar(
                     context,
-                    AppLocalizations.of(context).translate('card_info.dialog.add'),
+                    AppLocalizations.of(context)
+                        .translate('card_info.dialog.add'),
                   );
                 }
               },
@@ -128,7 +128,11 @@ class _CardInfoPageState extends State<CardInfoPage> with WidgetsBindingObserver
                   ? Icons.wifi_tethering_rounded
                   : Icons.wifi_tethering_off_rounded: () {
                 final nfcCubit = context.read<NFCCubit>();
-                nfcCubit.toggleNFC();
+                if (!nfcCubit.isClosed) {
+                  nfcCubit.toggleNFC();
+                } else {
+                  debugPrint('NFCCubit is already closed.');
+                }
                 if (nfcCubit.state.isNFCEnabled && card != null) {
                   nfcCubit.start(card: card);
                 }

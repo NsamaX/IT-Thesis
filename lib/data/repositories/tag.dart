@@ -1,10 +1,10 @@
 import '../datasources/local/tag.dart';
 import '../models/tag.dart';
-import '../../domain/entities/tag.dart';
+import '../models/card.dart';
 
 abstract class TagRepository {
-  Future<void> saveTag(TagEntity tagEntity);
-  Future<List<TagEntity>> loadTags();
+  Future<void> saveTagWithCard(TagModel tagEntity, CardModel cardEntity);
+  Future<List<Map<String, dynamic>>> loadTagsWithCards();
 }
 
 class TagRepositoryImpl implements TagRepository {
@@ -13,26 +13,12 @@ class TagRepositoryImpl implements TagRepository {
   TagRepositoryImpl(this.localDataSource);
 
   @override
-  Future<void> saveTag(TagEntity tagEntity) async {
-    final tagModel = TagModel(
-      tagId: tagEntity.tagId,
-      cardId: tagEntity.cardId,
-      game: tagEntity.game,
-      timestamp: tagEntity.timestamp,
-    );
-    await localDataSource.saveTag(tagModel);
+  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel) async {
+    await localDataSource.saveTagWithCard(tagModel, cardModel);
   }
 
   @override
-  Future<List<TagEntity>> loadTags() async {
-    final tagModels = await localDataSource.loadTags();
-    return tagModels
-        .map((tagModel) => TagEntity(
-              tagId: tagModel.tagId,
-              cardId: tagModel.cardId,
-              game: tagModel.game,
-              timestamp: tagModel.timestamp,
-            ))
-        .toList();
+  Future<List<Map<String, dynamic>>> loadTagsWithCards() async {
+    return await localDataSource.loadTagsWithCards();
   }
 }

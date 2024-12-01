@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/mappers/tag.dart';
 import '../../blocs/NFC.dart';
 import '../label/card.dart';
 
@@ -30,8 +29,8 @@ class HistoryDrawerWidget extends StatelessWidget {
           child: ListView.builder(
             itemCount: reversedTags.length,
             itemBuilder: (context, index) {
-              final tag = reversedTags[index];
-              final card = TagMapper.toCardEntity(tag);
+              final tagAndCard = reversedTags[index];
+              final card = tagAndCard.values.first;
               return CardLabelWidget(
                 card: card,
                 lightTheme: true,

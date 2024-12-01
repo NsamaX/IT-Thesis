@@ -10,7 +10,8 @@ class OtherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final gameKeys = AppImages.game.keys.toList();
     final gameImages = AppImages.game.values.toList();
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final isAdd = arguments?['isAdd'] ?? false;
     return Scaffold(
       appBar: AppBarWidget(
@@ -23,12 +24,12 @@ class OtherPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
         child: ListView.builder(
-          itemCount: gameKeys.length - 1,
+          itemCount: gameKeys.length,
           itemBuilder: (context, index) {
             return SupportedGameLabelWidget(
-              game: gameKeys[index + 1],
-              description: ApiConfig.baseUrls?[gameKeys[index + 1]] ?? '',
-              imagePath: gameImages[index + 1],
+              game: gameKeys[index],
+              description: ApiConfig.baseUrls?[gameKeys[index]] ?? '',
+              imagePath: gameImages[index],
               isAdd: isAdd,
             );
           },

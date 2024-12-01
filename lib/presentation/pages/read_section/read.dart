@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_project/core/service_locator.dart';
 import '../../../core/locales/localizations.dart';
 import '../../blocs/drawer.dart';
 import '../../blocs/NFC.dart';
@@ -21,9 +20,11 @@ class ReadPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
-                Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+                Icons.history_rounded: () =>
+                    context.read<DrawerCubit>().toggleDrawer('history'),
                 AppLocalizations.of(context).translate('read.title'): null,
-                Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
+                Icons.search_rounded: () =>
+                    context.read<DrawerCubit>().toggleDrawer('feature'),
               },
             ),
             body: GestureDetector(
@@ -31,11 +32,7 @@ class ReadPage extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Stack(
                 children: [
-                  Center(
-                    child: BlocProvider(
-                    create: (context) => locator<NFCCubit>(),
-                    child: NFCWidget(),
-                  )),
+                  Center(child: NFCWidget()),
                   BlocBuilder<DrawerCubit, Map<String, bool>>(
                     builder: (context, state) {
                       return AnimatedPositioned(
