@@ -38,35 +38,46 @@ class CardWidget extends StatelessWidget {
             aspectRatio: 3 / 4,
             child: Opacity(
               opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
-              child: Card(
-                elevation: 4,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: card.imageUrl != null
-                      ? Image.network(
-                          card.imageUrl!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: theme.appBarTheme.backgroundColor,
-                              child: Center(
-                                child: const Icon(
-                                  Icons.image_not_supported,
-                                  size: 36,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.6),
+                      offset: Offset(3, 4),
+                      blurRadius: 6,
+                      spreadRadius: 0,
+                    ),
+                  ],
+                ),
+                child: Card(
+                  elevation: 4,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: card.imageUrl != null
+                        ? Image.network(
+                            card.imageUrl!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: theme.appBarTheme.backgroundColor,
+                                child: Center(
+                                  child: const Icon(
+                                    Icons.image_not_supported,
+                                    size: 36,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        )
-                      : Container(
-                          color: theme.appBarTheme.backgroundColor,
-                          child: Center(
+                              );
+                            },
+                          )
+                        : Center(
                             child: const Icon(
                               Icons.image_not_supported,
                               size: 36,
                             ),
                           ),
-                        ),
+                  ),
                 ),
               ),
             ),
@@ -132,7 +143,7 @@ class CardWidget extends StatelessWidget {
   ) {
     final theme = Theme.of(context);
     return Padding(
-      padding: const EdgeInsets.only(top: 4),
+      padding: const EdgeInsets.only(top: 6),
       child: GestureDetector(
         onTap: onPressed,
         child: Container(

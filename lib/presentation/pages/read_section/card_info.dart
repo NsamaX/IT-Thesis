@@ -26,6 +26,13 @@ class _CardInfoPageState extends State<CardInfoPage>
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _stopNFCSession('Page disposed');
+    super.dispose();
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||
@@ -34,18 +41,11 @@ class _CardInfoPageState extends State<CardInfoPage>
     }
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _stopNFCSession('Page disposed');
-    super.dispose();
-  }
-
   void _stopNFCSession(String reason) {
     try {
       final nfcCubit = context.read<NFCCubit>();
       if (!nfcCubit.isClosed && nfcCubit.state.isNFCEnabled) {
-        nfcCubit.stopSession();
+        nfcCubit.stopSession(reason: reason);
         debugPrint('NFC session stopped: $reason');
       }
     } catch (e) {

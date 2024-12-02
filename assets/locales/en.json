@@ -46,6 +46,8 @@
     "upload_image": "Upload image",
     "dialog": {
       "add": "Card added to deck.",
+      "read_success": "Card read successfully.",
+      "read_fail": "Failed to read card.",
       "write_success": "Card written successfully.",
       "write_fail": "Failed to write card."
     }

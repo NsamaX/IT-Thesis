@@ -23,7 +23,6 @@ class CardLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textColor = lightTheme ? Colors.black : null;
-    final iconColor = theme.appBarTheme.backgroundColor ?? Colors.black;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed(
@@ -51,12 +50,8 @@ class CardLabelWidget extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                width: 42,
+                height: 42,
                 child: card?.imageUrl != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -66,14 +61,14 @@ class CardLabelWidget extends StatelessWidget {
                           errorBuilder: (_, __, ___) => Icon(
                             Icons.image_not_supported,
                             size: 36,
-                            color: iconColor,
+                            color: textColor,
                           ),
                         ),
                       )
                     : Icon(
                         Icons.image_not_supported,
                         size: 36,
-                        color: iconColor,
+                        color: textColor,
                       ),
               ),
               const SizedBox(width: 12),
@@ -83,15 +78,21 @@ class CardLabelWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      card?.name ?? AppLocalizations.of(context).translate('card_info.no_name'),
-                      style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
+                      card?.name ??
+                          AppLocalizations.of(context)
+                              .translate('card_info.no_name'),
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      card?.description ?? AppLocalizations.of(context).translate('card_info.no_description'),
-                      style: theme.textTheme.bodySmall?.copyWith(color: textColor),
+                      card?.description ??
+                          AppLocalizations.of(context)
+                              .translate('card_info.no_description'),
+                      style:
+                          theme.textTheme.bodySmall?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -102,7 +103,8 @@ class CardLabelWidget extends StatelessWidget {
               if (count != null) ...[
                 Text(
                   count.toString(),
-                  style: theme.textTheme.titleMedium?.copyWith(color: textColor),
+                  style:
+                      theme.textTheme.titleMedium?.copyWith(color: textColor),
                 ),
               ],
               const SizedBox(width: 8),

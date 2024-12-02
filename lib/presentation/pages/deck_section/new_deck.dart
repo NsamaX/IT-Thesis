@@ -51,7 +51,7 @@ class NewDeckPage extends StatelessWidget {
                   }
                 : {
                     Icons.nfc_rounded: () => context.read<DeckManagerCubit>().toggleNfcRead(),
-                    Icons.delete_rounded: () {
+                    Icons.delete_outline_rounded: () {
                       showCupertinoAlertCancle(
                         context,
                         AppLocalizations.of(context).translate('new_deck.dialog.delete.title'),

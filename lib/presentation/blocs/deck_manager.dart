@@ -79,8 +79,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   void toggleShare() {
     final deck = state.deck;
     final StringBuffer clipboardContent = StringBuffer()
-      ..writeln('Deck Name: ${deck.deckName}')
       ..writeln('Deck ID: ${deck.deckId}')
+      ..writeln('Deck Name: ${deck.deckName}')
       ..writeln('Total Cards: ${deck.totalCards}')
       ..writeln('\nCards:');
 
