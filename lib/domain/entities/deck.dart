@@ -23,9 +23,7 @@ class DeckEntity {
     );
   }
 
-  List<String> get games {
-    return cards.keys.map((card) => card.game).toSet().toList();
-  }
+  List<String> get games => cards.keys.map((card) => card.game).toSet().toList();
 
   int get totalCards => cards.values.fold(0, (total, count) => total + count);
 }

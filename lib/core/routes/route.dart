@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../presentation/pages/export.dart';
+import '../../presentation/pages/@export.dart';
 
 class AppRoutes {
   // Index Tree
@@ -14,7 +14,7 @@ class AppRoutes {
   // Read Tree
   static const String read = '/read';
   static const String search = '/search';
-  static const String other = '/other';
+  static const String hub = '/hub';
   static const String cardInfo = '/card_info';
 
   // Setting Tree
@@ -42,8 +42,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => ReadPage());
       case search:
         return MaterialPageRoute(builder: (_) => SearchPage(), settings: settings);
-      case other:
-        return MaterialPageRoute(builder: (_) => OtherPage(), settings: settings);
+      case hub:
+        return MaterialPageRoute(builder: (_) => HubPage(), settings: settings);
       case cardInfo:
         return MaterialPageRoute(builder: (_) => CardInfoPage(), settings: settings);
       

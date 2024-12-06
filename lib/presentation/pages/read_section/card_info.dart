@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../domain/entities/card.dart';
+
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
 import '../../blocs/NFC.dart';
+import '../NFC_service.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/details.dart';
 import '../../widgets/dialog.dart';
@@ -13,44 +15,22 @@ class CardInfoPage extends StatefulWidget {
   _CardInfoPageState createState() => _CardInfoPageState();
 }
 
-class _CardInfoPageState extends State<CardInfoPage>
-    with WidgetsBindingObserver {
+class _CardInfoPageState extends State<CardInfoPage> {
+  late NFCService _nfcService;
   late NFCCubit _nfcCubit;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
     _nfcCubit = context.read<NFCCubit>();
+    _nfcService = NFCService(_nfcCubit);
     debugPrint('CardInfoPage: initState');
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _stopNFCSession('Page disposed');
+    _nfcService.dispose();
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached ||
-        state == AppLifecycleState.inactive) {
-      _stopNFCSession('App moved to background: $state');
-    }
-  }
-
-  void _stopNFCSession(String reason) {
-    try {
-      final nfcCubit = context.read<NFCCubit>();
-      if (!nfcCubit.isClosed && nfcCubit.state.isNFCEnabled) {
-        nfcCubit.stopSession(reason: reason);
-        debugPrint('NFC session stopped: $reason');
-      }
-    } catch (e) {
-      debugPrint('Error stopping NFC session: $e');
-    }
   }
 
   void _handleSnackBar(BuildContext context, NFCState state) {
@@ -64,7 +44,9 @@ class _CardInfoPageState extends State<CardInfoPage>
     } else if (state.errorMessage != null) {
       showSnackBar(
         context,
-        AppLocalizations.of(context).translate('card_info.dialog.write_fail'),
+        state.errorMessage ??
+            AppLocalizations.of(context)
+                .translate('card_info.dialog.write_fail'),
       );
       _nfcCubit.clearErrorMessage();
     }
@@ -86,10 +68,7 @@ class _CardInfoPageState extends State<CardInfoPage>
       child: Scaffold(
         appBar: AppBarWidget(
           menu: {
-            Icons.arrow_back_ios_new_rounded: () {
-              _stopNFCSession('Navigating back');
-              Navigator.of(context).pop();
-            },
+            Icons.arrow_back_ios_new_rounded: '/back',
             isAdd
                 ? AppLocalizations.of(context).translate('card_info.title')
                 : TextField(
@@ -127,14 +106,15 @@ class _CardInfoPageState extends State<CardInfoPage>
               context.watch<NFCCubit>().state.isNFCEnabled
                   ? Icons.wifi_tethering_rounded
                   : Icons.wifi_tethering_off_rounded: () {
-                final nfcCubit = context.read<NFCCubit>();
-                if (!nfcCubit.isClosed) {
-                  nfcCubit.toggleNFC();
+                if (!_nfcCubit.isClosed &&
+                    !context.read<NFCCubit>().state.isProcessing) {
+                  _nfcCubit.toggleNFC();
+                  if (_nfcCubit.state.isNFCEnabled && card != null) {
+                    _nfcCubit.start(card: card);
+                  }
                 } else {
-                  debugPrint('NFCCubit is already closed.');
-                }
-                if (nfcCubit.state.isNFCEnabled && card != null) {
-                  nfcCubit.start(card: card);
+                  showSnackBar(
+                      context, "NFC is already processing. Please wait.");
                 }
               },
           },

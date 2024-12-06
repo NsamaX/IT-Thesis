@@ -1,21 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/datasources/local/deck.dart';
-import '../data/datasources/local/settings.dart';
-import '../data/datasources/local/tag.dart';
-import '../data/datasources/remote/game_api_factory.dart';
-import '../data/repositories/card.dart';
-import '../data/repositories/deck.dart';
-import '../data/repositories/settings.dart';
-import '../data/repositories/tag.dart';
-import '../domain/usecases/deck_manager.dart';
-import '../domain/usecases/fetch_cards.dart';
-import '../domain/usecases/settings.dart';
-import '../domain/usecases/tag.dart';
-import '../presentation/blocs/NFC.dart';
-import '../presentation/blocs/app_state.dart';
-import '../presentation/blocs/deck_manager.dart';
-import '../presentation/blocs/locale.dart';
+
+import 'package:nfc_project/data/datasources/@export.dart';
+import 'package:nfc_project/data/repositories/@export.dart';
+import 'package:nfc_project/domain/usecases/@export.dart';
+import 'package:nfc_project/presentation/blocs/@export.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -35,6 +24,24 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => LocaleCubit(
     saveSetting: locator<SaveSetting>(),
     loadSetting: locator<LoadSetting>(),
+  ));
+
+  // Deck manager
+  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl());
+  locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
+
+  locator.registerLazySingleton(() => AddCardUseCase());
+  locator.registerLazySingleton(() => RemoveCardUseCase());
+  locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
+  locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
+  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
+
+  locator.registerFactory(() => DeckManagerCubit(
+      addCardUseCase: locator<AddCardUseCase>(),
+      removeCardUseCase: locator<RemoveCardUseCase>(),
+      saveDeckUseCase: locator<SaveDeckUseCase>(),
+      deleteDeckUseCase: locator<DeleteDeckUseCase>(),
+      loadDecksUseCase: locator<LoadDecksUseCase>(),
   ));
 
   // Tag
@@ -63,22 +70,4 @@ Future<void> setupLocator() async {
     final cardRepository = locator<CardRepository>(param1: game);
     return FetchCardsPageUseCase(cardRepository);
   });
-
-  // Deck manager
-  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl());
-  locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
-
-  locator.registerLazySingleton(() => AddCardUseCase());
-  locator.registerLazySingleton(() => RemoveCardUseCase());
-  locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
-  locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
-  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
-
-  locator.registerFactory(() => DeckManagerCubit(
-      addCardUseCase: locator<AddCardUseCase>(),
-      removeCardUseCase: locator<RemoveCardUseCase>(),
-      saveDeckUseCase: locator<SaveDeckUseCase>(),
-      deleteDeckUseCase: locator<DeleteDeckUseCase>(),
-      loadDecksUseCase: locator<LoadDecksUseCase>(),
-  ));
 }

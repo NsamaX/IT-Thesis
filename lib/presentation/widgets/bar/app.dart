@@ -58,18 +58,21 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         }
       },
       child: Container(
-        width: isTitle ? 140 : 42,
+        width: isTitle ? 140 : 46,
+        height: kToolbarHeight,
         child: menu is IconData
             ? Icon(menu)
             : menu is String
-                ? Text(
-                    menu,
-                    style: isTitle
-                        ? theme.textTheme.titleMedium
-                        : theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.appBarTheme.iconTheme!.color,
-                          ),
-                    textAlign: TextAlign.center,
+                ? Center(
+                    child: Text(
+                      menu,
+                      style: isTitle
+                          ? theme.textTheme.titleMedium
+                          : theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.appBarTheme.iconTheme!.color,
+                            ),
+                      textAlign: TextAlign.center,
+                    ),
                   )
                 : menu,
       ),

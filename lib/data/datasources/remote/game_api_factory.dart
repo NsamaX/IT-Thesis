@@ -1,11 +1,12 @@
+import 'package:nfc_project/core/utils/exceptions.dart';
 import 'factories/@export.dart';
 import 'api_config.dart';
 import '../../models/card.dart';
 
 abstract class GameApi {
-  Future<CardModel> fetchCard(String cardId);
-  Future<List<CardModel>> fetchCardsPage(int page);
   Future<List<CardModel>> fetchAllCards();
+  Future<List<CardModel>> fetchCardsPage(int page);
+  Future<CardModel> fetchCardById(String cardId);
 }
 
 class GameApiFactory {
@@ -13,7 +14,7 @@ class GameApiFactory {
     try {
       final baseUrl = ApiConfig.getBaseUrl(game);
       if (baseUrl.isEmpty) {
-        throw Exception('Base URL for game "$game" is not configured properly.');
+        throw FactoryException('Base URL for game "$game" is not configured properly.');
       }
       final apiRegistry = {
         'vanguard': () => VanguardApi(baseUrl),
@@ -21,10 +22,10 @@ class GameApiFactory {
       if (apiRegistry.containsKey(game)) {
         return apiRegistry[game]!();
       } else {
-        throw Exception('Unsupported game: $game');
+        throw FactoryException('Unsupported game: $game');
       }
     } catch (e) {
-      throw Exception('Failed to create API for game "$game": $e');
+      throw FactoryException('Failed to create API for game "$game": ${e.toString()}');
     }
   }
 }

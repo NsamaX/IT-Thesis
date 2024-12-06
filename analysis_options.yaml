@@ -1,31 +1,27 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 # include: package:flutter_lints/flutter.yaml
 
-linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
-  rules:
 analyzer:
+  exclude:
+    - '**/*.g.dart' # Generated files
+    - 'build/**'    # Build output
+
   errors:
     invalid_use_of_protected_member: ignore
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    missing_return: error # บังคับให้ระบุ return เสมอในฟังก์ชัน
+    unused_import: error # ห้ามมี import ที่ไม่ได้ใช้งาน
+    dead_code: error # ห้ามมีโค้ดที่ไม่ได้ใช้งาน
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+linter:
+  rules:
+    always_specify_types: true # ระบุชนิดข้อมูลทุกครั้ง
+    annotate_overrides: true # ใส่ @override เสมอ
+    avoid_classes_with_only_static_members: true # หลีกเลี่ยงการใช้ class ที่มีแต่ static อย่างเดียว
+    avoid_print: true # ห้ามใช้ print ควรใช้ logger แทน
+    prefer_const_constructors: true # ใช้ const ทุกครั้งที่เป็นไปได้
+    prefer_const_literals_to_create_immutables: true # ใช้ const ใน literal เช่น list, map
+    prefer_final_fields: true # ใช้ final แทน var หากค่าไม่เปลี่ยน
+    prefer_single_quotes: true # ใช้ single quote เป็นหลัก
+    sort_child_properties_last: true # เรียง properties ใน widget ให้ children อยู่ท้ายสุด
+    use_key_in_widget_constructors: true # ใส่ key ใน widget constructor เสมอ
+    unnecessary_this: true # ลดการใช้ this ที่ไม่จำเป็น
+    lines_longer_than_80_chars: false # ยอมให้มีบรรทัดยาวเกิน 80 ตัวอักษรในบางกรณี

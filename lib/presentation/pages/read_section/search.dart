@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../domain/usecases/fetch_cards.dart';
+
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/domain/usecases/fetch_cards.dart';
 import '../../blocs/search.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/label/card.dart';

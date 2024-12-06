@@ -1,4 +1,4 @@
-import '../../data/repositories/settings.dart';
+import 'package:nfc_project/data/repositories/settings.dart';
 
 class LoadSetting {
   final SettingsRepository repository;

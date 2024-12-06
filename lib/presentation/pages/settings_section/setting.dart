@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
+
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
 import '../../blocs/locale.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/bar/bottom_navigation.dart';

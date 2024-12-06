@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../core/constants/image.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../data/datasources/remote/api_config.dart';
+
+import 'package:nfc_project/core/constants/images.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/data/datasources/remote/api_config.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/label/supported_game.dart';
 
-class OtherPage extends StatelessWidget {
+class HubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameKeys = AppImages.game.keys.toList();
@@ -17,12 +18,12 @@ class OtherPage extends StatelessWidget {
       appBar: AppBarWidget(
         menu: {
           Icons.arrow_back_ios_new_rounded: '/back',
-          AppLocalizations.of(context).translate('other.title'): null,
+          AppLocalizations.of(context).translate('hub.title'): null,
           null: null,
         },
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
         child: ListView.builder(
           itemCount: gameKeys.length,
           itemBuilder: (context, index) {

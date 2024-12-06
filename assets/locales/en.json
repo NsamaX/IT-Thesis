@@ -13,6 +13,10 @@
   },
   "new_deck": {
     "title": "New Deck",
+    "menu": {
+      "edit": "Edit",
+      "done": "Done"
+    },
     "dialog": {
       "share": "Deck log copied to clipboard",
       "delete": {
@@ -57,10 +61,12 @@
   },
   "search": {
     "title": "Search",
-    "error": "No cards found."
+    "error": "No cards found.",
+    "search": "Search",
+    "cancel": "Cancel"
   },
-  "other": {
-    "title": "Other"
+  "hub": {
+    "title": "Hub"
   },
   "custom": {
     "title": "Custom"

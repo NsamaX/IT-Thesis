@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants/image.dart';
+import '../../../core/constants/images.dart';
 import '../../../core/locales/localizations.dart';
 import '../../../core/routes/route.dart';
 import '../../blocs/app_state.dart';
@@ -32,9 +32,9 @@ class FeaturesDrawerWidget extends StatelessWidget {
               buildItem(
                 context,
                 null,
-                AppLocalizations.of(context).translate('other.title'),
+                AppLocalizations.of(context).translate('hub.title'),
                 () {
-                  Navigator.of(context).pushNamed(AppRoutes.other);
+                  Navigator.of(context).pushNamed(AppRoutes.hub);
                 },
               ),
               buildItem(
@@ -85,7 +85,8 @@ class FeaturesDrawerWidget extends StatelessWidget {
               : Center(
                   child: Text(
                     label ?? '',
-                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
+                    style: theme.textTheme.bodyMedium
+                        ?.copyWith(color: Colors.black),
                   ),
                 ),
         ),

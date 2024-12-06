@@ -81,21 +81,25 @@ class CardLabelWidget extends StatelessWidget {
                       card?.name ??
                           AppLocalizations.of(context)
                               .translate('card_info.no_name'),
-                      style: theme.textTheme.bodyMedium
+                      style: theme.textTheme.titleSmall
                           ?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      card?.description ??
-                          AppLocalizations.of(context)
-                              .translate('card_info.no_description'),
-                      style:
-                          theme.textTheme.bodySmall?.copyWith(color: textColor),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                    const SizedBox(height: 2),
+                    Opacity(
+                      opacity: 0.6,
+                      child: Text(
+                        card?.description ??
+                            AppLocalizations.of(context)
+                                .translate('card_info.no_description'),
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(color: textColor),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
+                    const SizedBox(height: 4),
                   ],
                 ),
               ),

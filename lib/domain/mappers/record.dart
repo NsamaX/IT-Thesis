@@ -1,4 +1,4 @@
-import '../../data/models/record.dart';
+import 'package:nfc_project/data/models/record.dart';
 import '../entities/record.dart';
 import 'data.dart';
 

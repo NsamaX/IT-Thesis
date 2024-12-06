@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
+import 'package:nfc_project/core/utils/exceptions.dart';
+
 class ApiConfig {
   static Map<String, String>? baseUrls;
   static String? currentEnvironment;
@@ -12,20 +14,22 @@ class ApiConfig {
       final environments = config['environments'] as Map<String, dynamic>?;
 
       if (environments == null || environments[environment] == null) {
-        throw Exception('Environment "$environment" not found in api.json');
+        throw ConfigException('Environment "$environment" not found in api.json');
       }
 
       currentEnvironment = environment;
       baseUrls = Map<String, String>.from(environments[environment] as Map);
     } catch (e) {
-      throw Exception('Failed to load API config: $e');
+      throw ConfigException('Failed to load API config: ${e.toString()}');
     }
   }
 
   static String getBaseUrl(String key) {
     if (baseUrls == null) {
-      throw Exception('API Config not loaded. Please call loadConfig() before using getBaseUrl().');
+      throw ConfigException('API Config not loaded. Please call loadConfig() before using getBaseUrl().');
     }
-    return baseUrls?[key] ?? (throw Exception('Base URL for key "$key" not found in environment "$currentEnvironment".'));
+    return baseUrls?[key] ?? (
+      throw ConfigException('Base URL for key "$key" not found in environment "$currentEnvironment".')
+    );
   }
 }

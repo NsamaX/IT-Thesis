@@ -10,7 +10,7 @@ void showSnackBar(
     SnackBar(
       content: Text(content),
       duration: Duration(seconds: 2),
-      backgroundColor: Colors.green,
+      backgroundColor: CupertinoColors.systemGreen,
     ),
   );
 }

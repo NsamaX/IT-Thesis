@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:nfc_project/core/utils/exceptions.dart';
 import '../../models/tag.dart';
 import '../../models/card.dart';
 
 abstract class TagLocalDataSource {
-  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel);
   Future<List<Map<String, dynamic>>> loadTagsWithCards();
+  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel);
 }
 
 class TagLocalDataSourceImpl implements TagLocalDataSource {
@@ -16,25 +18,33 @@ class TagLocalDataSourceImpl implements TagLocalDataSource {
   TagLocalDataSourceImpl(this.sharedPreferences);
 
   @override
-  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel) async {
-    final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
-    final Map<String, dynamic> tagWithCard = {
-      'tag': tagModel.toJson(),
-      'card': cardModel.toJson(),
-    };
-    tags.add(json.encode(tagWithCard));
-    await sharedPreferences.setStringList(_tagsWithCardsKey, tags);
+  Future<List<Map<String, dynamic>>> loadTagsWithCards() async {
+    try {
+      final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
+      return tags.map((tag) {
+        final Map<String, dynamic> jsonData = json.decode(tag);
+        return {
+          'tag': TagModel.fromJson(jsonData['tag']),
+          'card': CardModel.fromJson(jsonData['card']),
+        };
+      }).toList();
+    } catch (e) {
+      throw CacheException('Failed to load tags with cards: ${e.runtimeType} - ${e.toString()}');
+    }
   }
 
   @override
-  Future<List<Map<String, dynamic>>> loadTagsWithCards() async {
-    final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
-    return tags.map((tag) {
-      final Map<String, dynamic> jsonData = json.decode(tag);
-      return {
-        'tag': TagModel.fromJson(jsonData['tag']),
-        'card': CardModel.fromJson(jsonData['card']),
+  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel) async {
+    try {
+      final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
+      final Map<String, dynamic> tagWithCard = {
+        'tag': tagModel.toJson(),
+        'card': cardModel.toJson(),
       };
-    }).toList();
+      tags.add(json.encode(tagWithCard));
+      await sharedPreferences.setStringList(_tagsWithCardsKey, tags);
+    } catch (e) {
+      throw CacheException('Failed to save tag with card: ${e.runtimeType} - ${e.toString()}');
+    }
   }
 }

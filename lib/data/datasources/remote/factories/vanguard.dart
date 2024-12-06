@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../../core/utils/exceptions.dart';
-import '../../../models/card.dart';
+
+import 'package:nfc_project/core/utils/exceptions.dart';
 import '../game_api_factory.dart';
+import '../../../models/card.dart';
 
 class VanguardApi implements GameApi {
   final String baseUrl;
@@ -18,7 +19,7 @@ class VanguardApi implements GameApi {
 
   void _validateResponse(http.Response response) {
     if (response.statusCode != 200) {
-      throw ApiException('API Error: ${response.statusCode}, ${response.reasonPhrase}');
+      throw ApiException('API Error: ${response.reasonPhrase}', statusCode: response.statusCode);
     }
   }
 
@@ -30,7 +31,7 @@ class VanguardApi implements GameApi {
       cardId: cardData['id']?.toString() ?? '',
       game: 'vanguard',
       name: cardData['name'] ?? '',
-      description: cardData['format'] ?? '',
+      description: cardData['clan'] ?? '',
       imageUrl: cardData['imageurljp'] ?? '',
       additionalData: {
         'cardType': cardData['cardtype'] ?? '',
@@ -48,18 +49,22 @@ class VanguardApi implements GameApi {
   }
 
   @override
-  Future<CardModel> fetchCard(String cardId) async {
+  Future<List<CardModel>> fetchAllCards() async {
     try {
-      final url = _buildUrl('card', {'id': cardId});
+      final url = _buildUrl('cards');
       final response = await http.get(url);
       _validateResponse(response);
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      if (data.isEmpty) {
-        throw ApiException('No card found with id $cardId.');
+      final body = json.decode(response.body) as Map<String, dynamic>;
+      final data = body['data'] as List<dynamic>?;
+
+      if (data == null || data.isEmpty) {
+        throw ApiException('No cards available.');
       }
-      return _parseCardData(data);
+
+      return data.map((cardData) => _parseCardData(cardData)).toList();
     } catch (e) {
-      throw ApiException('Failed to fetch card with id $cardId: $e');
+      if (e is ApiException) rethrow;
+      throw ApiException('Failed to fetch all cards: ${e.runtimeType} - ${e.toString()}');
     }
   }
 
@@ -71,29 +76,34 @@ class VanguardApi implements GameApi {
       _validateResponse(response);
       final body = json.decode(response.body) as Map<String, dynamic>;
       final data = body['data'] as List<dynamic>?;
+
       if (data == null || data.isEmpty) {
         throw ApiException('No cards found for page $page.');
       }
+
       return data.map((cardData) => _parseCardData(cardData)).toList();
     } catch (e) {
-      throw ApiException('Failed to fetch cards on page $page: $e');
+      if (e is ApiException) rethrow;
+      throw ApiException('Failed to fetch cards on page $page: ${e.runtimeType} - ${e.toString()}');
     }
   }
 
   @override
-  Future<List<CardModel>> fetchAllCards() async {
+  Future<CardModel> fetchCardById(String cardId) async {
     try {
-      final url = _buildUrl('cards');
+      final url = _buildUrl('card', {'id': cardId});
       final response = await http.get(url);
       _validateResponse(response);
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      final data = body['data'] as List<dynamic>?;
-      if (data == null || data.isEmpty) {
-        throw ApiException('No cards available.');
+      final data = json.decode(response.body) as Map<String, dynamic>;
+
+      if (data.isEmpty) {
+        throw ApiException('No card found with id $cardId.');
       }
-      return data.map((cardData) => _parseCardData(cardData)).toList();
+
+      return _parseCardData(data);
     } catch (e) {
-      throw ApiException('Failed to fetch all cards: $e');
+      if (e is ApiException) rethrow;
+      throw ApiException('Failed to fetch card with id $cardId: ${e.runtimeType} - ${e.toString()}');
     }
   }
 }

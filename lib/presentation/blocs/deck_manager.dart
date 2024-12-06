@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/card.dart';
-import '../../domain/entities/deck.dart';
-import '../../domain/usecases/deck_manager.dart';
+
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
+import 'package:nfc_project/domain/usecases/deck_manager.dart';
 
 class DeckManagerState {
   final List<DeckEntity> allDecks;
@@ -102,7 +103,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   }
 
   void toggleSelectedCard(CardEntity card) {
-    emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+    emit(
+        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
   }
 
   void toggleDelete() {
@@ -118,6 +120,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   void addCard(CardEntity card) {
     final updatedDeck = addCardUseCase(state.deck, card);
     emit(state.copyWith(deck: updatedDeck));
+    saveDeck();
   }
 
   void removeCard(CardEntity card) {

@@ -25,10 +25,7 @@ class DataModel {
       location: json['location'] ?? '',
       action: ActionModel.values.firstWhere(
         (e) => describeEnum(e) == json['action'],
-        orElse: () {
-          print('Unknown action: ${json['action']}');
-          return ActionModel.unknown;
-        },
+        orElse: () => ActionModel.unknown,
       ),
       timestamp: json['timestamp'] != null
           ? DateTime.parse(json['timestamp'])

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:nfc_project/core/utils/exceptions.dart';
 import '../../models/deck.dart';
 
 abstract class DeckLocalDataSource {
@@ -18,13 +20,13 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
       final storedDecks = prefs.getString(_deckKey);
       if (storedDecks != null) {
         final decksData = Map<String, dynamic>.from(jsonDecode(storedDecks));
-        return decksData.values.map((deck) {
-          return DeckModel.fromJson(deck);
-        }).toList();
+        return decksData.values
+            .map((deck) => DeckModel.fromJson(deck))
+            .toList();
       }
       return [];
     } catch (e) {
-      throw Exception('Failed to load decks: $e');
+      throw CacheException('Failed to load decks: ${e.runtimeType} - ${e.toString()}');
     }
   }
 
@@ -39,7 +41,7 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
       };
       await prefs.setString(_deckKey, jsonEncode(updatedDecks));
     } catch (e) {
-      throw Exception('Failed to save deck: $e');
+      throw CacheException('Failed to save deck: ${e.runtimeType} - ${e.toString()}');
     }
   }
 
@@ -54,7 +56,7 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
       };
       await prefs.setString(_deckKey, jsonEncode(serializedDecks));
     } catch (e) {
-      throw Exception('Failed to delete deck: $e');
+      throw CacheException('Failed to delete deck: ${e.runtimeType} - ${e.toString()}');
     }
   }
 }

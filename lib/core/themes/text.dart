@@ -6,15 +6,11 @@ class AppTextStyles {
   static TextStyle titleLarge = textStyle(AppColors.DarkModeText, 32, true);
   static TextStyle titleMedium = textStyle(AppColors.DarkModeText, 24, true);
   static TextStyle titleSmall = textStyle(AppColors.DarkModeText, 16, true);
-  static TextStyle bodyLarge = textStyle(AppColors.DarkModeText, 20, false);
+  static TextStyle bodyLarge = textStyle(AppColors.DarkModeText, 24, false);
   static TextStyle bodyMedium = textStyle(AppColors.DarkModeText, 16, false);
-  static TextStyle bodySmall = textStyle(AppColors.DarkModeText, 12, false);
+  static TextStyle bodySmall = textStyle(AppColors.DarkModeText, 8, false);
 
-  static TextStyle textStyle(
-    Color color,
-    double fontSize,
-    bool isBold,
-  ) {
+  static TextStyle textStyle(Color color, double fontSize, bool isBold) {
     return TextStyle(
       fontFamily: GoogleFonts.inter().fontFamily,
       fontSize: fontSize,

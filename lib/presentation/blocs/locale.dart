@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/settings.dart';
+
+import 'package:nfc_project/domain/usecases/settings.dart';
 
 class LocaleState {
   final Locale locale;

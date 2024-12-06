@@ -1,15 +1,15 @@
-import '../../data/repositories/card.dart';
+import 'package:nfc_project/data/repositories/card.dart';
 import '../entities/card.dart';
 import '../mappers/card.dart';
 
-class FetchCardUseCase {
+class FetchAllCardsUseCase {
   final CardRepository cardRepository;
 
-  FetchCardUseCase(this.cardRepository);
+  FetchAllCardsUseCase(this.cardRepository);
 
-  Future<CardEntity> call(String cardId) async {
-    final cardModel = await cardRepository.fetchCard(cardId);
-    return CardMapper.toEntity(cardModel);
+  Future<List<CardEntity>> call() async {
+    final cardModels = await cardRepository.fetchAllCards();
+    return cardModels.map((model) => CardMapper.toEntity(model)).toList();
   }
 }
 
@@ -24,13 +24,13 @@ class FetchCardsPageUseCase {
   }
 }
 
-class FetchAllCardsUseCase {
+class FetchCardByIdUseCase {
   final CardRepository cardRepository;
 
-  FetchAllCardsUseCase(this.cardRepository);
+  FetchCardByIdUseCase(this.cardRepository);
 
-  Future<List<CardEntity>> call() async {
-    final cardModels = await cardRepository.fetchAllCards();
-    return cardModels.map((model) => CardMapper.toEntity(model)).toList();
+  Future<CardEntity> call(String cardId) async {
+    final cardModel = await cardRepository.fetchCardById(cardId);
+    return CardMapper.toEntity(cardModel);
   }
 }
