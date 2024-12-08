@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../domain/entities/card.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
 import '../../blocs/NFC.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/details.dart';
 import '../../widgets/dialog.dart';
 
-class CardInfoPage extends StatefulWidget {
+class CardPage extends StatefulWidget {
   @override
   _CardInfoPageState createState() => _CardInfoPageState();
 }
 
-class _CardInfoPageState extends State<CardInfoPage>
-    with WidgetsBindingObserver {
+class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   late NFCCubit _nfcCubit;
 
   @override
@@ -22,7 +21,7 @@ class _CardInfoPageState extends State<CardInfoPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _nfcCubit = context.read<NFCCubit>();
-    debugPrint('CardInfoPage: initState');
+    debugPrint('CardPage: initState');
   }
 
   @override
@@ -54,17 +53,17 @@ class _CardInfoPageState extends State<CardInfoPage>
   }
 
   void _handleSnackBar(BuildContext context, NFCState state) {
+    final locale = AppLocalizations.of(context);
     if (state.isOperationSuccessful) {
       showSnackBar(
         context,
-        AppLocalizations.of(context)
-            .translate('card_info.dialog.write_success'),
+        locale.translate('card.dialog.write_success'),
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage != null) {
       showSnackBar(
         context,
-        AppLocalizations.of(context).translate('card_info.dialog.write_fail'),
+        locale.translate('card.dialog.write_fail'),
       );
       _nfcCubit.clearErrorMessage();
     }
@@ -72,15 +71,12 @@ class _CardInfoPageState extends State<CardInfoPage>
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final locale = AppLocalizations.of(context);
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final TextEditingController deckNameController = TextEditingController(
-      text: AppLocalizations.of(context).translate('card_info.card_name'),
-    );
-
+    final TextEditingController deckNameController = TextEditingController(text: locale.translate('card.card_name'));
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) => _handleSnackBar(context, state),
       child: Scaffold(
@@ -91,38 +87,33 @@ class _CardInfoPageState extends State<CardInfoPage>
               Navigator.of(context).pop();
             },
             isAdd
-                ? AppLocalizations.of(context).translate('card_info.title')
+                ? locale.translate('card.title')
                 : TextField(
                     controller: deckNameController,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleMedium,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: AppLocalizations.of(context)
-                          .translate('card_info.card_name'),
+                      hintText: locale.translate('card.card_name'),
                     ),
                     onSubmitted: (value) {
                       final newName = value.trim().isNotEmpty
                           ? value.trim()
-                          : AppLocalizations.of(context)
-                              .translate('card_info.card_name');
+                          : locale.translate('card.card_name');
                       deckNameController.text = newName;
                     },
                   ): null,
-            if (isAdd)
-              AppLocalizations.of(context).translate('card_info.add'): () {
-                if (card != null) {
-                  context.read<DeckManagerCubit>().addCard(card);
-                  Navigator.pop(context);
-                  showSnackBar(
-                    context,
-                    AppLocalizations.of(context)
-                        .translate('card_info.dialog.add'),
-                  );
-                }
-              },
-            if (isCustom)
-              AppLocalizations.of(context).translate('card_info.save'): null,
+            if (isAdd) locale.translate('card.toggle.add'): () {
+              if (card != null) {
+                context.read<DeckManagerCubit>().addCard(card);
+                Navigator.pop(context);
+                showSnackBar(
+                  context,
+                  locale.translate('card.dialog.add_success'),
+                );
+              }
+            },
+            if (isCustom) locale.translate('card.toggle.done'): null,
             if (!isAdd && !isCustom)
               context.watch<NFCCubit>().state.isNFCEnabled
                   ? Icons.wifi_tethering_rounded

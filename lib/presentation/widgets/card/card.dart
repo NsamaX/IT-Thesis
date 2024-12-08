@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/routes/route.dart';
-import '../../../domain/entities/card.dart';
+import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
 
 class CardWidget extends StatelessWidget {
@@ -17,10 +17,8 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isSelected =
-        context.watch<DeckManagerCubit>().state.selectedCard == card;
-    final isNfcReadEnabled =
-        context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
+    final isSelected = context.watch<DeckManagerCubit>().state.selectedCard == card;
+    final isNfcReadEnabled = context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
     return Stack(
       children: [
         GestureDetector(
@@ -29,7 +27,7 @@ class CardWidget extends StatelessWidget {
               context.read<DeckManagerCubit>().toggleSelectedCard(card);
             } else {
               Navigator.of(context).pushNamed(
-                AppRoutes.cardInfo,
+                AppRoutes.card,
                 arguments: {'card': card},
               );
             }
@@ -41,7 +39,7 @@ class CardWidget extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  color: theme.appBarTheme.backgroundColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
@@ -83,27 +81,22 @@ class CardWidget extends StatelessWidget {
             ),
           ),
         ),
-        if (context.watch<DeckManagerCubit>().state.isEditMode &&
-            !isNfcReadEnabled)
+        if (context.watch<DeckManagerCubit>().state.isEditMode && !isNfcReadEnabled)
           Positioned(
             top: 0,
             right: 0,
             child: Column(
               children: [
-                buildCount(context, count!),
-                buildButton(
-                  context,
+                _buildCount(theme, count!),
+                _buildButton(
+                  theme,
                   Icons.add,
-                  () {
-                    context.read<DeckManagerCubit>().addCard(card);
-                  },
+                  () => context.read<DeckManagerCubit>().addCard(card),
                 ),
-                buildButton(
-                  context,
+                _buildButton(
+                  theme,
                   Icons.remove,
-                  () {
-                    context.read<DeckManagerCubit>().removeCard(card);
-                  },
+                  () => context.read<DeckManagerCubit>().removeCard(card),
                 ),
               ],
             ),
@@ -112,11 +105,7 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  Widget buildCount(
-    BuildContext context,
-    int count,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildCount(ThemeData theme, int count) {
     return Container(
       width: 24,
       height: 24,
@@ -127,21 +116,14 @@ class CardWidget extends StatelessWidget {
       child: Center(
         child: Text(
           count.toString(),
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.secondaryHeaderColor,
-          ),
+          style: theme.textTheme.bodyMedium?.copyWith(color: theme.secondaryHeaderColor),
           textAlign: TextAlign.center,
         ),
       ),
     );
   }
 
-  Widget buildButton(
-    BuildContext context,
-    IconData icon,
-    VoidCallback onPressed,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildButton(ThemeData theme, IconData icon, VoidCallback onPressed) {
     return Padding(
       padding: const EdgeInsets.only(top: 6),
       child: GestureDetector(

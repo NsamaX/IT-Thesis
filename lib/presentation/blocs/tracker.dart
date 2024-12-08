@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/data.dart';
-import '../../domain/entities/deck.dart';
-import '../../domain/entities/record.dart';
-import '../../domain/entities/tag.dart';
+import 'package:nfc_project/domain/entities/data.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
+import 'package:nfc_project/domain/entities/record.dart';
+import 'package:nfc_project/domain/entities/tag.dart';
 
 class TrackState {
   final DeckEntity deck;

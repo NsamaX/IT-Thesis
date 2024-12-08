@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
-import '../../../domain/entities/card.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 
 class CardLabelWidget extends StatelessWidget {
   final CardEntity? card;
@@ -21,15 +21,14 @@ class CardLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final textColor = lightTheme ? Colors.black : null;
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          AppRoutes.cardInfo,
-          arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
-        );
-      },
+      onTap: () => Navigator.of(context).pushNamed(
+        AppRoutes.card,
+        arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
+      ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 6),
         height: 60,
@@ -52,6 +51,12 @@ class CardLabelWidget extends StatelessWidget {
               Container(
                 width: 42,
                 height: 42,
+                decoration: BoxDecoration(
+                  color: lightTheme
+                      ? theme.appBarTheme.backgroundColor
+                      : Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: card?.imageUrl != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -78,21 +83,15 @@ class CardLabelWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      card?.name ??
-                          AppLocalizations.of(context)
-                              .translate('card_info.no_name'),
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: textColor),
+                      card?.name ?? locale.translate('card.no_name'),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      card?.description ??
-                          AppLocalizations.of(context)
-                              .translate('card_info.no_description'),
-                      style:
-                          theme.textTheme.bodySmall?.copyWith(color: textColor),
+                      card?.description ?? locale.translate('card.no_description'),
+                      style: theme.textTheme.bodySmall?.copyWith(color: textColor),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
@@ -103,8 +102,7 @@ class CardLabelWidget extends StatelessWidget {
               if (count != null) ...[
                 Text(
                   count.toString(),
-                  style:
-                      theme.textTheme.titleMedium?.copyWith(color: textColor),
+                  style: theme.textTheme.titleMedium?.copyWith(color: textColor),
                 ),
               ],
               const SizedBox(width: 8),

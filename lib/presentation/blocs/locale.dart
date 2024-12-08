@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/usecases/settings.dart';
+import 'package:nfc_project/domain/usecases/settings.dart';
 
 class LocaleState {
   final Locale locale;
@@ -17,13 +17,13 @@ class LocaleCubit extends Cubit<LocaleState> {
     required this.loadSetting,
   }) : super(const LocaleState(locale: Locale('en')));
 
-  Future<void> updateLanguage(String languageCode) async {
-    await saveSetting('language', languageCode);
+  Future<void> loadLanguage() async {
+    final languageCode = await loadSetting('language') ?? 'en';
     emit(LocaleState(locale: Locale(languageCode)));
   }
 
-  Future<void> loadLanguage() async {
-    final languageCode = await loadSetting('language') ?? 'en';
+  Future<void> updateLanguage(String languageCode) async {
+    await saveSetting('language', languageCode);
     emit(LocaleState(locale: Locale(languageCode)));
   }
 }

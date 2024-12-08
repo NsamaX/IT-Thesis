@@ -1,4 +1,4 @@
-import '../../data/models/data.dart';
+import 'package:nfc_project/data/models/data.dart';
 import '../entities/data.dart';
 
 class DataMapper {

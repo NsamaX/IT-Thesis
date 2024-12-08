@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 enum ActionModel {
   unknown,
   draw,
@@ -24,9 +22,8 @@ class DataModel {
       tagId: json['tagId'] ?? '',
       location: json['location'] ?? '',
       action: ActionModel.values.firstWhere(
-        (e) => describeEnum(e) == json['action'],
+        (e) => e.name == json['action'],
         orElse: () {
-          print('Unknown action: ${json['action']}');
           return ActionModel.unknown;
         },
       ),
@@ -40,7 +37,7 @@ class DataModel {
     return {
       'tagId': tagId,
       'location': location,
-      'action': describeEnum(action),
+      'action': action.name,
       'timestamp': timestamp.toIso8601String(),
     };
   }

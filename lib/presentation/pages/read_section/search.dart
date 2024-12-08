@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../domain/usecases/fetch_cards.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/domain/usecases/fetch_cards.dart';
 import '../../blocs/search.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/label/card.dart';
@@ -14,6 +14,7 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final game = arguments?['game'] ?? '';
     final isAdd = arguments?['isAdd'] ?? false;
@@ -25,10 +26,8 @@ class SearchPage extends StatelessWidget {
         builder: (context) {
           final searchBloc = context.read<SearchBloc>();
           _scrollController.addListener(() {
-            if (_scrollController.position.pixels >=
-                    _scrollController.position.maxScrollExtent - 200 &&
-                !searchBloc.isLoading &&
-                searchBloc.hasNextPage) {
+            if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 && 
+                !searchBloc.isLoading && searchBloc.hasNextPage) {
               searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
             }
           });
@@ -36,7 +35,7 @@ class SearchPage extends StatelessWidget {
             appBar: AppBarWidget(
               menu: {
                 Icons.arrow_back_ios_new_rounded: '/back',
-                AppLocalizations.of(context).translate('search.title'): null,
+                locale.translate('search.title'): null,
                 null: null,
               },
             ),
@@ -50,8 +49,7 @@ class SearchPage extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                     child: ListView.builder(
                       controller: _scrollController,
-                      itemCount:
-                          state.cards.length + (state.hasNextPage ? 1 : 0),
+                      itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
                       itemBuilder: (context, index) {
                         if (index < state.cards.length) {
                           return CardLabelWidget(
@@ -62,20 +60,14 @@ class SearchPage extends StatelessWidget {
                         } else {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
+                            child: Center(child: CircularProgressIndicator()),
                           );
                         }
                       },
                     ),
                   );
                 } else if (state is SearchError) {
-                  return Center(
-                    child: Text(
-                      AppLocalizations.of(context).translate('search.error'),
-                    ),
-                  );
+                  return Center(child: Text(locale.translate('search.error')));
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

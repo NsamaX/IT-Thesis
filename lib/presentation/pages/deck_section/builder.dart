@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
 import '../../blocs/deck_manager.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/card.dart';
 import '../../widgets/dialog.dart';
 
-class NewDeckPage extends StatelessWidget {
+class BuilderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final deck = context.read<DeckManagerCubit>().state.deck;
+    final locale = AppLocalizations.of(context);
+    final cubit = context.read<DeckManagerCubit>(); 
+    final deck = cubit.state.deck;
     final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
     return Builder(
       builder: (context) {
@@ -18,49 +20,33 @@ class NewDeckPage extends StatelessWidget {
           appBar: AppBarWidget(
             menu: !context.watch<DeckManagerCubit>().state.isEditMode
                 ? {
-                    Icons.window_rounded: () {
-                      context.read<DeckManagerCubit>().saveDeck();
+                    Icons.arrow_back_ios_new_rounded: () {
+                      cubit.saveDeck();
                       Navigator.of(context).pop();
                     },
-                    Icons.upload_rounded: () {
-                      context.read<DeckManagerCubit>().toggleShare();
+                    Icons.ios_share_rounded: () {
+                      cubit.toggleShare();
                       showSnackBar(
                         context,
-                        AppLocalizations.of(context).translate('new_deck.dialog.share'),
+                        locale.translate('builder.dialog.share'),
                       );
                     },
-                    TextField(
-                      controller: deckNameController,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.titleMedium,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: AppLocalizations.of(context).translate('new_deck.title'),
-                      ),
-                      onSubmitted: (value) {
-                        final newName = value.trim().isNotEmpty
-                            ? value.trim()
-                            : AppLocalizations.of(context).translate('new_deck.title');
-                        context.read<DeckManagerCubit>().renameDeck(newName);
-                        deckNameController.text = newName;
-                      },
-                    ): null,
-                    Icons.play_arrow_rounded: AppRoutes.track,
-                    Icons.build_outlined: () =>
-                        context.read<DeckManagerCubit>().toggleEditMode(),
+                    cubit.state.deck.deckName: null,
+                    Icons.play_arrow_rounded: AppRoutes.tracker,
+                    locale.translate('builder.toggle.edit'): () => cubit.toggleEditMode(),
                   }
                 : {
-                    Icons.nfc_rounded: () => context.read<DeckManagerCubit>().toggleNfcRead(),
+                    Icons.nfc_rounded: () => cubit.toggleNfcRead(),
                     Icons.delete_outline_rounded: () {
                       showCupertinoAlertCancle(
                         context,
-                        AppLocalizations.of(context).translate('new_deck.dialog.delete.title'),
-                        AppLocalizations.of(context).translate('new_deck.dialog.delete.content'),
+                        locale.translate('builder.dialog.delete.title'),
+                        locale.translate('builder.dialog.delete.content'),
                         () {
-                          context.read<DeckManagerCubit>().toggleDelete();
+                          cubit.toggleDelete();
                           showSnackBar(
                             context,
-                            AppLocalizations.of(context).translate('new_deck.dialog.delete.success'),
+                            locale.translate('builder.dialog.delete.success'),
                           );
                         },
                       );
@@ -71,21 +57,21 @@ class NewDeckPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: AppLocalizations.of(context).translate('new_deck.title'),
+                        hintText: locale.translate('builder.title'),
                       ),
                       onSubmitted: (value) {
                         final newName = value.trim().isNotEmpty
                             ? value.trim()
-                            : AppLocalizations.of(context).translate('new_deck.title');
-                        context.read<DeckManagerCubit>().renameDeck(newName);
+                            : locale.translate('builder.title');
+                        cubit.renameDeck(newName);
                         deckNameController.text = newName;
                       },
                     ): null,
-                    Icons.search_rounded: {
-                      'route': AppRoutes.other,
+                    Icons.add_rounded: {
+                      'route': AppRoutes.games,
                       'arguments': {'isAdd': true},
                     },
-                    Icons.build_rounded: () => context.read<DeckManagerCubit>().toggleEditMode(),
+                    locale.translate('builder.toggle.save'): () => cubit.toggleEditMode(),
                   },
           ),
           body: GridView.builder(
@@ -98,7 +84,7 @@ class NewDeckPage extends StatelessWidget {
             ),
             itemCount: context.read<DeckManagerCubit>().state.deck.cards.length,
             itemBuilder: (context, index) {
-              final deckCards = context.read<DeckManagerCubit>().state.deck.cards;
+              final deckCards = cubit.state.deck.cards;
               final card = deckCards.keys.toList()[index];
               final count = deckCards[card]!;
               return CardWidget(

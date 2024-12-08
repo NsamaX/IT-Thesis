@@ -1,10 +1,10 @@
-import '../datasources/remote/game_api_factory.dart';
+import '../datasources/remote/game_factory.dart';
 import '../models/card.dart';
 
 abstract class CardRepository {
-  Future<CardModel> fetchCard(String cardId);
-  Future<List<CardModel>> fetchCardsPage(int page);
   Future<List<CardModel>> fetchAllCards();
+  Future<List<CardModel>> fetchCardsPage(int page);
+  Future<CardModel> fetchCardById(String cardId);
 }
 
 class CardRepositoryImpl implements CardRepository {
@@ -13,8 +13,8 @@ class CardRepositoryImpl implements CardRepository {
   CardRepositoryImpl(this.gameApi);
 
   @override
-  Future<CardModel> fetchCard(String cardId) async {
-    return await gameApi.fetchCard(cardId);
+  Future<List<CardModel>> fetchAllCards() async {
+    return await gameApi.fetchAllCards();
   }
 
   @override
@@ -23,7 +23,7 @@ class CardRepositoryImpl implements CardRepository {
   }
 
   @override
-  Future<List<CardModel>> fetchAllCards() async {
-    return await gameApi.fetchAllCards();
+  Future<CardModel> fetchCardById(String cardId) async {
+    return await gameApi.fetchCardById(cardId);
   }
 }

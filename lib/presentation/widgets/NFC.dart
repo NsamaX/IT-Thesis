@@ -9,25 +9,25 @@ class NFCWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final iconSize = 40;
+    final cubit = context.read<NFCCubit>();
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {
-        final theme = Theme.of(context);
-        final double iconSize = 40;
         final bool isNFCEnabled = state.isNFCEnabled;
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildNFCIcon(context, -90, Offset(iconSize + 6, 0), isNFCEnabled),
+            _buildNFCIcon(theme, cubit, -90, Offset(iconSize + 6, 0), isNFCEnabled),
             const SizedBox(width: 4),
             GestureDetector(
               onTap: () async {
-                final nfcCubit = context.read<NFCCubit>();
                 if (!isNFCEnabled) {
-                  nfcCubit.toggleNFC();
-                  await nfcCubit.start();
+                  cubit.toggleNFC();
+                  await cubit.start();
                 } else {
-                  await nfcCubit.stopSession(reason: "User toggled off NFC");
+                  await cubit.stopSession(reason: "User toggled off NFC");
                 }
               },
               child: AnimatedContainer(
@@ -43,28 +43,21 @@ class NFCWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            buildNFCIcon(context, 90, Offset(-iconSize - 6, 0), isNFCEnabled),
+            _buildNFCIcon(theme, cubit, 90, Offset(-iconSize - 6, 0), isNFCEnabled),
           ],
         );
       },
     );
   }
 
-  Widget buildNFCIcon(
-    BuildContext context,
-    double angle,
-    Offset offset,
-    bool isNFCEnabled,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildNFCIcon(ThemeData theme, NFCCubit cubit, double angle, Offset offset, bool isNFCEnabled) {
     return GestureDetector(
       onTap: () async {
-        final nfcCubit = context.read<NFCCubit>();
         if (!isNFCEnabled) {
-          nfcCubit.toggleNFC();
-          await nfcCubit.start();
+          cubit.toggleNFC();
+          await cubit.start();
         } else {
-          await nfcCubit.stopSession(reason: "User toggled off NFC");
+          await cubit.stopSession(reason: "User toggled off NFC");
         }
       },
       child: Transform.translate(

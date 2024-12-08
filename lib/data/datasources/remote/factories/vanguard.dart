@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../../../core/utils/exceptions.dart';
+import 'package:nfc_project/core/utils/exception.dart';
+import '../game_factory.dart';
 import '../../../models/card.dart';
-import '../game_api_factory.dart';
 
 class VanguardApi implements GameApi {
   final String baseUrl;
@@ -47,19 +47,27 @@ class VanguardApi implements GameApi {
     );
   }
 
+  List<CardModel> _filterCardData(List<dynamic> cardsData) {
+    return cardsData
+        .map((cardData) => _parseCardData(cardData))
+        .where((card) => card.additionalData!['sets'] != null && (card.additionalData!['sets'] as List).isNotEmpty)
+        .toList();
+  }
+
   @override
-  Future<CardModel> fetchCard(String cardId) async {
+  Future<List<CardModel>> fetchAllCards() async {
     try {
-      final url = _buildUrl('card', {'id': cardId});
+      final url = _buildUrl('cards');
       final response = await http.get(url);
       _validateResponse(response);
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      if (data.isEmpty) {
-        throw ApiException('No card found with id $cardId.');
+      final body = json.decode(response.body) as Map<String, dynamic>;
+      final data = body['data'] as List<dynamic>?;
+      if (data == null || data.isEmpty) {
+        throw ApiException('No cards available.');
       }
-      return _parseCardData(data);
+      return _filterCardData(data);
     } catch (e) {
-      throw ApiException('Failed to fetch card with id $cardId: $e');
+      throw ApiException('Failed to fetch all cards: $e');
     }
   }
 
@@ -74,26 +82,25 @@ class VanguardApi implements GameApi {
       if (data == null || data.isEmpty) {
         throw ApiException('No cards found for page $page.');
       }
-      return data.map((cardData) => _parseCardData(cardData)).toList();
+      return _filterCardData(data);
     } catch (e) {
       throw ApiException('Failed to fetch cards on page $page: $e');
     }
   }
 
   @override
-  Future<List<CardModel>> fetchAllCards() async {
+  Future<CardModel> fetchCardById(String cardId) async {
     try {
-      final url = _buildUrl('cards');
+      final url = _buildUrl('card', {'id': cardId});
       final response = await http.get(url);
       _validateResponse(response);
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      final data = body['data'] as List<dynamic>?;
-      if (data == null || data.isEmpty) {
-        throw ApiException('No cards available.');
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      if (data.isEmpty) {
+        throw ApiException('No card found with id $cardId.');
       }
-      return data.map((cardData) => _parseCardData(cardData)).toList();
+      return _parseCardData(data);
     } catch (e) {
-      throw ApiException('Failed to fetch all cards: $e');
+      throw ApiException('Failed to fetch card with id $cardId: $e');
     }
   }
 }

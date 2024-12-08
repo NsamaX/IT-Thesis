@@ -10,16 +10,18 @@ class SettingsLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: label.map<Widget>((category) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildTitle(context, category['title'] as String),
+            _buildTitle(theme, category['title'] as String),
             ...category['content'].map<Widget>((item) {
-              return buildContent(
+              return _buildContent(
                 context,
+                theme,
                 item['icon'] as IconData,
                 item['text'] as String,
                 item['onTap'],
@@ -31,11 +33,7 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTitle(
-    BuildContext context,
-    String text,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildTitle(ThemeData theme, String text) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 16, bottom: 8),
       child: Text(
@@ -45,13 +43,7 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget buildContent(
-    BuildContext context,
-    dynamic icon,
-    String text,
-    dynamic onTap,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildContent(BuildContext context, ThemeData theme, dynamic icon, String text, dynamic onTap) {
     return GestureDetector(
       onTap: () {
         if (onTap != null) {

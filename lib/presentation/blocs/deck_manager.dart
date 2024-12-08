@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
-import '../../domain/entities/card.dart';
-import '../../domain/entities/deck.dart';
-import '../../domain/usecases/deck_manager.dart';
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
+import 'package:nfc_project/domain/usecases/deck_manager.dart';
 
 class DeckManagerState {
   final List<DeckEntity> allDecks;

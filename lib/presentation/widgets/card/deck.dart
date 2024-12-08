@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/routes/route.dart';
-import '../../../domain/entities/deck.dart';
+import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
 import '../../blocs/deck_manager.dart';
 
 class DeckWidget extends StatelessWidget {
@@ -20,7 +20,7 @@ class DeckWidget extends StatelessWidget {
         GestureDetector(
           onTap: () {
             context.read<DeckManagerCubit>().setDeck(deck);
-            Navigator.of(context).pushNamed(AppRoutes.newDeck);
+            Navigator.of(context).pushNamed(AppRoutes.builder);
           },
           child: Container(
             decoration: BoxDecoration(
@@ -52,9 +52,7 @@ class DeckWidget extends StatelessWidget {
             top: -2,
             right: -2,
             child: GestureDetector(
-              onTap: () {
-                context.read<DeckManagerCubit>().deleteDeck();
-              },
+              onTap: () => context.read<DeckManagerCubit>().deleteDeck(),
               child: Container(
                 width: 30,
                 height: 30,

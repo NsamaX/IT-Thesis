@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 import '../../blocs/drawer.dart';
 import '../../blocs/NFC.dart';
 import '../../widgets/bar/app.dart';
@@ -9,9 +9,10 @@ import '../../widgets/drawer/features.dart';
 import '../../widgets/drawer/history.dart';
 import '../../widgets/nfc.dart';
 
-class ReadPage extends StatelessWidget {
+class ReaderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     return BlocProvider(
       create: (context) => DrawerCubit(),
       child: Builder(
@@ -20,11 +21,9 @@ class ReadPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBarWidget(
               menu: {
-                Icons.history_rounded: () =>
-                    context.read<DrawerCubit>().toggleDrawer('history'),
-                AppLocalizations.of(context).translate('read.title'): null,
-                Icons.search_rounded: () =>
-                    context.read<DrawerCubit>().toggleDrawer('feature'),
+                Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+                locale.translate('reader.title'): null,
+                Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
               },
             ),
             body: GestureDetector(

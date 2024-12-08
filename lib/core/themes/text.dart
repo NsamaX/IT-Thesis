@@ -10,11 +10,7 @@ class AppTextStyles {
   static TextStyle bodyMedium = textStyle(AppColors.DarkModeText, 16, false);
   static TextStyle bodySmall = textStyle(AppColors.DarkModeText, 12, false);
 
-  static TextStyle textStyle(
-    Color color,
-    double fontSize,
-    bool isBold,
-  ) {
+  static TextStyle textStyle(Color color, double fontSize, bool isBold) {
     return TextStyle(
       fontFamily: GoogleFonts.inter().fontFamily,
       fontSize: fontSize,

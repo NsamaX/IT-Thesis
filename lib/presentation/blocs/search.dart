@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../domain/entities/card.dart';
-import '../../domain/usecases/fetch_cards.dart';
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/usecases/fetch_cards.dart';
 
 abstract class SearchEvent {}
 

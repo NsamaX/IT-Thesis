@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/routes/route.dart';
+import 'package:nfc_project/core/routes/route.dart';
 
 class AppState {
   final int currentPageIndex;
@@ -27,9 +27,9 @@ class AppStateCubit extends Cubit<AppState> {
   String getRouteForIndex(int index) {
     switch (index) {
       case 0:
-        return AppRoutes.myDeck;
+        return AppRoutes.decks;
       case 1:
-        return AppRoutes.read;
+        return AppRoutes.reader;
       case 2:
         return AppRoutes.setting;
       default:

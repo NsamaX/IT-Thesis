@@ -1,4 +1,4 @@
-import '../../data/models/card.dart';
+import 'package:nfc_project/data/models/card.dart';
 import '../entities/card.dart';
 
 class CardMapper {

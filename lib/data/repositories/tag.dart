@@ -3,8 +3,9 @@ import '../models/tag.dart';
 import '../models/card.dart';
 
 abstract class TagRepository {
-  Future<void> saveTagWithCard(TagModel tagEntity, CardModel cardEntity);
-  Future<List<Map<String, dynamic>>> loadTagsWithCards();
+  Future<List<Map<String, dynamic>>> loadTags();
+  Future<void> saveTag(TagModel tagEntity, CardModel cardEntity);
+  Future<void> deleteTags();
 }
 
 class TagRepositoryImpl implements TagRepository {
@@ -13,12 +14,17 @@ class TagRepositoryImpl implements TagRepository {
   TagRepositoryImpl(this.localDataSource);
 
   @override
-  Future<void> saveTagWithCard(TagModel tagModel, CardModel cardModel) async {
-    await localDataSource.saveTagWithCard(tagModel, cardModel);
+  Future<List<Map<String, dynamic>>> loadTags() async {
+    return await localDataSource.loadTags();
   }
 
   @override
-  Future<List<Map<String, dynamic>>> loadTagsWithCards() async {
-    return await localDataSource.loadTagsWithCards();
+  Future<void> saveTag(TagModel tagModel, CardModel cardModel) async {
+    await localDataSource.saveTag(tagModel, cardModel);
+  }
+
+  @override
+  Future<void> deleteTags() async {
+    await localDataSource.deleteTags();
   }
 }

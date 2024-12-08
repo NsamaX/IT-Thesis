@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
 
 class SignInWidget extends StatelessWidget {
   const SignInWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                AppLocalizations.of(context).translate('sign_in.title'),
-                style: theme.textTheme.titleMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 84),
-              Container(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              locale.translate('sign_in.title'),
+              style: theme.textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 42),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Container(
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
@@ -38,24 +39,20 @@ class SignInWidget extends StatelessWidget {
                 ),
                 child: Image.asset('assets/images/google.png'),
               ),
-              const SizedBox(height: 82),
-              SizedBox(
-                width: 132,
-                height: 46,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.read,
-                      (_) => false,
-                    );
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('sign_in.button'),
-                  ),
+            ),
+            const SizedBox(height: 42),
+            SizedBox(
+              width: 132,
+              height: 46,
+              child: ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRoutes.reader,
+                  (_) => false,
                 ),
+                child: Text(locale.translate('sign_in.button')),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

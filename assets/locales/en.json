@@ -1,76 +1,88 @@
 {
   "index": {
     "title": "Deck Tracker",
-    "description": "With NFC technology and this app, managing your cards is easy! Simply scan, track, and organize the cards in your deck with ease. You'll always know what's in your deck, allowing you to focus and enjoy the game more!",
+    "description": "Welcome to Deck Tracker! This app uses NFC technology to help you scan, track, and organize your cards effortlessly. Tap 'Start' to begin exploring!",
     "button": "Start"
   },
   "sign_in": {
     "title": "Sign in with",
+    "description": "Sign in with your Google account for a personalized experience, or continue as a guest to explore the app.",
     "button": "Guest"
   },
-  "my_deck": {
-    "title": "My Deck"
+  "decks": {
+    "title": "My Decks",
+    "description": "Here, you can view all your saved decks. Manage, edit, or track them easily from this page."
   },
-  "new_deck": {
+  "builder": {
     "title": "New Deck",
+    "description": "Start building your deck! Add cards, organize them, and prepare for your next game.",
+    "toggle": {
+      "edit": "Edit",
+      "save": "Save"
+    },
     "dialog": {
-      "share": "Deck log copied to clipboard",
+      "share": "Your deck log has been copied to the clipboard for easy sharing.",
       "delete": {
         "title": "Delete Deck",
-        "content": "Are you sure you want to delete this deck?",
-        "success": "Deck deleted successfully"
+        "content": "Are you sure you want to delete this deck? This action cannot be undone.",
+        "success": "Deck deleted successfully."
       }
     }
   },
-  "track": {
-    "title": "Track",
+  "tracker": {
+    "title": "Deck Tracker",
+    "description": "Use this feature to track your cards in real-time during a game. Simply scan your cards to update your deck's status.",
     "dialog": {
-      "title": "Card tracking",
-      "content": "You can scan cards while playing on this page. When a card is scanned, it will be counted as removed from the deck. If you scan a previously scanned card, it will be added back to the deck. Click OK once you've read this."
+      "title": "Card Tracking Tutorial",
+      "content": "On this page, you can scan cards while playing. When a card is scanned, it will be removed from the deck. Scanning it again adds it back. Tap OK to proceed."
     }
   },
-  "dialog": {
-    "confirm": "Confirm",
-    "cancel": "Cancel",
-    "ok": "OK"
+  "reader": {
+    "title": "Card Reader",
+    "description": "Use this tool to scan cards and view their details or status in real-time."
   },
-  "card_info": {
-    "title": "Card info",
-    "card_name": "Card name",
-    "add": "Add",
-    "save": "Save",
-    "description": "Description",
-    "no_name": "No card name",
-    "no_description": "No card description",
-    "no_image": "No card image",
-    "upload_image": "Upload image",
-    "dialog": {
-      "add": "Card added to deck.",
-      "read_success": "Card read successfully.",
-      "read_fail": "Failed to read card.",
-      "write_success": "Card written successfully.",
-      "write_fail": "Failed to write card."
-    }
-  },
-  "read": {
-    "title": "Read"
+  "games": {
+    "title": "Games",
+    "description": "Choose the game you are playing to customize your decks and track your cards."
   },
   "search": {
     "title": "Search",
+    "description": "Looking for a card? Use the search feature to find specific cards across all your games.",
     "error": "No cards found."
   },
-  "other": {
-    "title": "Other"
+  "card": {
+    "title": "Card info",    
+    "description": "Manage individual card details here. Add a name, description, and upload an image to personalize your cards.",
+    "toggle": {
+      "add": "Add",
+      "done": "Done"
+    },
+    "card_name": "Card name",
+    "card_description": "Description",
+    "upload_image": "Upload image",
+    "no_name": "No card name",
+    "no_description": "No card description",
+    "no_image": "No card image",
+    "dialog": {
+      "add_success": "Card successfully added to your deck!",
+      "read_success": "NFC tag read successfully.",
+      "write_success": "Card information written successfully.",
+      "add_fail": "Could not add the card to your deck.",
+      "read_fail": "Failed to read the NFC tag.",
+      "write_fail": "Failed to write to the NFC tag."
+    }
   },
   "custom": {
-    "title": "Custom"
+    "title": "Custom",
+    "description": "Create unique custom cards with personalized images and descriptions. Perfect for homebrew decks or special rules."
   },
-  "setting": {
-    "title": "Setting",
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your experience. Manage your account, adjust preferences, and explore additional features here.",
     "account": {
       "title": "Account",
       "email": "Email",
-      "my_card": "My card"
+      "library": "Library"
     },
     "general": {
       "title": "General",
@@ -85,7 +97,18 @@
       "donate": "Donate"
     }
   },
-  "my_card": {
-    "title": "My Card"
+  "library": {
+    "title": "Library",
+    "description": "Browse all the cards and decks you have created or saved. Use this as a reference during games."
+  },
+  "navigation": {
+    "decks": "Decks",
+    "reader": "Reader",
+    "settings": "Settings"
+  },
+  "dialog": {
+    "ok": "OK",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   }
 }

@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:nfc_project/core/utils/exception.dart';
 import '../../models/deck.dart';
 
 abstract class DeckLocalDataSource {
-  Future<List<DeckModel>> getDecks();
+  Future<List<DeckModel>> loadDecks();
   Future<void> saveDeck(DeckModel deck);
   Future<void> deleteDeck(String deckId);
 }
@@ -12,7 +13,7 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   static const String _deckKey = "user_decks";
 
   @override
-  Future<List<DeckModel>> getDecks() async {
+  Future<List<DeckModel>> loadDecks() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final storedDecks = prefs.getString(_deckKey);
@@ -24,7 +25,7 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
       }
       return [];
     } catch (e) {
-      throw Exception('Failed to load decks: $e');
+      throw LocalDataException('Failed to load decks', details: e.toString());
     }
   }
 
@@ -32,14 +33,14 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   Future<void> saveDeck(DeckModel deck) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final decks = await getDecks();
+      final decks = await loadDecks();
       final updatedDecks = {
         for (var existingDeck in decks) existingDeck.deckId: existingDeck.toJson(),
         deck.deckId: deck.toJson(),
       };
       await prefs.setString(_deckKey, jsonEncode(updatedDecks));
     } catch (e) {
-      throw Exception('Failed to save deck: $e');
+      throw LocalDataException('Failed to save deck', details: e.toString());
     }
   }
 
@@ -47,14 +48,14 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   Future<void> deleteDeck(String deckId) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final decks = await getDecks();
+      final decks = await loadDecks();
       final updatedDecks = decks.where((deck) => deck.deckId != deckId).toList();
       final serializedDecks = {
         for (var deck in updatedDecks) deck.deckId: deck.toJson(),
       };
       await prefs.setString(_deckKey, jsonEncode(serializedDecks));
     } catch (e) {
-      throw Exception('Failed to delete deck: $e');
+      throw LocalDataException('Failed to delete deck', details: e.toString());
     }
   }
 }

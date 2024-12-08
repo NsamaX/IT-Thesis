@@ -1,4 +1,4 @@
-import '../../data/models/tag.dart';
+import 'package:nfc_project/data/models/tag.dart';
 import '../entities/card.dart';
 import '../entities/tag.dart';
 

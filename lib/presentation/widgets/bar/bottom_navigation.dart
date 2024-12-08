@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 import '../../blocs/app_state.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
@@ -8,9 +8,10 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
-        final theme = Theme.of(context);
         return BottomNavigationBar(
           currentIndex: state.currentPageIndex,
           onTap: (index) {
@@ -26,15 +27,15 @@ class BottomNavigationBarWidget extends StatelessWidget {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.web_stories_rounded),
-              label: AppLocalizations.of(context).translate('my_deck.title'),
+              label: locale.translate('navigation.decks'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.insert_page_break_outlined),
-              label: AppLocalizations.of(context).translate('read.title'),
+              label: locale.translate('navigation.reader'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              label: AppLocalizations.of(context).translate('setting.title'),
+              label: locale.translate('navigation.settings'),
             ),
           ],
           selectedItemColor: theme.secondaryHeaderColor,

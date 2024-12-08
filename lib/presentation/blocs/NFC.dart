@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'package:logger/logger.dart';
-import '../../../domain/entities/card.dart';
-import '../../../domain/entities/tag.dart';
-import '../../../domain/usecases/tag.dart';
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/entities/tag.dart';
+import 'package:nfc_project/domain/usecases/tag.dart';
 
 class NFCState {
   final bool isNFCEnabled;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../domain/entities/card.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 
 class CardDetailsWidget extends StatelessWidget {
   final CardEntity? card;
@@ -15,26 +15,26 @@ class CardDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(40),
       child: ListView(
         children: [
-          isCustom ? buildDottedBorder(context) : buildImage(context, card),
+          isCustom ? _buildDottedBorder(locale, theme) : _buildImage(locale, theme, card),
           const SizedBox(height: 26),
           Text(
-            AppLocalizations.of(context).translate('card_info.description'),
+            locale.translate('card.card_description'),
             style: theme.textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
-          buildDescription(context, card, isCustom),
+          _buildDescription(locale, theme, card, isCustom),
         ],
       ),
     );
   }
 
-  Widget buildDottedBorder(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildDottedBorder(AppLocalizations locale, ThemeData theme) {
     return AspectRatio(
       aspectRatio: 3 / 4,
       child: DottedBorder(
@@ -50,7 +50,7 @@ class CardDetailsWidget extends StatelessWidget {
               const Icon(Icons.upload_rounded, size: 36),
               const SizedBox(height: 12),
               Text(
-                AppLocalizations.of(context).translate('card_info.upload_image'),
+                locale.translate('card.upload_image'),
                 style: theme.textTheme.titleSmall,
               ),
             ],
@@ -60,10 +60,7 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget buildImage(
-    BuildContext context,
-    CardEntity? card,
-  ) {
+  Widget _buildImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: AspectRatio(
@@ -72,15 +69,14 @@ class CardDetailsWidget extends StatelessWidget {
             ? Image.network(
                 card!.imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _buildErrorImage(context),
+                errorBuilder: (_, __, ___) => _buildErrorImage(locale, theme),
               )
-            : _buildErrorImage(context),
+            : _buildErrorImage(locale, theme),
       ),
     );
   }
 
-  Widget _buildErrorImage(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildErrorImage(AppLocalizations locale, ThemeData theme) {
     return Container(
       color: theme.appBarTheme.backgroundColor,
       child: Center(
@@ -90,7 +86,7 @@ class CardDetailsWidget extends StatelessWidget {
             const Icon(Icons.image_not_supported, size: 36),
             const SizedBox(height: 8),
             Text(
-              AppLocalizations.of(context).translate('card_info.no_image'),
+              locale.translate('card.no_image'),
               style: theme.textTheme.titleSmall,
             ),
           ],
@@ -99,12 +95,7 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget buildDescription(
-    BuildContext context,
-    CardEntity? card,
-    bool isCustom,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildDescription(AppLocalizations locale, ThemeData theme, CardEntity? card, bool isCustom) {
     if (isCustom) {
       return Opacity(
         opacity: 0.6,
@@ -116,18 +107,15 @@ class CardDetailsWidget extends StatelessWidget {
         ),
       );
     }
-
     if (card == null) {
       return Container();
     }
-
     if (card.additionalData == null) {
       return _buildDescriptionText(
-        context,
-        card.description ?? AppLocalizations.of(context).translate('card_info.no_description'),
+        theme,
+        card.description ?? locale.translate('card.no_description'),
       );
     }
-
     return Opacity(
       opacity: 0.6,
       child: Column(
@@ -160,11 +148,7 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText(
-    BuildContext context,
-    String text,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildDescriptionText(ThemeData theme, String text) {
     return Opacity(
       opacity: 0.6,
       child: Text(

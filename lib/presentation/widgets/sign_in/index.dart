@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
 
 class IndexWidget extends StatelessWidget {
   const IndexWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                AppLocalizations.of(context).translate('index.title'),
+                locale.translate('index.title'),
                 style: theme.textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
               Text(
-                AppLocalizations.of(context).translate('index.description'),
+                locale.translate('index.description'),
                 style: theme.textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -31,12 +32,8 @@ class IndexWidget extends StatelessWidget {
                 width: 132,
                 height: 46,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(AppRoutes.signIn);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('index.button'),
-                  ),
+                  onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
+                  child: Text(locale.translate('index.button')),
                 ),
               ),
             ],

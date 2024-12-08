@@ -1,4 +1,4 @@
-import '../../data/models/user.dart';
+import 'package:nfc_project/data/models/user.dart';
 import '../entities/user.dart';
 
 class UserMapper {

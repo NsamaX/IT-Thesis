@@ -10,11 +10,9 @@ class ApiConfig {
       final String jsonString = await rootBundle.loadString('assets/configs/api.json');
       final Map<String, dynamic> config = json.decode(jsonString);
       final environments = config['environments'] as Map<String, dynamic>?;
-
       if (environments == null || environments[environment] == null) {
         throw Exception('Environment "$environment" not found in api.json');
       }
-
       currentEnvironment = environment;
       baseUrls = Map<String, String>.from(environments[environment] as Map);
     } catch (e) {

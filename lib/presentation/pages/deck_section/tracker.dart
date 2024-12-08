@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/presentation/blocs/NFC.dart';
-import '../../../core/locales/localizations.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 import '../../blocs/deck_manager.dart';
 import '../../blocs/tracker.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/label/card.dart';
 
-class TrackPage extends StatelessWidget {
+class TrackerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final cubit = context.read<TrackCubit>();
     final deck = context.read<DeckManagerCubit>().state.deck;
     return BlocProvider(
       create: (context) => TrackCubit(deck),
@@ -21,17 +23,15 @@ class TrackPage extends StatelessWidget {
               final tag = nfcState.lastReadTag;
               if (tag != null && nfcState.isNFCEnabled) {
                 try {
-                  context.read<TrackCubit>().readTag(tag);
+                  cubit.readTag(tag);
                   showSnackBar(
                     context,
-                    AppLocalizations.of(context)
-                        .translate('card_info.dialog.read_success'),
+                    locale.translate('card.dialog.read_success'),
                   );
                 } catch (e) {
                   showSnackBar(
                     context,
-                    AppLocalizations.of(context)
-                        .translate('card_info.dialog.read_fail'),
+                    locale.translate('card.dialog.read_fail'),
                   );
                 }
               }
@@ -40,15 +40,14 @@ class TrackPage extends StatelessWidget {
         ],
         child: BlocBuilder<TrackCubit, TrackState>(
           builder: (context, state) {
-            final totalCards = context.read<TrackCubit>().totalCards;
+            final totalCards = cubit.totalCards;
             if (!state.isDialogShown) {
               Future.microtask(() {
                 context.read<TrackCubit>().showDialog();
                 showCupertinoAlertOK(
                   context,
-                  AppLocalizations.of(context).translate('track.dialog.title'),
-                  AppLocalizations.of(context)
-                      .translate('track.dialog.content'),
+                  locale.translate('tracker.dialog.title'),
+                  locale.translate('tracker.dialog.content'),
                 );
               });
             }
@@ -57,10 +56,8 @@ class TrackPage extends StatelessWidget {
                 menu: {
                   Icons.arrow_back_ios_new_rounded: '/back',
                   totalCards.toString(): null,
-                  AppLocalizations.of(context).translate('track.title'): null,
-                  Icons.refresh_rounded: () {
-                    context.read<TrackCubit>().toggleReset(deck);
-                  },
+                  locale.translate('tracker.title'): null,
+                  Icons.refresh_rounded: () => cubit.toggleReset(deck),
                   context.watch<NFCCubit>().state.isNFCEnabled
                       ? Icons.wifi_tethering_rounded
                       : Icons.wifi_tethering_off_rounded: () async {

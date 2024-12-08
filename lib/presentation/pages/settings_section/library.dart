@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/locales/localizations.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 import '../../blocs/NFC.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/card.dart';
 
-class MyCardPage extends StatelessWidget {
+class LibraryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBarWidget(
         menu: {
           Icons.arrow_back_ios_new_rounded: '/back',
-          AppLocalizations.of(context).translate('my_card.title'): null,
+          locale.translate('library.title'): null,
           null: null,
         },
       ),
@@ -21,10 +22,7 @@ class MyCardPage extends StatelessWidget {
           if (state.savedTags == null || state.savedTags!.isEmpty) {
             return Container();
           }
-
-          final savedCards =
-              state.savedTags!.map((map) => map.values.first).toList();
-
+          final savedCards = state.savedTags!.map((map) => map.values.first).toList();
           return GridView.builder(
             padding: const EdgeInsets.all(16),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

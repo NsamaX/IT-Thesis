@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants/image.dart';
-import '../../../core/locales/localizations.dart';
-import '../../../core/routes/route.dart';
+import 'package:nfc_project/core/constants/image.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/route.dart';
 import '../../blocs/app_state.dart';
 
 class FeaturesDrawerWidget extends StatelessWidget {
@@ -10,6 +10,8 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
@@ -18,35 +20,29 @@ class FeaturesDrawerWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildItem(
-                context,
+              _buildItem(
+                theme,
                 AppImages.game[currentGame],
                 null,
-                () {
-                  Navigator.of(context).pushNamed(
-                    AppRoutes.search,
-                    arguments: {'game': currentGame},
-                  );
-                },
+                () => Navigator.of(context).pushNamed(
+                  AppRoutes.search,
+                  arguments: {'game': currentGame},
+                ),
               ),
-              buildItem(
-                context,
+              _buildItem(
+                theme,
                 null,
-                AppLocalizations.of(context).translate('other.title'),
-                () {
-                  Navigator.of(context).pushNamed(AppRoutes.other);
-                },
+                locale.translate('games.title'),
+                () => Navigator.of(context).pushNamed(AppRoutes.games),
               ),
-              buildItem(
-                context,
+              _buildItem(
+                theme,
                 null,
-                AppLocalizations.of(context).translate('custom.title'),
-                () {
-                  Navigator.of(context).pushNamed(
-                    AppRoutes.cardInfo,
-                    arguments: {'isCustom': true},
-                  );
-                },
+                locale.translate('custom.title'),
+                () => Navigator.of(context).pushNamed(
+                  AppRoutes.card,
+                  arguments: {'isCustom': true},
+                ),
               ),
             ],
           ),
@@ -55,13 +51,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildItem(
-    BuildContext context,
-    String? image,
-    String? label,
-    VoidCallback? onTapFunction,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildItem(ThemeData theme, String? image, String? label, VoidCallback? onTapFunction) {
     final double boxSize = 60;
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
