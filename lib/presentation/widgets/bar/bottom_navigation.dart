@@ -10,38 +10,46 @@ class BottomNavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: state.currentPageIndex,
-          onTap: (index) {
-            if (index != state.currentPageIndex) {
-              context.read<AppStateCubit>().updatePageIndex(index);
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                context.read<AppStateCubit>().getRouteForIndex(index),
-                (_) => false,
-              );
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.web_stories_rounded),
-              label: locale.translate('navigation.decks'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.insert_page_break_outlined),
-              label: locale.translate('navigation.reader'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: locale.translate('navigation.settings'),
-            ),
-          ],
+          onTap: (index) => _handleNavigation(context, state, index),
+          items: _buildNavigationBarItems(locale),
           selectedItemColor: theme.secondaryHeaderColor,
           unselectedItemColor: theme.iconTheme.color,
         );
       },
     );
+  }
+
+  void _handleNavigation(BuildContext context, AppState state, int index) {
+    if (index != state.currentPageIndex) {
+      final appStateCubit = context.read<AppStateCubit>();
+      appStateCubit.updatePageIndex(index);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        appStateCubit.getRouteForIndex(index),
+        (_) => false,
+      );
+    }
+  }
+
+  List<BottomNavigationBarItem> _buildNavigationBarItems(AppLocalizations locale) {
+    return [
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.web_stories_rounded),
+        label: locale.translate('navigation.decks'),
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.insert_page_break_outlined),
+        label: locale.translate('navigation.reader'),
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.settings),
+        label: locale.translate('navigation.settings'),
+      ),
+    ];
   }
 }

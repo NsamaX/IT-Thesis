@@ -17,18 +17,21 @@ class CardDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.all(40),
       child: ListView(
         children: [
-          isCustom ? _buildDottedBorder(locale, theme) : _buildImage(locale, theme, card),
+          isCustom
+              ? _buildDottedBorder(locale, theme)
+              : _buildImage(locale, theme, card),
           const SizedBox(height: 26),
           Text(
             locale.translate('card.card_description'),
             style: theme.textTheme.titleSmall,
           ),
           const SizedBox(height: 8),
-          _buildDescription(locale, theme, card, isCustom),
+          _buildDescription(locale, theme),
         ],
       ),
     );
@@ -95,32 +98,43 @@ class CardDetailsWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(AppLocalizations locale, ThemeData theme, CardEntity? card, bool isCustom) {
+  Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
     if (isCustom) {
-      return Opacity(
-        opacity: 0.6,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            Icon(Icons.edit_rounded),
-          ],
-        ),
-      );
+      return _buildEditableDescription();
     }
+
     if (card == null) {
       return Container();
     }
-    if (card.additionalData == null) {
+
+    if (card!.additionalData == null) {
       return _buildDescriptionText(
         theme,
-        card.description ?? locale.translate('card.no_description'),
+        card!.description ?? locale.translate('card.no_description'),
       );
     }
+
+    return _buildAdditionalDataDescription(theme);
+  }
+
+  Widget _buildEditableDescription() {
+    return Opacity(
+      opacity: 0.6,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: const [
+          Icon(Icons.edit_rounded),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdditionalDataDescription(ThemeData theme) {
     return Opacity(
       opacity: 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: card.additionalData!.entries.map((entry) {
+        children: card!.additionalData!.entries.map((entry) {
           final value = entry.value;
           if (value is String && value.isNotEmpty || value is num) {
             return Padding(

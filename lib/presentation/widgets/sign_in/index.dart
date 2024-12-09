@@ -9,36 +9,49 @@ class IndexWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 26),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                locale.translate('index.title'),
-                style: theme.textTheme.titleLarge,
-                textAlign: TextAlign.center,
-              ),
+              _buildTitle(theme, locale),
               const SizedBox(height: 30),
-              Text(
-                locale.translate('index.description'),
-                style: theme.textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
+              _buildDescription(theme, locale),
               const SizedBox(height: 38),
-              SizedBox(
-                width: 132,
-                height: 46,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
-                  child: Text(locale.translate('index.button')),
-                ),
-              ),
+              _buildSignInButton(context, locale),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTitle(ThemeData theme, AppLocalizations locale) {
+    return Text(
+      locale.translate('index.title'),
+      style: theme.textTheme.titleLarge,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildDescription(ThemeData theme, AppLocalizations locale) {
+    return Text(
+      locale.translate('index.description'),
+      style: theme.textTheme.bodyMedium,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) {
+    return SizedBox(
+      width: 132,
+      height: 46,
+      child: ElevatedButton(
+        onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
+        child: Text(locale.translate('index.button')),
       ),
     );
   }

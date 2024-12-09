@@ -7,6 +7,6 @@ class AppBarStyles {
   static AppBarTheme appBarTheme = AppBarTheme(
     backgroundColor: AppColors.DarkModeBackground_lv3,
     iconTheme: AppIconThemes.appBarIcon,
-    titleTextStyle: AppTextStyles.textStyle(AppColors.PrimaryColor, 16, true),
+    titleTextStyle: AppTextStyles.textStyle(AppColors.PrimaryColor, 12, true),
   );
 }

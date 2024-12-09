@@ -22,9 +22,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   Future<Map<String, String>> loadSettings() async {
     try {
       final settingsString = sharedPreferences.getString(_settingsKey);
-      if (settingsString != null) {
-        return Map<String, String>.from(json.decode(settingsString));
-      }
+      if (settingsString != null) Map<String, String>.from(json.decode(settingsString));
       return _defaultSettings;
     } catch (e) {
       throw LocalDataException('Failed to load settings', details: e.toString());

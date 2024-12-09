@@ -11,25 +11,20 @@ class SettingsLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: label.map<Widget>((category) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildTitle(theme, category['title'] as String),
-            ...category['content'].map<Widget>((item) {
-              return _buildContent(
-                context,
-                theme,
-                item['icon'] as IconData,
-                item['text'] as String,
-                item['onTap'],
-              );
-            }).toList(),
-          ],
-        );
-      }).toList(),
+      children: label.map<Widget>(
+        (category) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildTitle(theme, category['title'] as String),
+              ..._buildContentList(context, theme, category['content'] as List<dynamic>),
+            ],
+          );
+        },
+      ).toList(),
     );
   }
 
@@ -43,17 +38,27 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, ThemeData theme, dynamic icon, String text, dynamic onTap) {
+  List<Widget> _buildContentList(BuildContext context, ThemeData theme, List<dynamic> content) {
+    return content.map<Widget>((item) {
+      return _buildContent(
+        context: context,
+        theme: theme,
+        icon: item['icon'] as IconData?,
+        text: item['text'] as String,
+        onTap: item['onTap'],
+      );
+    }).toList();
+  }
+
+  Widget _buildContent({
+    required BuildContext context,
+    required ThemeData theme,
+    IconData? icon,
+    required String text,
+    dynamic onTap,
+  }) {
     return GestureDetector(
-      onTap: () {
-        if (onTap != null) {
-          if (onTap is String) {
-            Navigator.pushNamed(context, onTap);
-          } else if (onTap is VoidCallback) {
-            onTap();
-          }
-        }
-      },
+      onTap: () => _handleTap(context, onTap),
       child: Container(
         height: 40,
         decoration: BoxDecoration(
@@ -77,5 +82,15 @@ class SettingsLabelWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleTap(BuildContext context, dynamic onTap) {
+    if (onTap != null) {
+      if (onTap is String) {
+        Navigator.pushNamed(context, onTap);
+      } else if (onTap is VoidCallback) {
+        onTap();
+      }
+    }
   }
 }

@@ -22,7 +22,7 @@ class AppState {
 }
 
 class AppStateCubit extends Cubit<AppState> {
-  AppStateCubit() : super(AppState(currentPageIndex: 1, selectedGame: 'vanguard'));
+  AppStateCubit() : super(AppState(currentPageIndex: 0, selectedGame: 'vanguard'));
 
   String getRouteForIndex(int index) {
     switch (index) {

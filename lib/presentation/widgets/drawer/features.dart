@@ -12,34 +12,33 @@ class FeaturesDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
+
         return Padding(
           padding: const EdgeInsets.only(right: 8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildItem(
-                theme,
-                AppImages.game[currentGame],
-                null,
-                () => Navigator.of(context).pushNamed(
-                  AppRoutes.search,
-                  arguments: {'game': currentGame},
-                ),
+              _buildFeatureItem(
+                theme: theme,
+                image: AppImages.game[currentGame],
+                label: null,
+                onTapFunction: () => _navigateToSearch(context, currentGame),
               ),
-              _buildItem(
-                theme,
-                null,
-                locale.translate('games.title'),
-                () => Navigator.of(context).pushNamed(AppRoutes.games),
+              _buildFeatureItem(
+                theme: theme,
+                image: null,
+                label: locale.translate('games.title'),
+                onTapFunction: () => Navigator.of(context).pushNamed(AppRoutes.games),
               ),
-              _buildItem(
-                theme,
-                null,
-                locale.translate('custom.title'),
-                () => Navigator.of(context).pushNamed(
+              _buildFeatureItem(
+                theme: theme,
+                image: null,
+                label: locale.translate('custom.title'),
+                onTapFunction: () => Navigator.of(context).pushNamed(
                   AppRoutes.card,
                   arguments: {'isCustom': true},
                 ),
@@ -51,8 +50,14 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(ThemeData theme, String? image, String? label, VoidCallback? onTapFunction) {
-    final double boxSize = 60;
+  Widget _buildFeatureItem({
+    required ThemeData theme,
+    String? image,
+    String? label,
+    VoidCallback? onTapFunction,
+  }) {
+    const double boxSize = 60;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
@@ -80,6 +85,13 @@ class FeaturesDrawerWidget extends StatelessWidget {
                 ),
         ),
       ),
+    );
+  }
+
+  void _navigateToSearch(BuildContext context, String? currentGame) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.search,
+      arguments: {'game': currentGame},
     );
   }
 }

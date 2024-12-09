@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Map<dynamic, dynamic> menu;
 
-  const AppBarWidget({Key? key, required this.menu}) : super(key: key);
+  const AppBarWidget({
+    Key? key,
+    required this.menu,
+  }) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -13,40 +16,40 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       title: menu.length == 1
-          ? Center(child: buildMenu(context, menu.keys.first, menu.values.first))
+          ? Center(
+              child: _buildMenuItem(
+                context,
+                menu.keys.first,
+                menu.values.first,
+                isTitle: true,
+              ),
+            )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: menu.entries.map((entry) => buildMenu(context, entry.key, entry.value)).toList(),
+              children: menu.entries
+                  .map(
+                    (entry) => _buildMenuItem(
+                      context,
+                      entry.key,
+                      entry.value,
+                      isTitle: _isTitle(entry.key),
+                    ),
+                  )
+                  .toList(),
             ),
     );
   }
 
-  Widget buildMenu(BuildContext context, dynamic menu, dynamic onTapFunction) {
+  Widget _buildMenuItem(
+    BuildContext context,
+    dynamic menu,
+    dynamic onTapFunction, {
+    required bool isTitle,
+  }) {
     final theme = Theme.of(context);
-    final isTitle = menu == this.menu.keys.elementAt(this.menu.length ~/ 2);
+
     return GestureDetector(
-      onTap: () {
-        if (onTapFunction != null) {
-          if (onTapFunction is String) {
-            if (onTapFunction.startsWith('/back')) {
-              Navigator.pop(context);
-            } else {
-              Navigator.pushNamed(
-                context,
-                onTapFunction,
-              );
-            }
-          } else if (onTapFunction is Map<String, dynamic>) {
-            Navigator.pushNamed(
-              context,
-              onTapFunction['route'],
-              arguments: onTapFunction['arguments'],
-            );
-          } else if (onTapFunction is VoidCallback) {
-            onTapFunction();
-          }
-        }
-      },
+      onTap: () => _handleMenuTap(context, onTapFunction),
       child: Container(
         width: isTitle ? 142 : 42,
         height: kToolbarHeight,
@@ -58,12 +61,38 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                       menu,
                       style: isTitle
                           ? theme.textTheme.titleMedium
-                          : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme!.color),
+                          : theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.appBarTheme.iconTheme?.color,
+                            ),
                       textAlign: TextAlign.center,
                     )
                   : menu,
         ),
       ),
     );
+  }
+
+  void _handleMenuTap(BuildContext context, dynamic onTapFunction) {
+    if (onTapFunction != null) {
+      if (onTapFunction is String) {
+        if (onTapFunction.startsWith('/back')) {
+          Navigator.pop(context);
+        } else {
+          Navigator.pushNamed(context, onTapFunction);
+        }
+      } else if (onTapFunction is Map<String, dynamic>) {
+        Navigator.pushNamed(
+          context,
+          onTapFunction['route'],
+          arguments: onTapFunction['arguments'],
+        );
+      } else if (onTapFunction is VoidCallback) {
+        onTapFunction();
+      }
+    }
+  }
+
+  bool _isTitle(dynamic menuKey) {
+    return menuKey == menu.keys.elementAt(menu.length ~/ 2);
   }
 }

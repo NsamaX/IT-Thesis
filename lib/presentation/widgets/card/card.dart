@@ -17,91 +17,94 @@ class CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isSelected = context.watch<DeckManagerCubit>().state.selectedCard == card;
-    final isNfcReadEnabled = context.watch<DeckManagerCubit>().state.isNfcReadEnabled;
+    final deckManagerState = context.watch<DeckManagerCubit>().state;
+    final isSelected = deckManagerState.selectedCard == card;
+    final isNfcReadEnabled = deckManagerState.isNfcReadEnabled;
+    final isEditMode = deckManagerState.isEditMode;
+
     return Stack(
       children: [
-        GestureDetector(
-          onTap: () {
-            if (isNfcReadEnabled) {
-              context.read<DeckManagerCubit>().toggleSelectedCard(card);
-            } else {
-              Navigator.of(context).pushNamed(
-                AppRoutes.card,
-                arguments: {'card': card},
-              );
-            }
-          },
-          child: AspectRatio(
-            aspectRatio: 3 / 4,
-            child: Opacity(
-              opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: theme.appBarTheme.backgroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.6),
-                      offset: Offset(3, 4),
-                      blurRadius: 6,
-                      spreadRadius: 0,
-                    ),
-                  ],
+        _buildCardContainer(context, theme, isSelected, isNfcReadEnabled),
+        if (isEditMode && !isNfcReadEnabled) _buildEditControls(context, theme),
+      ],
+    );
+  }
+
+  Widget _buildCardContainer(
+    BuildContext context,
+    ThemeData theme,
+    bool isSelected,
+    bool isNfcReadEnabled,
+  ) {
+    return GestureDetector(
+      onTap: () => _handleCardTap(context, isNfcReadEnabled),
+      child: AspectRatio(
+        aspectRatio: 3 / 4,
+        child: Opacity(
+          opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: theme.appBarTheme.backgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.6),
+                  offset: const Offset(3, 4),
+                  blurRadius: 6,
+                  spreadRadius: 0,
                 ),
-                child: Card(
-                  elevation: 4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: card.imageUrl != null
-                        ? Image.network(
-                            card.imageUrl!,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: theme.appBarTheme.backgroundColor,
-                                child: Center(
-                                  child: const Icon(
-                                    Icons.image_not_supported,
-                                    size: 36,
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: const Icon(
-                              Icons.image_not_supported,
-                              size: 36,
-                            ),
-                          ),
-                  ),
-                ),
+              ],
+            ),
+            child: Card(
+              elevation: 4,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: card.imageUrl != null
+                    ? Image.network(
+                        card.imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildImageError(theme),
+                      )
+                    : _buildImageError(theme),
               ),
             ),
           ),
         ),
-        if (context.watch<DeckManagerCubit>().state.isEditMode && !isNfcReadEnabled)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Column(
-              children: [
-                _buildCount(theme, count!),
-                _buildButton(
-                  theme,
-                  Icons.add,
-                  () => context.read<DeckManagerCubit>().addCard(card),
-                ),
-                _buildButton(
-                  theme,
-                  Icons.remove,
-                  () => context.read<DeckManagerCubit>().removeCard(card),
-                ),
-              ],
-            ),
+      ),
+    );
+  }
+
+  Widget _buildImageError(ThemeData theme) {
+    return Container(
+      child: const Center(
+        child: Icon(
+          Icons.image_not_supported,
+          size: 36,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEditControls(BuildContext context, ThemeData theme) {
+    return Positioned(
+      top: 0,
+      right: 0,
+      child: Column(
+        children: [
+          _buildCount(theme, count ?? 0),
+          _buildButton(
+            theme,
+            Icons.add,
+            () => context.read<DeckManagerCubit>().addCard(card),
           ),
-      ],
+          _buildButton(
+            theme,
+            Icons.remove,
+            () => context.read<DeckManagerCubit>().removeCard(card),
+          ),
+        ],
+      ),
     );
   }
 
@@ -133,7 +136,7 @@ class CardWidget extends StatelessWidget {
           height: 24,
           decoration: BoxDecoration(
             color: theme.scaffoldBackgroundColor,
-            shape: BoxShape.circle,
+            shape: BoxShape.circle
           ),
           child: Icon(
             icon,
@@ -143,5 +146,16 @@ class CardWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
+    if (isNfcReadEnabled) {
+      context.read<DeckManagerCubit>().toggleSelectedCard(card);
+    } else {
+      Navigator.of(context).pushNamed(
+        AppRoutes.card,
+        arguments: {'card': card},
+      );
+    }
   }
 }

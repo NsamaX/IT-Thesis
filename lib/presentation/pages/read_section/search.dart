@@ -15,67 +15,87 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final game = arguments?['game'] ?? '';
-    final isAdd = arguments?['isAdd'] ?? false;
-    final isCustom = arguments?['isCustom'] ?? false;
-    final fetchCardsPageUseCase = GetIt.instance<FetchCardsPageUseCase>(param1: game);
+    final arguments = _getArguments(context);
+    final fetchCardsPageUseCase = GetIt.instance<FetchCardsPageUseCase>(param1: arguments['game']);
+
     return BlocProvider(
       create: (_) => SearchBloc(fetchCardsPageUseCase),
-      child: Builder(
-        builder: (context) {
-          final searchBloc = context.read<SearchBloc>();
-          _scrollController.addListener(() {
-            if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 && 
-                !searchBloc.isLoading && searchBloc.hasNextPage) {
-              searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
-            }
-          });
-          return Scaffold(
-            appBar: AppBarWidget(
-              menu: {
-                Icons.arrow_back_ios_new_rounded: '/back',
-                locale.translate('search.title'): null,
-                null: null,
-              },
-            ),
-            body: BlocBuilder<SearchBloc, SearchState>(
-              builder: (context, state) {
-                if (state is SearchInitial) {
-                  searchBloc.add(FetchPageEvent(1));
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is SearchLoaded) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index < state.cards.length) {
-                          return CardLabelWidget(
-                            card: state.cards[index],
-                            isAdd: isAdd,
-                            isCustom: isCustom,
-                          );
-                        } else {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12.0),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
-                      },
-                    ),
-                  );
-                } else if (state is SearchError) {
-                  return Center(child: Text(locale.translate('search.error')));
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          );
+      child: Scaffold(
+        appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
+        body: _buildBody(context, arguments),
+      ),
+    );
+  }
+
+  Map<String, dynamic> _getArguments(BuildContext context) {
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    return {
+      'game': arguments?['game'] ?? '',
+      'isAdd': arguments?['isAdd'] ?? false,
+      'isCustom': arguments?['isCustom'] ?? false,
+    };
+  }
+
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
+    return {
+      Icons.arrow_back_ios_new_rounded: '/back',
+      locale.translate('search.title'): null,
+      null: null,
+    };
+  }
+
+  Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      builder: (context, state) {
+        if (state is SearchInitial) {
+          context.read<SearchBloc>().add(FetchPageEvent(1));
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is SearchLoaded) {
+          return _buildCardList(context, state, arguments);
+        } else if (state is SearchError) {
+          final locale = AppLocalizations.of(context);
+          return Center(child: Text(locale.translate('search.error')));
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+
+  Widget _buildCardList(BuildContext context, SearchLoaded state, Map<String, dynamic> arguments) {
+    final searchBloc = context.read<SearchBloc>();
+    _setupScrollListener(searchBloc);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index < state.cards.length) {
+            return CardLabelWidget(
+              card: state.cards[index],
+              isAdd: arguments['isAdd'],
+              isCustom: arguments['isCustom'],
+            );
+          } else {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.0),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
         },
       ),
     );
+  }
+
+  void _setupScrollListener(SearchBloc searchBloc) {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
+          !searchBloc.isLoading &&
+          searchBloc.hasNextPage) {
+        searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
+      }
+    });
   }
 }

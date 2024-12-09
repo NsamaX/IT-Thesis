@@ -2,19 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-void showSnackBar(BuildContext context, String content) {
+void showSnackBar({
+  required BuildContext context,
+  required String content,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(content),
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       backgroundColor: CupertinoColors.systemGreen,
     ),
   );
 }
 
-void showCupertinoAlertCancle(BuildContext context, String title, String content, VoidCallback onConfirm) {
+void showCupertinoAlertCancel({
+  required BuildContext context,
+  required String title,
+  required String content,
+  required VoidCallback onConfirm,
+}) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
+
   showCupertinoDialog(
     context: context,
     builder: (BuildContext context) {
@@ -51,9 +60,14 @@ void showCupertinoAlertCancle(BuildContext context, String title, String content
   );
 }
 
-void showCupertinoAlertOK(BuildContext context, String title, String content) {
+void showCupertinoAlertOK({
+  required BuildContext context,
+  required String title,
+  required String content,
+}) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
+
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -74,7 +88,7 @@ void showCupertinoAlertOK(BuildContext context, String title, String content) {
               locale.translate('dialog.ok'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
             ),
-            onPressed: () => Navigator.of(context).pop()
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       );

@@ -23,10 +23,10 @@
     "dialog": {
       "share": "Your deck log has been copied to the clipboard for easy sharing.",
       "delete": {
-        "title": "Delete Deck",
-        "content": "Are you sure you want to delete this deck? This action cannot be undone.",
-        "success": "Deck deleted successfully."
-      }
+        "title": "Delete All Cards",
+        "content": "Are you sure you want to delete all cards in this deck?",
+        "success": "All cards in the deck deleted successfully."
+      }      
     }
   },
   "tracker": {

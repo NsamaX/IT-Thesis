@@ -7,6 +7,7 @@ import 'package:nfc_project/domain/usecases/tag.dart';
 
 class NFCState {
   final bool isNFCEnabled;
+  final bool isProcessing;
   final TagEntity? lastReadTag;
   final String? errorMessage;
   final bool isOperationSuccessful;
@@ -14,6 +15,7 @@ class NFCState {
 
   NFCState({
     required this.isNFCEnabled,
+    this.isProcessing = false,
     this.lastReadTag,
     this.errorMessage,
     this.isOperationSuccessful = false,
@@ -22,6 +24,7 @@ class NFCState {
 
   NFCState copyWith({
     bool? isNFCEnabled,
+    bool? isProcessing,
     TagEntity? lastReadTag,
     String? errorMessage,
     bool? isOperationSuccessful,
@@ -29,6 +32,7 @@ class NFCState {
   }) {
     return NFCState(
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
+      isProcessing: isProcessing ?? this.isProcessing,
       lastReadTag: lastReadTag ?? this.lastReadTag,
       errorMessage: errorMessage ?? this.errorMessage,
       isOperationSuccessful:
@@ -42,7 +46,6 @@ class NFCCubit extends Cubit<NFCState> {
   final SaveTagUseCase saveTagUseCase;
   final LoadTagsUseCase loadTagsUseCase;
   final Logger logger = Logger();
-  bool _isProcessing = false;
 
   static const String nfcUnavailableMessage =
       'NFC is not available on this device.';
@@ -92,14 +95,14 @@ class NFCCubit extends Cubit<NFCState> {
 
   Future<void> _startSession(
       Future<void> Function(NfcTag tag) onDiscovered) async {
-    if (_isProcessing) {
+    if (state.isProcessing) {
       logger.w('Another NFC process is ongoing.');
       return;
     }
-    _isProcessing = true;
+    emitSafe(state.copyWith(isProcessing: true));
     try {
       if (!await NfcManager.instance.isAvailable()) {
-        throw Exception(nfcUnavailableMessage);
+        throw Exception('NFC is not available on this device.');
       }
       NfcManager.instance.startSession(onDiscovered: (tag) async {
         try {
@@ -108,13 +111,14 @@ class NFCCubit extends Cubit<NFCState> {
           logger.e('Error processing NFC tag: $e');
           emitSafe(state.copyWith(errorMessage: e.toString()));
         } finally {
-          _isProcessing = false;
+          emitSafe(state.copyWith(isProcessing: false));
         }
       });
     } catch (e) {
       logger.e('Error initializing NFC session: $e');
       emitSafe(state.copyWith(errorMessage: e.toString()));
-      _isProcessing = false;
+    } finally {
+      emitSafe(state.copyWith(isProcessing: false));
     }
   }
 
@@ -133,7 +137,9 @@ class NFCCubit extends Cubit<NFCState> {
   Future<void> _processRead(NfcTag tag) async {
     logger.i('Tag discovered: ${tag.data}');
     final ndef = Ndef.from(tag);
-    if (ndef == null) throw Exception('This tag does not support NDEF.');
+    if (ndef == null)
+      throw Exception(
+          'This NFC tag is not supported. Please use a compatible tag.');
 
     final tagId = _extractTagId(tag);
     final gameAndCardId = _parseGameAndCardId(tag.data);
@@ -176,7 +182,9 @@ class NFCCubit extends Cubit<NFCState> {
     );
 
     await _saveTagWithCard(tagEntity, card);
-    emitSafe(state.copyWith(isOperationSuccessful: true));
+
+    emitSafe(state.copyWith(isProcessing: false, isOperationSuccessful: true));
+    await stopSession(reason: 'Tag written successfully');
   }
 
   String _extractTagId(NfcTag tag) {
@@ -192,15 +200,17 @@ class NFCCubit extends Cubit<NFCState> {
     String? game;
     String? cardId;
 
-    if (cachedMessage != null && cachedMessage['records'] != null) {
-      for (var record in (cachedMessage['records'] as List<dynamic>)) {
-        final payload = record['payload'] as List<dynamic>?;
-        if (payload != null) {
-          final text = String.fromCharCodes(payload.cast<int>().sublist(3));
-          if (text.startsWith('Game:')) {
-            game = text.replaceFirst('Game: ', '').trim();
-          } else if (text.startsWith('Card ID:')) {
-            cardId = text.replaceFirst('Card ID: ', '').trim();
+    if (cachedMessage != null && cachedMessage['records'] is List<dynamic>) {
+      for (var record in cachedMessage['records']) {
+        if (record is Map<String, dynamic>) {
+          final payload = record['payload'] as List<dynamic>?;
+          if (payload != null && payload.length > 3) {
+            final text = String.fromCharCodes(payload.cast<int>().sublist(3));
+            if (text.startsWith('Game:')) {
+              game = text.replaceFirst('Game: ', '').trim();
+            } else if (text.startsWith('Card ID:')) {
+              cardId = text.replaceFirst('Card ID: ', '').trim();
+            }
           }
         }
       }
@@ -225,9 +235,7 @@ class NFCCubit extends Cubit<NFCState> {
     try {
       final tagsWithCards = await loadTagsUseCase();
       emitSafe(state.copyWith(savedTags: tagsWithCards));
-      logger.i('Tags and Cards loaded successfully.');
     } catch (e) {
-      logger.e('Error loading tags and cards: $e');
       emitSafe(
           state.copyWith(errorMessage: 'Error loading tags and cards: $e'));
     }
