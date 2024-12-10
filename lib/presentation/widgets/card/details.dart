@@ -34,18 +34,15 @@ class CardDetailsWidget extends StatelessWidget {
     if (isCustom) {
       return _buildEditableDescription();
     }
-
     if (card == null) {
       return Container();
     }
-
     if (card!.additionalData == null) {
       return _buildDescriptionText(
         theme,
         card!.description ?? locale.translate('card.no_description'),
       );
     }
-
     return _buildAdditionalDataDescription(theme);
   }
 
@@ -96,10 +93,7 @@ class CardDetailsWidget extends StatelessWidget {
   Widget _buildDescriptionText(ThemeData theme, String text) {
     return Opacity(
       opacity: 0.6,
-      child: Text(
-        text,
-        style: theme.textTheme.bodyMedium,
-      ),
+      child: Text(text, style: theme.textTheme.bodyMedium),
     );
   }
 }

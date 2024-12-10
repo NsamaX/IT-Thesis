@@ -11,7 +11,7 @@ abstract class TagLocalDataSource {
 }
 
 class TagLocalDataSourceImpl implements TagLocalDataSource {
-  static const String _tagsWithCardsKey = 'tags';
+  static const String _tagsKey = 'tags';
 
   final SharedPreferences sharedPreferences;
 
@@ -20,7 +20,7 @@ class TagLocalDataSourceImpl implements TagLocalDataSource {
   @override
   Future<List<Map<String, dynamic>>> loadTags() async {
     try {
-      final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
+      final List<String> tags = sharedPreferences.getStringList(_tagsKey) ?? [];
       return tags.map((tag) {
         final Map<String, dynamic> jsonData = json.decode(tag);
         return {
@@ -36,13 +36,13 @@ class TagLocalDataSourceImpl implements TagLocalDataSource {
   @override
   Future<void> saveTag(TagModel tagModel, CardModel cardModel) async {
     try {
-      final List<String> tags = sharedPreferences.getStringList(_tagsWithCardsKey) ?? [];
+      final List<String> tags = sharedPreferences.getStringList(_tagsKey) ?? [];
       final Map<String, dynamic> tagWithCard = {
         'tag': tagModel.toJson(),
         'card': cardModel.toJson(),
       };
       tags.add(json.encode(tagWithCard));
-      await sharedPreferences.setStringList(_tagsWithCardsKey, tags);
+      await sharedPreferences.setStringList(_tagsKey, tags);
     } catch (e) {
       throw LocalDataException('Failed to save tag with card', details: e.toString());
     }
@@ -51,7 +51,7 @@ class TagLocalDataSourceImpl implements TagLocalDataSource {
   @override
   Future<void> deleteTags() async {
     try {
-      await sharedPreferences.remove(_tagsWithCardsKey);
+      await sharedPreferences.remove(_tagsKey);
     } catch (e) {
       throw LocalDataException('Failed to delete tags', details: e.toString());
     }

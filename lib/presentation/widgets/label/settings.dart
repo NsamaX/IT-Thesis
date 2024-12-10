@@ -50,6 +50,16 @@ class SettingsLabelWidget extends StatelessWidget {
     }).toList();
   }
 
+  void _handleTap(BuildContext context, dynamic onTap) {
+    if (onTap != null) {
+      if (onTap is String) {
+        Navigator.pushNamed(context, onTap);
+      } else if (onTap is VoidCallback) {
+        onTap();
+      }
+    }
+  }
+
   Widget _buildContent({
     required BuildContext context,
     required ThemeData theme,
@@ -82,15 +92,5 @@ class SettingsLabelWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _handleTap(BuildContext context, dynamic onTap) {
-    if (onTap != null) {
-      if (onTap is String) {
-        Navigator.pushNamed(context, onTap);
-      } else if (onTap is VoidCallback) {
-        onTap();
-      }
-    }
   }
 }

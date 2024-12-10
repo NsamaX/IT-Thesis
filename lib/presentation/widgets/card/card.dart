@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
+import 'edit_controls.dart';
 
 class CardWidget extends StatelessWidget {
   final CardEntity card;
@@ -25,9 +26,20 @@ class CardWidget extends StatelessWidget {
     return Stack(
       children: [
         _buildCardContainer(context, theme, isSelected, isNfcReadEnabled),
-        if (isEditMode && !isNfcReadEnabled) _buildEditControls(context, theme),
+        if (isEditMode && !isNfcReadEnabled) buildEditControls(context, theme, card, count),
       ],
     );
+  }
+
+  void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
+    if (isNfcReadEnabled) {
+      context.read<DeckManagerCubit>().toggleSelectedCard(card);
+    } else {
+      Navigator.of(context).pushNamed(
+        AppRoutes.card,
+        arguments: {'card': card},
+      );
+    }
   }
 
   Widget _buildCardContainer(
@@ -63,8 +75,7 @@ class CardWidget extends StatelessWidget {
                     ? Image.network(
                         card.imageUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildImageError(theme),
+                        errorBuilder: (context, error, stackTrace) => _buildImageError(theme),
                       )
                     : _buildImageError(theme),
               ),
@@ -84,78 +95,5 @@ class CardWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Widget _buildEditControls(BuildContext context, ThemeData theme) {
-    return Positioned(
-      top: 0,
-      right: 0,
-      child: Column(
-        children: [
-          _buildCount(theme, count ?? 0),
-          _buildButton(
-            theme,
-            Icons.add,
-            () => context.read<DeckManagerCubit>().addCard(card),
-          ),
-          _buildButton(
-            theme,
-            Icons.remove,
-            () => context.read<DeckManagerCubit>().removeCard(card),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCount(ThemeData theme, int count) {
-    return Container(
-      width: 24,
-      height: 24,
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        shape: BoxShape.circle,
-      ),
-      child: Center(
-        child: Text(
-          count.toString(),
-          style: theme.textTheme.bodyMedium?.copyWith(color: theme.secondaryHeaderColor),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton(ThemeData theme, IconData icon, VoidCallback onPressed) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: GestureDetector(
-        onTap: onPressed,
-        child: Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor,
-            shape: BoxShape.circle
-          ),
-          child: Icon(
-            icon,
-            size: 16,
-            color: theme.secondaryHeaderColor,
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
-    if (isNfcReadEnabled) {
-      context.read<DeckManagerCubit>().toggleSelectedCard(card);
-    } else {
-      Navigator.of(context).pushNamed(
-        AppRoutes.card,
-        arguments: {'card': card},
-      );
-    }
   }
 }

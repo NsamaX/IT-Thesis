@@ -16,7 +16,10 @@ class SignInWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildTitle(theme, locale),
-            _buildGoogleIcon(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 80),
+              child: _buildGoogleIcon(),
+            ),
             _buildSignInButton(context, locale),
           ],
         ),
@@ -33,25 +36,22 @@ class SignInWidget extends StatelessWidget {
   }
 
   Widget _buildGoogleIcon() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 80),
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(1, 1),
-            ),
-          ],
-        ),
-        child: Image.asset('assets/images/google.png'),
+    return Container(
+      width: 60,
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(1, 1),
+          ),
+        ],
       ),
+      child: Image.asset('assets/images/google.png'),
     );
   }
 

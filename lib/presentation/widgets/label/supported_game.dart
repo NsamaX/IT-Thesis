@@ -87,26 +87,13 @@ class SupportedGameLabelWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            game,
-            style: theme.textTheme.bodyMedium,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            _extractDescription(description),
-            style: theme.textTheme.bodySmall,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ],
+            Text(game, style: theme.textTheme.bodyMedium, overflow: TextOverflow.ellipsis, maxLines: 1),
+            const SizedBox(height: 4),
+            Text(_extractDescription(description), style: theme.textTheme.bodySmall, overflow: TextOverflow.ellipsis, maxLines: 1),
+          ],
       ),
     );
   }
 
-  String _extractDescription(String description) {
-    final parts = description.split('//');
-    return parts.length > 1 ? parts[1] : description;
-  }
+  String _extractDescription(String desc) => desc.split('//').length > 1 ? desc.split('//')[1] : desc;
 }
