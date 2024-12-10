@@ -61,7 +61,7 @@ class SignInWidget extends StatelessWidget {
       height: 46,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.decks,
+          AppRoutes.my_decks,
           (_) => false,
         ),
         child: Text(locale.translate('sign_in.button')),

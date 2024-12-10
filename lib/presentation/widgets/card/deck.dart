@@ -77,6 +77,6 @@ class DeckWidget extends StatelessWidget {
 
   void _navigateToDeckBuilder(BuildContext context) {
     context.read<DeckManagerCubit>().setDeck(deck);
-    Navigator.of(context).pushNamed(AppRoutes.builder);
+    Navigator.of(context).pushNamed(AppRoutes.new_deck);
   }
 }

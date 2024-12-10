@@ -4,10 +4,10 @@ import 'package:nfc_project/presentation/pages/@export.dart';
 class AppRoutes {
   static const String index     = '/';
   static const String signIn    = '/sign_in';
-  static const String decks     = '/decks';
-  static const String builder   = '/builder';
+  static const String my_decks  = '/my_decks';
+  static const String new_deck  = '/new_deck';
   static const String tracker   = '/tracker';
-  static const String reader    = '/reader';
+  static const String scan      = '/scan';
   static const String games     = '/games';
   static const String search    = '/search';
   static const String setting   = '/setting';
@@ -20,13 +20,13 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => IndexPage());
       case signIn:
         return MaterialPageRoute(builder: (_) => SignInPage());
-      case decks:
-        return MaterialPageRoute(builder: (_) => DecksPage());
-      case builder:
-        return MaterialPageRoute(builder: (_) => BuilderPage());
+      case my_decks:
+        return MaterialPageRoute(builder: (_) => MyDecksPage());
+      case new_deck:
+        return MaterialPageRoute(builder: (_) => NewDeckPage());
       case tracker:
         return MaterialPageRoute(builder: (_) => TrackerPage());
-      case reader:
+      case scan:
         return MaterialPageRoute(builder: (_) => ReaderPage());
       case games:
         return MaterialPageRoute(builder: (_) => GamesPage(), settings: settings);

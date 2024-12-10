@@ -70,12 +70,9 @@ class FeaturesDrawerWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: image != null
-              ? Padding(
-                  padding: const EdgeInsets.all(6),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(image, fit: BoxFit.cover),
-                  ),
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(image, fit: BoxFit.cover),
                 )
               : Center(
                   child: Text(

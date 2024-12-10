@@ -9,7 +9,7 @@ import '../../widgets/card/deck.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/navigation_bar/bottom.dart';
 
-class DecksPage extends StatelessWidget {
+class MyDecksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -33,7 +33,7 @@ class DecksPage extends StatelessWidget {
 
     return {
       Icons.open_in_new_rounded: () => _createNewDeck(context, cubit, locale),
-      locale.translate('decks.title'): null,
+      locale.translate('my_decks.title'): null,
       state.allDecks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
@@ -46,7 +46,7 @@ class DecksPage extends StatelessWidget {
     cubit.setDeck(
       DeckEntity(
         deckId: const Uuid().v4(),
-        deckName: locale.translate('builder.title'),
+        deckName: locale.translate('new_deck.title'),
         cards: {},
       ),
     );
@@ -55,7 +55,7 @@ class DecksPage extends StatelessWidget {
       cubit.toggleEditMode();
     }
 
-    Navigator.of(context).pushNamed(AppRoutes.builder);
+    Navigator.of(context).pushNamed(AppRoutes.new_deck);
   }
 
   Widget _buildBody(BuildContext context) {

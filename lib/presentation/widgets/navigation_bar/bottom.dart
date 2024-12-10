@@ -44,7 +44,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.insert_page_break_outlined),
-        label: locale.translate('navigation.reader'),
+        label: locale.translate('navigation.scan'),
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.settings),

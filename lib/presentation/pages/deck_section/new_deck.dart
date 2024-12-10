@@ -7,7 +7,7 @@ import '../../widgets/card/card.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';
 
-class BuilderPage extends StatelessWidget {
+class NewDeckPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -27,8 +27,9 @@ class BuilderPage extends StatelessWidget {
     AppLocalizations locale,
     TextEditingController deckNameController,
   ) {
-    final isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
-    
+    final bool isNewDeck = cubit.state.deck.cards.isEmpty ? true : false;
+    final bool isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
+
     return isEditMode
         ? {
             Icons.nfc_rounded: () => cubit.toggleNfcRead(),
@@ -39,7 +40,7 @@ class BuilderPage extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: locale.translate('builder.title'),
+                hintText: locale.translate('new_deck.title'),
               ),
               onSubmitted: (value) => _renameDeck(cubit, deckNameController, locale, value),
             ): null,
@@ -47,17 +48,21 @@ class BuilderPage extends StatelessWidget {
               'route': AppRoutes.games,
               'arguments': {'isAdd': true},
             },
-            locale.translate('builder.toggle.save'): () {
+            locale.translate('new_deck.toggle.save'): () {
               cubit.saveDeck();
               cubit.toggleEditMode();
             },
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
+            isNewDeck 
+                ? null
+                : Icons.ios_share_rounded : () => _toggleShare(context, cubit, locale),
             cubit.state.deck.deckName: null,
-            Icons.play_arrow_rounded: AppRoutes.tracker,
-            locale.translate('builder.toggle.edit'): () => cubit.toggleEditMode(),
+            isNewDeck 
+                ? null
+                : Icons.play_arrow_rounded : AppRoutes.tracker,
+            locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
           };
   }
 
@@ -68,13 +73,13 @@ class BuilderPage extends StatelessWidget {
   ) {
     showCupertinoAlertCancel(
       context: context,
-      title: locale.translate('builder.dialog.delete.title'),
-      content: locale.translate('builder.dialog.delete.content'),
+      title: locale.translate('new_deck.dialog.delete.title'),
+      content: locale.translate('new_deck.dialog.delete.content'),
       onConfirm: () {
         cubit.toggleDelete();
         showSnackBar(
           context: context,
-          content: locale.translate('builder.dialog.delete.success'),
+          content: locale.translate('new_deck.dialog.delete.success'),
         );
       },
     );
@@ -88,7 +93,7 @@ class BuilderPage extends StatelessWidget {
   ) {
     final newName = value.trim().isNotEmpty
         ? value.trim()
-        : locale.translate('builder.title');
+        : locale.translate('new_deck.title');
     cubit.renameDeck(newName);
     controller.text = newName;
   }
@@ -97,7 +102,7 @@ class BuilderPage extends StatelessWidget {
     cubit.toggleShare();
     showSnackBar(
       context: context,
-      content: locale.translate('builder.dialog.share'),
+      content: locale.translate('new_deck.dialog.share'),
     );
   }
 

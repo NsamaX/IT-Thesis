@@ -53,8 +53,11 @@ class CardLabelWidget extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(child: _buildCardInfo(theme, locale, textColor)),
               if (count != null) ...[
-                const SizedBox(width: 8),
-                Text(count.toString(), style: theme.textTheme.titleMedium?.copyWith(color: textColor)),
+                Text(
+                  count.toString(),
+                  style: theme.textTheme.titleMedium?.copyWith(color: textColor),
+                ),
+                const SizedBox(width: 12),
               ],
             ],
           ),

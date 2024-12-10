@@ -27,9 +27,9 @@ class AppStateCubit extends Cubit<AppState> {
   String getRouteForIndex(int index) {
     switch (index) {
       case 0:
-        return AppRoutes.decks;
+        return AppRoutes.my_decks;
       case 1:
-        return AppRoutes.reader;
+        return AppRoutes.scan;
       case 2:
         return AppRoutes.setting;
       default:

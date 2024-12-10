@@ -35,7 +35,7 @@ class SettingsPage extends StatelessWidget {
       'title': locale.translate('settings.account.title'),
       'content': [
         {
-          'icon': Icons.account_circle,
+          'icon': Icons.account_circle_rounded,
           'text': locale.translate('settings.account.email'),
           'onTap': () {},
         },
