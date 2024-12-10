@@ -30,7 +30,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   Future<void> saveSetting(String key, String value) async {
-    final settings = await loadSettings();
+    final settings = Map<String, String>.from(await loadSettings());
     settings[key] = value;
     await saveSettings(settings);
   }

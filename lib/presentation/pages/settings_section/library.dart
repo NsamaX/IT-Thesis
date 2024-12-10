@@ -35,22 +35,8 @@ class LibraryPage extends StatelessWidget {
             .expand((deck) => deck.cards.keys)
             .toSet()
             .toList();
-        return cards.isNotEmpty
-            ? GridWidget(items: cards)
-            : _buildEmptyState(context);
+        return GridWidget(items: cards);
       },
-    );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    
-    return Center(
-      child: Text(
-        locale.translate('library.empty'),
-        style: Theme.of(context).textTheme.bodyMedium,
-        textAlign: TextAlign.center,
-      ),
     );
   }
 }

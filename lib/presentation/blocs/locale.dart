@@ -18,12 +18,12 @@ class LocaleCubit extends Cubit<LocaleState> {
   }) : super(const LocaleState(locale: Locale('en')));
 
   Future<void> loadLanguage() async {
-    final languageCode = await loadSetting('language') ?? 'en';
+    final languageCode = await loadSetting('locale') ?? 'en';
     emit(LocaleState(locale: Locale(languageCode)));
   }
 
   Future<void> updateLanguage(String languageCode) async {
-    await saveSetting('language', languageCode);
+    await saveSetting('locale', languageCode);
     emit(LocaleState(locale: Locale(languageCode)));
   }
 }

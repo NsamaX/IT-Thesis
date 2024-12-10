@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 import 'package:nfc_project/domain/entities/card.dart';
@@ -83,12 +84,10 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
       ..writeln('Deck Name: ${deck.deckName}')
       ..writeln('Total Cards: ${deck.totalCards}')
       ..writeln('\nCards:');
-
     deck.cards.forEach((card, count) {
-      clipboardContent
-        ..writeln('- ${card.name} (ID: ${card.cardId}) x$count')
-        ..writeln('  Description: ${card.description ?? "N/A"}');
+      clipboardContent..writeln('- ${card.name} (ID: ${card.cardId}) x$count');
     });
+    Clipboard.setData(ClipboardData(text: clipboardContent.toString()));
     emit(state.copyWith(isShareEnabled: true));
   }
 
@@ -102,7 +101,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   }
 
   void toggleSelectedCard(CardEntity card) {
-    emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+    emit(
+        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
   }
 
   void toggleDelete() {
@@ -127,26 +127,22 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
 
   Future<void> loadDecks() async {
     final decks = await loadDecksUseCase.call();
-    emit(state.copyWith(allDecks: decks));
+    final filteredDecks = decks.where((deck) => deck.cards.isNotEmpty).toList();
+    emit(state.copyWith(allDecks: filteredDecks));
   }
 
   Future<void> saveDeck() async {
     emit(state.copyWith(isLoading: true));
     try {
-      if (state.deck.cards.isEmpty) {
-        await deleteDeck();
+      await saveDeckUseCase(state.deck);
+      final updatedDecks = List<DeckEntity>.from(state.allDecks);
+      final existingIndex = updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
+      if (existingIndex != -1) {
+        updatedDecks[existingIndex] = state.deck;
       } else {
-        await saveDeckUseCase(state.deck);
-        final updatedDecks = List<DeckEntity>.from(state.allDecks);
-        final existingIndex =
-            updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
-        if (existingIndex != -1) {
-          updatedDecks[existingIndex] = state.deck;
-        } else {
-          updatedDecks.add(state.deck);
-        }
-        emit(state.copyWith(allDecks: updatedDecks));
+        updatedDecks.add(state.deck);
       }
+      emit(state.copyWith(allDecks: updatedDecks));
     } catch (e) {
       print("Error saving deck: $e");
     } finally {
@@ -154,16 +150,16 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     }
   }
 
-  Future<void> deleteDeck() async {
-    final deckId = state.deck.deckId;
-    await deleteDeckUseCase(deckId);
-    final updatedDecks =
-        state.allDecks.where((deck) => deck.deckId != deckId).toList();
+  Future<void> deleteDeck(DeckEntity deckToDelete) async {
+    await deleteDeckUseCase(deckToDelete.deckId);
+    final updatedDecks = state.allDecks
+        .where((deck) => deck.deckId != deckToDelete.deckId)
+        .toList();
     emit(state.copyWith(
       allDecks: updatedDecks,
       deck: updatedDecks.isNotEmpty
           ? updatedDecks.first
-          : DeckEntity(deckId: Uuid().v4(), deckName: 'New Deck', cards: {}),
+          : DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
     ));
   }
 }

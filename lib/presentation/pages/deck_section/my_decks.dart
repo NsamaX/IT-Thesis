@@ -5,7 +5,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import '../../blocs/deck_manager.dart';
-import '../../widgets/card/deck.dart';
+import '../../widgets/card/grid.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/navigation_bar/bottom.dart';
 
@@ -42,14 +42,14 @@ class MyDecksPage extends StatelessWidget {
     BuildContext context,
     DeckManagerCubit cubit,
     AppLocalizations locale,
-  ) {
-    cubit.setDeck(
-      DeckEntity(
-        deckId: const Uuid().v4(),
-        deckName: locale.translate('new_deck.title'),
-        cards: {},
-      ),
+  ) async {
+    final newDeck = DeckEntity(
+      deckId: const Uuid().v4(),
+      deckName: locale.translate('new_deck.title'),
+      cards: {},
     );
+    cubit.setDeck(newDeck);
+    await cubit.saveDeck();
 
     if (context.read<DeckManagerCubit>().state.isEditMode) {
       cubit.toggleEditMode();
@@ -63,23 +63,7 @@ class MyDecksPage extends StatelessWidget {
       builder: (context, state) {
         final decks = state.allDecks;
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemCount: decks.length,
-            itemBuilder: (context, index) {
-              final deck = decks[index];
-              return DeckWidget(deck: deck);
-            },
-          ),
-        );
+        return GridWidget(items: decks);
       },
     );
   }

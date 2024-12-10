@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import '../../blocs/deck_manager.dart';
-import '../../widgets/card/card.dart';
+import '../../widgets/card/grid.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';
 
@@ -27,8 +27,17 @@ class NewDeckPage extends StatelessWidget {
     AppLocalizations locale,
     TextEditingController deckNameController,
   ) {
-    final bool isNewDeck = cubit.state.deck.cards.isEmpty ? true : false;
-    final bool isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
+    final state = context.watch<DeckManagerCubit>().state;
+    final bool isEditMode = state.isEditMode;
+    final bool hasCards = state.deck.cards.isNotEmpty;
+
+    if (!isEditMode && !hasCards) {
+      return {
+        Icons.arrow_back_ios_new_rounded: '/back',
+        state.deck.deckName: null,
+        locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
+      };
+    }
 
     return isEditMode
         ? {
@@ -55,13 +64,9 @@ class NewDeckPage extends StatelessWidget {
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            isNewDeck 
-                ? null
-                : Icons.ios_share_rounded : () => _toggleShare(context, cubit, locale),
-            cubit.state.deck.deckName: null,
-            isNewDeck 
-                ? null
-                : Icons.play_arrow_rounded : AppRoutes.tracker,
+            Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
+            state.deck.deckName: null,
+            Icons.play_arrow_rounded: AppRoutes.tracker,
             locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
           };
   }
@@ -109,23 +114,6 @@ class NewDeckPage extends StatelessWidget {
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit) {
     final deckCards = cubit.state.deck.cards;
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 3 / 4,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: deckCards.length,
-      itemBuilder: (context, index) {
-        final card = deckCards.keys.toList()[index];
-        final count = deckCards[card]!;
-        return CardWidget(
-          card: card,
-          count: count,
-        );
-      },
-    );
+    return GridWidget(items: deckCards.entries.toList());
   }
 }

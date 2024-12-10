@@ -61,7 +61,7 @@ class DeckWidget extends StatelessWidget {
       top: -2,
       right: -2,
       child: GestureDetector(
-        onTap: () => context.read<DeckManagerCubit>().deleteDeck(),
+        onTap: () => context.read<DeckManagerCubit>().deleteDeck(deck),
         child: Container(
           width: 30,
           height: 30,

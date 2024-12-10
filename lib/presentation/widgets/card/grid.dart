@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
 import 'card.dart';
 import 'deck.dart';
 
@@ -10,20 +11,26 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isCard = items.every((element) => element is MapEntry<CardEntity, int>);
+
     return GridView.builder(
       padding: const EdgeInsets.all(16),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 3 / 4,
+        childAspectRatio: isCard ? 3 / 4 : 1,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
-        return item is CardEntity
-            ? CardWidget(card: item)
-            : DeckWidget(deck: item);
+
+        if (isCard) {
+          final cardEntry = item as MapEntry<CardEntity, int>;
+          return CardWidget(card: cardEntry.key, count: cardEntry.value);
+        } else {
+          return DeckWidget(deck: item as DeckEntity);
+        }
       },
     );
   }
