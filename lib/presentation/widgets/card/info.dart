@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 
-class CardDetailsWidget extends StatelessWidget {
+class CardInfoWidget extends StatelessWidget {
   final CardEntity? card;
   final bool isCustom;
 
-  const CardDetailsWidget({
+  const CardInfoWidget({
     Key? key,
     this.card,
     this.isCustom = false,

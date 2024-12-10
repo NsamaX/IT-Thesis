@@ -4,8 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/usecases/fetch_cards.dart';
 import '../../blocs/search.dart';
-import '../../widgets/bar/app.dart';
 import '../../widgets/label/card.dart';
+import '../../widgets/navigation_bar/app.dart';
 
 class SearchPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
@@ -92,8 +92,7 @@ class SearchPage extends StatelessWidget {
   void _setupScrollListener(SearchBloc searchBloc) {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
-          !searchBloc.isLoading &&
-          searchBloc.hasNextPage) {
+          !searchBloc.isLoading && searchBloc.hasNextPage) {
         searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
       }
     });

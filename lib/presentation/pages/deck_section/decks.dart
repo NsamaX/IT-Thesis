@@ -5,9 +5,9 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import '../../blocs/deck_manager.dart';
-import '../../widgets/bar/app.dart';
-import '../../widgets/bar/bottom_navigation.dart';
 import '../../widgets/card/deck.dart';
+import '../../widgets/navigation_bar/app.dart';
+import '../../widgets/navigation_bar/bottom.dart';
 
 class DecksPage extends StatelessWidget {
   @override

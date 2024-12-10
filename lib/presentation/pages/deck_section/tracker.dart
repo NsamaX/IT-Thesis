@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_project/core/utils/nfc_helper.dart';
-import 'package:nfc_project/presentation/blocs/NFC.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import '../../blocs/deck_manager.dart';
+import '../../blocs/NFC.dart';
 import '../../blocs/tracker.dart';
-import '../../widgets/bar/app.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/label/card.dart';
+import '../../widgets/navigation_bar/app.dart';
 
 class TrackerPage extends StatefulWidget {
   @override
@@ -76,6 +76,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     AppLocalizations locale,
   ) async {
     final tag = nfcState.lastReadTag;
+    
     if (tag != null && nfcState.isNFCEnabled) {
       try {
         context.read<TrackCubit>().readTag(tag);

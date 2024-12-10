@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import '../../blocs/deck_manager.dart';
-import '../../widgets/bar/app.dart';
 import '../../widgets/card/card.dart';
 import '../../widgets/dialog.dart';
+import '../../widgets/navigation_bar/app.dart';
 
 class BuilderPage extends StatelessWidget {
   @override
@@ -28,6 +28,7 @@ class BuilderPage extends StatelessWidget {
     TextEditingController deckNameController,
   ) {
     final isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
+    
     return isEditMode
         ? {
             Icons.nfc_rounded: () => cubit.toggleNfcRead(),
@@ -92,8 +93,7 @@ class BuilderPage extends StatelessWidget {
     controller.text = newName;
   }
 
-  void _toggleShare(
-      BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
     showSnackBar(
       context: context,
@@ -103,6 +103,7 @@ class BuilderPage extends StatelessWidget {
 
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit) {
     final deckCards = cubit.state.deck.cards;
+
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

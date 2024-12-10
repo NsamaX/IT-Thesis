@@ -27,7 +27,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   try {
-    await clearLocalStorage();
+    // await clearLocalStorage();
     await ApiConfig.loadConfig(environment: 'development');
     await setupLocator();
     await locator<LocaleCubit>().loadLanguage();

@@ -3,7 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
 
-Widget buildEditControls(BuildContext context, ThemeData theme, CardEntity card, int? count) {
+Widget buildEditControls(
+  BuildContext context,
+  ThemeData theme,
+  CardEntity card,
+  int? count,
+) {
   return Positioned(
     top: 0,
     right: 0,
@@ -36,7 +41,8 @@ Widget _buildCount(ThemeData theme, int count) {
     child: Center(
       child: Text(
         count.toString(),
-        style: theme.textTheme.bodyMedium?.copyWith(color: theme.secondaryHeaderColor),
+        style: theme.textTheme.bodyMedium
+            ?.copyWith(color: theme.secondaryHeaderColor),
         textAlign: TextAlign.center,
       ),
     ),
@@ -52,9 +58,7 @@ Widget _buildButton(ThemeData theme, IconData icon, VoidCallback onPressed) {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          color: theme.scaffoldBackgroundColor,
-          shape: BoxShape.circle
-        ),
+            color: theme.scaffoldBackgroundColor, shape: BoxShape.circle),
         child: Icon(
           icon,
           size: 16,
