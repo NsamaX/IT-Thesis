@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 
 class AppState {
   final int currentPageIndex;

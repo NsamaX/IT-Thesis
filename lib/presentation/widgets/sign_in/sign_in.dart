@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 
 class SignInWidget extends StatelessWidget {
   const SignInWidget({Key? key}) : super(key: key);

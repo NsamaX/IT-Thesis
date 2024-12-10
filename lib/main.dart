@@ -4,9 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/locales/localizations.dart';
-import 'core/routes/route.dart';
+import 'core/routes/routes.dart';
 import 'core/themes/theme.dart';
-import 'core/service_locator.dart';
+import 'core/services/locator.dart';
 import 'core/utils/api_config.dart';
 import 'presentation/blocs/@export.dart';
 
@@ -27,7 +27,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   try {
-    // await clearLocalStorage();
+    await clearLocalStorage();
     await ApiConfig.loadConfig(environment: 'development');
     await setupLocator();
     await locator<LocaleCubit>().loadLanguage();

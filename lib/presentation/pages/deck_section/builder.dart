@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 import '../../blocs/deck_manager.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/card.dart';

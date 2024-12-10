@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 
 class IndexWidget extends StatelessWidget {
   const IndexWidget({Key? key}) : super(key: key);

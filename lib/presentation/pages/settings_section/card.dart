@@ -8,6 +8,7 @@ import '../../blocs/NFC.dart';
 import '../../blocs/deck_manager.dart';
 import '../../widgets/bar/app.dart';
 import '../../widgets/card/details.dart';
+import '../../widgets/card/image.dart';
 import '../../widgets/dialog.dart';
 
 class CardPage extends StatefulWidget {
@@ -113,8 +114,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
@@ -130,8 +130,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
         }
       },
       child: Scaffold(
-        appBar: AppBarWidget(
-            menu: _buildAppBarMenu(
+        appBar: AppBarWidget(menu: _buildAppBarMenu(
           context,
           locale,
           card,
@@ -139,7 +138,14 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
           isCustom,
           deckNameController,
         )),
-        body: CardDetailsWidget(card: card, isCustom: isCustom),
+        body: ListView(
+          padding: const EdgeInsets.all(40),
+          children: [
+            CardImageWidget(card: card, isCustom: isCustom),
+            const SizedBox(height: 24),
+            CardDetailsWidget(card: card, isCustom: isCustom),
+          ],
+        ),
       ),
     );
   }

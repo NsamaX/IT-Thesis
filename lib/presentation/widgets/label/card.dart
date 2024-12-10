@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/core/routes/route.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 
 class CardLabelWidget extends StatelessWidget {

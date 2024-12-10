@@ -1,5 +1,5 @@
 import 'package:nfc_project/core/utils/api_config.dart';
-import 'package:nfc_project/core/utils/exception.dart';
+import 'package:nfc_project/core/utils/exceptions.dart';
 import 'factories/@export.dart';
 import '../../models/card.dart';
 

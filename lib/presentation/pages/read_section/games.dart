@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nfc_project/core/constants/image.dart';
+import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/api_config.dart';
 import '../../widgets/bar/app.dart';

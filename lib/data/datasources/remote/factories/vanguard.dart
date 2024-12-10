@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:nfc_project/core/utils/exception.dart';
+import 'package:nfc_project/core/utils/exceptions.dart';
 import '../game_factory.dart';
 import '../../../models/card.dart';
 
