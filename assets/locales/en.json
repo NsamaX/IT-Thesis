@@ -48,7 +48,8 @@
   "search": {
     "title": "Search",
     "description": "Looking for a card? Use the search feature to find specific cards across all your games.",
-    "error": "No matching cards were found. Please try a different search term."
+    "error": "No matching cards were found. Please try a different search term.",
+    "internet_error": "No internet connection. Please check your connection and try again."
   },
   "card": {
     "title": "Card info",    
@@ -101,14 +102,14 @@
     "title": "Library",
     "description": "Browse all the cards and decks you have created or saved. Use this as a reference during games."
   },
-  "navigation": {
-    "decks": "Decks",
-    "scan": "Scan",
-    "settings": "Settings"
-  },
   "dialog": {
     "ok": "OK",
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+  "navigation": {
+    "decks": "Decks",
+    "scan": "Scan",
+    "settings": "Settings"
   }
 }

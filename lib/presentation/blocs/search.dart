@@ -37,8 +37,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<FetchPageEvent>(_onFetchPageEvent);
   }
 
-  Future<void> _onFetchPageEvent(
-      FetchPageEvent event, Emitter<SearchState> emit) async {
+  Future<void> _onFetchPageEvent(FetchPageEvent event, Emitter<SearchState> emit) async {
     if (isLoading || !hasNextPage) return;
     isLoading = true;
 

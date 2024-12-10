@@ -1,3 +1,3 @@
 export 'games.dart';
-export 'reader.dart';
+export 'scan.dart';
 export 'search.dart';
