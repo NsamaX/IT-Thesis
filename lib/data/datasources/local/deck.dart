@@ -12,11 +12,14 @@ abstract class DeckLocalDataSource {
 class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   static const String _deckKey = "decks";
 
+  final SharedPreferences sharedPreferences;
+
+  DeckLocalDataSourceImpl(this.sharedPreferences);
+
   @override
   Future<List<DeckModel>> loadDecks() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final storedDecks = prefs.getString(_deckKey);
+      final storedDecks = sharedPreferences.getString(_deckKey);
       if (storedDecks != null) {
         final decksData = Map<String, dynamic>.from(jsonDecode(storedDecks));
         return decksData.values.map((deck) {
@@ -32,13 +35,12 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   @override
   Future<void> saveDeck(DeckModel deck) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       final decks = await loadDecks();
       final updatedDecks = {
         for (var existingDeck in decks) existingDeck.deckId: existingDeck.toJson(),
         deck.deckId: deck.toJson(),
       };
-      await prefs.setString(_deckKey, jsonEncode(updatedDecks));
+      await sharedPreferences.setString(_deckKey, jsonEncode(updatedDecks));
     } catch (e) {
       throw LocalDataException('Failed to save deck', details: e.toString());
     }
@@ -47,13 +49,12 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   @override
   Future<void> deleteDeck(String deckId) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       final decks = await loadDecks();
       final updatedDecks = decks.where((deck) => deck.deckId != deckId).toList();
       final serializedDecks = {
         for (var deck in updatedDecks) deck.deckId: deck.toJson(),
       };
-      await prefs.setString(_deckKey, jsonEncode(serializedDecks));
+      await sharedPreferences.setString(_deckKey, jsonEncode(serializedDecks));
     } catch (e) {
       throw LocalDataException('Failed to delete deck', details: e.toString());
     }

@@ -38,7 +38,7 @@ Future<void> setupLocator() async {
   });
 
   // ตัวจัดการเด็ค
-  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl());
+  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(sharedPreferences));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());

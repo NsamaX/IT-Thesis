@@ -2,23 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'core/locales/localizations.dart';
 import 'core/routes/routes.dart';
 import 'core/themes/theme.dart';
+import 'core/services/local_storage.dart'; // ignore: unused_import
 import 'core/services/locator.dart';
 import 'core/utils/api_config.dart';
 import 'presentation/blocs/@export.dart';
-
-Future<void> clearLocalStorage() async {
-  try {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    debugPrint('Local storage cleared successfully!');
-  } catch (e) {
-    debugPrint('Error clearing local storage: $e');
-  }
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,20 +17,21 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  try {
-    // await clearLocalStorage(); // Comment this out in production
-    
-    await ApiConfig.loadConfig(environment: 'development');
-    await setupLocator();
+  // ยกเลิก comment บรรทัดนี้เพื่อล้างที่เก็บข้อมูลภายในระหว่างการพัฒนา
+  // final localStorageService = LocalStorageService();
+  // await localStorageService.clearLocalStorageSQLite();
+  // await localStorageService.clearLocalStorageSharedPreferences();
+  
+  await ApiConfig.loadConfig(environment: 'development');
+  await setupLocator();
 
-    final settingsCubit = locator<SettingsCubit>();
-    await settingsCubit.initialize();
-    final initialRoute = settingsCubit.state.firstLoad ? AppRoutes.index : AppRoutes.my_decks;
+  final settingsCubit = locator<SettingsCubit>();
+  await settingsCubit.initialize();
+  final initialRoute = settingsCubit.state.firstLoad 
+      ? AppRoutes.index 
+      : AppRoutes.my_decks;
 
-    runApp(MyApp(initialRoute: initialRoute));
-  } catch (e) {
-    debugPrint('Error initializing API Config: $e');
-  }
+  runApp(MyApp(initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {
@@ -60,7 +51,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return MaterialApp(
-            debugShowCheckedModeBanner: true,
+            debugShowCheckedModeBanner: true, // แอพอยู่ระหว่างการพัฒนา
             locale: state.locale,
             supportedLocales: [
               Locale('en'),
