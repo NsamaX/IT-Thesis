@@ -55,14 +55,20 @@ class SearchPage extends StatelessWidget {
       builder: (context, state) {
         if (state is SearchInitial) {
           context.read<SearchBloc>().add(FetchPageEvent(1));
-          return const Center(child: CircularProgressIndicator());
+          return const Expanded(
+            child: Center(child: CircularProgressIndicator()),
+          );
         } else if (state is SearchLoaded) {
           return _buildCardList(context, state, arguments);
         } else if (state is SearchError) {
           final locale = AppLocalizations.of(context);
-          return Center(child: Text(locale.translate('search.error')));
+          return Expanded(
+            child: Center(child: Text(locale.translate('search.error'))),
+          );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const Expanded(
+            child: Center(child: CircularProgressIndicator()),
+          );
         }
       },
     );
@@ -99,8 +105,11 @@ class SearchPage extends StatelessWidget {
 
   void _setupScrollListener(SearchBloc searchBloc) {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 &&
-          !searchBloc.isLoading && searchBloc.hasNextPage) {
+      if (
+          _scrollController.position.pixels >= 
+          _scrollController.position.maxScrollExtent - 200 &&
+          !searchBloc.isLoading && searchBloc.hasNextPage
+        ) {
         searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
       }
     });

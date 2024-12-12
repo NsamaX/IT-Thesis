@@ -10,7 +10,7 @@ abstract class DeckLocalDataSource {
 }
 
 class DeckLocalDataSourceImpl implements DeckLocalDataSource {
-  static const String _deckKey = "user_decks";
+  static const String _deckKey = "decks";
 
   @override
   Future<List<DeckModel>> loadDecks() async {
