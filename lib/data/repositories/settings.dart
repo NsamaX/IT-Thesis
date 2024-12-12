@@ -1,10 +1,10 @@
 import '../datasources/local/settings.dart';
 
 abstract class SettingsRepository {
-  Future<Map<String, String>> loadSettings();
-  Future<String?> loadSetting(String key);
-  Future<void> saveSettings(Map<String, String> settings);
-  Future<void> saveSetting(String key, String value);
+  Future<Map<String, dynamic>> loadSettings();
+  Future<dynamic> loadSetting(String key);
+  Future<void> saveSettings(Map<String, dynamic> settings);
+  Future<void> saveSetting(String key, dynamic value);
 }
 
 class SettingsRepositoryImpl implements SettingsRepository {
@@ -13,24 +13,28 @@ class SettingsRepositoryImpl implements SettingsRepository {
   SettingsRepositoryImpl(this.localDataSource);
 
   @override
-  Future<Map<String, String>> loadSettings() async {
+  Future<Map<String, dynamic>> loadSettings() async {
     return await localDataSource.loadSettings();
   }
 
   @override
-  Future<String?> loadSetting(String key) async {
+  Future<dynamic> loadSetting(String key) async {
     final settings = await loadSettings();
-    return settings[key];
+    if (SettingsLocalDataSourceImpl.defaultSettings.containsKey(key)) {
+      return settings[key] ?? SettingsLocalDataSourceImpl.defaultSettings[key];
+    } else {
+      throw Exception('Invalid key: $key');
+    }
   }
 
   @override
-  Future<void> saveSettings(Map<String, String> settings) async {
+  Future<void> saveSettings(Map<String, dynamic> settings) async {
     await localDataSource.saveSettings(settings);
   }
 
   @override
-  Future<void> saveSetting(String key, String value) async {
-    final settings = Map<String, String>.from(await loadSettings());
+  Future<void> saveSetting(String key, dynamic value) async {
+    final settings = Map<String, dynamic>.from(await loadSettings());
     settings[key] = value;
     await saveSettings(settings);
   }

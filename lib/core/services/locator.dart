@@ -11,18 +11,18 @@ final GetIt locator = GetIt.instance;
 Future<void> setupLocator() async {
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  // ตัวจัดการสถานะ
-  locator.registerLazySingleton(() => AppStateCubit());
-
   // ตัวจัดการตั้งค่า
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
   locator.registerLazySingleton(() => LoadSetting(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SaveSetting(locator<SettingsRepository>()));
-  locator.registerLazySingleton(() => LocaleCubit(
+  locator.registerLazySingleton(() => SettingsCubit(
     loadSetting: locator<LoadSetting>(),
     saveSetting: locator<SaveSetting>(),
   ));
+
+  // ตัวจัดการสถานะ
+  locator.registerLazySingleton(() => AppStateCubit());
   
   // ตัวจัดการการ์ดจาก API
   locator.registerFactoryParam<GameApi, String, void>((game, _) {

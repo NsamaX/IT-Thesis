@@ -5,7 +5,7 @@ class LoadSetting {
 
   LoadSetting(this.repository);
 
-  Future<String?> call(String key) async {
+  Future<dynamic> call(String key) async {
     return await repository.loadSetting(key);
   }
 }
@@ -15,7 +15,7 @@ class SaveSetting {
 
   SaveSetting(this.repository);
 
-  Future<void> call(String key, String value) async {
+  Future<void> call(String key, dynamic value) async {
     await repository.saveSetting(key, value);
   }
 }

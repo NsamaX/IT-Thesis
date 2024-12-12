@@ -6,6 +6,7 @@ import 'package:nfc_project/domain/usecases/fetch_cards.dart';
 import '../../blocs/search.dart';
 import '../../widgets/label/card.dart';
 import '../../widgets/navigation_bar/app.dart';
+import '../../widgets/search.dart';
 
 class SearchPage extends StatelessWidget {
   final ScrollController _scrollController = ScrollController();
@@ -22,7 +23,12 @@ class SearchPage extends StatelessWidget {
       create: (_) => SearchBloc(fetchCardsPageUseCase),
       child: Scaffold(
         appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-        body: _buildBody(context, arguments),
+        body: Column(
+          children: [
+            const SearchBarWidget(),
+            _buildBody(context, arguments),
+          ],
+        ),
       ),
     );
   }
@@ -66,25 +72,27 @@ class SearchPage extends StatelessWidget {
     final searchBloc = context.read<SearchBloc>();
     _setupScrollListener(searchBloc);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-      child: ListView.builder(
-        controller: _scrollController,
-        itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index < state.cards.length) {
-            return CardLabelWidget(
-              card: state.cards[index],
-              isAdd: arguments['isAdd'],
-              isCustom: arguments['isCustom'],
-            );
-          } else {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 12.0),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-        },
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index < state.cards.length) {
+              return CardLabelWidget(
+                card: state.cards[index],
+                isAdd: arguments['isAdd'],
+                isCustom: arguments['isCustom'],
+              );
+            } else {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 12.0),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+          },
+        ),
       ),
     );
   }

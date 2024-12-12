@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
-import '../../blocs/locale.dart';
+import '../../blocs/settings.dart';
 import '../../widgets/label/settings.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/navigation_bar/bottom.dart';
@@ -11,7 +11,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final cubit = context.read<LocaleCubit>();
+    final cubit = context.read<SettingsCubit>();
 
     return Scaffold(
       appBar: AppBarWidget(menu: {locale.translate('settings.title'): null}),
@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsContent(AppLocalizations locale, LocaleCubit cubit) {
+  Widget _buildSettingsContent(AppLocalizations locale, SettingsCubit cubit) {
     return SettingsLabelWidget(
       label: [
         _buildAccountSettings(locale),
@@ -71,7 +71,7 @@ class SettingsPage extends StatelessWidget {
     };
   }
 
-  Map<String, dynamic> _buildSupportSettings(AppLocalizations locale, LocaleCubit cubit) {
+  Map<String, dynamic> _buildSupportSettings(AppLocalizations locale, SettingsCubit cubit) {
     return {
       'title': locale.translate('settings.support.title'),
       'content': [
@@ -89,7 +89,7 @@ class SettingsPage extends StatelessWidget {
     };
   }
 
-  void _toggleLanguage(LocaleCubit cubit) {
+  void _toggleLanguage(SettingsCubit cubit) {
     final currentLanguage = cubit.state.locale.languageCode;
     cubit.updateLanguage(currentLanguage == 'en' ? 'ja' : 'en');
   }
