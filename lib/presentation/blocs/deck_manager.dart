@@ -101,8 +101,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   }
 
   void toggleSelectedCard(CardEntity card) {
-    emit(
-        state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+    emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
   }
 
   void toggleDelete() {
@@ -136,7 +135,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     try {
       await saveDeckUseCase(state.deck);
       final updatedDecks = List<DeckEntity>.from(state.allDecks);
-      final existingIndex = updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
+      final existingIndex =
+          updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
       if (existingIndex != -1) {
         updatedDecks[existingIndex] = state.deck;
       } else {
@@ -159,7 +159,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
       allDecks: updatedDecks,
       deck: updatedDecks.isNotEmpty
           ? updatedDecks.first
-          : DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
+          : DeckEntity(
+              deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
     ));
   }
 }

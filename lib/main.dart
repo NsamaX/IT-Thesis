@@ -4,34 +4,35 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/locales/localizations.dart';
 import 'core/routes/routes.dart';
-import 'core/themes/theme.dart';
-import 'core/services/local_storage.dart'; // ignore: unused_import
 import 'core/services/locator.dart';
+import 'core/themes/theme.dart';
 import 'core/utils/api_config.dart';
 import 'presentation/blocs/@export.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
 
-  // ยกเลิก comment บรรทัดนี้เพื่อล้างที่เก็บข้อมูลภายในระหว่างการพัฒนา
-  // final localStorageService = LocalStorageService();
-  // await localStorageService.clearLocalStorageSQLite();
-  // await localStorageService.clearLocalStorageSharedPreferences();
-  
-  await ApiConfig.loadConfig(environment: 'development');
-  await setupLocator();
+  try {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-  final settingsCubit = locator<SettingsCubit>();
-  await settingsCubit.initialize();
-  final initialRoute = settingsCubit.state.firstLoad 
-      ? AppRoutes.index 
-      : AppRoutes.my_decks;
+    await setupLocator();
+    await ApiConfig.loadConfig(environment: 'development');
 
-  runApp(MyApp(initialRoute: initialRoute));
+    final settingsCubit = locator<SettingsCubit>();
+    await settingsCubit.initialize();
+
+    final initialRoute = settingsCubit.state.firstLoad
+        ? AppRoutes.index
+        : AppRoutes.my_decks;
+
+    runApp(MyApp(initialRoute: initialRoute));
+  } catch (e, stackTrace) {
+    debugPrint('Error occurred during app initialization: $e');
+    debugPrint(stackTrace as String?);
+  }
 }
 
 class MyApp extends StatelessWidget {

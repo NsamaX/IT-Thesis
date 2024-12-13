@@ -1,6 +1,4 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:nfc_project/core/utils/exceptions.dart';
+import 'package:nfc_project/core/services/shared_preferences.dart';
 
 abstract class SettingsLocalDataSource {
   Future<Map<String, dynamic>> loadSettings();
@@ -9,37 +7,24 @@ abstract class SettingsLocalDataSource {
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   static const String _settingsKey = 'settings';
-
   static const Map<String, dynamic> defaultSettings = {
     'locale': 'en',
     'isDarkMode': true,
     'firstLoad': true,
   };
 
-  final SharedPreferences sharedPreferences;
+  final SharedPreferencesService _sharedPreferencesService;
 
-  SettingsLocalDataSourceImpl(this.sharedPreferences);
+  SettingsLocalDataSourceImpl(this._sharedPreferencesService);
 
   @override
   Future<Map<String, dynamic>> loadSettings() async {
-    try {
-      final settingsString = sharedPreferences.getString(_settingsKey);
-      if (settingsString != null) {
-        return Map<String, dynamic>.from(json.decode(settingsString));
-      }
-      return defaultSettings;
-    } catch (e) {
-      throw LocalDataException('Failed to load settings', details: e.toString());
-    }
+    final settings = _sharedPreferencesService.getMap(_settingsKey);
+    return settings ?? defaultSettings;
   }
 
   @override
   Future<void> saveSettings(Map<String, dynamic> settings) async {
-    try {
-      final settingsString = json.encode(settings);
-      await sharedPreferences.setString(_settingsKey, settingsString);
-    } catch (e) {
-      throw LocalDataException('Failed to save settings', details: e.toString());
-    }
+    await _sharedPreferencesService.saveMap(_settingsKey, settings);
   }
 }

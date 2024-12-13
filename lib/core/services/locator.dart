@@ -5,14 +5,22 @@ import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/blocs/@export.dart';
+import '@export.dart';
 
 final GetIt locator = GetIt.instance;
 
 Future<void> setupLocator() async {
+  // ตัวจัดการฐานข้อมูล
+  locator.registerLazySingleton(() => DatabaseService()); // DatabaseService
+  final databaseService = locator<DatabaseService>();
+
+  // ตัวจัดการ Shared Preferences และ SQLite
   final sharedPreferences = await SharedPreferences.getInstance();
+  locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences: sharedPreferences)); // SharedPreferences
+  locator.registerLazySingleton(() => SQLiteService(databaseService: databaseService)); // SQLiteService
 
   // ตัวจัดการตั้งค่า
-  locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(sharedPreferences));
+  locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
   locator.registerLazySingleton(() => LoadSetting(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SaveSetting(locator<SettingsRepository>()));
@@ -23,7 +31,7 @@ Future<void> setupLocator() async {
 
   // ตัวจัดการสถานะ
   locator.registerLazySingleton(() => AppStateCubit());
-  
+
   // ตัวจัดการการ์ดจาก API
   locator.registerFactoryParam<GameApi, String, void>((game, _) {
     return GameFactory.createApi(game);
@@ -38,7 +46,7 @@ Future<void> setupLocator() async {
   });
 
   // ตัวจัดการเด็ค
-  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(sharedPreferences));
+  locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());
