@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:nfc_project/core/utils/exceptions.dart';
+import 'package:nfc_project/core/services/shared_preferences.dart';
 import '../../models/tag.dart';
 import '../../models/card.dart';
 
@@ -13,47 +12,37 @@ abstract class TagLocalDataSource {
 class TagLocalDataSourceImpl implements TagLocalDataSource {
   static const String _tagsKey = 'tags';
 
-  final SharedPreferences sharedPreferences;
+  final SharedPreferencesService _sharedPreferencesService;
 
-  TagLocalDataSourceImpl(this.sharedPreferences);
+  TagLocalDataSourceImpl(this._sharedPreferencesService);
 
   @override
   Future<List<Map<String, dynamic>>> loadTags() async {
-    try {
-      final List<String> tags = sharedPreferences.getStringList(_tagsKey) ?? [];
-      return tags.map((tag) {
-        final Map<String, dynamic> jsonData = json.decode(tag);
-        return {
-          'tag': TagModel.fromJson(jsonData['tag']),
-          'card': CardModel.fromJson(jsonData['card']),
-        };
-      }).toList();
-    } catch (e) {
-      throw LocalDataException('Failed to load tags with cards', details: e.toString());
-    }
+    final List<String>? tagsList = _sharedPreferencesService.getStringList(_tagsKey);
+    if (tagsList == null) return [];
+
+    return tagsList.map((tag) {
+      final Map<String, dynamic> jsonData = json.decode(tag);
+      return {
+        'tag': TagModel.fromJson(jsonData['tag']),
+        'card': CardModel.fromJson(jsonData['card']),
+      };
+    }).toList();
   }
 
   @override
   Future<void> saveTag(TagModel tagModel, CardModel cardModel) async {
-    try {
-      final List<String> tags = sharedPreferences.getStringList(_tagsKey) ?? [];
-      final Map<String, dynamic> tagWithCard = {
-        'tag': tagModel.toJson(),
-        'card': cardModel.toJson(),
-      };
-      tags.add(json.encode(tagWithCard));
-      await sharedPreferences.setStringList(_tagsKey, tags);
-    } catch (e) {
-      throw LocalDataException('Failed to save tag with card', details: e.toString());
-    }
+    final List<String>? tagsList = _sharedPreferencesService.getStringList(_tagsKey) ?? [];
+    final Map<String, dynamic> tagWithCard = {
+      'tag': tagModel.toJson(),
+      'card': cardModel.toJson(),
+    };
+    tagsList?.add(json.encode(tagWithCard));
+    await _sharedPreferencesService.saveStringList(_tagsKey, tagsList!);
   }
 
   @override
   Future<void> deleteTags() async {
-    try {
-      await sharedPreferences.remove(_tagsKey);
-    } catch (e) {
-      throw LocalDataException('Failed to delete tags', details: e.toString());
-    }
+    await _sharedPreferencesService.clearKey(_tagsKey);
   }
 }

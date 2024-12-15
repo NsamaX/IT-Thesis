@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../utils/exceptions.dart';
+import '../exceptions/local_data.dart';
 
 class DatabaseService {
   static Database? _database;
@@ -28,6 +28,22 @@ class DatabaseService {
                 deckId TEXT PRIMARY KEY,
                 deckName TEXT NOT NULL,
                 cards TEXT NOT NULL
+              )
+            ''');
+            await db.execute('''
+              CREATE TABLE cards (
+                id TEXT PRIMARY KEY,
+                game TEXT NOT NULL,
+                name TEXT NOT NULL,
+                description TEXT,
+                imageUrl TEXT,
+                additionalData TEXT
+              )
+            ''');
+            await db.execute('''
+              CREATE TABLE pages (
+                game TEXT PRIMARY KEY,
+                page INTEGER NOT NULL
               )
             ''');
           } catch (e) {

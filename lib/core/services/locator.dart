@@ -1,23 +1,23 @@
 import 'package:get_it/get_it.dart';
+import '@export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/blocs/@export.dart';
-import '@export.dart';
 
 final GetIt locator = GetIt.instance;
 
 Future<void> setupLocator() async {
   // ตัวจัดการฐานข้อมูล
-  locator.registerLazySingleton(() => DatabaseService()); // DatabaseService
+  locator.registerLazySingleton(() => DatabaseService());
   final databaseService = locator<DatabaseService>();
 
   // ตัวจัดการ Shared Preferences และ SQLite
   final sharedPreferences = await SharedPreferences.getInstance();
-  locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences: sharedPreferences)); // SharedPreferences
-  locator.registerLazySingleton(() => SQLiteService(databaseService: databaseService)); // SQLiteService
+  locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences: sharedPreferences));
+  locator.registerLazySingleton(() => SQLiteService(databaseService: databaseService));
 
   // ตัวจัดการตั้งค่า
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
@@ -62,7 +62,7 @@ Future<void> setupLocator() async {
   ));
 
   // ตัวจัดการ NFC และ Tag
-  locator.registerLazySingleton<TagLocalDataSource>(() => TagLocalDataSourceImpl(sharedPreferences));
+  locator.registerLazySingleton<TagLocalDataSource>(() => TagLocalDataSourceImpl(locator<SharedPreferencesService>()));
   locator.registerLazySingleton<TagRepository>(() => TagRepositoryImpl(locator<TagLocalDataSource>()));
   locator.registerLazySingleton(() => LoadTagsUseCase(locator<TagRepository>()));
   locator.registerLazySingleton(() => SaveTagUseCase(locator<TagRepository>()));

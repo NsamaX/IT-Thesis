@@ -1,11 +1,21 @@
 import 'package:sqflite/sqflite.dart';
 import 'database.dart';
-import '../utils/exceptions.dart';
+import '../exceptions/local_data.dart';
 
 class SQLiteService {
   final DatabaseService _databaseService;
 
   SQLiteService({required DatabaseService databaseService}) : _databaseService = databaseService;
+
+  Future<List<Map<String, dynamic>>> query(String table) async {
+    try {
+      final db = await _databaseService.database;
+      final result = await db.query(table);
+      return result.isNotEmpty ? result : [];
+    } catch (e) {
+      throw LocalDataException('Failed to query table $table', details: e.toString());
+    }
+  }
 
   Future<void> insert(String table, Map<String, dynamic> data) async {
     try {
@@ -13,15 +23,6 @@ class SQLiteService {
       await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       throw LocalDataException('Failed to insert data into $table', details: e.toString());
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> query(String table) async {
-    try {
-      final db = await _databaseService.database;
-      return await db.query(table);
-    } catch (e) {
-      throw LocalDataException('Failed to query table $table', details: e.toString());
     }
   }
 

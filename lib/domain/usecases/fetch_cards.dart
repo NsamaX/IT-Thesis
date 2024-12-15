@@ -24,13 +24,3 @@ class FetchCardsPageUseCase {
   }
 }
 
-class FetchCardByIdUseCase {
-  final CardRepository cardRepository;
-
-  FetchCardByIdUseCase(this.cardRepository);
-
-  Future<CardEntity> call(String cardId) async {
-    final cardModel = await cardRepository.fetchCardById(cardId);
-    return CardMapper.toEntity(cardModel);
-  }
-}

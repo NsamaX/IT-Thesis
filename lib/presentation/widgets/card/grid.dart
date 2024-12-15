@@ -12,14 +12,15 @@ class GridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isCard = items.every((element) => element is MapEntry<CardEntity, int>);
+    final double spacing = isCard ? 8 : 12;
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: isCard ? 3 / 4 : 1,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+        crossAxisSpacing: spacing,
+        mainAxisSpacing: spacing,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {

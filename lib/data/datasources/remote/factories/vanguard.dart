@@ -1,6 +1,6 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:nfc_project/core/utils/exceptions.dart';
+import 'dart:convert';
+import 'package:nfc_project/core/exceptions/api.dart';
 import '../game_factory.dart';
 import '../../../models/card.dart';
 
@@ -85,22 +85,6 @@ class VanguardApi implements GameApi {
       return _filterCardData(data);
     } catch (e) {
       throw ApiException('Failed to fetch cards on page $page: $e');
-    }
-  }
-
-  @override
-  Future<CardModel> fetchCardById(String cardId) async {
-    try {
-      final url = _buildUrl('card', {'id': cardId});
-      final response = await http.get(url);
-      _validateResponse(response);
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      if (data.isEmpty) {
-        throw ApiException('No card found with id $cardId.');
-      }
-      return _parseCardData(data);
-    } catch (e) {
-      throw ApiException('Failed to fetch card with id $cardId: $e');
     }
   }
 }

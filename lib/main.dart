@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/constants/api_config.dart';
 import 'core/locales/localizations.dart';
 import 'core/routes/routes.dart';
 import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
-import 'core/utils/api_config.dart';
 import 'presentation/blocs/@export.dart';
 
 void main() async {
