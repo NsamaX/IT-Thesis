@@ -41,7 +41,4 @@ class CardEntity {
         other.game == game &&
         other.name == name;
   }
-
-  @override
-  int get hashCode => cardId.hashCode ^ game.hashCode ^ name.hashCode;
 }

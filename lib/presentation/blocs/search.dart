@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/domain/usecases/fetch_cards.dart';
+import 'package:nfc_project/domain/usecases/sync_cards.dart';
 
 abstract class SearchEvent {}
 
-class FetchPageEvent extends SearchEvent {
-  final int page;
-  FetchPageEvent(this.page);
+class SyncCardsEvent extends SearchEvent {
+  final String game;
+  SyncCardsEvent(this.game);
 }
 
 abstract class SearchState {}
@@ -17,8 +17,7 @@ class SearchLoading extends SearchState {}
 
 class SearchLoaded extends SearchState {
   final List<CardEntity> cards;
-  final bool hasNextPage;
-  SearchLoaded({required this.cards, required this.hasNextPage});
+  SearchLoaded({required this.cards});
 }
 
 class SearchError extends SearchState {
@@ -27,33 +26,20 @@ class SearchError extends SearchState {
 }
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final FetchCardsPageUseCase fetchCardsPageUseCase;
-  bool isLoading = false;
-  bool hasNextPage = true;
-  int currentPage = 0;
-  List<CardEntity> cards = [];
+  final SyncCardsUseCase syncCardsUseCase;
 
-  SearchBloc(this.fetchCardsPageUseCase) : super(SearchInitial()) {
-    on<FetchPageEvent>(_onFetchPageEvent);
+  SearchBloc(this.syncCardsUseCase) : super(SearchInitial()) {
+    on<SyncCardsEvent>(_onSyncCardsEvent);
   }
 
-  Future<void> _onFetchPageEvent(FetchPageEvent event, Emitter<SearchState> emit) async {
-    if (isLoading || !hasNextPage) return;
-    isLoading = true;
-
+  Future<void> _onSyncCardsEvent(SyncCardsEvent event, Emitter<SearchState> emit) async {
+    if (state is SearchLoading || state is SearchLoaded) return;
+    emit(SearchLoading());
     try {
-      final newCards = await fetchCardsPageUseCase(event.page);
-      if (newCards.isEmpty) {
-        hasNextPage = false;
-      } else {
-        currentPage = event.page;
-        cards.addAll(newCards);
-        emit(SearchLoaded(cards: cards, hasNextPage: hasNextPage));
-      }
+      final syncedCards = await syncCardsUseCase.call(event.game);
+      emit(SearchLoaded(cards: syncedCards));
     } catch (e) {
-      emit(SearchError(message: e.toString()));
-    } finally {
-      isLoading = false;
+      emit(SearchError(message: 'Failed to sync cards: $e'));
     }
   }
 }

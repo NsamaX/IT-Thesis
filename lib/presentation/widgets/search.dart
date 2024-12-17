@@ -18,8 +18,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Container(
       color: theme.appBarTheme.backgroundColor,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        padding: const EdgeInsets.only(bottom: 12),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Animated Search Bar
             AnimatedContainer(
@@ -34,22 +35,20 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Expanded(
-                  child: TextField(
-                    onTap: () {
-                      setState(() {
-                        isSearch = true;
-                      });
-                    },
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Search',
-                      hintStyle: TextStyle(fontSize: 16),
-                      contentPadding: EdgeInsets.only(bottom: 12),
-                    ),
-                    style: theme.textTheme.bodyMedium,
+                child: TextField(
+                  onTap: () {
+                    setState(() {
+                      isSearch = true;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.search),
+                    hintText: 'Search',
+                    hintStyle: TextStyle(fontSize: 16),
+                    contentPadding: EdgeInsets.only(bottom: 12),
                   ),
+                  style: theme.textTheme.bodyMedium,
                 ),
               ),
             ),

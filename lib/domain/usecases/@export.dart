@@ -1,4 +1,4 @@
 export 'deck_manager.dart';
-export 'fetch_cards.dart';
 export 'settings.dart';
+export 'sync_cards.dart';
 export 'tag.dart';

@@ -47,8 +47,7 @@ class TrackCubit extends Cubit<TrackState> {
     emit(state.copyWith(isDialogShown: true));
   }
 
-  int get totalCards =>
-      state.deck.cards.values.fold(0, (total, count) => total + count);
+  int get totalCards => state.deck.cards.values.fold(0, (total, count) => total + count);
 
   void toggleReset(DeckEntity deck) {
     emit(state.copyWith(
@@ -86,18 +85,15 @@ class TrackCubit extends Cubit<TrackState> {
         existingData.action == Action.unknown) {
       _updateCardCount(tag, Action.draw, "out", -1);
     }
-
     emit(state.copyWith(isProcessing: false));
   }
 
-  void _updateCardCount(
-      TagEntity tag, Action action, String location, int delta) {
+  void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
     try {
       final cardEntry = state.deck.cards.entries.firstWhere(
         (entry) => entry.key.cardId == tag.cardId,
         orElse: () => throw Exception("Card not found in deck"),
       );
-
       final currentCount = state.deck.cards[cardEntry.key] ?? 0;
 
       if ((currentCount + delta) < 0) return;
@@ -114,8 +110,7 @@ class TrackCubit extends Cubit<TrackState> {
         timestamp: DateTime.now(),
       );
 
-      final updatedData = List<DataEntity>.from(state.record.data)
-        ..add(newData);
+      final updatedData = List<DataEntity>.from(state.record.data)..add(newData);
 
       emit(state.copyWith(
         deck: state.deck.copyWith(cards: updatedCards),

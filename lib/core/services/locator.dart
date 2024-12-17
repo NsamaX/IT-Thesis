@@ -16,8 +16,13 @@ Future<void> setupLocator() async {
 
   // ตัวจัดการ Shared Preferences และ SQLite
   final sharedPreferences = await SharedPreferences.getInstance();
-  locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences: sharedPreferences));
-  locator.registerLazySingleton(() => SQLiteService(databaseService: databaseService));
+  locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences));
+  locator.registerLazySingleton(() => SQLiteService(databaseService));
+
+  // ตัวจัดการ Local DataSource สำหรับการ์ด
+  locator.registerLazySingleton<CardLocalDataSource>(
+    () => CardLocalDataSourceImpl(locator<SQLiteService>()),
+  );
 
   // ตัวจัดการตั้งค่า
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
@@ -25,9 +30,9 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => LoadSetting(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SaveSetting(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SettingsCubit(
-    loadSetting: locator<LoadSetting>(),
-    saveSetting: locator<SaveSetting>(),
-  ));
+        loadSetting: locator<LoadSetting>(),
+        saveSetting: locator<SaveSetting>(),
+      ));
 
   // ตัวจัดการสถานะ
   locator.registerLazySingleton(() => AppStateCubit());
@@ -38,11 +43,12 @@ Future<void> setupLocator() async {
   });
   locator.registerFactoryParam<CardRepository, String, void>((game, _) {
     final gameApi = locator<GameApi>(param1: game);
-    return CardRepositoryImpl(gameApi);
+    final cardLocalDataSource = locator<CardLocalDataSource>();
+    return CardRepositoryImpl(gameApi: gameApi, cardLocalDataSource: cardLocalDataSource);
   });
-  locator.registerFactoryParam<FetchCardsPageUseCase, String, void>((game, _) {
+  locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) {
     final cardRepository = locator<CardRepository>(param1: game);
-    return FetchCardsPageUseCase(cardRepository);
+    return SyncCardsUseCase(cardRepository);
   });
 
   // ตัวจัดการเด็ค
@@ -54,12 +60,12 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
   locator.registerFactory(() => DeckManagerCubit(
-    addCardUseCase: locator<AddCardUseCase>(),
-    removeCardUseCase: locator<RemoveCardUseCase>(),
-    loadDecksUseCase: locator<LoadDecksUseCase>(),
-    saveDeckUseCase: locator<SaveDeckUseCase>(),
-    deleteDeckUseCase: locator<DeleteDeckUseCase>(),
-  ));
+        addCardUseCase: locator<AddCardUseCase>(),
+        removeCardUseCase: locator<RemoveCardUseCase>(),
+        loadDecksUseCase: locator<LoadDecksUseCase>(),
+        saveDeckUseCase: locator<SaveDeckUseCase>(),
+        deleteDeckUseCase: locator<DeleteDeckUseCase>(),
+      ));
 
   // ตัวจัดการ NFC และ Tag
   locator.registerLazySingleton<TagLocalDataSource>(() => TagLocalDataSourceImpl(locator<SharedPreferencesService>()));
@@ -67,7 +73,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => LoadTagsUseCase(locator<TagRepository>()));
   locator.registerLazySingleton(() => SaveTagUseCase(locator<TagRepository>()));
   locator.registerLazySingleton(() => NFCCubit(
-    loadTagsUseCase: locator<LoadTagsUseCase>(),
-    saveTagUseCase: locator<SaveTagUseCase>(),
-  ));
+        loadTagsUseCase: locator<LoadTagsUseCase>(),
+        saveTagUseCase: locator<SaveTagUseCase>(),
+      ));
 }

@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/domain/usecases/fetch_cards.dart';
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/domain/usecases/sync_cards.dart';
 import '../../blocs/search.dart';
 import '../../widgets/label/card.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/search.dart';
 
 class SearchPage extends StatelessWidget {
-  final ScrollController _scrollController = ScrollController();
-
   SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final arguments = _getArguments(context);
-    final fetchCardsPageUseCase = GetIt.instance<FetchCardsPageUseCase>(param1: arguments['game']);
+    final syncCardsUseCase = GetIt.instance<SyncCardsUseCase>(param1: arguments['game']);
 
-    return BlocProvider(
-      create: (_) => SearchBloc(fetchCardsPageUseCase),
+    return BlocProvider<SearchBloc>(
+      create: (_) => SearchBloc(syncCardsUseCase)..add(SyncCardsEvent(arguments['game'])),
       child: Scaffold(
         appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
         body: Column(
           children: [
             const SearchBarWidget(),
+            SizedBox(height: 8),
             _buildBody(context, arguments),
           ],
         ),
@@ -34,12 +34,15 @@ class SearchPage extends StatelessWidget {
   }
 
   Map<String, dynamic> _getArguments(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    return {
-      'game': arguments?['game'] ?? '',
-      'isAdd': arguments?['isAdd'] ?? false,
-      'isCustom': arguments?['isCustom'] ?? false,
-    };
+    final arguments = ModalRoute.of(context)?.settings.arguments;
+    if (arguments is Map<String, dynamic>) {
+      return {
+        'game': arguments['game'] ?? '',
+        'isAdd': arguments['isAdd'] ?? false,
+        'isCustom': arguments['isCustom'] ?? false,
+      };
+    }
+    return {'game': '', 'isAdd': false, 'isCustom': false};
   }
 
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
@@ -53,17 +56,20 @@ class SearchPage extends StatelessWidget {
   Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        if (state is SearchInitial) {
-          context.read<SearchBloc>().add(FetchPageEvent(1));
+        if (state is SearchInitial || state is SearchLoading) {
           return const Expanded(
             child: Center(child: CircularProgressIndicator()),
           );
         } else if (state is SearchLoaded) {
-          return _buildCardList(context, state, arguments);
+          return _buildCardList(context, state.cards, arguments);
         } else if (state is SearchError) {
           final locale = AppLocalizations.of(context);
           return Expanded(
-            child: Center(child: Text(locale.translate('search.error'))),
+            child: Center(
+              child: Text(state.message.isNotEmpty
+                  ? state.message
+                  : locale.translate('search.error')),
+            ),
           );
         } else {
           return const Expanded(
@@ -74,44 +80,27 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  Widget _buildCardList(BuildContext context, SearchLoaded state, Map<String, dynamic> arguments) {
-    final searchBloc = context.read<SearchBloc>();
-    _setupScrollListener(searchBloc);
-
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: state.cards.length + (state.hasNextPage ? 1 : 0),
-          itemBuilder: (context, index) {
-            if (index < state.cards.length) {
-              return CardLabelWidget(
-                card: state.cards[index],
-                isAdd: arguments['isAdd'],
-                isCustom: arguments['isCustom'],
-              );
-            } else {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 12.0),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-          },
+  Widget _buildCardList(BuildContext context, List<CardEntity> cards, Map<String, dynamic> arguments) {
+    if (cards.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Text(AppLocalizations.of(context).translate('search.no_results')),
         ),
+      );
+    }
+    
+    return Expanded(
+      child: ListView.builder(
+        itemCount: cards.length,
+        itemBuilder: (context, index) {
+          return CardLabelWidget(
+            card: cards[index],
+            isAdd: arguments['isAdd'],
+            isCustom: arguments['isCustom'],
+          );
+        },
+        cacheExtent: 1000,
       ),
     );
-  }
-
-  void _setupScrollListener(SearchBloc searchBloc) {
-    _scrollController.addListener(() {
-      if (
-          _scrollController.position.pixels >= 
-          _scrollController.position.maxScrollExtent - 200 &&
-          !searchBloc.isLoading && searchBloc.hasNextPage
-        ) {
-        searchBloc.add(FetchPageEvent(searchBloc.currentPage + 1));
-      }
-    });
   }
 }

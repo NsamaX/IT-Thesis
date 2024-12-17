@@ -5,12 +5,35 @@ import '../exceptions/local_data.dart';
 class SQLiteService {
   final DatabaseService _databaseService;
 
-  SQLiteService({required DatabaseService databaseService}) : _databaseService = databaseService;
+  SQLiteService(DatabaseService databaseService) : _databaseService = databaseService;
 
-  Future<List<Map<String, dynamic>>> query(String table) async {
+  Future<Database> getDatabase() async {
+    return await _databaseService.database;
+  }
+
+  Future<List<Map<String, dynamic>>> query(
+      String table, {
+      String? where,
+      List<dynamic>? whereArgs,
+      String? orderBy,
+      int? limit,
+    }) async {
     try {
       final db = await _databaseService.database;
-      final result = await db.query(table);
+      final tableExists = await db.rawQuery(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+        [table],
+      );
+      if (tableExists.isEmpty) {
+        throw LocalDataException('Table $table does not exist in the database.');
+      }
+      final result = await db.query(
+        table,
+        where: where,
+        whereArgs: whereArgs,
+        orderBy: orderBy,
+        limit: limit,
+      );
       return result.isNotEmpty ? result : [];
     } catch (e) {
       throw LocalDataException('Failed to query table $table', details: e.toString());
@@ -23,6 +46,19 @@ class SQLiteService {
       await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
       throw LocalDataException('Failed to insert data into $table', details: e.toString());
+    }
+  }
+
+  Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
+    try {
+      final db = await _databaseService.database;
+      await db.transaction((txn) async {
+        for (final data in dataList) {
+          await txn.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
+        }
+      });
+    } catch (e) {
+      throw LocalDataException('Failed to batch insert data into $table', details: e.toString());
     }
   }
 

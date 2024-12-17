@@ -20,7 +20,6 @@ class TagLocalDataSourceImpl implements TagLocalDataSource {
   Future<List<Map<String, dynamic>>> loadTags() async {
     final List<String>? tagsList = _sharedPreferencesService.getStringList(_tagsKey);
     if (tagsList == null) return [];
-
     return tagsList.map((tag) {
       final Map<String, dynamic> jsonData = json.decode(tag);
       return {

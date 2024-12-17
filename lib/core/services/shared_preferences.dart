@@ -5,7 +5,7 @@ import '../exceptions/local_data.dart';
 class SharedPreferencesService {
   final SharedPreferences _sharedPreferences;
 
-  SharedPreferencesService({required SharedPreferences sharedPreferences}) : _sharedPreferences = sharedPreferences;
+  SharedPreferencesService(SharedPreferences sharedPreferences) : _sharedPreferences = sharedPreferences;
 
   String? getString(String key) {
     try {

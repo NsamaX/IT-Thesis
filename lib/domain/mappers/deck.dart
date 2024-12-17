@@ -7,9 +7,7 @@ class DeckMapper {
     return DeckModel(
       deckId: entity.deckId,
       deckName: entity.deckName,
-      cards: entity.cards.map(
-        (card, count) => MapEntry(CardMapper.toModel(card), count),
-      ),
+      cards: entity.cards.map((card, count) => MapEntry(CardMapper.toModel(card), count)),
     );
   }
 
@@ -17,9 +15,7 @@ class DeckMapper {
     return DeckEntity(
       deckId: model.deckId,
       deckName: model.deckName,
-      cards: model.cards.map(
-        (card, count) => MapEntry(CardMapper.toEntity(card), count),
-      ),
+      cards: model.cards.map((card, count) => MapEntry(CardMapper.toEntity(card), count)),
     );
   }
 }

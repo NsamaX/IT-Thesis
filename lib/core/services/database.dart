@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'dart:io';
 import '../exceptions/local_data.dart';
 
 class DatabaseService {
@@ -18,8 +19,12 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     try {
       final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'nfc_project.db');
+      await deleteDatabase(path);
+      print('Database deleted: $path');
+      await Directory(dbPath).create(recursive: true);
       return await openDatabase(
-        join(dbPath, 'nfc_project.db'),
+        path,
         version: 1,
         onCreate: (db, version) async {
           try {
@@ -42,7 +47,7 @@ class DatabaseService {
             ''');
             await db.execute('''
               CREATE TABLE pages (
-                game TEXT PRIMARY KEY,
+                game TEXT PRIMARY KEY REFERENCES cards(game),
                 page INTEGER NOT NULL
               )
             ''');
