@@ -31,7 +31,7 @@ void main() async {
     runApp(MyApp(initialRoute: initialRoute));
   } catch (e, stackTrace) {
     debugPrint('Error occurred during app initialization: $e');
-    debugPrint(stackTrace as String?);
+    debugPrint(stackTrace.toString());
   }
 }
 

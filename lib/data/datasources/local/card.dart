@@ -15,19 +15,34 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
 
   CardLocalDataSourceImpl(this._sqliteService);
 
+  List<CardModel> _parseCards(List<Map<String, dynamic>> rows) {
+    return rows.map((row) {
+      try {
+        return CardModel(
+          cardId: row['id'],
+          game: row['game'],
+          name: row['name'],
+          description: row['description'],
+          imageUrl: row['imageUrl'],
+          additionalData: json.decode(row['additionalData'] ?? '{}'),
+        );
+      } catch (e) {
+        return CardModel(
+          cardId: row['id'],
+          game: row['game'],
+          name: row['name'],
+          description: row['description'],
+          imageUrl: row['imageUrl'],
+          additionalData: {},
+        );
+      }
+    }).toList();
+  }
+
   @override
   Future<List<CardModel>> fetchCards(String game) async {
     final result = await _sqliteService.query('cards', where: 'game = ?', whereArgs: [game]);
-    return result
-        .map((row) => CardModel(
-              cardId: row['id'],
-              game: row['game'],
-              name: row['name'],
-              description: row['description'],
-              imageUrl: row['imageUrl'],
-              additionalData: json.decode(row['additionalData']),
-            ))
-        .toList();
+    return _parseCards(result);
   }
 
   @override
@@ -40,30 +55,17 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     return pageData['page'] ?? 0;
   }
 
-  @override
   Future<bool> isPageExists(String game, int page) async {
-    final result = await _sqliteService.query(
-      'pages',
-      where: 'game = ? AND page = ?',
-      whereArgs: [game, page],
+    final db = await _sqliteService.getDatabase();
+    final result = await db.rawQuery(
+      'SELECT EXISTS(SELECT 1 FROM pages WHERE game = ? AND page = ? LIMIT 1)',
+      [game, page],
     );
-    return result.isNotEmpty;
+    return result.first.values.first == 1;
   }
 
-  @override
-  Future<void> saveCards(String game, int page, List<CardModel> cards) async {
-    final cardDataList = cards.map((card) {
-      return {
-        'id': card.cardId,
-        'game': game,
-        'name': card.name,
-        'description': card.description,
-        'imageUrl': card.imageUrl,
-        'additionalData': json.encode(card.additionalData),
-      };
-    }).toList();
-    await _sqliteService.insertBatch('cards', cardDataList);
-    if (!(await isPageExists(game, page))) {
+  Future<void> _savePageIfNotExists(String game, int page) async {
+    if (!await isPageExists(game, page)) {
       await _sqliteService.insert('pages', {
         'game': game,
         'page': page,
@@ -72,8 +74,27 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   }
 
   @override
+  Future<void> saveCards(String game, int page, List<CardModel> cards) async {
+    final cardDataList = cards.map((card) => {
+          'id': card.cardId,
+          'game': game,
+          'name': card.name,
+          'description': card.description,
+          'imageUrl': card.imageUrl,
+          'additionalData': json.encode(card.additionalData),
+        }).toList();
+
+    await Future.wait([
+      _sqliteService.insertBatch('cards', cardDataList),
+      _savePageIfNotExists(game, page),
+    ]);
+  }
+
   Future<void> clearCards(String game) async {
-    await _sqliteService.delete('cards', 'game', game);
-    await _sqliteService.delete('pages', 'game', game);
+    final db = await _sqliteService.getDatabase();
+    await db.transaction((txn) async {
+      await txn.delete('cards', where: 'game = ?', whereArgs: [game]);
+      await txn.delete('pages', where: 'game = ?', whereArgs: [game]);
+    });
   }
 }

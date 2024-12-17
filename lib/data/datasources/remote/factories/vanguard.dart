@@ -10,10 +10,7 @@ class VanguardApi implements GameApi {
   VanguardApi(this.baseUrl);
 
   Uri _buildUrl(String path, [Map<String, String>? queryParams]) {
-    final uri = Uri.parse('$baseUrl/$path');
-    return queryParams != null
-        ? uri.replace(queryParameters: queryParams)
-        : uri;
+    return Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
   }
 
   void _validateResponse(http.Response response) {
@@ -22,10 +19,14 @@ class VanguardApi implements GameApi {
     }
   }
 
+  Future<http.Response> _getRequest(Uri url) async {
+    return await http.get(url, headers: {
+      'Accept-Encoding': 'gzip',
+      'Content-Type': 'application/json',
+    });
+  }
+
   CardModel _parseCardData(Map<String, dynamic> cardData) {
-    if (cardData.isEmpty) {
-      throw ApiException('Card data is empty or invalid.');
-    }
     return CardModel(
       cardId: cardData['id']?.toString() ?? '',
       game: 'vanguard',
@@ -49,40 +50,22 @@ class VanguardApi implements GameApi {
 
   List<CardModel> _filterCardData(List<dynamic> cardsData) {
     return cardsData
+        .where((card) => card['sets'] != null && (card['sets'] as List).isNotEmpty) // กรองก่อน map
         .map((cardData) => _parseCardData(cardData))
-        .where((card) => card.additionalData!['sets'] != null && (card.additionalData!['sets'] as List).isNotEmpty)
         .toList();
-  }
-
-  @override
-  Future<List<CardModel>> fetchAllCards() async {
-    try {
-      final url = _buildUrl('cards');
-      final response = await http.get(url);
-      _validateResponse(response);
-      final body = json.decode(response.body) as Map<String, dynamic>;
-      final data = body['data'] as List<dynamic>?;
-      if (data == null || data.isEmpty) {
-        throw ApiException('No cards available.');
-      }
-      return _filterCardData(data);
-    } catch (e) {
-      throw ApiException('Failed to fetch all cards: $e');
-    }
   }
 
   @override
   Future<List<CardModel>> fetchCardsPage(int page) async {
     try {
       final url = _buildUrl('cards', {'page': page.toString()});
-      final response = await http.get(url);
+      final response = await _getRequest(url);
       _validateResponse(response);
-      final body = json.decode(response.body) as Map<String, dynamic>;
+
+      final body = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final data = body['data'] as List<dynamic>?;
-      if (data == null || data.isEmpty) {
-        throw ApiException('No cards found for page $page.');
-      }
-      return _filterCardData(data);
+
+      return data != null ? _filterCardData(data) : [];
     } catch (e) {
       throw ApiException('Failed to fetch cards on page $page: $e');
     }

@@ -14,15 +14,16 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => DatabaseService());
   final databaseService = locator<DatabaseService>();
 
-  // ตัวจัดการ Shared Preferences และ SQLite
+  // ตัวจัดการ SQLite
+  final sqliteService = SQLiteService(databaseService);
+  locator.registerLazySingleton(() => sqliteService);
+
+  // ตัวจัดการ Shared Preferences
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences));
-  locator.registerLazySingleton(() => SQLiteService(databaseService));
 
   // ตัวจัดการ Local DataSource สำหรับการ์ด
-  locator.registerLazySingleton<CardLocalDataSource>(
-    () => CardLocalDataSourceImpl(locator<SQLiteService>()),
-  );
+  locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
 
   // ตัวจัดการตั้งค่า
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));

@@ -40,25 +40,39 @@ class SQLiteService {
     }
   }
 
-  Future<void> insert(String table, Map<String, dynamic> data) async {
-    try {
-      final db = await _databaseService.database;
-      await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
-    } catch (e) {
-      throw LocalDataException('Failed to insert data into $table', details: e.toString());
+  Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
+    const chunkSize = 500;
+    final db = await _databaseService.database;
+
+    await db.transaction((txn) async {
+      for (int i = 0; i < dataList.length; i += chunkSize) {
+        final chunk = dataList.skip(i).take(chunkSize).toList();
+        final batch = txn.batch();
+        for (final data in chunk) {
+          batch.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
+        }
+        await batch.commit(noResult: false, continueOnError: true);
+      }
+    });
+  }
+
+  Future<void> _ensureTableExists(Database db, String table) async {
+    final tableExists = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+      [table],
+    );
+    if (tableExists.isEmpty) {
+      throw LocalDataException('Table $table does not exist.');
     }
   }
 
-  Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
+  Future<void> insert(String table, Map<String, dynamic> data) async {
     try {
       final db = await _databaseService.database;
-      await db.transaction((txn) async {
-        for (final data in dataList) {
-          await txn.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
-        }
-      });
+      await _ensureTableExists(db, table);
+      await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      throw LocalDataException('Failed to batch insert data into $table', details: e.toString());
+      throw LocalDataException('Failed to insert data into $table', details: e.toString());
     }
   }
 

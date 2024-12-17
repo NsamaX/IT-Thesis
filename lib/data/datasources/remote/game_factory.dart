@@ -4,7 +4,6 @@ import 'factories/@export.dart';
 import '../../models/card.dart';
 
 abstract class GameApi {
-  Future<List<CardModel>> fetchAllCards();
   Future<List<CardModel>> fetchCardsPage(int page);
 }
 
