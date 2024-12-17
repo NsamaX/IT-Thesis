@@ -19,8 +19,6 @@ class DatabaseService {
     try {
       final dbPath = await getDatabasesPath();
       final path = join(dbPath, 'nfc_project.db');
-      await deleteDatabase(path);
-      print('Database deleted: $path');
 
       final db = await openDatabase(
         path,
