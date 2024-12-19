@@ -15,16 +15,20 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBarWidget(menu: {locale.translate('settings.title'): null}),
-      body: _buildSettingsContent(locale, cubit),
+      body: _buildSettingsContent(context, locale, cubit),
       bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 
-  Widget _buildSettingsContent(AppLocalizations locale, SettingsCubit cubit) {
+  Widget _buildSettingsContent(
+    BuildContext context,
+    AppLocalizations locale,
+    SettingsCubit cubit,
+  ) {
     return SettingsLabelWidget(
       label: [
         _buildAccountSettings(locale),
-        _buildGeneralSettings(locale),
+        _buildGeneralSettings(context, locale, cubit),
         _buildSupportSettings(locale, cubit),
       ],
     );
@@ -48,7 +52,11 @@ class SettingsPage extends StatelessWidget {
     };
   }
 
-  Map<String, dynamic> _buildGeneralSettings(AppLocalizations locale) {
+  Map<String, dynamic> _buildGeneralSettings(
+    BuildContext context,
+    AppLocalizations locale,
+    SettingsCubit cubit,
+  ) {
     return {
       'title': locale.translate('settings.general.title'),
       'content': [
@@ -65,13 +73,16 @@ class SettingsPage extends StatelessWidget {
         {
           'icon': Icons.logout_rounded,
           'text': locale.translate('settings.general.sign_out'),
-          'onTap': AppRoutes.signIn,
+          'onTap': () => _toggleSignOut(context, cubit),
         },
       ],
     };
   }
 
-  Map<String, dynamic> _buildSupportSettings(AppLocalizations locale, SettingsCubit cubit) {
+  Map<String, dynamic> _buildSupportSettings(
+    AppLocalizations locale,
+    SettingsCubit cubit,
+  ) {
     return {
       'title': locale.translate('settings.support.title'),
       'content': [
@@ -87,6 +98,12 @@ class SettingsPage extends StatelessWidget {
         // },
       ],
     };
+  }
+
+  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
+    cubit.updateFirstLoad(true);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
   }
 
   void _toggleLanguage(SettingsCubit cubit) {

@@ -49,9 +49,14 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         listeners: [
           BlocListener<NFCCubit, NFCState>(
             listener: (context, nfcState) {
+              // ตรวจสอบว่า state มี tag และ NFC เปิดใช้งานอยู่
               if (nfcState.lastReadTag != null && nfcState.isNFCEnabled) {
                 _handleNFCTag(context, nfcState, locale);
               }
+            },
+            listenWhen: (previous, current) {
+              // แสดง snackbar เฉพาะเมื่อ lastReadTag เปลี่ยนไป
+              return previous.lastReadTag != current.lastReadTag && current.lastReadTag != null;
             },
           ),
         ],
@@ -78,7 +83,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) async {
     final tag = nfcState.lastReadTag;
 
-    if (tag != null && nfcState.isNFCEnabled) {
+    if (tag != null) {
       try {
         context.read<TrackCubit>().readTag(tag);
         showSnackBar(
@@ -135,7 +140,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       children: [
         // ListView แสดงการ์ด
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 46, 8, 0),
+          padding: const EdgeInsets.fromLTRB(8, 46, 8, 8),
           child: ListView.builder(
             itemCount: state.deck.cards.length,
             itemBuilder: (context, index) {

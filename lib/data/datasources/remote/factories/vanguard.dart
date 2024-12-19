@@ -50,7 +50,10 @@ class VanguardApi implements GameApi {
 
   List<CardModel> _filterCardData(List<dynamic> cardsData) {
     return cardsData
-        .where((card) => card['sets'] != null && (card['sets'] as List).isNotEmpty) // กรองก่อน map
+        .where((card) => 
+          card['sets'] != null && 
+          card['format'] != 'Vanguard ZERO' &&
+          (card['sets'] as List).isNotEmpty)
         .map((cardData) => _parseCardData(cardData))
         .toList();
   }

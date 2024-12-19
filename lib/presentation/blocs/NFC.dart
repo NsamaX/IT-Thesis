@@ -137,23 +137,48 @@ class NFCCubit extends Cubit<NFCState> {
   Future<void> _processRead(NfcTag tag) async {
     logger.i('Tag discovered: ${tag.data}');
     final ndef = Ndef.from(tag);
-    if (ndef == null)
+    if (ndef == null) {
       throw Exception(
           'This NFC tag is not supported. Please use a compatible tag.');
+    }
+
+    // ตรวจสอบโครงสร้างของ tag.data ก่อนประมวลผล
+    final ndefMessage = tag.data['ndef']?['cachedMessage'];
+    if (ndefMessage == null) {
+      throw Exception('No NDEF message found on the tag.');
+    }
+
+    final records = ndefMessage['records'] as List<dynamic>;
+    final parsedRecords = records.map((record) {
+      final payload = record['payload'] as List<int>;
+      return String.fromCharCodes(payload).substring(3); // ข้าม `en` (ภาษา)
+    }).toList();
+
+    logger.i('Parsed Records: $parsedRecords');
+
+    final cardIdMatch = parsedRecords
+        .firstWhere((record) => record.startsWith('Card ID:'), orElse: () => '')
+        .split(': ')
+        .last;
+    final gameMatch = parsedRecords
+        .firstWhere((record) => record.startsWith('Game:'), orElse: () => '')
+        .split(': ')
+        .last;
 
     final tagId = _extractTagId(tag);
-    final gameAndCardId = _parseGameAndCardId(tag.data);
+
     final tagEntity = TagEntity(
       tagId: tagId,
-      cardId: gameAndCardId['cardId'] ?? '',
-      game: gameAndCardId['game'] ?? '',
+      cardId: cardIdMatch,
+      game: gameMatch,
       timestamp: DateTime.now(),
     );
 
     logger.i('Tag Read Successful: $tagEntity');
     emitSafe(
-        state.copyWith(lastReadTag: tagEntity, isOperationSuccessful: true));
-  }
+      state.copyWith(lastReadTag: tagEntity, isOperationSuccessful: true),
+    );
+    }
 
   Future<void> _processWrite(NfcTag tag, CardEntity card) async {
     logger.i('Tag discovered for writing: ${tag.data}');
@@ -161,6 +186,7 @@ class NFCCubit extends Cubit<NFCState> {
     if (ndef == null) throw Exception('This tag does not support NDEF.');
     if (!ndef.isWritable) throw Exception('This tag is read-only.');
 
+    // สร้างข้อความ NDEF
     final ndefMessage = NdefMessage([
       NdefRecord.createText('Card Name: ${card.name}'),
       NdefRecord.createText('Game: ${card.game}'),
@@ -170,9 +196,16 @@ class NFCCubit extends Cubit<NFCState> {
     if (ndefMessage.byteLength > ndef.maxSize)
       throw Exception('Data exceeds tag capacity.');
 
+    // แสดงข้อความ NDEF ก่อนเขียน
+    for (var record in ndefMessage.records) {
+      logger.i('Writing record: ${String.fromCharCodes(record.payload)}');
+    }
+
+    // เขียนข้อความลงแท็ก
     await ndef.write(ndefMessage);
     logger.i('NFC Write Successful.');
 
+    // สร้าง TagEntity
     final tagId = _extractTagId(tag);
     final tagEntity = TagEntity(
       tagId: tagId,
@@ -195,28 +228,18 @@ class NFCCubit extends Cubit<NFCState> {
     return tagId;
   }
 
-  Map<String, String?> _parseGameAndCardId(Map<String, dynamic> data) {
-    final cachedMessage = data['ndef']?['cachedMessage'];
-    String? game;
-    String? cardId;
+  Map<String, String?> _parseGameAndCardId(dynamic data) {
+    // แปลงข้อมูล data เป็น string หากเป็น binary
+    final payloadString = String.fromCharCodes(data);
 
-    if (cachedMessage != null && cachedMessage['records'] is List<dynamic>) {
-      for (var record in cachedMessage['records']) {
-        if (record is Map<String, dynamic>) {
-          final payload = record['payload'] as List<dynamic>?;
-          if (payload != null && payload.length > 3) {
-            final text = String.fromCharCodes(payload.cast<int>().sublist(3));
-            if (text.startsWith('Game:')) {
-              game = text.replaceFirst('Game: ', '').trim();
-            } else if (text.startsWith('Card ID:')) {
-              cardId = text.replaceFirst('Card ID: ', '').trim();
-            }
-          }
-        }
-      }
-    }
+    // สร้าง regex เพื่อแยกข้อมูล
+    final cardIdMatch = RegExp(r'Card ID: (\d+)').firstMatch(payloadString);
+    final gameMatch = RegExp(r'Game: (.+)').firstMatch(payloadString);
 
-    return {'game': game, 'cardId': cardId};
+    return {
+      'cardId': cardIdMatch?.group(1),
+      'game': gameMatch?.group(1),
+    };
   }
 
   Future<void> _saveTagWithCard(

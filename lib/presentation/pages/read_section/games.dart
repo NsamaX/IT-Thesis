@@ -34,7 +34,7 @@ class GamesPage extends StatelessWidget {
 
   Widget _buildGameList(List<String> gameKeys, List<String> gameImages, bool isAdd) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         itemCount: gameKeys.length,
         itemBuilder: (context, index) {
