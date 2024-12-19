@@ -60,4 +60,5 @@
 ---
 
 <h2>📜 License</h2>
-<p>This project is licensed under the <strong>MIT License</strong>.</p>
+<p>This project is part of my Bachelor's degree thesis. While you are welcome to explore the code for learning purposes, please note that this project is my intellectual property, and I strongly prohibit its use for commercial purposes. Feel free to reference or review it, but do not use it to generate income. This project is licensed under the <strong>MIT License</strong> with this additional restriction.</p>
+
