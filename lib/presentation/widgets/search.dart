@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 
 class SearchBarWidget extends StatefulWidget {
-  const SearchBarWidget({super.key});
+  final ValueChanged<String> onSearchChanged;
+  final VoidCallback onSearchCleared;
+
+  const SearchBarWidget({
+    Key? key,
+    required this.onSearchChanged,
+    required this.onSearchCleared,
+  }) : super(key: key);
 
   @override
   _SearchBarWidgetState createState() => _SearchBarWidgetState();
@@ -9,70 +17,88 @@ class SearchBarWidget extends StatefulWidget {
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   bool isSearch = false;
+  bool showCancel = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final double searchBarHeight = 32;
 
     return Container(
       color: theme.appBarTheme.backgroundColor,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Animated Search Bar
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              width: isSearch
-                  ? MediaQuery.of(context).size.width - 118
-                  : MediaQuery.of(context).size.width - 32,
+            // Static Search Container (Left Side)
+            Expanded(
               child: Container(
-                height: searchBarHeight,
+                height: 32,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surface,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
+                  controller: _searchController,
                   onTap: () {
                     setState(() {
                       isSearch = true;
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        setState(() {
+                          showCancel = true;
+                        });
+                      });
                     });
                   },
-                  decoration: const InputDecoration(
+                  onChanged: widget.onSearchChanged,
+                  decoration: InputDecoration(
                     border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search),
-                    hintText: 'Search',
-                    hintStyle: TextStyle(fontSize: 16),
-                    contentPadding: EdgeInsets.only(bottom: 12),
+                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                    hintText: locale.translate('search.hint_text'),
+                    hintStyle:
+                        const TextStyle(fontSize: 16, color: Colors.grey),
+                    contentPadding: const EdgeInsets.only(bottom: 12),
                   ),
-                  style: theme.textTheme.bodyMedium,
+                  style:
+                      theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
                 ),
               ),
             ),
-            if (isSearch) ...[
-              const SizedBox(width: 8),
-              // Cancel Button
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isSearch = false;
-                  });
-                },
-                child: Text(
-                  'Cancel',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.secondaryHeaderColor,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
+            // Animated Container (Right Side)
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              width: isSearch ? 80 : 0, // Shrink to show the Cancel button
+              child: showCancel
+                  ? TextButton(
+                      onPressed: () {
+                        setState(() {
+                          isSearch = false;
+                          showCancel = false;
+                          _searchController.clear();
+                        });
+                        widget.onSearchCleared();
+                      },
+                      child: Text(
+                        locale.translate('search.button'),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.secondaryHeaderColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 }

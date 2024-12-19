@@ -18,17 +18,28 @@ class SearchPage extends StatelessWidget {
     final arguments = _getArguments(context);
     final syncCardsUseCase = GetIt.instance<SyncCardsUseCase>(param1: arguments['game']);
 
-    return BlocProvider<SearchBloc>(
-      create: (_) => SearchBloc(syncCardsUseCase)..add(SyncCardsEvent(arguments['game'])),
-      child: Scaffold(
-        appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-        body: Column(
-          children: [
-            const SearchBarWidget(),
-            SizedBox(height: 8),
-            _buildBody(context, arguments),
-          ],
-        ),
+    // Use BlocProvider to scope the SearchCubit to this page
+    return BlocProvider<SearchCubit>(
+      create: (_) => SearchCubit(syncCardsUseCase)..syncCards(arguments['game']),
+      child: Builder(
+        // Use Builder to ensure the correct context for reading the Bloc
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
+            body: Column(
+              children: [
+                SearchBarWidget(
+                  onSearchChanged: (query) =>
+                      context.read<SearchCubit>().searchCards(query),
+                  onSearchCleared: () =>
+                      context.read<SearchCubit>().clearSearch(),
+                ),
+                const SizedBox(height: 8),
+                _buildBody(context, arguments),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -54,27 +65,22 @@ class SearchPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
-    return BlocBuilder<SearchBloc, SearchState>(
+    return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-        if (state is SearchInitial || state is SearchLoading) {
+        if (state.isLoading) {
           return const Expanded(
             child: Center(child: CircularProgressIndicator()),
           );
-        } else if (state is SearchLoaded) {
-          return _buildCardList(context, state.cards, arguments);
-        } else if (state is SearchError) {
-          final locale = AppLocalizations.of(context);
+        } else if (state.errorMessage != null) {
           return Expanded(
             child: Center(
-              child: Text(state.message.isNotEmpty
-                  ? state.message
-                  : locale.translate('search.error')),
+              child: Text(state.errorMessage!.isNotEmpty
+                  ? state.errorMessage!
+                  : AppLocalizations.of(context).translate('search.error')),
             ),
           );
         } else {
-          return const Expanded(
-            child: Center(child: CircularProgressIndicator()),
-          );
+          return _buildCardList(context, state.cards, arguments);
         }
       },
     );
@@ -88,7 +94,7 @@ class SearchPage extends StatelessWidget {
         ),
       );
     }
-    
+
     return Expanded(
       child: ListView.builder(
         itemCount: cards.length,

@@ -6,8 +6,9 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../blocs/deck_manager.dart';
 import '../../blocs/NFC.dart';
-import '../../widgets/card/info.dart';
-import '../../widgets/card/image.dart';
+import '../../widgets/card/info/count.dart';
+import '../../widgets/card/info/info.dart';
+import '../../widgets/card/info/image.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';
 
@@ -118,7 +119,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final deckNameController = TextEditingController(text: locale.translate('card.card_name'));
+    final deckNameController =
+        TextEditingController(text: locale.translate('card.card_name'));
 
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
@@ -129,7 +131,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
         }
       },
       child: Scaffold(
-        appBar: AppBarWidget(menu: _buildAppBarMenu(
+        appBar: AppBarWidget(
+            menu: _buildAppBarMenu(
           context,
           locale,
           card,
@@ -143,6 +146,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
             CardImageWidget(card: card, isCustom: isCustom),
             const SizedBox(height: 24),
             CardInfoWidget(card: card, isCustom: isCustom),
+            const SizedBox(height: 24),
+            CardCountWidget(),
           ],
         ),
       ),

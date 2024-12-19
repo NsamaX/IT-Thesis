@@ -48,6 +48,8 @@
   "search": {
     "title": "Search",
     "description": "Looking for a card? Use the search feature to find specific cards across all your games.",
+    "hint_text": "Got a card in mind?",
+    "button": "Cancel",
     "error": "No matching cards were found. Please try a different search term.",
     "internet_error": "No internet connection. Please check your connection and try again."
   },

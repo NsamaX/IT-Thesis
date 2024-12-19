@@ -2,44 +2,67 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/sync_cards.dart';
 
-abstract class SearchEvent {}
+class SearchState {
+  final List<CardEntity> allCards; // การ์ดทั้งหมด
+  final List<CardEntity> cards; // การ์ดที่แสดงผล
+  final bool isLoading;
+  final String? errorMessage;
 
-class SyncCardsEvent extends SearchEvent {
-  final String game;
-  SyncCardsEvent(this.game);
+  SearchState({
+    this.allCards = const [],
+    this.cards = const [],
+    this.isLoading = false,
+    this.errorMessage,
+  });
+
+  SearchState copyWith({
+    List<CardEntity>? allCards,
+    List<CardEntity>? cards,
+    bool? isLoading,
+    String? errorMessage,
+  }) {
+    return SearchState(
+      allCards: allCards ?? this.allCards,
+      cards: cards ?? this.cards,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage,
+    );
+  }
 }
 
-abstract class SearchState {}
-
-class SearchInitial extends SearchState {}
-
-class SearchLoading extends SearchState {}
-
-class SearchLoaded extends SearchState {
-  final List<CardEntity> cards;
-  SearchLoaded({required this.cards});
-}
-
-class SearchError extends SearchState {
-  final String message;
-  SearchError({required this.message});
-}
-
-class SearchBloc extends Bloc<SearchEvent, SearchState> {
+class SearchCubit extends Cubit<SearchState> {
   final SyncCardsUseCase syncCardsUseCase;
 
-  SearchBloc(this.syncCardsUseCase) : super(SearchInitial()) {
-    on<SyncCardsEvent>(_onSyncCardsEvent);
+  SearchCubit(this.syncCardsUseCase) : super(SearchState());
+
+  Future<void> syncCards(String game) async {
+    if (state.isLoading) return;
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+    try {
+      final syncedCards = await syncCardsUseCase.call(game);
+      emit(state.copyWith(
+        allCards: syncedCards,
+        cards: syncedCards,
+        isLoading: false,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        errorMessage: 'Failed to sync cards: $e',
+        isLoading: false,
+      ));
+    }
   }
 
-  Future<void> _onSyncCardsEvent(SyncCardsEvent event, Emitter<SearchState> emit) async {
-    if (state is SearchLoading || state is SearchLoaded) return;
-    emit(SearchLoading());
-    try {
-      final syncedCards = await syncCardsUseCase.call(event.game);
-      emit(SearchLoaded(cards: syncedCards));
-    } catch (e) {
-      emit(SearchError(message: 'Failed to sync cards: $e'));
-    }
+  void searchCards(String query) {
+    // กรองการ์ดตามคำค้นหา (ไม่คำนึงถึงตัวพิมพ์ใหญ่/เล็ก)
+    final filteredCards = state.allCards
+        .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    emit(state.copyWith(cards: filteredCards));
+  }
+
+  void clearSearch() {
+    // เคลียร์ผลการค้นหาและแสดงการ์ดทั้งหมด
+    emit(state.copyWith(cards: state.allCards));
   }
 }
