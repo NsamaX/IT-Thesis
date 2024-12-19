@@ -80,11 +80,11 @@ class SettingsPage extends StatelessWidget {
           'text': locale.translate('settings.support.language'),
           'onTap': () => _toggleLanguage(cubit),
         },
-        {
-          'icon': Icons.coffee_rounded,
-          'text': locale.translate('settings.support.donate'),
-          'onTap': () {},
-        },
+        // {
+        //   'icon': Icons.coffee_rounded,
+        //   'text': locale.translate('settings.support.donate'),
+        //   'onTap': () {},
+        // },
       ],
     };
   }

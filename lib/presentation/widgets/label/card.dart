@@ -52,6 +52,7 @@ class CardLabelWidget extends StatelessWidget {
               _buildImage(theme, textColor),
               const SizedBox(width: 12),
               Expanded(child: _buildCardInfo(theme, locale, textColor)),
+              const SizedBox(width: 16),
               if (count != null) ...[
                 Text(
                   count.toString(),

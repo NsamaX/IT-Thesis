@@ -61,7 +61,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               _showTrackerDialog(context, locale);
             }
             return Scaffold(
-              appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
+              appBar:
+                  AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
               body: _buildCardList(context, state),
             );
           },
@@ -76,7 +77,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     AppLocalizations locale,
   ) async {
     final tag = nfcState.lastReadTag;
-    
+
     if (tag != null && nfcState.isNFCEnabled) {
       try {
         context.read<TrackCubit>().readTag(tag);
@@ -114,31 +115,50 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
 
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      context.read<TrackCubit>().totalCards.toString(): null,
+      Icons.access_time_rounded: null,
       locale.translate('tracker.title'): null,
       Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
       isNFCEnabled
-          ? Icons.wifi_tethering_rounded
-          : Icons.wifi_tethering_off_rounded: () => NFCHelper.handleToggleNFC(nfcCubit, enable: !isNFCEnabled, reason: 'User toggled NFC in Tracker Page'),
+              ? Icons.wifi_tethering_rounded
+              : Icons.wifi_tethering_off_rounded:
+          () => NFCHelper.handleToggleNFC(nfcCubit,
+              enable: !isNFCEnabled,
+              reason: 'User toggled NFC in Tracker Page'),
     };
   }
 
   Widget _buildCardList(BuildContext context, TrackState state) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
-      child: ListView.builder(
-        itemCount: state.deck.cards.length,
-        itemBuilder: (context, index) {
-          final entry = state.deck.cards.entries.elementAt(index);
-          final card = entry.key;
-          final count = entry.value;
-          return CardLabelWidget(
-            card: card,
-            count: count,
-            lightTheme: count > 0,
-          );
-        },
-      ),
+    final totalCards =
+        state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
+
+    return Stack(
+      children: [
+        // ListView แสดงการ์ด
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 46, 8, 0),
+          child: ListView.builder(
+            itemCount: state.deck.cards.length,
+            itemBuilder: (context, index) {
+              final entry = state.deck.cards.entries.elementAt(index);
+              final card = entry.key;
+              final count = entry.value;
+              return CardLabelWidget(
+                card: card,
+                count: count,
+                lightTheme: count > 0,
+              );
+            },
+          ),
+        ),
+        // จำนวนการ์ดทั้งหมด
+        Positioned(
+          top: 8,
+          right: 16,
+          child: Text(
+              '$totalCards ${AppLocalizations.of(context).translate('tracker.total')}',
+              style: Theme.of(context).textTheme.titleMedium),
+        ),
+      ],
     );
   }
 }

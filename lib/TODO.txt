@@ -1,0 +1,19 @@
+# Feature
+    [] Scan history
+    [] Record history
+    [] NFC multi write
+    [] Custom card
+    [] Filter card
+    [] Sign in
+
+# page
+    [] About
+    [] provacy
+
+# widget
+    [] Track card count
+    [] Snack bar timing
+    [] Add by count
+
+# Error
+    [] NFC เขียนยังไม่เสร็จแล้วออกก่อนเลยค้าง

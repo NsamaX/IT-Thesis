@@ -35,7 +35,8 @@
     "dialog": {
       "title": "Card Tracking Tutorial",
       "content": "On this page, you can scan cards while playing. When a card is scanned, it will be removed from the deck. Scanning it again adds it back. Tap OK to proceed."
-    }
+    },
+    "total": "Cards"
   },
   "scan": {
     "title": "Scan Card",

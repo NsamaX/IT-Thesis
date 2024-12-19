@@ -11,14 +11,16 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isCard = items.every((element) => element is MapEntry<CardEntity, int>);
-    final double spacing = isCard ? 8 : 12;
+    // ตรวจสอบว่าเป็น Deck หรือ Card
+    final bool isDeckEntity = items.isNotEmpty && items.first is DeckEntity;
+    final bool isCardEntity = items.isNotEmpty && items.first is CardEntity;
+    final double spacing = isDeckEntity ? 12 : 8;
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: isCard ? 3 / 4 : 1,
+        childAspectRatio: isDeckEntity ? 1 : 3 / 4,
         crossAxisSpacing: spacing,
         mainAxisSpacing: spacing,
       ),
@@ -26,11 +28,17 @@ class GridWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
 
-        if (isCard) {
+         if (isDeckEntity) {
+          // แสดง DeckEntity
+          return DeckWidget(deck: item as DeckEntity);
+        } else if (isCardEntity) {
+          // แสดง CardEntity โดยไม่มี Count
+          final card = item as CardEntity;
+          return CardWidget(card: card);
+        } else {
+          // กรณีที่เหลือ (MapEntry<CardEntity, int>)
           final cardEntry = item as MapEntry<CardEntity, int>;
           return CardWidget(card: cardEntry.key, count: cardEntry.value);
-        } else {
-          return DeckWidget(deck: item as DeckEntity);
         }
       },
     );
