@@ -9,6 +9,9 @@ import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
 import 'presentation/cubits/@export.dart';
 
+// ignore: unused_import
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -17,6 +20,9 @@ void main() async {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
+    // final pref = await SharedPreferences.getInstance();
+    // pref.clear();
 
     await setupLocator();
     await ApiConfig.loadConfig(environment: 'development');
@@ -52,7 +58,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return MaterialApp(
-            debugShowCheckedModeBanner: true, // แอพอยู่ระหว่างการพัฒนา
+            debugShowCheckedModeBanner: true,
             locale: state.locale,
             supportedLocales: [
               Locale('en'),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
+import 'package:get_it/get_it.dart';
 import '../../cubits/drawer.dart';
 import '../../cubits/NFC.dart';
+import '../../cubits/scan_history.dart';
 import '../../widgets/drawer/features.dart';
 import '../../widgets/drawer/history.dart';
 import '../../widgets/navigation_bar/app.dart';
@@ -24,6 +26,9 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
     final nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(nfcCubit);
     _nfcSessionHandler.initNFCSessionHandler();
+
+    // โหลดข้อมูลแท็กเมื่อหน้าเริ่มต้น
+    GetIt.I<ScanHistoryCubit>().loadTags();
   }
 
   @override
@@ -41,12 +46,13 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
 
-    return BlocProvider(
-      create: (context) => DrawerCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => DrawerCubit()),
+        BlocProvider.value(value: GetIt.I<ScanHistoryCubit>()),
+      ],
       child: Builder(
         builder: (context) {
-          context.read<NFCCubit>().loadTags();
-
           return Scaffold(
             appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
             body: GestureDetector(
@@ -83,7 +89,11 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
           duration: const Duration(milliseconds: 200),
           top: 0,
           left: state['history']! ? 0 : -200,
-          child: const HistoryDrawerWidget(),
+          child: BlocBuilder<ScanHistoryCubit, ScanHistoryState>(
+            builder: (context, scanHistoryState) {
+              return HistoryDrawerWidget(savedTags: scanHistoryState.savedTags!);
+            },
+          ),
         );
       },
     );

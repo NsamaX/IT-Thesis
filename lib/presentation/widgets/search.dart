@@ -56,12 +56,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                     border: InputBorder.none,
                     prefixIcon: const Icon(Icons.search, color: Colors.grey),
                     hintText: locale.translate('search.hint_text'),
-                    hintStyle:
-                        const TextStyle(fontSize: 16, color: Colors.grey),
-                    contentPadding: const EdgeInsets.only(bottom: 12),
+                    hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+                    contentPadding: const EdgeInsets.only(bottom: 10),
                   ),
-                  style:
-                      theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
                 ),
               ),
             ),
@@ -69,7 +67,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              width: isSearch ? 80 : 0, // Shrink to show the Cancel button
+              width: isSearch ? 86 : 0, // Shrink to show the Cancel button
               child: showCancel
                   ? TextButton(
                       onPressed: () {

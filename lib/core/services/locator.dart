@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import '@export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '@export.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
@@ -68,7 +68,7 @@ Future<void> setupLocator() async {
         deleteDeckUseCase: locator<DeleteDeckUseCase>(),
       ));
 
-  // ตัวจัดการ NFC และ Tag
+  // ตัวจัดการ NFC และแท็ค
   locator.registerLazySingleton<TagLocalDataSource>(() => TagLocalDataSourceImpl(locator<SharedPreferencesService>()));
   locator.registerLazySingleton<TagRepository>(() => TagRepositoryImpl(locator<TagLocalDataSource>()));
   locator.registerLazySingleton(() => LoadTagsUseCase(locator<TagRepository>()));
@@ -76,5 +76,10 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => NFCCubit(
         loadTagsUseCase: locator<LoadTagsUseCase>(),
         saveTagUseCase: locator<SaveTagUseCase>(),
+      ));
+
+  // ตัวจัดการประวัติการอ่านแท็ค
+  locator.registerLazySingleton(() => ScanHistoryCubit(
+        loadTagsUseCase: locator<LoadTagsUseCase>(),
       ));
 }

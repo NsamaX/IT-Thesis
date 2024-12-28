@@ -14,6 +14,7 @@
     [] Snack bar timing
     [] Track card count
     [] Add by count
+    [] Animations
 
 # Error
     [] NFC เขียนยังไม่เสร็จแล้วออกก่อนเลยค้าง
