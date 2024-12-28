@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/usecases/deck_manager.dart';
+import 'NFC.dart';
 
 class DeckManagerState {
   final List<DeckEntity> allDecks;
@@ -80,12 +83,11 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   void toggleShare() {
     final deck = state.deck;
     final StringBuffer clipboardContent = StringBuffer()
-      ..writeln('Deck ID: ${deck.deckId}')
       ..writeln('Deck Name: ${deck.deckName}')
       ..writeln('Total Cards: ${deck.totalCards}')
       ..writeln('\nCards:');
     deck.cards.forEach((card, count) {
-      clipboardContent..writeln('- ${card.name} (ID: ${card.cardId}) x$count');
+      clipboardContent..writeln('- ${card.name} x$count');
     });
     Clipboard.setData(ClipboardData(text: clipboardContent.toString()));
     emit(state.copyWith(isShareEnabled: true));
@@ -102,6 +104,32 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
 
   void toggleSelectedCard(CardEntity card) {
     emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+  }
+
+  void writeSelectedCardToNFC(NFCCubit nfcCubit) async {
+    if (!state.isNfcReadEnabled) {
+      debugPrint('NFC read is disabled. Cannot write to NFC.');
+      return;
+    }
+
+    if (state.selectedCard == null) {
+      debugPrint('No card selected. Cannot write to NFC.');
+      return;
+    }
+
+    try {
+      emit(state.copyWith(isLoading: true)); // ตั้งสถานะกำลังทำงาน
+      await NFCHelper.handleToggleNFC(
+        nfcCubit,
+        enable: true,
+        card: state.selectedCard!,
+        reason: 'Writing selected card to NFC',
+      );
+      emit(state.copyWith(isLoading: false)); // ยกเลิกสถานะกำลังทำงานเมื่อเสร็จสิ้น
+    } catch (e) {
+      debugPrint('Error writing card to NFC: $e');
+      emit(state.copyWith(isLoading: false)); // ยกเลิกสถานะเมื่อเกิดข้อผิดพลาด
+    }
   }
 
   void toggleDelete() {
@@ -135,8 +163,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     try {
       await saveDeckUseCase(state.deck);
       final updatedDecks = List<DeckEntity>.from(state.allDecks);
-      final existingIndex =
-          updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
+      final existingIndex = updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
       if (existingIndex != -1) {
         updatedDecks[existingIndex] = state.deck;
       } else {
@@ -144,7 +171,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
       }
       emit(state.copyWith(allDecks: updatedDecks));
     } catch (e) {
-      print("Error saving deck: $e");
+      debugPrint("Error saving deck: $e");
     } finally {
       emit(state.copyWith(isLoading: false));
     }
@@ -159,8 +186,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
       allDecks: updatedDecks,
       deck: updatedDecks.isNotEmpty
           ? updatedDecks.first
-          : DeckEntity(
-              deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
+          : DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
     ));
   }
 }
