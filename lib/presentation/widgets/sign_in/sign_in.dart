@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
-import '../../blocs/settings.dart';
+import '../../cubits/settings.dart';
 
 class SignInWidget extends StatelessWidget {
   const SignInWidget({Key? key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
-import '../../blocs/deck_manager.dart';
+import '../../cubits/deck_manager.dart';
 import '../../widgets/card/grid.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';

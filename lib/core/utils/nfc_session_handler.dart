@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:nfc_project/presentation/blocs/NFC.dart';
+import 'package:nfc_project/presentation/cubits/NFC.dart';
 
 class NFCSessionHandler with WidgetsBindingObserver {
   final NFCCubit nfcCubit;

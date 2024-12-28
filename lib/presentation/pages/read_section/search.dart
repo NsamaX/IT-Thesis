@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/sync_cards.dart';
-import '../../blocs/search.dart';
+import '../../cubits/search.dart';
 import '../../widgets/label/card.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/search.dart';

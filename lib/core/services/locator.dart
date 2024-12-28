@@ -5,7 +5,7 @@ import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
-import 'package:nfc_project/presentation/blocs/@export.dart';
+import 'package:nfc_project/presentation/cubits/@export.dart';
 
 final GetIt locator = GetIt.instance;
 

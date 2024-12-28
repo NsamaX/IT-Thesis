@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/presentation/blocs/NFC.dart';
+import 'package:nfc_project/presentation/cubits/NFC.dart';
 
 class NFCHelper {
   static Future<void> handleToggleNFC(

@@ -1,8 +1,8 @@
 # Feature
     [] Scan history
-    [] Record history
     [] NFC multi write
     [] Custom card
+    [] Record history
     [] Filter card
     [] Sign in
 
@@ -11,8 +11,8 @@
     [] provacy
 
 # widget
-    [] Track card count
     [] Snack bar timing
+    [] Track card count
     [] Add by count
 
 # Error

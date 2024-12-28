@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../blocs/NFC.dart';
+import '../../cubits/NFC.dart';
 import '../label/card.dart';
 
 class HistoryDrawerWidget extends StatelessWidget {

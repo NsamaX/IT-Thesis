@@ -7,7 +7,7 @@ import 'core/locales/localizations.dart';
 import 'core/routes/routes.dart';
 import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
-import 'presentation/blocs/@export.dart';
+import 'presentation/cubits/@export.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

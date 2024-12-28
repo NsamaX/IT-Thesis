@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
-import '../blocs/NFC.dart';
+import '../cubits/NFC.dart';
 
 class NFCWidget extends StatelessWidget {
   const NFCWidget({Key? key}) : super(key: key);

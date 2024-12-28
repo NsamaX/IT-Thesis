@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import '../../blocs/deck_manager.dart';
+import '../../cubits/deck_manager.dart';
 
 Widget buildEditControls(
   BuildContext context,

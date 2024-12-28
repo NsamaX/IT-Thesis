@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
-import '../../blocs/app_state.dart';
+import '../../cubits/app_state.dart';
 
 class SupportedGameLabelWidget extends StatelessWidget {
   final String game;
