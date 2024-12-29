@@ -2,22 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../../cubits/deck_manager.dart';
+import '../../cubits/NFC.dart';
 import '../../widgets/card/grid.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';
 
-class NewDeckPage extends StatelessWidget {
+class NewDeckPage extends StatefulWidget {
+  @override
+  State<NewDeckPage> createState() => _NewDeckPageState();
+}
+
+class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
+  late final NFCCubit _nfcCubit;
+  late final NFCSessionHandler _nfcSessionHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    final nfcCubit = context.read<NFCCubit>();
+    _nfcSessionHandler = NFCSessionHandler(nfcCubit);
+    _nfcSessionHandler.initNFCSessionHandler();
+  }
+
+  @override
+  void dispose() {
+    _nfcSessionHandler.disposeNFCSessionHandler();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _nfcSessionHandler.handleAppLifecycleState(state);
+  }
+
+  void _handleSnackBar(BuildContext context, NFCState state) {
+    debugPrint('SnackBar Handler Called: $state');
+    final locale = AppLocalizations.of(context);
+    if (state.isOperationSuccessful) {
+      debugPrint('Operation Successful');
+      showSnackBar(
+        context: context,
+        content: locale.translate('card.dialog.write_success'),
+      );
+      _nfcCubit.resetOperationStatus();
+    } else if (state.errorMessage != null) {
+      debugPrint('Error Message: ${state.errorMessage}');
+      showSnackBar(
+        context: context,
+        content: locale.translate('card.dialog.write_fail'),
+      );
+      _nfcCubit.clearErrorMessage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<DeckManagerCubit>();
     final deck = cubit.state.deck;
-    final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
+    final TextEditingController deckNameController =
+        TextEditingController(text: deck.deckName);
 
-    return Scaffold(
-      appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
-      body: _buildGridView(context, cubit),
+    return BlocListener<NFCCubit, NFCState>(
+      listener: (context, state) {
+        if (state.isOperationSuccessful) {
+          _handleSnackBar(context, state);
+        } else if (state.errorMessage != null) {
+          _handleSnackBar(context, state);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBarWidget(
+            menu: _buildMenu(context, cubit, locale, deckNameController)),
+        body: _buildGridView(context, cubit),
+      ),
     );
   }
 
@@ -42,7 +102,8 @@ class NewDeckPage extends StatelessWidget {
     return isEditMode
         ? {
             Icons.nfc_rounded: () => cubit.toggleNfcRead(),
-            Icons.delete_outline_rounded: () => _showDeleteDialog(context, cubit, locale),
+            Icons.delete_outline_rounded: () =>
+                _showDeleteDialog(context, cubit, locale),
             TextField(
               controller: deckNameController,
               textAlign: TextAlign.center,
@@ -51,7 +112,8 @@ class NewDeckPage extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: locale.translate('new_deck.title'),
               ),
-              onSubmitted: (value) => _renameDeck(cubit, deckNameController, locale, value),
+              onSubmitted: (value) =>
+                  _renameDeck(cubit, deckNameController, locale, value),
             ): null,
             Icons.add_rounded: {
               'route': AppRoutes.games,
@@ -67,7 +129,8 @@ class NewDeckPage extends StatelessWidget {
             Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
             state.deck.deckName: null,
             Icons.play_arrow_rounded: AppRoutes.tracker,
-            locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
+            locale.translate('new_deck.toggle.edit'): () =>
+                cubit.toggleEditMode(),
           };
   }
 
@@ -103,7 +166,8 @@ class NewDeckPage extends StatelessWidget {
     controller.text = newName;
   }
 
-  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+  void _toggleShare(
+      BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
     showSnackBar(
       context: context,

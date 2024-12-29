@@ -16,9 +16,15 @@ class SearchBarWidget extends StatefulWidget {
 }
 
 class _SearchBarWidgetState extends State<SearchBarWidget> {
+  final TextEditingController _searchController = TextEditingController();
   bool isSearch = false;
   bool showCancel = false;
-  final TextEditingController _searchController = TextEditingController();
+  
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
         child: Row(
           children: [
-            // Static Search Container (Left Side)
             Expanded(
               child: Container(
                 height: 32,
@@ -63,11 +68,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 ),
               ),
             ),
-            // Animated Container (Right Side)
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              width: isSearch ? 86 : 0, // Shrink to show the Cancel button
+              width: isSearch ? 86 : 0,
               child: showCancel
                   ? TextButton(
                       onPressed: () {
@@ -92,11 +96,5 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
   }
 }

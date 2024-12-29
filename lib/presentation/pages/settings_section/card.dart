@@ -119,8 +119,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final deckNameController =
-        TextEditingController(text: locale.translate('card.card_name'));
+    final deckNameController = TextEditingController(text: locale.translate('card.card_name'));
 
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
@@ -132,13 +131,13 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       },
       child: Scaffold(
         appBar: AppBarWidget(
-            menu: _buildAppBarMenu(
-          context,
-          locale,
-          card,
-          isAdd,
-          isCustom,
-          deckNameController,
+          menu: _buildAppBarMenu(
+            context,
+            locale,
+            card,
+            isAdd,
+            isCustom,
+            deckNameController,
         )),
         body: ListView(
           padding: const EdgeInsets.all(40),
