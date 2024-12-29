@@ -42,10 +42,6 @@ class TrackCubit extends Cubit<TrackState> {
             data: [],
           ),
         )) {
-      // Print card details when cloning the deck
-      deck.cards.forEach((card, count) {
-        print('Card: ${card.name}, ID: ${card.cardId}, Count: $count');
-      });
     }
 
   void showDialog() {
@@ -74,8 +70,6 @@ class TrackCubit extends Cubit<TrackState> {
 
     emit(state.copyWith(isProcessing: true));
 
-    print('Reading Tag: ${tag.tagId}');
-
     final existingData = state.record.data.lastWhere(
       (data) => data.tagId == tag.tagId,
       orElse: () => DataEntity(
@@ -85,11 +79,6 @@ class TrackCubit extends Cubit<TrackState> {
         timestamp: DateTime.now(),
       ),
     );
-
-    // ดึง cardId จาก tag และแสดงใน log
-    print('Tag ID associated with tag: ${tag.tagId}');
-    print('Game associated with tag: ${tag.game}');
-    print('Card ID associated with tag: ${tag.cardId}');
 
     if (existingData.action == Action.draw) {
       _updateCardCount(tag, Action.returnToDeck, "deck", 1);

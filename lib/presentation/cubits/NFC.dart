@@ -151,19 +151,18 @@ class NFCCubit extends Cubit<NFCState> {
 
   NdefMessage _createNDEFMessage(CardEntity card) {
     final message = NdefMessage([
-      NdefRecord.createText('Card Name: ${card.name}'),
-      NdefRecord.createText('Game: ${card.game}'),
-      NdefRecord.createText('Card ID: ${card.cardId}'),
+      NdefRecord.createText('game: ${card.game}'),
+      NdefRecord.createText('id: ${card.cardId}'),
     ]);
-    if (message.byteLength > 512) throw Exception('ข้อมูลเกินความจุของ Tag');
+    if (message.byteLength > 180) throw Exception('ข้อมูลเกินความจุของ Tag');
     return message;
   }
 
   TagEntity _createTagEntity(NfcTag tag, List<String> parsedRecords) {
-    final cardId = parsedRecords.firstWhere((record) => record.startsWith('Card ID:'), orElse: () => '').split(': ').last;
-    final game = parsedRecords.firstWhere((record) => record.startsWith('Game:'), orElse: () => '').split(': ').last;
+    final game = parsedRecords.firstWhere((record) => record.startsWith('game:'), orElse: () => '').split(': ').last;
+    final cardId = parsedRecords.firstWhere((record) => record.startsWith('id:'), orElse: () => '').split(': ').last;
     final tagId = _extractTagId(tag);
-    if (cardId.isEmpty || game.isEmpty || tagId.isEmpty) throw Exception('ข้อมูลไม่ครบถ้วน');
+    if (game.isEmpty || cardId.isEmpty || tagId.isEmpty) throw Exception('ข้อมูลไม่ครบถ้วน');
     return TagEntity(tagId: tagId, cardId: cardId, game: game, timestamp: DateTime.now());
   }
 
