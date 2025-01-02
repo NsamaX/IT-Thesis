@@ -4,8 +4,13 @@ import '../../models/tag.dart';
 import '../../models/card.dart';
 
 abstract class TagLocalDataSource {
+  /// ดึงรายการแท็กทั้งหมดที่บันทึกไว้
   Future<List<Map<String, dynamic>>> loadTags();
+
+  /// บันทึกข้อมูลแท็กและการ์ด
   Future<void> saveTag(TagModel tagModel, CardModel cardModel);
+
+  /// ลบแท็กทั้งหมดที่บันทึกไว้
   Future<void> deleteTags();
 }
 

@@ -118,17 +118,17 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     }
 
     try {
-      emit(state.copyWith(isLoading: true)); // ตั้งสถานะกำลังทำงาน
+      emit(state.copyWith(isLoading: true));
       await NFCHelper.handleToggleNFC(
         nfcCubit,
         enable: true,
         card: state.selectedCard!,
         reason: 'Writing selected card to NFC',
       );
-      emit(state.copyWith(isLoading: false)); // ยกเลิกสถานะกำลังทำงานเมื่อเสร็จสิ้น
+      emit(state.copyWith(isLoading: false));
     } catch (e) {
       debugPrint('Error writing card to NFC: $e');
-      emit(state.copyWith(isLoading: false)); // ยกเลิกสถานะเมื่อเกิดข้อผิดพลาด
+      emit(state.copyWith(isLoading: false));
     }
   }
 

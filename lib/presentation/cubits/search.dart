@@ -3,8 +3,8 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/sync_cards.dart';
 
 class SearchState {
-  final List<CardEntity> allCards; // การ์ดทั้งหมด
-  final List<CardEntity> cards; // การ์ดที่แสดงผล
+  final List<CardEntity> allCards;
+  final List<CardEntity> cards;
   final bool isLoading;
   final String? errorMessage;
 
@@ -54,15 +54,11 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void searchCards(String query) {
-    // กรองการ์ดตามคำค้นหา (ไม่คำนึงถึงตัวพิมพ์ใหญ่/เล็ก)
     final filteredCards = state.allCards
         .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
     emit(state.copyWith(cards: filteredCards));
   }
 
-  void clearSearch() {
-    // เคลียร์ผลการค้นหาและแสดงการ์ดทั้งหมด
-    emit(state.copyWith(cards: state.allCards));
-  }
+  void clearSearch() => emit(state.copyWith(cards: state.allCards));
 }

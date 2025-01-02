@@ -2,8 +2,13 @@ import 'package:nfc_project/core/services/sqlite.dart';
 import '../../models/deck.dart';
 
 abstract class DeckLocalDataSource {
+  /// ดึงรายการสำรับทั้งหมดที่บันทึกไว้
   Future<List<DeckModel>> loadDecks();
+
+  /// บันทึกข้อมูลสำรับใหม่หรืออัปเดตสำรับเดิม
   Future<void> saveDeck(DeckModel deck);
+
+  /// ลบข้อมูลสำรับที่ระบุด้วย deckId
   Future<void> deleteDeck(String deckId);
 }
 

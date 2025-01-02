@@ -1,7 +1,10 @@
 import 'package:nfc_project/core/services/shared_preferences.dart';
 
 abstract class SettingsLocalDataSource {
+  /// ดึงค่าการตั้งค่าทั้งหมด
   Future<Map<String, dynamic>> loadSettings();
+
+  /// บันทึกค่าการตั้งค่าใหม่
   Future<void> saveSettings(Map<String, dynamic> settings);
 }
 

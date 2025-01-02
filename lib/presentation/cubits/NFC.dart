@@ -9,18 +9,18 @@ import 'package:nfc_project/domain/usecases/tag.dart';
 class NFCState {
   final bool isNFCEnabled;
   final bool isProcessing;
+  final bool isSnackBarDisplayed;
   final bool isOperationSuccessful;
   final String errorMessage;
-  final bool isSnackBarDisplayed;
   final TagEntity? lastReadTag;
   final List<Map<TagEntity, CardEntity>>? savedTags;
 
   NFCState({
     required this.isNFCEnabled,
     this.isProcessing = false,
+    this.isSnackBarDisplayed = false,
     this.isOperationSuccessful = false,
     this.errorMessage = '',
-    this.isSnackBarDisplayed = false,
     this.lastReadTag,
     this.savedTags,
   });
@@ -28,18 +28,18 @@ class NFCState {
   NFCState copyWith({
     bool? isNFCEnabled,
     bool? isProcessing,
+    bool? isSnackBarDisplayed,
     bool? isOperationSuccessful,
     String? errorMessage = '',
-    bool? isSnackBarDisplayed,
     TagEntity? lastReadTag,
     List<Map<TagEntity, CardEntity>>? savedTags,
   }) {
     return NFCState(
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
       isProcessing: isProcessing ?? this.isProcessing,
+      isSnackBarDisplayed: isSnackBarDisplayed ?? this.isSnackBarDisplayed,
       isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
       errorMessage: errorMessage ?? this.errorMessage,
-      isSnackBarDisplayed: isSnackBarDisplayed ?? this.isSnackBarDisplayed,
       lastReadTag: lastReadTag ?? this.lastReadTag,
       savedTags: savedTags ?? this.savedTags,
     );
@@ -51,7 +51,6 @@ class NFCCubit extends Cubit<NFCState> {
   final SaveTagUseCase saveTagUseCase;
   final LoadTagsUseCase loadTagsUseCase;
 
-  // Constructor
   NFCCubit({
     required this.saveTagUseCase,
     required this.loadTagsUseCase,

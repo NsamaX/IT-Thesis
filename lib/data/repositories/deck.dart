@@ -2,8 +2,13 @@ import '../datasources/local/deck.dart';
 import '../models/deck.dart';
 
 abstract class DeckRepository {
+  /// ดึงรายการสำรับทั้งหมดจาก Local Data Source
   Future<List<DeckModel>> loadDecks();
+
+  /// บันทึกข้อมูลสำรับใหม่หรืออัปเดตสำรับเดิมใน Local Data Source
   Future<void> saveDeck(DeckModel deck);
+
+  /// ลบข้อมูลสำรับที่ระบุด้วย `deckId` จาก Local Data Source
   Future<void> deleteDeck(String deckId);
 }
 

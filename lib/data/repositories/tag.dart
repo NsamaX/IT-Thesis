@@ -3,8 +3,13 @@ import '../models/tag.dart';
 import '../models/card.dart';
 
 abstract class TagRepository {
+  /// ดึงข้อมูลแท็กทั้งหมดที่บันทึกไว้
   Future<List<Map<String, dynamic>>> loadTags();
+
+  /// บันทึกแท็กใหม่พร้อมการ์ดที่เชื่อมโยง
   Future<void> saveTag(TagModel tagEntity, CardModel cardEntity);
+
+  /// ลบข้อมูลแท็กทั้งหมดที่บันทึกไว้
   Future<void> deleteTags();
 }
 
