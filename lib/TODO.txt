@@ -1,7 +1,7 @@
 # Feature
     [] NFC multi write
-    [] Scan history
     [] Record history
+    [] Scan card
     [] Custom card
     [] Sign in
     [] Drop down for order deck
@@ -12,6 +12,5 @@
     [] privacy
 
 # widget
-    [] Snack bar timing
     [] Add by count
     [] Animations

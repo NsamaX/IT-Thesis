@@ -10,13 +10,13 @@ Future<void> showSnackBar({
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(content),
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       backgroundColor: isError ?? false 
           ? CupertinoColors.systemRed
           : CupertinoColors.systemGreen,
     ),
   );
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 1));
 }
 
 void showCupertinoAlertCancel({
