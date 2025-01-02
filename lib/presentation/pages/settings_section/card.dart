@@ -136,11 +136,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
-        print('[State]');
-        print('      : isOperationSuccessful: ${state.isOperationSuccessful}');
-        print('      : errorMessage: ${state.errorMessage}');
-        print('      : isSnackBarDisplayed: ${state.isSnackBarDisplayed}');
-        print('');
         if ((state.isOperationSuccessful || state.errorMessage != null) &&
             !state.isSnackBarDisplayed) {
           _handleSnackBar(context, state);
