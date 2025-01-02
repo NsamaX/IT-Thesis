@@ -67,31 +67,17 @@ class NFCCubit extends Cubit<NFCState> {
   void toggleNFC() => emitSafe(state.copyWith(isNFCEnabled: !state.isNFCEnabled));
 
   /// Resets the operation success flag.
-  void resetOperationStatus() {
-    emitSafe(state.copyWith(
-      isOperationSuccessful: false,
-      isSnackBarDisplayed: false,
-    ));
-  }
+  void resetOperationStatus() => emitSafe(state.copyWith(isOperationSuccessful: false));
 
   /// Clears the current error message in the state.
-  void clearErrorMessage() {
-    emitSafe(state.copyWith(
-      errorMessage: null,
-      isSnackBarDisplayed: false,
-    ));
-  }
+  void clearErrorMessage() => emitSafe(state.copyWith(errorMessage: null));
 
   //---------------------------- SnackBar Control ----------------------------//
   /// Marks the SnackBar as displayed to prevent repeated UI actions.
-  void markSnackBarDisplayed() {
-    emitSafe(state.copyWith(isSnackBarDisplayed: true));
-  }
+  void markSnackBarDisplayed() => emitSafe(state.copyWith(isSnackBarDisplayed: true));
 
   /// Resets the SnackBar state for future displays.
-  void resetSnackBarState() {
-    emitSafe(state.copyWith(isSnackBarDisplayed: false));
-  }
+  void resetSnackBarState() => emitSafe(state.copyWith(isSnackBarDisplayed: false));
 
   //----------------------------- Error Recovery -----------------------------//
   /// Restarts the NFC session if no processing is ongoing and NFC is disabled.
@@ -247,9 +233,6 @@ class NFCCubit extends Cubit<NFCState> {
   /// Handles errors and updates the state with error messages.
   void _handleError(dynamic error) {
     logger.e('Error: $error');
-    emitSafe(state.copyWith(
-      errorMessage: error.toString(),
-      isSnackBarDisplayed: false,
-    ));
+    emitSafe(state.copyWith(errorMessage: error.toString()));
   }
 }
