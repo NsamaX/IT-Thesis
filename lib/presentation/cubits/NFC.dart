@@ -10,7 +10,7 @@ class NFCState {
   final bool isNFCEnabled;
   final bool isProcessing;
   final bool isOperationSuccessful;
-  final String? errorMessage;
+  final String errorMessage;
   final bool isSnackBarDisplayed;
   final TagEntity? lastReadTag;
   final List<Map<TagEntity, CardEntity>>? savedTags;
@@ -19,7 +19,7 @@ class NFCState {
     required this.isNFCEnabled,
     this.isProcessing = false,
     this.isOperationSuccessful = false,
-    this.errorMessage,
+    this.errorMessage = '',
     this.isSnackBarDisplayed = false,
     this.lastReadTag,
     this.savedTags,
@@ -29,7 +29,7 @@ class NFCState {
     bool? isNFCEnabled,
     bool? isProcessing,
     bool? isOperationSuccessful,
-    String? errorMessage,
+    String? errorMessage = '',
     bool? isSnackBarDisplayed,
     TagEntity? lastReadTag,
     List<Map<TagEntity, CardEntity>>? savedTags,
@@ -88,6 +88,7 @@ class NFCCubit extends Cubit<NFCState> {
         await start(card: card);
       } catch (e) {
         logger.e('Failed to restart NFC session: $e');
+        emitSafe(state.copyWith(errorMessage: 'Failed to restart session: $e'));
       }
     }
   }

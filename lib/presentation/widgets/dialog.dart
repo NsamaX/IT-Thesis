@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-void showSnackBar({
+Future<void> showSnackBar({
   required BuildContext context,
   required String content,
-}) {
+  bool? isError = false,
+}) async {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(content),
       duration: const Duration(seconds: 2),
-      backgroundColor: CupertinoColors.systemGreen,
+      backgroundColor: isError ?? false 
+          ? CupertinoColors.systemRed
+          : CupertinoColors.systemGreen,
     ),
   );
+  await Future.delayed(const Duration(seconds: 2));
 }
 
 void showCupertinoAlertCancel({

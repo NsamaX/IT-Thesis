@@ -46,24 +46,21 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
       final successMessage = locale.translate('card.dialog.write_success');
       _nfcCubit.markSnackBarDisplayed();
-      await ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
-              content: Text(successMessage),
-              duration: const Duration(seconds: 2)))
-          .closed;
-
+      await showSnackBar(
+        context: context,
+        content: successMessage,
+      );
       _nfcCubit.resetOperationStatus();
     }
 
-    if (state.errorMessage != null && !state.isSnackBarDisplayed) {
+    if (state.errorMessage.isNotEmpty && !state.isSnackBarDisplayed) {
       final errorMessage = locale.translate('card.dialog.write_fail');
       _nfcCubit.markSnackBarDisplayed();
-      await ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
-              content: Text(errorMessage),
-              duration: const Duration(seconds: 2)))
-          .closed;
-
+      await showSnackBar(
+        context: context,
+        content: errorMessage,
+        isError: true,
+      );
       _nfcCubit.clearErrorMessage();
       await _nfcCubit.restartSessionIfNeeded();
     }
@@ -126,24 +123,21 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final deckNameController =
-        TextEditingController(text: locale.translate('card.card_name'));
+    final deckNameController = TextEditingController(text: locale.translate('card.card_name'));
 
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
-        if ((state.isOperationSuccessful || state.errorMessage != null) &&
+        if ((state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
             !state.isSnackBarDisplayed) {
           _handleSnackBar(context, state);
         }
       },
       child: Scaffold(
-        appBar: AppBarWidget(
-            menu: _buildAppBarMenu(
+        appBar: AppBarWidget(menu: _buildAppBarMenu(
           context,
           locale,
           card,
