@@ -44,26 +44,24 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final locale = AppLocalizations.of(context);
 
     if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
+      final successMessage = locale.translate('card.dialog.write_success');
       _nfcCubit.markSnackBarDisplayed();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(locale.translate('card.dialog.write_success'))))
-          .closed
-          .then((_) {
-        _nfcCubit.resetSnackBarState();
-        _nfcCubit.resetOperationStatus();
-      });
+      await ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(successMessage), duration: const Duration(seconds: 2)))
+          .closed;
+
+      _nfcCubit.resetOperationStatus();
     }
 
     if (state.errorMessage != null && !state.isSnackBarDisplayed) {
+      final errorMessage = locale.translate('card.dialog.write_fail');
       _nfcCubit.markSnackBarDisplayed();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(locale.translate('card.dialog.write_fail'))))
-          .closed
-          .then((_) async {
-        _nfcCubit.resetSnackBarState();
-        _nfcCubit.clearErrorMessage();
-        await _nfcCubit.restartSessionIfNeeded();
-      });
+      await ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(errorMessage), duration: const Duration(seconds: 2)))
+          .closed;
+
+      _nfcCubit.clearErrorMessage();
+      await _nfcCubit.restartSessionIfNeeded();
     }
   }
 
@@ -130,9 +128,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
-        if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
-          _handleSnackBar(context, state);
-        } else if (state.errorMessage != null && !state.isSnackBarDisplayed) {
+        if ((state.isOperationSuccessful || state.errorMessage != null) &&
+            !state.isSnackBarDisplayed) {
           _handleSnackBar(context, state);
         }
       },
