@@ -14,7 +14,6 @@ class NewDeckPage extends StatelessWidget {
     final cubit = context.read<DeckManagerCubit>();
     final deck = cubit.state.deck;
     final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
-
     return Scaffold(
       appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
       body: _buildGridView(context, cubit),
@@ -30,7 +29,6 @@ class NewDeckPage extends StatelessWidget {
     final state = context.watch<DeckManagerCubit>().state;
     final bool isEditMode = state.isEditMode;
     final bool hasCards = state.deck.cards.isNotEmpty;
-
     if (!isEditMode && !hasCards) {
       return {
         Icons.arrow_back_ios_new_rounded: '/back',
@@ -38,7 +36,6 @@ class NewDeckPage extends StatelessWidget {
         locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
       };
     }
-
     return isEditMode
         ? {
             Icons.nfc_rounded: () => cubit.toggleNfcRead(),
@@ -113,7 +110,6 @@ class NewDeckPage extends StatelessWidget {
 
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit) {
     final deckCards = cubit.state.deck.cards;
-
     return GridWidget(items: deckCards.entries.toList());
   }
 }

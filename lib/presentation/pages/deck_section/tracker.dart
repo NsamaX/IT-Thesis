@@ -42,20 +42,17 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
-
     return BlocProvider(
       create: (context) => TrackCubit(deck),
       child: MultiBlocListener(
         listeners: [
           BlocListener<NFCCubit, NFCState>(
             listener: (context, nfcState) {
-              // ตรวจสอบว่า state มี tag และ NFC เปิดใช้งานอยู่
               if (nfcState.lastReadTag != null && nfcState.isNFCEnabled) {
                 _handleNFCTag(context, nfcState, locale);
               }
             },
             listenWhen: (previous, current) {
-              // แสดง snackbar เฉพาะเมื่อ lastReadTag เปลี่ยนไป
               return previous.lastReadTag != current.lastReadTag && current.lastReadTag != null;
             },
           ),
@@ -66,8 +63,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               _showTrackerDialog(context, locale);
             }
             return Scaffold(
-              appBar:
-                  AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
+              appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
               body: _buildCardList(context, state),
             );
           },
@@ -82,7 +78,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     AppLocalizations locale,
   ) async {
     final tag = nfcState.lastReadTag;
-
     if (tag != null) {
       try {
         context.read<TrackCubit>().readTag(tag);
@@ -117,7 +112,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
       Icons.access_time_rounded: null,
@@ -133,12 +127,9 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   }
 
   Widget _buildCardList(BuildContext context, TrackState state) {
-    final totalCards =
-        state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
-
+    final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
     return Stack(
       children: [
-        // ListView แสดงการ์ด
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 46, 8, 8),
           child: ListView.builder(
@@ -155,13 +146,13 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             },
           ),
         ),
-        // จำนวนการ์ดทั้งหมด
         Positioned(
           top: 8,
           right: 16,
           child: Text(
-              '$totalCards ${AppLocalizations.of(context).translate('tracker.total')}',
-              style: Theme.of(context).textTheme.titleMedium),
+            '$totalCards ${AppLocalizations.of(context).translate('tracker.total')}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
       ],
     );

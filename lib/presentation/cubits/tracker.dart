@@ -67,9 +67,7 @@ class TrackCubit extends Cubit<TrackState> {
 
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
-
     emit(state.copyWith(isProcessing: true));
-
     final existingData = state.record.data.lastWhere(
       (data) => data.tagId == tag.tagId,
       orElse: () => DataEntity(
@@ -79,14 +77,13 @@ class TrackCubit extends Cubit<TrackState> {
         timestamp: DateTime.now(),
       ),
     );
-
     if (existingData.action == Action.draw) {
       _updateCardCount(tag, Action.returnToDeck, "deck", 1);
     } else if (existingData.action == Action.returnToDeck ||
         existingData.action == Action.unknown) {
       _updateCardCount(tag, Action.draw, "out", -1);
     }
-
+    _moveCardToTop(tag);
     emit(state.copyWith(isProcessing: false));
   }
 
@@ -97,23 +94,18 @@ class TrackCubit extends Cubit<TrackState> {
         orElse: () => throw Exception("Card not found in deck"),
       );
       final currentCount = state.deck.cards[cardEntry.key] ?? 0;
-
       if ((currentCount + delta) < 0) return;
-
       final updatedCards = Map.of(state.deck.cards);
       updatedCards[cardEntry.key] = (updatedCards[cardEntry.key]! + delta)
           .clamp(0, double.infinity)
           .toInt();
-
       final newData = DataEntity(
         tagId: tag.tagId,
         location: location,
         action: action,
         timestamp: DateTime.now(),
       );
-
       final updatedData = List<DataEntity>.from(state.record.data)..add(newData);
-
       emit(state.copyWith(
         deck: state.deck.copyWith(cards: updatedCards),
         record: state.record.copyWith(data: updatedData),
@@ -121,5 +113,21 @@ class TrackCubit extends Cubit<TrackState> {
     } catch (e) {
       emit(state.copyWith(isProcessing: false));
     }
+  }
+
+  void _moveCardToTop(TagEntity tag) {
+    final updatedCards = Map.of(state.deck.cards);
+    final cardEntry = updatedCards.entries.firstWhere(
+      (entry) => entry.key.cardId == tag.cardId,
+      orElse: () => throw Exception("Card not found in deck"),
+    );
+    updatedCards.remove(cardEntry.key);
+    final reorderedCards = {
+      cardEntry.key: cardEntry.value,
+      ...updatedCards,
+    };
+    emit(state.copyWith(
+      deck: state.deck.copyWith(cards: reorderedCards),
+    ));
   }
 }
