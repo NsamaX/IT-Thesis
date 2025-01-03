@@ -4,11 +4,11 @@ import '../exceptions/local_data.dart';
 
 /// จัดการการตั้งค่า API โดยโหลด URL ของแต่ละ environment จากไฟล์ JSON
 class ApiConfig {
-  /// เก็บ URL หลัก (base URLs) ของ environment ปัจจุบัน
-  static Map<String, String>? baseUrls;
-
   /// ระบุ environment ที่ใช้งานอยู่ (development หรือ production)
   static String? currentEnvironment;
+  
+  /// เก็บ URL หลัก (base URLs) ของ environment ปัจจุบัน
+  static Map<String, String>? baseUrls;
 
   //------------------------------- โหลดการตั้งค่า ------------------------------//
   /// โหลดการตั้งค่า API สำหรับ environment ที่ระบุ

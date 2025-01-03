@@ -29,7 +29,6 @@ class NFCSessionHandler with WidgetsBindingObserver {
   }
 
   /// จัดการสถานะ Lifecycle ของแอป
-  /// - หยุดเซสชัน NFC เมื่อแอปถูกย่อหน้าต่างหรือหยุดทำงาน
   void handleAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||
@@ -40,11 +39,9 @@ class NFCSessionHandler with WidgetsBindingObserver {
 
   //----------------------------- การหยุดเซสชัน NFC ----------------------------//
   /// หยุดเซสชัน NFC และแสดงเหตุผลใน Debug Log
-  /// - [reason]: เหตุผลที่หยุดเซสชัน
   void _stopNFCSession(String reason) {
     if (!nfcCubit.isClosed && nfcCubit.state.isNFCEnabled) {
       nfcCubit.stopSession(reason: reason);
-      debugPrint('NFC session stopped: $reason');
     }
   }
 }

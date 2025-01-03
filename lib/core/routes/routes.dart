@@ -20,6 +20,7 @@ class AppRoutes {
   /// สร้างเส้นทางตามชื่อ (RouteSettings)
   /// - ใช้ `settings.name` เพื่อกำหนดหน้าที่ต้องการแสดง
   /// - คืนค่า `MaterialPageRoute` สำหรับหน้าแต่ละหน้า
+  /// - คืนค่า `Scaffold` กรณีไม่พบเส้นทางที่ระบุ
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case index:
@@ -45,7 +46,6 @@ class AppRoutes {
       case card:
         return MaterialPageRoute(builder: (_) => CardPage(), settings: settings);
       default:
-        // กรณีไม่พบเส้นทางที่ระบุ
         return MaterialPageRoute(
           builder: (_) => Scaffold(
             body: Center(child: Text('No route defined for ${settings.name}')),
