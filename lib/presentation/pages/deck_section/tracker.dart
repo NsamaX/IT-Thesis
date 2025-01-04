@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import '../../cubits/deck_manager.dart';
+import '../../cubits/drawer.dart';
 import '../../cubits/NFC.dart';
+import '../../cubits/scan_history.dart';
 import '../../cubits/tracker.dart';
 import '../../widgets/dialog.dart';
+import '../../widgets/drawer/history.dart';
 import '../../widgets/label/card.dart';
 import '../../widgets/navigation_bar/app.dart';
 
@@ -42,8 +46,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
-    return BlocProvider(
-      create: (context) => TrackCubit(deck),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => DrawerCubit()),
+        BlocProvider.value(value: GetIt.I<ScanHistoryCubit>()),
+        BlocProvider(create: (context) => TrackCubit(deck)),
+      ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<NFCCubit, NFCState>(
@@ -53,7 +61,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               }
             },
             listenWhen: (previous, current) {
-              return previous.lastReadTag != current.lastReadTag && current.lastReadTag != null;
+              return previous.lastReadTag != current.lastReadTag &&
+                  current.lastReadTag != null;
             },
           ),
         ],
@@ -64,7 +73,26 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             }
             return Scaffold(
               appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
-              body: _buildCardList(context, state),
+              body: Stack(
+                children: [
+                  _buildCardList(context, state),
+                  _buildHistoryDrawer(context),
+                  BlocBuilder<DrawerCubit, Map<String, bool>>(
+                    builder: (context, state) {
+                      if (state['history'] == true) {
+                        return GestureDetector(
+                          onTap: () => context.read<DrawerCubit>().closeDrawer(),
+                          behavior: HitTestBehavior.opaque,
+                          child: Container(
+                            color: Colors.transparent,
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -114,7 +142,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      Icons.access_time_rounded: null,
+      Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
       locale.translate('title.tracker'): null,
       Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
       isNFCEnabled
@@ -155,6 +183,24 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildHistoryDrawer(BuildContext context) {
+    return BlocBuilder<DrawerCubit, Map<String, bool>>(
+      buildWhen: (previous, current) => previous['history'] != current['history'],
+      builder: (context, state) {
+        return AnimatedPositioned(
+          duration: const Duration(milliseconds: 200),
+          top: 0,
+          left: state['history']! ? 0 : -200,
+          child: BlocBuilder<ScanHistoryCubit, ScanHistoryState>(
+            builder: (context, scanHistoryState) {
+              return HistoryDrawerWidget(savedTags: []);
+            },
+          ),
+        );
+      },
     );
   }
 }

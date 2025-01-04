@@ -24,9 +24,9 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
     _nfcSessionHandler.initNFCSessionHandler();
-    GetIt.I<ScanHistoryCubit>().loadTags();
   }
 
   @override
