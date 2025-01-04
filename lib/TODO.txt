@@ -1,11 +1,10 @@
 # Feature
-    [] NFC multi write
     [] Record history
     [] Scan card
     [] Custom card
     [] Sign in
-    [] Drop down for order deck
     [] Filter card
+    [] Drop down for order deck
 
 # page
     [] About
