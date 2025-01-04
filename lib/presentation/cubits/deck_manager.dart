@@ -98,8 +98,16 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     emit(state.copyWith(deck: updatedDeck));
   }
 
-  void toggleNfcRead() {
-    emit(state.copyWith(isNfcReadEnabled: !state.isNfcReadEnabled));
+  void toggleNfcRead(NFCCubit nfcCubit) {
+    final bool newState = !state.isNfcReadEnabled;
+    emit(state.copyWith(isNfcReadEnabled: newState));
+    if (!newState) {
+      NFCHelper.handleToggleNFC(
+        nfcCubit,
+        enable: false,
+        reason: 'NFC read disabled by user',
+      );
+    }
   }
 
   void toggleSelectedCard(CardEntity card) {
@@ -158,7 +166,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     emit(state.copyWith(allDecks: filteredDecks));
   }
 
-  Future<void> saveDeck() async {
+  Future<void> saveDeck(NFCCubit nfcCubit) async {
     emit(state.copyWith(isLoading: true));
     try {
       await saveDeckUseCase(state.deck);
@@ -170,6 +178,11 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
         updatedDecks.add(state.deck);
       }
       emit(state.copyWith(allDecks: updatedDecks));
+      await NFCHelper.handleToggleNFC(
+        nfcCubit,
+        enable: false,
+        reason: 'Deck saved successfully',
+      );
     } catch (e) {
       debugPrint("Error saving deck: $e");
     } finally {

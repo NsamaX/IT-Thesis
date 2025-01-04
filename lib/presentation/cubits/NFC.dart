@@ -156,10 +156,15 @@ class NFCCubit extends Cubit<NFCState> {
   }
 
   //----------------------------- Error Recovery -----------------------------//
-  Future<void> restartSessionIfNeeded({CardEntity? card}) async {
-    if (!state.isProcessing && !state.isNFCEnabled) {
+  Future<void> restartSessionIfNeeded({CardEntity? card, bool isCardChanged = false}) async {
+    if (!state.isProcessing && state.isNFCEnabled) {
       try {
-        addToBuffer('[Recovery] Restarting NFC session...');
+        if (isCardChanged) {
+          addToBuffer('[Recovery] Card changed, restarting session...');
+          await stopSession(reason: 'Card changed, restarting session...');
+        } else {
+          addToBuffer('[Recovery] Restarting NFC session...');
+        }
         await startSession(card: card);
       } catch (e) {
         emitSafe(state.copyWith(errorMessage: 'Failed to restart session: $e'));

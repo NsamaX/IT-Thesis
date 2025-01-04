@@ -10,6 +10,7 @@ class NFCHelper {
     String? reason,
   }) async {
     if (cubit.isClosed) return;
+
     if (enable) {
       if (!cubit.state.isNFCEnabled) cubit.toggleNFC();
       if (!cubit.state.isProcessing) {
@@ -18,6 +19,8 @@ class NFCHelper {
         } catch (e) {
           cubit.clearErrorMessage();
         }
+      } else if (card != null && cubit.state.isNFCEnabled) {
+        await cubit.restartSessionIfNeeded(card: card);
       }
     } else {
       await cubit.stopSession(reason: reason ?? 'User toggled off NFC');

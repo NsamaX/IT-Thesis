@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../cubits/deck_manager.dart';
+import '../../cubits/NFC.dart';
 import 'edit_controls.dart';
 
 class CardWidget extends StatelessWidget {
@@ -32,8 +34,20 @@ class CardWidget extends StatelessWidget {
   }
 
   void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
+    final cubit = context.read<DeckManagerCubit>();
+
     if (isNfcReadEnabled) {
-      context.read<DeckManagerCubit>().toggleSelectedCard(card);
+      cubit.toggleSelectedCard(card);
+
+      if (cubit.state.selectedCard != null) {
+        final nfcCubit = context.read<NFCCubit>();
+        NFCHelper.handleToggleNFC(
+          nfcCubit,
+          enable: true,
+          card: cubit.state.selectedCard,
+          reason: 'User selected a card to write to NFC tag.',
+        );
+      }
     } else {
       Navigator.of(context).pushNamed(
         AppRoutes.card,

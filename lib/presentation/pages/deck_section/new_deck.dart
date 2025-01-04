@@ -2,21 +2,86 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../../cubits/deck_manager.dart';
+import '../../cubits/NFC.dart';
 import '../../widgets/card/grid.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/navigation_bar/app.dart';
 
-class NewDeckPage extends StatelessWidget {
+class NewDeckPage extends StatefulWidget {
+  @override
+  State<NewDeckPage> createState() => _NewDeckPageState();
+}
+
+class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
+  late final NFCCubit _nfcCubit;
+  late final NFCSessionHandler _nfcSessionHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    _nfcCubit = context.read<NFCCubit>();
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
+    _nfcSessionHandler.initNFCSessionHandler();
+  }
+
+  @override
+  void dispose() {
+    _nfcSessionHandler.disposeNFCSessionHandler();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _nfcSessionHandler.handleAppLifecycleState(state);
+  }
+
+  void _handleSnackBar(BuildContext context, NFCState state) async {
+    final locale = AppLocalizations.of(context);
+
+    if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
+      final successMessage = locale.translate('card.dialog.write_success');
+      _nfcCubit.markSnackBarDisplayed();
+      await showSnackBar(
+        context: context,
+        content: successMessage,
+      );
+      _nfcCubit.resetOperationStatus();
+    }
+
+    if (state.errorMessage.isNotEmpty && !state.isSnackBarDisplayed) {
+      final errorMessage = locale.translate('card.dialog.write_fail');
+      _nfcCubit.markSnackBarDisplayed();
+      await showSnackBar(
+        context: context,
+        content: errorMessage,
+        isError: true,
+      );
+      _nfcCubit.clearErrorMessage();
+      await _nfcCubit.restartSessionIfNeeded();
+    }
+
+    _nfcCubit.resetSnackBarState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<DeckManagerCubit>();
     final deck = cubit.state.deck;
     final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
-    return Scaffold(
-      appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
-      body: _buildGridView(context, cubit),
+    return BlocListener<NFCCubit, NFCState>(
+      listener: (context, state) {
+        if ((state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
+            !state.isSnackBarDisplayed) {
+          _handleSnackBar(context, state);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
+        body: _buildGridView(context, cubit),
+      ),
     );
   }
 
@@ -38,7 +103,7 @@ class NewDeckPage extends StatelessWidget {
     }
     return isEditMode
         ? {
-            Icons.nfc_rounded: () => cubit.toggleNfcRead(),
+            Icons.nfc_rounded: () => cubit.toggleNfcRead(_nfcCubit),
             Icons.delete_outline_rounded: () => _showDeleteDialog(context, cubit, locale),
             TextField(
               controller: deckNameController,
@@ -55,7 +120,7 @@ class NewDeckPage extends StatelessWidget {
               'arguments': {'isAdd': true},
             },
             locale.translate('new_deck.toggle.save'): () {
-              cubit.saveDeck();
+              cubit.saveDeck(_nfcCubit);
               cubit.toggleEditMode();
             },
           }
@@ -100,7 +165,8 @@ class NewDeckPage extends StatelessWidget {
     controller.text = newName;
   }
 
-  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+  void _toggleShare(
+      BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
     showSnackBar(
       context: context,
@@ -110,6 +176,16 @@ class NewDeckPage extends StatelessWidget {
 
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit) {
     final deckCards = cubit.state.deck.cards;
+
+    if (deckCards.isEmpty) {
+      return Center(
+        child: Text(
+          AppLocalizations.of(context).translate('new_deck.empty'),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      );
+    }
+
     return GridWidget(items: deckCards.entries.toList());
   }
 }

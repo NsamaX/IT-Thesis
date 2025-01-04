@@ -26,6 +26,7 @@
         "success": "All cards in the deck deleted successfully."
       }      
     },
+    "empty": "No cards in the deck.",
     "tutorial": "Start building your deck! Add cards, organize them, and prepare for your next game."
   },
   "tracker": {
