@@ -10,6 +10,7 @@ class NFCState {
   final bool isNFCEnabled;
   final bool isProcessing;
   final bool isSnackBarDisplayed;
+  final bool isWriteOperation;
   final bool isOperationSuccessful;
   final String errorMessage;
   final TagEntity? lastReadTag;
@@ -19,6 +20,7 @@ class NFCState {
     required this.isNFCEnabled,
     this.isProcessing = false,
     this.isSnackBarDisplayed = false,
+    this.isWriteOperation = false,
     this.isOperationSuccessful = false,
     this.errorMessage = '',
     this.lastReadTag,
@@ -29,8 +31,9 @@ class NFCState {
     bool? isNFCEnabled,
     bool? isProcessing,
     bool? isSnackBarDisplayed,
+    bool? isWriteOperation,
     bool? isOperationSuccessful,
-    String? errorMessage = '',
+    String? errorMessage,
     TagEntity? lastReadTag,
     List<Map<TagEntity, CardEntity>>? savedTags,
   }) {
@@ -38,8 +41,9 @@ class NFCState {
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
       isProcessing: isProcessing ?? this.isProcessing,
       isSnackBarDisplayed: isSnackBarDisplayed ?? this.isSnackBarDisplayed,
-      isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
+      isWriteOperation: isWriteOperation ?? this.isWriteOperation,
       errorMessage: errorMessage ?? this.errorMessage,
+      isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
       lastReadTag: lastReadTag ?? this.lastReadTag,
       savedTags: savedTags ?? this.savedTags,
     );
@@ -89,7 +93,7 @@ class NFCCubit extends Cubit<NFCState> {
 
   void resetOperationStatus() => emitSafe(state.copyWith(isOperationSuccessful: false));
 
-  void clearErrorMessage() => emitSafe(state.copyWith(errorMessage: null));
+  void clearErrorMessage() => emitSafe(state.copyWith(errorMessage: ''));
 
   //---------------------------- SnackBar Control ----------------------------//
   void markSnackBarDisplayed() => emitSafe(state.copyWith(isSnackBarDisplayed: true));
@@ -179,7 +183,11 @@ class NFCCubit extends Cubit<NFCState> {
     final ndef = _validateNDEF(tag);
     final parsedRecords = _parseNDEFRecords(ndef);
     final tagEntity = _createTagEntity(tag, parsedRecords);
-    emitSafe(state.copyWith(lastReadTag: tagEntity, isOperationSuccessful: true));
+    emitSafe(state.copyWith(
+      lastReadTag: tagEntity,
+      isOperationSuccessful: true,
+      isWriteOperation: false,
+    ));
     addToBuffer('[NFC Read] Tag Read Successful: $tagEntity');
     flushBuffer();
   }
@@ -189,7 +197,10 @@ class NFCCubit extends Cubit<NFCState> {
     final ndefMessage = _createNDEFMessage(card);
     await _testWrite(ndef);
     await ndef.write(ndefMessage);
-    emitSafe(state.copyWith(isOperationSuccessful: true));
+    emitSafe(state.copyWith(
+      isOperationSuccessful: true,
+      isWriteOperation: true,
+    ));
     addToBuffer('[NFC Write] NFC Write Successful.');
     flushBuffer();
   }

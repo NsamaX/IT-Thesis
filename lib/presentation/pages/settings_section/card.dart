@@ -40,34 +40,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     _nfcSessionHandler.handleAppLifecycleState(state);
   }
 
-  void _handleSnackBar(BuildContext context, NFCState state) async {
-    final locale = AppLocalizations.of(context);
-
-    if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
-      final successMessage = locale.translate('card.dialog.write_success');
-      _nfcCubit.markSnackBarDisplayed();
-      await showSnackBar(
-        context: context,
-        content: successMessage,
-      );
-      _nfcCubit.resetOperationStatus();
-    }
-
-    if (state.errorMessage.isNotEmpty && !state.isSnackBarDisplayed) {
-      final errorMessage = locale.translate('card.dialog.write_fail');
-      _nfcCubit.markSnackBarDisplayed();
-      await showSnackBar(
-        context: context,
-        content: errorMessage,
-        isError: true,
-      );
-      _nfcCubit.clearErrorMessage();
-      await _nfcCubit.restartSessionIfNeeded();
-    }
-
-    _nfcCubit.resetSnackBarState();
-  }
-
   Map<dynamic, dynamic> _buildAppBarMenu(
     BuildContext context,
     AppLocalizations locale,
@@ -129,32 +101,24 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final isCustom = arguments?['isCustom'] ?? false;
     final deckNameController = TextEditingController(text: locale.translate('card.card_name'));
 
-    return BlocListener<NFCCubit, NFCState>(
-      listener: (context, state) {
-        if ((state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
-            !state.isSnackBarDisplayed) {
-          _handleSnackBar(context, state);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBarWidget(menu: _buildAppBarMenu(
-          context,
-          locale,
-          card,
-          isAdd,
-          isCustom,
-          deckNameController,
-        )),
-        body: ListView(
-          padding: const EdgeInsets.all(40),
-          children: [
-            CardImageWidget(card: card, isCustom: isCustom),
-            const SizedBox(height: 24),
-            CardInfoWidget(card: card, isCustom: isCustom),
-            const SizedBox(height: 24),
-            CardCountWidget(),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBarWidget(menu: _buildAppBarMenu(
+        context,
+        locale,
+        card,
+        isAdd,
+        isCustom,
+        deckNameController,
+      )),
+      body: ListView(
+        padding: const EdgeInsets.all(40),
+        children: [
+          CardImageWidget(card: card, isCustom: isCustom),
+          const SizedBox(height: 24),
+          CardInfoWidget(card: card, isCustom: isCustom),
+          const SizedBox(height: 24),
+          CardCountWidget(),
+        ],
       ),
     );
   }

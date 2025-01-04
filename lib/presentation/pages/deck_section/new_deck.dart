@@ -39,20 +39,16 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
 
   void _handleSnackBar(BuildContext context, NFCState state) async {
     final locale = AppLocalizations.of(context);
-
-    if (state.isOperationSuccessful && !state.isSnackBarDisplayed) {
+    _nfcCubit.markSnackBarDisplayed();
+    if (state.isOperationSuccessful) {
       final successMessage = locale.translate('card.dialog.write_success');
-      _nfcCubit.markSnackBarDisplayed();
       await showSnackBar(
         context: context,
         content: successMessage,
       );
       _nfcCubit.resetOperationStatus();
-    }
-
-    if (state.errorMessage.isNotEmpty && !state.isSnackBarDisplayed) {
+    } else if (state.errorMessage.isNotEmpty) {
       final errorMessage = locale.translate('card.dialog.write_fail');
-      _nfcCubit.markSnackBarDisplayed();
       await showSnackBar(
         context: context,
         content: errorMessage,
@@ -61,7 +57,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
       _nfcCubit.clearErrorMessage();
       await _nfcCubit.restartSessionIfNeeded();
     }
-
     _nfcCubit.resetSnackBarState();
   }
 
@@ -73,7 +68,8 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
     return BlocListener<NFCCubit, NFCState>(
       listener: (context, state) {
-        if ((state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
+        if (state.isWriteOperation && 
+            (state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
             !state.isSnackBarDisplayed) {
           _handleSnackBar(context, state);
         }
