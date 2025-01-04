@@ -18,16 +18,14 @@ class ReaderPage extends StatefulWidget {
 }
 
 class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
+  late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
   @override
   void initState() {
     super.initState();
-    final nfcCubit = context.read<NFCCubit>();
-    _nfcSessionHandler = NFCSessionHandler(nfcCubit);
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
     _nfcSessionHandler.initNFCSessionHandler();
-
-    // โหลดข้อมูลแท็กเมื่อหน้าเริ่มต้น
     GetIt.I<ScanHistoryCubit>().loadTags();
   }
 
@@ -91,7 +89,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
           left: state['history']! ? 0 : -200,
           child: BlocBuilder<ScanHistoryCubit, ScanHistoryState>(
             builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(savedTags: scanHistoryState.savedTags!);
+              return HistoryDrawerWidget(savedTags: []);
             },
           ),
         );

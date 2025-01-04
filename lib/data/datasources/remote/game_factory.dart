@@ -5,6 +5,7 @@ import '../../models/card.dart';
 
 abstract class GameApi {
   /// ดึงข้อมูลการ์ดในหน้าที่ระบุ
+  Future<CardModel> fetchCardsById(int id);
   Future<List<CardModel>> fetchCardsPage(int page);
 }
 

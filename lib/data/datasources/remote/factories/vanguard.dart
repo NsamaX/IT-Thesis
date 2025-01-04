@@ -78,6 +78,20 @@ class VanguardApi implements GameApi {
   }
 
   //------------------------------ การดึงข้อมูลการ์ด -----------------------------//
+  /// ดึงข้อมูลการ์ดจาก API โดยระบุ ID
+  /// - [id]: รหัสของการ์ดที่ต้องการดึงข้อมูล
+  Future<CardModel> fetchCardsById(int id) async {
+    try {
+      final url = _buildUrl('cards/$id');
+      final response = await _getRequest(url);
+      _validateResponse(response);
+      final cardData = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      return _parseCardData(cardData);
+    } catch (e) {
+      throw ApiException('Failed to fetch card by ID $id: $e');
+    }
+  }
+
   /// ดึงข้อมูลการ์ดจาก API โดยระบุหน้า (page)
   /// - [page]: หมายเลขหน้าที่ต้องการดึงข้อมูล
   @override

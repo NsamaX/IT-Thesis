@@ -70,18 +70,7 @@ Future<void> setupLocator() async {
         deleteDeckUseCase: locator<DeleteDeckUseCase>(),
       ));
 
-  //-------------------------------- NFC และแท็ค ------------------------------//
-  locator.registerLazySingleton<TagLocalDataSource>(() => TagLocalDataSourceImpl(locator<SharedPreferencesService>()));
-  locator.registerLazySingleton<TagRepository>(() => TagRepositoryImpl(locator<TagLocalDataSource>()));
-
-  locator.registerLazySingleton(() => LoadTagsUseCase(locator<TagRepository>()));
-  locator.registerLazySingleton(() => SaveTagUseCase(locator<TagRepository>()));
-  locator.registerLazySingleton(() => NFCCubit(
-        loadTagsUseCase: locator<LoadTagsUseCase>(),
-        saveTagUseCase: locator<SaveTagUseCase>(),
-      ));
-
-  locator.registerLazySingleton(() => ScanHistoryCubit(
-        loadTagsUseCase: locator<LoadTagsUseCase>(),
-      ));
+  //----------------------------------- NFC ----------------------------------//
+  locator.registerLazySingleton(() => NFCCubit());
+  locator.registerLazySingleton(() => ScanHistoryCubit());
 }

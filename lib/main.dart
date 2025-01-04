@@ -22,8 +22,8 @@ void main() async {
     ]);
 
     // ตัวเลือกสำหรับการล้าง Shared Preferences (สำหรับ debug)
-    final pref = await SharedPreferences.getInstance();
-    pref.clear();
+    // final pref = await SharedPreferences.getInstance();
+    // pref.clear();
 
     await setupLocator();
     await ApiConfig.loadConfig(environment: 'development');

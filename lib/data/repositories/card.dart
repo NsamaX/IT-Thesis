@@ -5,6 +5,7 @@ import '../models/card.dart';
 
 abstract class CardRepository {
   /// ซิงค์ข้อมูลการ์ดระหว่าง Local Data Source และ Remote API
+  Future<CardModel> fetchCardById(int id);
   Future<List<CardModel>> syncCards(String game);
 }
 
@@ -19,6 +20,13 @@ class CardRepositoryImpl implements CardRepository {
 
   /// สร้างออบเจ็กต์ CardRepositoryImpl ด้วย GameApi และ CardLocalDataSource
   CardRepositoryImpl({required this.gameApi, required this.cardLocalDataSource});
+
+  //--------------------------- ดึงข้อมูลการ์ดโดย ID ---------------------------//
+  /// ดึงข้อมูลการ์ดจาก Remote API โดยระบุ ID
+  @override
+  Future<CardModel> fetchCardById(int id) async {
+    return await gameApi.fetchCardsById(id);
+  }
 
   //------------------------------- ซิงค์ข้อมูลการ์ด ------------------------------//
   /// ซิงค์ข้อมูลการ์ดระหว่าง Local Data Source และ Remote API
