@@ -43,14 +43,14 @@ void showCupertinoAlertCancel({
         actions: [
           CupertinoDialogAction(
             child: Text(
-              locale.translate('dialog.cancel'),
+              locale.translate('button.cancel'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemRed),
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
           CupertinoDialogAction(
             child: Text(
-              locale.translate('dialog.confirm'),
+              locale.translate('button.confirm'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
             ),
             onPressed: () {
@@ -89,7 +89,7 @@ void showCupertinoAlertOK({
         actions: [
           CupertinoDialogAction(
             child: Text(
-              locale.translate('dialog.ok'),
+              locale.translate('button.ok'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
             ),
             onPressed: () => Navigator.of(context).pop(),

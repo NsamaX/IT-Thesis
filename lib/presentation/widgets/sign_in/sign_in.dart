@@ -31,7 +31,7 @@ class SignInWidget extends StatelessWidget {
 
   Widget _buildTitle(ThemeData theme, AppLocalizations locale) {
     return Text(
-      locale.translate('sign_in.title'),
+      locale.translate('title.sign_in'),
       style: theme.textTheme.titleLarge,
       textAlign: TextAlign.center,
     );
@@ -78,7 +78,7 @@ class SignInWidget extends StatelessWidget {
             (_) => false,
           );
         },
-        child: Text(locale.translate('sign_in.button')),
+        child: Text(locale.translate('button.guest')),
       ),
     );
   }

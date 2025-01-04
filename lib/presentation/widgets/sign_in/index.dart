@@ -31,7 +31,7 @@ class IndexWidget extends StatelessWidget {
 
   Widget _buildTitle(ThemeData theme, AppLocalizations locale) {
     return Text(
-      locale.translate('index.title'),
+      locale.translate('title.index'),
       style: theme.textTheme.titleLarge,
       textAlign: TextAlign.center,
     );
@@ -39,7 +39,7 @@ class IndexWidget extends StatelessWidget {
 
   Widget _buildDescription(ThemeData theme, AppLocalizations locale) {
     return Text(
-      locale.translate('index.description'),
+      locale.translate('tutorial.index'),
       style: theme.textTheme.bodyMedium,
       textAlign: TextAlign.center,
     );
@@ -51,7 +51,7 @@ class IndexWidget extends StatelessWidget {
       height: 46,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
-        child: Text(locale.translate('index.button')),
+        child: Text(locale.translate('button.start')),
       ),
     );
   }

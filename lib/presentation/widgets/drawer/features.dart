@@ -31,13 +31,13 @@ class FeaturesDrawerWidget extends StatelessWidget {
               _buildFeatureItem(
                 theme: theme,
                 image: null,
-                label: locale.translate('games.title'),
+                label: locale.translate('title.games'),
                 onTapFunction: () => Navigator.of(context).pushNamed(AppRoutes.games),
               ),
               _buildFeatureItem(
                 theme: theme,
                 image: null,
-                label: locale.translate('custom.title'),
+                label: locale.translate('title.custom'),
                 onTapFunction: () => Navigator.of(context).pushNamed(
                   AppRoutes.card,
                   arguments: {'isCustom': true},

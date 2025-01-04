@@ -60,7 +60,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                    hintText: locale.translate('search.hint_text'),
+                    hintText: locale.translate('text.hint_text'),
                     hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                     contentPadding: const EdgeInsets.only(bottom: 10),
                   ),
@@ -83,7 +83,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                         widget.onSearchCleared();
                       },
                       child: Text(
-                        locale.translate('search.button'),
+                        locale.translate('button.cancel'),
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.secondaryHeaderColor,
                           fontSize: 16,

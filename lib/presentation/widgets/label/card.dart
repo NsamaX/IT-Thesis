@@ -94,14 +94,14 @@ class CardLabelWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          card?.name ?? locale.translate('card.no_name'),
+          card?.name ?? locale.translate('text.no_card_name'),
           style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
         const SizedBox(height: 4),
         Text(
-          card?.description ?? locale.translate('card.no_description'),
+          card?.description ?? locale.translate('text.no_card_description'),
           style: theme.textTheme.bodySmall?.copyWith(color: textColor),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,

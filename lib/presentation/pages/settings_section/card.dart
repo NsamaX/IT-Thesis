@@ -60,26 +60,26 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: locale.translate('card.card_name'),
+                hintText: locale.translate('text.card_name'),
               ),
               onSubmitted: (value) {
                 final newName = value.trim().isNotEmpty
                     ? value.trim()
-                    : locale.translate('card.card_name');
+                    : locale.translate('text.card_name');
                 deckNameController.text = newName;
               },
             )
-          : locale.translate('card.title'): null,
+          : locale.translate('title.card'): null,
       if (isAdd)
-        locale.translate('card.toggle.add'): () {
+        locale.translate('toggle.add'): () {
           context.read<DeckManagerCubit>().addCard(card!);
           Navigator.of(context).pop();
           showSnackBar(
             context: context,
-            content: locale.translate('card.dialog.add_success'),
+            content: locale.translate('snack_bar.card.add_success'),
           );
         },
-      if (isCustom) locale.translate('card.toggle.done'): null,
+      if (isCustom) locale.translate('toggle.done'): null,
       if (!isAdd && !isCustom)
         isNFCEnabled
             ? Icons.wifi_tethering_rounded
@@ -99,7 +99,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final deckNameController = TextEditingController(text: locale.translate('card.card_name'));
+    final deckNameController = TextEditingController(text: locale.translate('text.card_name'));
 
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(

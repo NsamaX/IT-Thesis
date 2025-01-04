@@ -22,7 +22,7 @@ class GamesPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('games.title'): null,
+      locale.translate('title.games'): null,
       null: null,
     };
   }

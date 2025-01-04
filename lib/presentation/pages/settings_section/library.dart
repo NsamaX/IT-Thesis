@@ -20,7 +20,7 @@ class LibraryPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('library.title'): null,
+      locale.translate('title.library'): null,
       null: null,
     };
   }

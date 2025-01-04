@@ -21,7 +21,7 @@ class CardInfoWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          locale.translate('card.card_description'),
+          locale.translate('text.description'),
           style: theme.textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
@@ -40,7 +40,7 @@ class CardInfoWidget extends StatelessWidget {
     if (card!.additionalData == null) {
       return _buildDescriptionText(
         theme,
-        card!.description ?? locale.translate('card.no_description'),
+        card!.description ?? locale.translate('text.no_card_description'),
       );
     }
     return _buildAdditionalDataDescription(theme);

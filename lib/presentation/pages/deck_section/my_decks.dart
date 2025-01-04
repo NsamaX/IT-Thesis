@@ -34,7 +34,7 @@ class MyDecksPage extends StatelessWidget {
 
     return {
       Icons.open_in_new_rounded: () => _createNewDeck(context, cubit, locale),
-      locale.translate('my_decks.title'): null,
+      locale.translate('title.my_decks'): null,
       state.allDecks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
@@ -46,7 +46,7 @@ class MyDecksPage extends StatelessWidget {
   ) async {
     final newDeck = DeckEntity(
       deckId: const Uuid().v4(),
-      deckName: locale.translate('new_deck.title'),
+      deckName: locale.translate('title.new_deck'),
       cards: {},
     );
     cubit.setDeck(newDeck);

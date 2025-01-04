@@ -41,14 +41,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     final locale = AppLocalizations.of(context);
     _nfcCubit.markSnackBarDisplayed();
     if (state.isOperationSuccessful) {
-      final successMessage = locale.translate('card.dialog.write_success');
+      final successMessage = locale.translate('snack_bar.nfc.write_success');
       await showSnackBar(
         context: context,
         content: successMessage,
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage.isNotEmpty) {
-      final errorMessage = locale.translate('card.dialog.write_fail');
+      final errorMessage = locale.translate('snack_bar.nfc.write_failed');
       await showSnackBar(
         context: context,
         content: errorMessage,
@@ -76,7 +76,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
       },
       child: Scaffold(
         appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
-        body: _buildGridView(context, cubit),
+        body: _buildGridView(context, cubit, locale),
       ),
     );
   }
@@ -94,7 +94,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
       return {
         Icons.arrow_back_ios_new_rounded: '/back',
         state.deck.deckName: null,
-        locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
+        locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
       };
     }
     return isEditMode
@@ -107,7 +107,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: locale.translate('new_deck.title'),
+                hintText: locale.translate('title.new_deck'),
               ),
               onSubmitted: (value) => _renameDeck(cubit, deckNameController, locale, value),
             ): null,
@@ -115,7 +115,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
               'route': AppRoutes.games,
               'arguments': {'isAdd': true},
             },
-            locale.translate('new_deck.toggle.save'): () {
+            locale.translate('toggle.save'): () {
               cubit.saveDeck(_nfcCubit);
               cubit.toggleEditMode();
             },
@@ -125,7 +125,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
             Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
             state.deck.deckName: null,
             Icons.play_arrow_rounded: AppRoutes.tracker,
-            locale.translate('new_deck.toggle.edit'): () => cubit.toggleEditMode(),
+            locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
           };
   }
 
@@ -136,13 +136,13 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
   ) {
     showCupertinoAlertCancel(
       context: context,
-      title: locale.translate('new_deck.dialog.delete.title'),
-      content: locale.translate('new_deck.dialog.delete.content'),
+      title: locale.translate('dialog.deck.title'),
+      content: locale.translate('dialog.deck.content'),
       onConfirm: () {
         cubit.toggleDelete();
         showSnackBar(
           context: context,
-          content: locale.translate('new_deck.dialog.delete.success'),
+          content: locale.translate('snack_bar.deck.deleted'),
         );
       },
     );
@@ -156,27 +156,25 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
   ) {
     final newName = value.trim().isNotEmpty
         ? value.trim()
-        : locale.translate('new_deck.title');
+        : locale.translate('title.new_deck');
     cubit.renameDeck(newName);
     controller.text = newName;
   }
 
-  void _toggleShare(
-      BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
     showSnackBar(
       context: context,
-      content: locale.translate('new_deck.dialog.share'),
+      content: locale.translate('snack_bar.deck.share'),
     );
   }
 
-  Widget _buildGridView(BuildContext context, DeckManagerCubit cubit) {
+  Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final deckCards = cubit.state.deck.cards;
-
     if (deckCards.isEmpty) {
       return Center(
         child: Text(
-          AppLocalizations.of(context).translate('new_deck.empty'),
+          locale.translate('text.deck_empty'),
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       );

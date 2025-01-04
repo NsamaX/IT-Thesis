@@ -76,7 +76,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     return {
       Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-      locale.translate('scan.title'): null,
+      locale.translate('title.scan'): null,
       Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
     };
   }

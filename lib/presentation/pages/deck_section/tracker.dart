@@ -83,12 +83,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         context.read<TrackCubit>().readTag(tag);
         showSnackBar(
           context: context,
-          content: locale.translate('card.dialog.read_success'),
+          content: locale.translate('snack_bar.nfc.read_success'),
         );
       } catch (e) {
         showSnackBar(
           context: context,
-          content: locale.translate('card.dialog.read_fail'),
+          content: locale.translate('snack_bar.nfc.read_failed'),
         );
       }
     }
@@ -99,8 +99,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       context.read<TrackCubit>().showDialog();
       showCupertinoAlertOK(
         context: context,
-        title: locale.translate('tracker.dialog.title'),
-        content: locale.translate('tracker.dialog.content'),
+        title: locale.translate('dialog.tracker.title'),
+        content: locale.translate('dialog.tracker.content'),
       );
     });
   }
@@ -115,7 +115,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
       Icons.access_time_rounded: null,
-      locale.translate('tracker.title'): null,
+      locale.translate('title.tracker'): null,
       Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
       isNFCEnabled
               ? Icons.wifi_tethering_rounded
@@ -150,7 +150,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           top: 8,
           right: 16,
           child: Text(
-            '$totalCards ${AppLocalizations.of(context).translate('tracker.total')}',
+            '$totalCards ${AppLocalizations.of(context).translate('text.total_cards')}',
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),

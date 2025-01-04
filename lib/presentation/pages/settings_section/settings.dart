@@ -14,7 +14,7 @@ class SettingsPage extends StatelessWidget {
     final cubit = context.read<SettingsCubit>();
 
     return Scaffold(
-      appBar: AppBarWidget(menu: {locale.translate('settings.title'): null}),
+      appBar: AppBarWidget(menu: {locale.translate('title.settings'): null}),
       body: _buildSettingsContent(context, locale, cubit),
       bottomNavigationBar: const BottomNavigationBarWidget(),
     );
@@ -36,7 +36,7 @@ class SettingsPage extends StatelessWidget {
 
   Map<String, dynamic> _buildAccountSettings(AppLocalizations locale) {
     return {
-      'title': locale.translate('settings.account.title'),
+      'title': locale.translate('settings.account.label'),
       'content': [
         {
           'icon': Icons.account_circle_rounded,
@@ -58,7 +58,7 @@ class SettingsPage extends StatelessWidget {
     SettingsCubit cubit,
   ) {
     return {
-      'title': locale.translate('settings.general.title'),
+      'title': locale.translate('settings.general.label'),
       'content': [
         {
           'icon': Icons.auto_stories_rounded,
@@ -84,7 +84,7 @@ class SettingsPage extends StatelessWidget {
     SettingsCubit cubit,
   ) {
     return {
-      'title': locale.translate('settings.support.title'),
+      'title': locale.translate('settings.support.label'),
       'content': [
         {
           'icon': Icons.language_rounded,
@@ -102,8 +102,7 @@ class SettingsPage extends StatelessWidget {
 
   void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
     cubit.updateFirstLoad(true);
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
   }
 
   void _toggleLanguage(SettingsCubit cubit) {

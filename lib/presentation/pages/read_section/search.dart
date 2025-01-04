@@ -59,7 +59,7 @@ class SearchPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('search.title'): null,
+      locale.translate('title.search'): null,
       null: null,
     };
   }

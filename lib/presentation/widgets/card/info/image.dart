@@ -39,7 +39,7 @@ class CardImageWidget extends StatelessWidget {
               const Icon(Icons.upload_rounded, size: 36),
               const SizedBox(height: 12),
               Text(
-                locale.translate('card.upload_image'),
+                locale.translate('text.upload_image'),
                 style: theme.textTheme.titleSmall,
               ),
             ],
@@ -75,7 +75,7 @@ class CardImageWidget extends StatelessWidget {
             const Icon(Icons.image_not_supported, size: 36),
             const SizedBox(height: 8),
             Text(
-              locale.translate('card.no_image'),
+              locale.translate('card.no_card_image'),
               style: theme.textTheme.titleSmall,
             ),
           ],
