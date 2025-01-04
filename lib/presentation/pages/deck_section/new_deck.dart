@@ -37,7 +37,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     _nfcSessionHandler.handleAppLifecycleState(state);
   }
 
-  void _handleSnackBar(BuildContext context, NFCState state) async {
+  void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
     final locale = AppLocalizations.of(context);
     _nfcCubit.markSnackBarDisplayed();
     if (state.isOperationSuccessful) {
@@ -55,7 +55,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
         isError: true,
       );
       _nfcCubit.clearErrorMessage();
-      await _nfcCubit.restartSessionIfNeeded();
+      await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
     }
     _nfcCubit.resetSnackBarState();
   }
@@ -71,7 +71,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
         if (state.isWriteOperation && 
             (state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
             !state.isSnackBarDisplayed) {
-          _handleSnackBar(context, state);
+          _handleSnackBar(context, cubit, state);
         }
       },
       child: Scaffold(

@@ -10,7 +10,6 @@ class NFCHelper {
     String? reason,
   }) async {
     if (cubit.isClosed) return;
-
     if (enable) {
       if (!cubit.state.isNFCEnabled) cubit.toggleNFC();
       if (!cubit.state.isProcessing) {
