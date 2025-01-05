@@ -21,7 +21,7 @@ void main() async {
       DeviceOrientation.portraitDown,
     ]);
 
-    // ตัวเลือกสำหรับการล้าง Shared Preferences (สำหรับ debug)
+    // Option for deleting the shared preferences (for debugging)
     // final pref = await SharedPreferences.getInstance();
     // pref.clear();
 
