@@ -37,6 +37,27 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     _nfcSessionHandler.handleAppLifecycleState(state);
   }
 
+  @override
+  Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final cubit = context.read<DeckManagerCubit>();
+    final deck = cubit.state.deck;
+    final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
+    return BlocListener<NFCCubit, NFCState>(
+      listener: (context, state) {
+        if (state.isWriteOperation && 
+            (state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
+            !state.isSnackBarDisplayed) {
+          _handleSnackBar(context, cubit, state);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
+        body: _buildGridView(context, cubit, locale),
+      ),
+    );
+  }
+
   void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
     final locale = AppLocalizations.of(context);
     _nfcCubit.markSnackBarDisplayed();
@@ -58,27 +79,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
       await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
     }
     _nfcCubit.resetSnackBarState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final cubit = context.read<DeckManagerCubit>();
-    final deck = cubit.state.deck;
-    final TextEditingController deckNameController = TextEditingController(text: deck.deckName);
-    return BlocListener<NFCCubit, NFCState>(
-      listener: (context, state) {
-        if (state.isWriteOperation && 
-            (state.isOperationSuccessful || state.errorMessage.isNotEmpty) &&
-            !state.isSnackBarDisplayed) {
-          _handleSnackBar(context, cubit, state);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
-        body: _buildGridView(context, cubit, locale),
-      ),
-    );
   }
 
   Map<dynamic, dynamic> _buildMenu(
@@ -163,10 +163,10 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
 
   void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
-    showSnackBar(
-      context: context,
-      content: locale.translate('snack_bar.deck.share'),
-    );
+    // showSnackBar(
+    //   context: context,
+    //   content: locale.translate('snack_bar.deck.share'),
+    // );
   }
 
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
@@ -179,7 +179,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
         ),
       );
     }
-
     return GridWidget(items: deckCards.entries.toList());
   }
 }
