@@ -1,5 +1,4 @@
 # Feature
-    [] Record history
     [] Scan card
     [] Custom card
     [] Sign in
