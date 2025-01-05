@@ -1,8 +1,7 @@
 import 'card.dart';
 
 class DeckEntity {
-  final String deckId;
-  final String deckName;
+  final String deckId, deckName;
   final Map<CardEntity, int> cards;
 
   DeckEntity({
@@ -12,8 +11,7 @@ class DeckEntity {
   });
 
   DeckEntity copyWith({
-    String? deckId,
-    String? deckName,
+    String? deckId, deckName,
     Map<CardEntity, int>? cards,
   }) {
     return DeckEntity(

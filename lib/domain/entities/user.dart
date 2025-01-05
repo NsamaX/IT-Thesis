@@ -1,9 +1,6 @@
 class UserEntity {
-  final String userId;
-  final String email;
-  final List<String> tagIds;
-  final List<String> deckIds;
-  final List<String> recordIds;
+  final String userId, email;
+  final List<String> tagIds, deckIds, recordIds;
 
   UserEntity({
     required this.userId,
@@ -14,11 +11,8 @@ class UserEntity {
   });
 
   UserEntity copyWith({
-    String? userId,
-    String? email,
-    List<String>? tagIds,
-    List<String>? deckIds,
-    List<String>? recordIds,
+    String? userId, email,
+    List<String>? tagIds, deckIds, recordIds,
   }) {
     return UserEntity(
       userId: userId ?? this.userId,

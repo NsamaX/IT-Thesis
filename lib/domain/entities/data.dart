@@ -5,8 +5,7 @@ enum Action {
 }
 
 class DataEntity {
-  final String tagId;
-  final String location;
+  final String tagId, location;
   final Action action;
   final DateTime timestamp;
 
