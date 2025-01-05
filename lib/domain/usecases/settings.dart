@@ -1,21 +1,21 @@
 import 'package:nfc_project/data/repositories/settings.dart';
 
-class LoadSetting {
+class SaveSettingUseCase {
   final SettingsRepository repository;
 
-  LoadSetting(this.repository);
-
-  Future<dynamic> call(String key) async {
-    return await repository.loadSetting(key);
-  }
-}
-
-class SaveSetting {
-  final SettingsRepository repository;
-
-  SaveSetting(this.repository);
+  SaveSettingUseCase(this.repository);
 
   Future<void> call(String key, dynamic value) async {
     await repository.saveSetting(key, value);
+  }
+}
+
+class LoadSettingUseCase {
+  final SettingsRepository repository;
+
+  LoadSettingUseCase(this.repository);
+
+  Future<dynamic> call(String key) async {
+    return await repository.loadSetting(key);
   }
 }

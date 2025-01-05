@@ -3,12 +3,12 @@ import '../entities/card.dart';
 import '../mappers/card.dart';
 
 class SyncCardsUseCase {
-  final CardRepository cardRepository;
+  final CardRepository repository;
 
-  SyncCardsUseCase(this.cardRepository);
+  SyncCardsUseCase(this.repository);
 
   Future<List<CardEntity>> call(String game) async {
-    final cardModels = await cardRepository.syncCards(game);
+    final cardModels = await repository.syncCards(game);
     return cardModels.map((model) => CardMapper.toEntity(model)).toList();
   }
 }

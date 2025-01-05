@@ -29,17 +29,6 @@ class RemoveCardUseCase {
   }
 }
 
-class LoadDecksUseCase {
-  final DeckRepository repository;
-
-  LoadDecksUseCase(this.repository);
-
-  Future<List<DeckEntity>> call() async {
-    final decksModel = await repository.loadDecks();
-    return decksModel.map((deckModel) => DeckMapper.toEntity(deckModel)).toList();
-  }
-}
-
 class SaveDeckUseCase {
   final DeckRepository repository;
 
@@ -58,5 +47,16 @@ class DeleteDeckUseCase {
 
   Future<void> call(String deckId) async {
     await repository.deleteDeck(deckId);
+  }
+}
+
+class LoadDecksUseCase {
+  final DeckRepository repository;
+
+  LoadDecksUseCase(this.repository);
+
+  Future<List<DeckEntity>> call() async {
+    final decksModel = await repository.loadDecks();
+    return decksModel.map((deckModel) => DeckMapper.toEntity(deckModel)).toList();
   }
 }

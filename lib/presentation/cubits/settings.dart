@@ -27,8 +27,8 @@ class SettingsState {
 }
 
 class SettingsCubit extends Cubit<SettingsState> {
-  final SaveSetting saveSetting;
-  final LoadSetting loadSetting;
+  final SaveSettingUseCase saveSetting;
+  final LoadSettingUseCase loadSetting;
 
   SettingsCubit({
     required this.saveSetting,

@@ -28,11 +28,11 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
 
-  locator.registerLazySingleton(() => LoadSetting(locator<SettingsRepository>()));
-  locator.registerLazySingleton(() => SaveSetting(locator<SettingsRepository>()));
+  locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
+  locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SettingsCubit(
-        loadSetting: locator<LoadSetting>(),
-        saveSetting: locator<SaveSetting>(),
+        loadSetting: locator<LoadSettingUseCase>(),
+        saveSetting: locator<SaveSettingUseCase>(),
       ));
 
   //------------------------------- สถานะของแอป ------------------------------//
