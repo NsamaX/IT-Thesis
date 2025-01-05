@@ -68,6 +68,7 @@ class TrackCubit extends Cubit<TrackState> {
         createdAt: DateTime.now(),
         data: [],
       ),
+      history: [],
     ));
   }
 
