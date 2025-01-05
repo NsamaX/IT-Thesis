@@ -1,7 +1,5 @@
 class TagModel {
-  final String tagId;
-  final String cardId;
-  final String game;
+  final String tagId, cardId, game;
   final DateTime timestamp;
 
   TagModel({

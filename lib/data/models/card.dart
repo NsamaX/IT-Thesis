@@ -1,17 +1,14 @@
 class CardModel {
-  final String cardId;
-  final String game;
-  final String name;
-  final String? description;
-  final String? imageUrl;
+  final String cardId, game, name;
+  final String? imageUrl, description;
   final Map<String, dynamic>? additionalData;
 
   CardModel({
     required this.cardId,
     required this.game,
     required this.name,
-    this.description,
     this.imageUrl,
+    this.description,
     this.additionalData,
   });
 
@@ -20,8 +17,8 @@ class CardModel {
       cardId: json['cardId'] ?? '',
       game: json['game'] ?? '',
       name: json['name'] ?? '',
-      description: json['description'],
       imageUrl: json['imageUrl'],
+      description: json['description'],
       additionalData: json['additionalData'] is Map<String, dynamic>
           ? Map<String, dynamic>.from(json['additionalData'])
           : null,
@@ -33,8 +30,8 @@ class CardModel {
       'cardId': cardId,
       'game': game,
       'name': name,
-      'description': description,
       'imageUrl': imageUrl,
+      'description': description,
       'additionalData': additionalData,
     };
   }

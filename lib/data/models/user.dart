@@ -1,9 +1,6 @@
 class UserModel {
-  final String userId;
-  final String email;
-  final List<String> tagIds;
-  final List<String> deckIds;
-  final List<String> recordIds;
+  final String userId, email;
+  final List<String> tagIds, deckIds, recordIds;
 
   UserModel({
     required this.userId,

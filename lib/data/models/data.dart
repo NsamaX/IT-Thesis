@@ -5,8 +5,7 @@ enum ActionModel {
 }
 
 class DataModel {
-  final String tagId;
-  final String location;
+  final String tagId, location;
   final ActionModel action;
   final DateTime timestamp;
 
@@ -23,9 +22,7 @@ class DataModel {
       location: json['location'] ?? '',
       action: ActionModel.values.firstWhere(
         (e) => e.name == json['action'],
-        orElse: () {
-          return ActionModel.unknown;
-        },
+        orElse: () => ActionModel.unknown,
       ),
       timestamp: json['timestamp'] != null
           ? DateTime.parse(json['timestamp'])

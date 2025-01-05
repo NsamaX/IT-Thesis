@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'card.dart';
 
 class DeckModel {
-  final String deckId;
-  final String deckName;
+  final String deckId, deckName;
   final Map<CardModel, int> cards;
 
   DeckModel({
@@ -15,7 +14,6 @@ class DeckModel {
   factory DeckModel.fromJson(Map<String, dynamic> json) {
     final cardsJson = json['cards'] as String;
     final decodedCards = jsonDecode(cardsJson) as Map<String, dynamic>;
-
     return DeckModel(
       deckId: json['deckId'] as String,
       deckName: json['deckName'] as String,
