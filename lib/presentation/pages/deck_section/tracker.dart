@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
@@ -8,7 +7,6 @@ import 'package:nfc_project/domain/entities/deck.dart';
 import '../../cubits/deck_manager.dart';
 import '../../cubits/drawer.dart';
 import '../../cubits/NFC.dart';
-import '../../cubits/scan_history.dart';
 import '../../cubits/tracker.dart';
 import '../../widgets/dialog.dart';
 import '../../widgets/drawer/history.dart';
@@ -49,7 +47,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
-        BlocProvider.value(value: GetIt.I<ScanHistoryCubit>()),
         BlocProvider(create: (context) => TrackCubit(deck)),
       ],
       child: MultiBlocListener(
