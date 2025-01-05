@@ -2,37 +2,33 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// จัดการการแปลภาษาสำหรับแอปพลิเคชัน
+/// Handles localization for the application
 class AppLocalizations {
-  /// เก็บ locale ปัจจุบัน เช่น `en`, `ja`
+  /// Stores the current locale, e.g., `en`, `ja`
   final Locale locale;
 
-  /// สร้างออบเจ็กต์ของ `AppLocalizations` โดยใช้ locale
+  /// Constructs an `AppLocalizations` object with the provided locale
   AppLocalizations(this.locale);
 
-  /// ดึงออบเจ็กต์ `AppLocalizations` จาก `BuildContext`
+  /// Retrieves the `AppLocalizations` object from the `BuildContext`
   static AppLocalizations of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
-  /// Delegate สำหรับ `AppLocalizations`
+  /// Delegate for `AppLocalizations`
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
-  /// เก็บข้อความแปลทั้งหมดในรูปแบบ Map
+  /// Holds all localized strings in a Map
   late Map<String, dynamic> localizedStrings;
 
-  //----------------------------- โหลดไฟล์แปลภาษา ----------------------------//
-  /// โหลดไฟล์ JSON ที่เกี่ยวข้องกับภาษาและตั้งค่า `localizedStrings`
+  //----------------------------- Load Localization File -----------------------------//
   Future<bool> load() async {
     String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
     localizedStrings = json.decode(jsonString);
     return true;
   }
 
-  //-------------------------------- แปลข้อความ -------------------------------//
-  /// แปลข้อความตาม `key` ที่ระบุ
-  /// - โดยแยก key ที่เป็นรูปแบบ `key1.key2` เพื่อค้นหาใน Map
-  /// - หากไม่พบ key จะคืนค่า key เดิม
+  //-------------------------------- Translate Text --------------------------------//
   String translate(String key) {
     try {
       List<String> keys = key.split('.');
@@ -51,15 +47,15 @@ class AppLocalizations {
   }
 }
 
-/// Delegate สำหรับจัดการการโหลดภาษาของแอป
+/// Delegate for managing app localization loading
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
-  /// ตรวจสอบว่า locale ที่ระบุรองรับหรือไม่
+  /// Checks if the provided locale is supported
   @override
   bool isSupported(Locale locale) => ['en', 'ja'].contains(locale.languageCode);
 
-  /// โหลดไฟล์แปลภาษาสำหรับ locale ที่ระบุ
+  /// Loads the localization file for the provided locale
   @override
   Future<AppLocalizations> load(Locale locale) async {
     AppLocalizations localizations = AppLocalizations(locale);
@@ -67,7 +63,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
     return localizations;
   }
 
-  /// ระบุว่า delegate ควรโหลดใหม่หรือไม่
+  /// Indicates whether the delegate should reload
   @override
   bool shouldReload(covariant LocalizationsDelegate old) => false;
 }

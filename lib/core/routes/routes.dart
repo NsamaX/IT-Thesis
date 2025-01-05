@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/presentation/pages/@export.dart';
 
-/// จัดการเส้นทาง (Routes) ของแอปพลิเคชัน
 class AppRoutes {
-  //---------------------------- เส้นทางต่าง ๆ ในแอป ----------------------------//
   static const String index     = '/';
   static const String signIn    = '/sign_in';
   static const String my_decks  = '/my_decks';
@@ -16,11 +14,6 @@ class AppRoutes {
   static const String library   = '/library';
   static const String card      = '/card';
 
-  //-------------------------- กำหนดเส้นทางตามชื่อที่ระบุ --------------------------//
-  /// สร้างเส้นทางตามชื่อ (RouteSettings)
-  /// - ใช้ `settings.name` เพื่อกำหนดหน้าที่ต้องการแสดง
-  /// - คืนค่า `MaterialPageRoute` สำหรับหน้าแต่ละหน้า
-  /// - คืนค่า `Scaffold` กรณีไม่พบเส้นทางที่ระบุ
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case index:

@@ -7,12 +7,12 @@ import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
 
-/// ตัวจัดการ Dependency Injection ด้วย GetIt
+/// Dependency Injection handler using GetIt
 final GetIt locator = GetIt.instance;
 
-/// ตั้งค่าตัวจัดการ Dependency Injection
+/// Configure Dependency Injection
 Future<void> setupLocator() async {
-  //--------------------------------- ฐานข้อมูล --------------------------------//
+  //-------------------------------- Database --------------------------------//
   locator.registerLazySingleton(() => DatabaseService());
   final databaseService = locator<DatabaseService>();
 
@@ -35,10 +35,12 @@ Future<void> setupLocator() async {
         saveSetting: locator<SaveSettingUseCase>(),
       ));
 
-  //------------------------------- สถานะของแอป ------------------------------//
+  //-------------------------------- App State -------------------------------//
   locator.registerLazySingleton(() => AppStateCubit());
+  locator.registerLazySingleton(() => NFCCubit());
+  locator.registerLazySingleton(() => ScanHistoryCubit());
 
-  //------------------------------- การ์ดจาก API ------------------------------//
+  //----------------------------------- API ----------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) {
     return GameFactory.createApi(game);
   });
@@ -53,7 +55,7 @@ Future<void> setupLocator() async {
     return SyncCardsUseCase(cardRepository);
   });
 
-  //--------------------------------- สำรับการ์ด -------------------------------//
+  //---------------------------------- Decks ---------------------------------//
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
 
@@ -69,8 +71,4 @@ Future<void> setupLocator() async {
         saveDeckUseCase: locator<SaveDeckUseCase>(),
         deleteDeckUseCase: locator<DeleteDeckUseCase>(),
       ));
-
-  //----------------------------------- NFC ----------------------------------//
-  locator.registerLazySingleton(() => NFCCubit());
-  locator.registerLazySingleton(() => ScanHistoryCubit());
 }
