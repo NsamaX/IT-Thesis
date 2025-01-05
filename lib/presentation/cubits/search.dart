@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/domain/usecases/sync_cards.dart';
+import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class SearchState {
   final List<CardEntity> allCards;

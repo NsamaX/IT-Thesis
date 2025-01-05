@@ -4,8 +4,8 @@ import '../datasources/remote/game_factory.dart';
 import '../models/card.dart';
 
 abstract class CardRepository {
+  Future<CardModel> fetchCardById(String game, String id);
   Future<List<CardModel>> syncCards(String game);
-  Future<CardModel> fetchCardById(int id);
 }
 
 class CardRepositoryImpl implements CardRepository {
@@ -13,6 +13,16 @@ class CardRepositoryImpl implements CardRepository {
   final CardLocalDataSource cardLocalDataSource;
 
   CardRepositoryImpl({required this.gameApi, required this.cardLocalDataSource});
+
+  @override
+  Future<CardModel> fetchCardById(String game, String id) async {
+    final localCard = await cardLocalDataSource.fetchCardById(game, id);
+    if (localCard != null) {
+      return localCard;
+    } else {
+      return await gameApi.fetchCardsById(id);
+    }
+  }
 
   @override
   Future<List<CardModel>> syncCards(String game) async {
@@ -86,10 +96,5 @@ class CardRepositoryImpl implements CardRepository {
         }
       }
     }
-  }
-
-  @override
-  Future<CardModel> fetchCardById(int id) async {
-    return await gameApi.fetchCardsById(id);
   }
 }

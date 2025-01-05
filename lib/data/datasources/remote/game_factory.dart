@@ -4,8 +4,8 @@ import '../../models/card.dart';
 import 'factories/@export.dart';
 
 abstract class GameApi {
+  Future<CardModel> fetchCardsById(String id);
   Future<List<CardModel>> fetchCardsPage(int page);
-  Future<CardModel> fetchCardsById(int id);
 }
 
 class GameFactory {

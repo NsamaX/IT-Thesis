@@ -10,6 +10,19 @@ class VanguardApi implements GameApi {
   VanguardApi(this.baseUrl);
 
   @override
+  Future<CardModel> fetchCardsById(String id) async {
+    try {
+      final url = _buildUrl('cards/$id');
+      final response = await _getRequest(url);
+      _validateResponse(response);
+      final cardData = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      return _parseCardData(cardData);
+    } catch (e) {
+      throw ApiException('Failed to fetch card by ID $id: $e');
+    }
+  }
+
+  @override
   Future<List<CardModel>> fetchCardsPage(int page) async {
     try {
       final url = _buildUrl('cards', {'page': page.toString()});
@@ -70,18 +83,5 @@ class VanguardApi implements GameApi {
         'skill': cardData['skill'] ?? '',
       },
     );
-  }
-
-  @override
-  Future<CardModel> fetchCardsById(int id) async {
-    try {
-      final url = _buildUrl('cards/$id');
-      final response = await _getRequest(url);
-      _validateResponse(response);
-      final cardData = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      return _parseCardData(cardData);
-    } catch (e) {
-      throw ApiException('Failed to fetch card by ID $id: $e');
-    }
   }
 }

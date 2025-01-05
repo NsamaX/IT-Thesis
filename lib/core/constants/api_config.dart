@@ -12,19 +12,19 @@ class ApiConfig {
       final Map<String, dynamic> config = json.decode(jsonString);
       final environments = config['environments'] as Map<String, dynamic>?;
       if (environments == null || environments[environment] == null) {
-        throw LocalDataException('ไม่พบ environment "$environment" ในไฟล์ api.json');
+        throw LocalDataException('Environment "$environment" not found in api.json file.');
       }
       currentEnvironment = environment;
       baseUrls = Map<String, String>.from(environments[environment] as Map);
     } catch (e) {
-      throw LocalDataException('ไม่สามารถโหลดการตั้งค่า API ได้', details: e.toString());
+      throw LocalDataException('Failed to load API configuration.', details: e.toString());
     }
   }
 
   static String getBaseUrl(String key) {
     if (baseUrls == null) {
-      throw LocalDataException('ยังไม่ได้โหลดการตั้งค่า API กรุณาเรียกใช้ loadConfig() ก่อนเรียก getBaseUrl().');
+      throw LocalDataException('API configuration has not been loaded. Call loadConfig() before calling getBaseUrl().');
     }
-    return baseUrls?[key] ?? (throw LocalDataException('ไม่พบ Base URL สำหรับ key "$key" ใน environment "$currentEnvironment".'));
+    return baseUrls?[key] ?? (throw LocalDataException('Base URL for key "$key" not found in environment "$currentEnvironment".'));
   }
 }

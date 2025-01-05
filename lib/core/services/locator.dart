@@ -1,11 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '@export.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
+import '@export.dart';
 
 /// Dependency Injection handler using GetIt
 final GetIt locator = GetIt.instance;
@@ -24,10 +24,8 @@ Future<void> setupLocator() async {
 
   //---------------------------- Local DataSource ----------------------------//
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
-
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
-
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SettingsCubit(
@@ -49,7 +47,6 @@ Future<void> setupLocator() async {
     final cardLocalDataSource = locator<CardLocalDataSource>();
     return CardRepositoryImpl(gameApi: gameApi, cardLocalDataSource: cardLocalDataSource);
   });
-
   locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) {
     final cardRepository = locator<CardRepository>(param1: game);
     return SyncCardsUseCase(cardRepository);
@@ -58,7 +55,6 @@ Future<void> setupLocator() async {
   //---------------------------------- Decks ---------------------------------//
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
-
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());
   locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));

@@ -3,6 +3,7 @@ import 'package:nfc_project/core/services/sqlite.dart';
 import '../../models/card.dart';
 
 abstract class CardLocalDataSource {
+  Future<CardModel?> fetchCardById(String game, String id);
   Future<List<CardModel>> fetchCards(String game);
   Future<int> fetchLastPage(String game);
   Future<bool> isPageExists(String game, int page);
@@ -14,6 +15,19 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   final SQLiteService _sqliteService;
 
   CardLocalDataSourceImpl(this._sqliteService);
+
+  @override
+  Future<CardModel?> fetchCardById(String game, String id) async {
+    final result = await _sqliteService.query(
+      'cards',
+      where: 'game = ? AND id = ?',
+      whereArgs: [game, id],
+    );
+    if (result.isNotEmpty) {
+      return _parseCards(result).first;
+    }
+    return null;
+  }
 
   @override
   Future<List<CardModel>> fetchCards(String game) async {

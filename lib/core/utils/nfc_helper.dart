@@ -10,7 +10,9 @@ class NFCHelper {
   }) async {
     if (cubit.isClosed) return;
     if (enable) {
-      if (!cubit.state.isNFCEnabled) cubit.toggleNFC();
+      if (!cubit.state.isNFCEnabled) {
+        cubit.toggleNFC();
+      }
       if (!cubit.state.isProcessing) {
         try {
           await cubit.startSession(card: card);

@@ -12,3 +12,14 @@ class SyncCardsUseCase {
     return cardModels.map((model) => CardMapper.toEntity(model)).toList();
   }
 }
+
+class FetchCardByIdUseCase {
+  final CardRepository repository;
+
+  FetchCardByIdUseCase(this.repository);
+
+  Future<CardEntity> call(String game, String id) async {
+    final cardModel = await repository.fetchCardById(game, id);
+    return CardMapper.toEntity(cardModel);
+  }
+}

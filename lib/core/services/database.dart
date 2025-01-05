@@ -11,14 +11,12 @@ class DatabaseService {
 
   static Database? _database;
 
-  /// Getter to return the database instance, initializing it if necessary
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
 
-  /// Initialize the database
   Future<Database> _initDatabase() async {
     try {
       final dbPath = await getDatabasesPath();
