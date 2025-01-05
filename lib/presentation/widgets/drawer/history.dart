@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/domain/entities/tag.dart';
 import '../label/card.dart';
 
 class HistoryDrawerWidget extends StatelessWidget {
-  final List<Map<TagEntity, CardEntity>> savedTags;
+  final List<CardEntity> savedTags;
 
   const HistoryDrawerWidget({
     Key? key,
@@ -31,8 +30,7 @@ class HistoryDrawerWidget extends StatelessWidget {
       child: ListView.builder(
         itemCount: reversedTags.length,
         itemBuilder: (context, index) {
-          final tagAndCard = reversedTags[index];
-          final card = tagAndCard.values.first;
+          final card = reversedTags[index];
           return CardLabelWidget(
             card: card,
             lightTheme: true,

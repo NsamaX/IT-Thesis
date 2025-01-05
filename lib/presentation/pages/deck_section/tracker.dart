@@ -189,14 +189,14 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget _buildHistoryDrawer(BuildContext context) {
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
-      builder: (context, state) {
+      builder: (context, drawerState) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 200),
           top: 0,
-          left: state['history']! ? 0 : -200,
-          child: BlocBuilder<ScanHistoryCubit, ScanHistoryState>(
-            builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(savedTags: []);
+          left: drawerState['history']! ? 0 : -200,
+          child: BlocBuilder<TrackCubit, TrackState>(
+            builder: (context, trackState) {
+              return HistoryDrawerWidget(savedTags: trackState.history);
             },
           ),
         );

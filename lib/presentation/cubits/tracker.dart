@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/data.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
@@ -7,12 +8,14 @@ import 'package:nfc_project/domain/entities/tag.dart';
 class TrackState {
   final DeckEntity deck;
   final RecordEntity record;
+  final List<CardEntity> history;
   final bool isDialogShown;
   final bool isProcessing;
 
   TrackState({
     required this.deck,
     required this.record,
+    this.history = const [],
     this.isDialogShown = false,
     this.isProcessing = false,
   });
@@ -20,12 +23,14 @@ class TrackState {
   TrackState copyWith({
     DeckEntity? deck,
     RecordEntity? record,
+    List<CardEntity>? history,
     bool? isDialogShown,
     bool? isProcessing,
   }) {
     return TrackState(
       deck: deck ?? this.deck,
       record: record ?? this.record,
+      history: history ?? this.history,
       isDialogShown: isDialogShown ?? this.isDialogShown,
       isProcessing: isProcessing ?? this.isProcessing,
     );
@@ -41,6 +46,7 @@ class TrackCubit extends Cubit<TrackState> {
             createdAt: DateTime.now(),
             data: [],
           ),
+          history: [],
         )) {
     }
 
@@ -68,6 +74,11 @@ class TrackCubit extends Cubit<TrackState> {
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
     emit(state.copyWith(isProcessing: true));
+    final matchingCard = state.deck.cards.keys.firstWhere(
+      (card) => card.cardId == tag.cardId,
+      orElse: () => throw Exception("Card not found in deck"),
+    );
+    final updatedHistory = List<CardEntity>.from(state.history)..add(matchingCard);
     final existingData = state.record.data.lastWhere(
       (data) => data.tagId == tag.tagId,
       orElse: () => DataEntity(
@@ -84,7 +95,10 @@ class TrackCubit extends Cubit<TrackState> {
       _updateCardCount(tag, Action.draw, "out", -1);
     }
     _moveCardToTop(tag);
-    emit(state.copyWith(isProcessing: false));
+    emit(state.copyWith(
+      isProcessing: false,
+      history: updatedHistory,
+    ));
   }
 
   void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
