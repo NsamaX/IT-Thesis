@@ -11,7 +11,9 @@
     "card": "Card Info",
     "custom": "Custom",
     "settings": "Settings",
-    "library": "Library"
+    "library": "Library",
+    "about": "About",
+    "privacy": "Privacy"
   },
   "toggle": {
     "add": "Add",

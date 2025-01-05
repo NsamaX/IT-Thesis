@@ -63,12 +63,12 @@ class SettingsPage extends StatelessWidget {
         {
           'icon': Icons.auto_stories_rounded,
           'text': locale.translate('settings.general.about'),
-          'onTap': () {},
+          'onTap': AppRoutes.about,
         },
         {
           'icon': Icons.privacy_tip_rounded,
           'text': locale.translate('settings.general.privacy'),
-          'onTap': () {},
+          'onTap': AppRoutes.privacy,
         },
         {
           'icon': Icons.logout_rounded,
