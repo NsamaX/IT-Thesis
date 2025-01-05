@@ -1,7 +1,6 @@
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/presentation/cubits/NFC.dart';
 
-/// ตัวช่วยสำหรับจัดการการเปิด/ปิด NFC ผ่าน NFCCubit
 class NFCHelper {
   static Future<void> handleToggleNFC(
     NFCCubit cubit, {

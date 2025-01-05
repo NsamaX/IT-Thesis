@@ -4,32 +4,16 @@ import '../datasources/remote/game_factory.dart';
 import '../models/card.dart';
 
 abstract class CardRepository {
-  /// ซิงค์ข้อมูลการ์ดระหว่าง Local Data Source และ Remote API
-  Future<CardModel> fetchCardById(int id);
   Future<List<CardModel>> syncCards(String game);
+  Future<CardModel> fetchCardById(int id);
 }
 
-/// การใช้งานจริงของ CardRepository
-/// - ใช้สำหรับจัดการการดึงและบันทึกข้อมูลการ์ด
 class CardRepositoryImpl implements CardRepository {
-  /// API ของเกม
   final GameApi gameApi;
-
-  /// Local Data Source สำหรับการ์ด
   final CardLocalDataSource cardLocalDataSource;
 
-  /// สร้างออบเจ็กต์ CardRepositoryImpl ด้วย GameApi และ CardLocalDataSource
   CardRepositoryImpl({required this.gameApi, required this.cardLocalDataSource});
 
-  //--------------------------- ดึงข้อมูลการ์ดโดย ID ---------------------------//
-  /// ดึงข้อมูลการ์ดจาก Remote API โดยระบุ ID
-  @override
-  Future<CardModel> fetchCardById(int id) async {
-    return await gameApi.fetchCardsById(id);
-  }
-
-  //------------------------------- ซิงค์ข้อมูลการ์ด ------------------------------//
-  /// ซิงค์ข้อมูลการ์ดระหว่าง Local Data Source และ Remote API
   @override
   Future<List<CardModel>> syncCards(String game) async {
     final stopwatch = Stopwatch()..start();
@@ -44,8 +28,6 @@ class CardRepositoryImpl implements CardRepository {
     return updatedCards;
   }
 
-  //---------------------------- ดึงหน้าสุดท้ายจาก API ---------------------------//
-  /// ดึงหมายเลขหน้าสุดท้ายของข้อมูลการ์ดจาก Remote API
   Future<int> _getLastPageFromApi(int startPage) async {
     const int batchSize = 30;
     int currentPage = startPage;
@@ -64,7 +46,6 @@ class CardRepositoryImpl implements CardRepository {
     }
   }
 
-  /// ดึงข้อมูลการ์ดจาก Remote API พร้อมระบุหมายเลขหน้า
   Future<Map<int, List<CardModel>>> _fetchCardsPageWithPageNumber(int page) async {
     try {
       final cards = await gameApi.fetchCardsPage(page);
@@ -74,8 +55,6 @@ class CardRepositoryImpl implements CardRepository {
     }
   }
 
-  //---------------------------- ซิงค์ข้อมูลแบบคู่ขนาน ----------------------------//
-  /// ดึงและบันทึกข้อมูลการ์ดแบบคู่ขนานระหว่าง Local และ Remote
   Future<List<CardModel>> _parallelLoadAndSaveCards(String game, int startPage, int endPage) async {
     const int maxConcurrentRequests = 50;
     final List<Future<void>> futures = [];
@@ -89,7 +68,6 @@ class CardRepositoryImpl implements CardRepository {
     return cardLocalDataSource.fetchCards(game);
   }
 
-  /// ดึงข้อมูลจาก Remote API และบันทึกลง Local
   Future<void> _loadPageAndSave(String game, int page) async {
     if (await cardLocalDataSource.isPageExists(game, page)) return;
     const int maxRetries = 3;
@@ -108,5 +86,10 @@ class CardRepositoryImpl implements CardRepository {
         }
       }
     }
+  }
+
+  @override
+  Future<CardModel> fetchCardById(int id) async {
+    return await gameApi.fetchCardsById(id);
   }
 }

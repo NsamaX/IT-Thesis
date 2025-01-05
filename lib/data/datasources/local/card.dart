@@ -3,19 +3,10 @@ import 'package:nfc_project/core/services/sqlite.dart';
 import '../../models/card.dart';
 
 abstract class CardLocalDataSource {
-  /// ดึงรายการการ์ดทั้งหมดสำหรับเกมที่ระบุ
   Future<List<CardModel>> fetchCards(String game);
-
-  /// ดึงหน้าสุดท้ายที่บันทึกไว้ของเกมที่ระบุ
   Future<int> fetchLastPage(String game);
-
-  /// ตรวจสอบว่าหน้าของเกมที่ระบุมีอยู่หรือไม่
   Future<bool> isPageExists(String game, int page);
-
-  /// บันทึกรายการการ์ดสำหรับเกมและหน้าที่ระบุ
   Future<void> saveCards(String game, int page, List<CardModel> cards);
-
-  /// ลบการ์ดทั้งหมดที่เกี่ยวข้องกับเกมที่ระบุ
   Future<void> clearCards(String game);
 }
 
@@ -23,6 +14,12 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   final SQLiteService _sqliteService;
 
   CardLocalDataSourceImpl(this._sqliteService);
+
+  @override
+  Future<List<CardModel>> fetchCards(String game) async {
+    final result = await _sqliteService.query('cards', where: 'game = ?', whereArgs: [game]);
+    return _parseCards(result);
+  }
 
   List<CardModel> _parseCards(List<Map<String, dynamic>> rows) {
     return rows.map((row) {
@@ -49,12 +46,6 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   }
 
   @override
-  Future<List<CardModel>> fetchCards(String game) async {
-    final result = await _sqliteService.query('cards', where: 'game = ?', whereArgs: [game]);
-    return _parseCards(result);
-  }
-
-  @override
   Future<int> fetchLastPage(String game) async {
     final result = await _sqliteService.query('pages', where: 'game = ?', whereArgs: [game]);
     final pageData = result.firstWhere(
@@ -64,6 +55,7 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     return pageData['page'] ?? 0;
   }
 
+  @override
   Future<bool> isPageExists(String game, int page) async {
     final db = await _sqliteService.getDatabase();
     final result = await db.rawQuery(
@@ -71,15 +63,6 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
       [game, page],
     );
     return result.first.values.first == 1;
-  }
-
-  Future<void> _savePageIfNotExists(String game, int page) async {
-    if (!await isPageExists(game, page)) {
-      await _sqliteService.insert('pages', {
-        'game': game,
-        'page': page,
-      });
-    }
   }
 
   @override
@@ -98,6 +81,16 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     ]);
   }
 
+  Future<void> _savePageIfNotExists(String game, int page) async {
+    if (!await isPageExists(game, page)) {
+      await _sqliteService.insert('pages', {
+        'game': game,
+        'page': page,
+      });
+    }
+  }
+
+  @override
   Future<void> clearCards(String game) async {
     final db = await _sqliteService.getDatabase();
     await db.transaction((txn) async {
