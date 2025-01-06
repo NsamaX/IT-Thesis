@@ -122,7 +122,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            Icons.ios_share_rounded: () => null, // _toggleShare(context, cubit, locale),
+            Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
             state.deck.deckName: null,
             Icons.play_arrow_rounded: AppRoutes.tracker,
             locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
@@ -163,10 +163,10 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
 
   void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
-    // showSnackBar(
-    //   context: context,
-    //   content: locale.translate('snack_bar.deck.share'),
-    // );
+    showSnackBar(
+      context: context,
+      content: locale.translate('snack_bar.deck.share'),
+    );
   }
 
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {

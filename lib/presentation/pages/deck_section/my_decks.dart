@@ -32,7 +32,7 @@ class MyDecksPage extends StatelessWidget {
     return {
       Icons.open_in_new_rounded: () => _createNewDeck(context, cubit, locale),
       locale.translate('title.my_decks'): null,
-      state.allDecks.isNotEmpty ? Icons.edit_rounded : null: null, // cubit.toggleEditMode,
+      state.allDecks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
 

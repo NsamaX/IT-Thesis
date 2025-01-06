@@ -47,8 +47,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
-        BlocProvider(
-            create: (context) => locator<ScanCubit>(param1: 'vanguard')),
+        BlocProvider(create: (context) => locator<ScanCubit>(param1: 'vanguard')),
       ],
       child: Builder(
         builder: (context) {
@@ -83,21 +82,17 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
     );
   }
 
-  Map<dynamic, dynamic> _buildAppBarMenu(
-      BuildContext context, AppLocalizations locale) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     return {
-      Icons.history_rounded: () =>
-          context.read<DrawerCubit>().toggleDrawer('history'),
+      Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
       locale.translate('title.scan'): null,
-      Icons.search_rounded: () =>
-          context.read<DrawerCubit>().toggleDrawer('feature'),
+      Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
     };
   }
 
   Widget _buildHistoryDrawer(BuildContext context) {
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) =>
-          previous['history'] != current['history'],
+      buildWhen: (previous, current) => previous['history'] != current['history'],
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 200),
