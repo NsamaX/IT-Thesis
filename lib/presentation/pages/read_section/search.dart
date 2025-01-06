@@ -18,11 +18,9 @@ class SearchPage extends StatelessWidget {
     final arguments = _getArguments(context);
     final syncCardsUseCase = GetIt.instance<SyncCardsUseCase>(param1: arguments['game']);
 
-    // Use BlocProvider to scope the SearchCubit to this page
     return BlocProvider<SearchCubit>(
       create: (_) => SearchCubit(syncCardsUseCase)..syncCards(arguments['game']),
       child: Builder(
-        // Use Builder to ensure the correct context for reading the Bloc
         builder: (context) {
           return Scaffold(
             appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
@@ -76,7 +74,7 @@ class SearchPage extends StatelessWidget {
             child: Center(
               child: Text(state.errorMessage!.isNotEmpty
                   ? state.errorMessage!
-                  : AppLocalizations.of(context).translate('search.error')),
+                  : AppLocalizations.of(context).translate('text.internet_error')),
             ),
           );
         } else {
@@ -90,7 +88,7 @@ class SearchPage extends StatelessWidget {
     if (cards.isEmpty) {
       return Expanded(
         child: Center(
-          child: Text(AppLocalizations.of(context).translate('search.no_results')),
+          child: Text(AppLocalizations.of(context).translate('text.no_results')),
         ),
       );
     }

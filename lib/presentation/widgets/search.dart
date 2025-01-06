@@ -64,7 +64,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                     hintStyle: const TextStyle(fontSize: 16, color: Colors.grey),
                     contentPadding: const EdgeInsets.only(bottom: 10),
                   ),
-                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
+                  style: theme.textTheme.bodyMedium,
                 ),
               ),
             ),
