@@ -1,5 +1,4 @@
 # Feature
-    [] Scan card
     [] Custom card
     [] Sign in
     [] Filter card
@@ -12,3 +11,7 @@
 # widget
     [] Add by count
     [] Animations
+
+# structure
+    [] cleanup code
+    [] refactor code

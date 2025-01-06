@@ -25,20 +25,9 @@ Future<void> setupLocator() async {
   //---------------------------- Local DataSource ----------------------------//
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
+
+  //----------------------------- Repositories -------------------------------//
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
-  locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
-  locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
-  locator.registerLazySingleton(() => SettingsCubit(
-        loadSetting: locator<LoadSettingUseCase>(),
-        saveSetting: locator<SaveSettingUseCase>(),
-      ));
-
-  //-------------------------------- App State -------------------------------//
-  locator.registerLazySingleton(() => AppStateCubit());
-  locator.registerLazySingleton(() => NFCCubit());
-  locator.registerLazySingleton(() => ScanHistoryCubit());
-
-  //----------------------------------- API ----------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) {
     return GameFactory.createApi(game);
   });
@@ -47,9 +36,29 @@ Future<void> setupLocator() async {
     final cardLocalDataSource = locator<CardLocalDataSource>();
     return CardRepositoryImpl(gameApi: gameApi, cardLocalDataSource: cardLocalDataSource);
   });
+
+  //------------------------------- Use Cases --------------------------------//
+  locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
+  locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) {
     final cardRepository = locator<CardRepository>(param1: game);
     return SyncCardsUseCase(cardRepository);
+  });
+  locator.registerFactoryParam<FetchCardByIdUseCase, String, void>((game, _) {
+    final cardRepository = locator<CardRepository>(param1: game);
+    return FetchCardByIdUseCase(cardRepository);
+  });
+
+  //-------------------------------- Cubits ----------------------------------//
+  locator.registerLazySingleton(() => SettingsCubit(
+        loadSetting: locator<LoadSettingUseCase>(),
+        saveSetting: locator<SaveSettingUseCase>(),
+      ));
+  locator.registerLazySingleton(() => AppStateCubit());
+  locator.registerLazySingleton(() => NFCCubit());
+  locator.registerFactoryParam<ScanCubit, String, void>((game, _) {
+    final fetchCardByIdUseCase = locator<FetchCardByIdUseCase>(param1: game);
+    return ScanCubit(fetchCardByIdUseCase: fetchCardByIdUseCase);
   });
 
   //---------------------------------- Decks ---------------------------------//

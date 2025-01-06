@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
-import 'package:get_it/get_it.dart';
 import '../../cubits/drawer.dart';
 import '../../cubits/NFC.dart';
-import '../../cubits/scan_history.dart';
+import '../../cubits/scan.dart';
 import '../../widgets/drawer/features.dart';
 import '../../widgets/drawer/history.dart';
 import '../../widgets/navigation_bar/app.dart';
@@ -47,49 +47,66 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
-        BlocProvider.value(value: GetIt.I<ScanHistoryCubit>()),
+        BlocProvider(
+            create: (context) => locator<ScanCubit>(param1: 'vanguard')),
       ],
       child: Builder(
         builder: (context) {
-          return Scaffold(
-            appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
-            body: GestureDetector(
-              onTap: () => context.read<DrawerCubit>().closeDrawer(),
-              behavior: HitTestBehavior.opaque,
-              child: Stack(
-                children: [
-                  const Center(child: NFCWidget()),
-                  _buildHistoryDrawer(context),
-                  _buildFeaturesDrawer(context),
-                ],
+          return BlocListener<NFCCubit, NFCState>(
+            listener: (context, nfcState) {
+              if (nfcState.lastReadTag != null) {
+                context.read<ScanCubit>().fetchCardById(nfcState.lastReadTag!);
+              }
+            },
+            child: Scaffold(
+              appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
+              body: GestureDetector(
+                onTap: () => context.read<DrawerCubit>().closeDrawer(),
+                behavior: HitTestBehavior.opaque,
+                child: BlocBuilder<ScanCubit, ScanCubitState>(
+                  builder: (context, scanState) {
+                    return Stack(
+                      children: [
+                        const Center(child: NFCWidget()),
+                        _buildHistoryDrawer(context),
+                        _buildFeaturesDrawer(context),
+                      ],
+                    );
+                  },
+                ),
               ),
+              bottomNavigationBar: const BottomNavigationBarWidget(),
             ),
-            bottomNavigationBar: const BottomNavigationBarWidget(),
           );
         },
       ),
     );
   }
 
-  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
+  Map<dynamic, dynamic> _buildAppBarMenu(
+      BuildContext context, AppLocalizations locale) {
     return {
-      Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+      Icons.history_rounded: () =>
+          context.read<DrawerCubit>().toggleDrawer('history'),
       locale.translate('title.scan'): null,
-      Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
+      Icons.search_rounded: () =>
+          context.read<DrawerCubit>().toggleDrawer('feature'),
     };
   }
 
   Widget _buildHistoryDrawer(BuildContext context) {
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) => previous['history'] != current['history'],
+      buildWhen: (previous, current) =>
+          previous['history'] != current['history'],
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 200),
           top: 0,
           left: state['history']! ? 0 : -200,
-          child: BlocBuilder<ScanHistoryCubit, ScanHistoryState>(
+          child: BlocBuilder<ScanCubit, ScanCubitState>(
             builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(savedTags: []);
+              return HistoryDrawerWidget(
+                  savedTags: scanHistoryState.cards ?? []);
             },
           ),
         );
@@ -99,7 +116,8 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
 
   Widget _buildFeaturesDrawer(BuildContext context) {
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) => previous['feature'] != current['feature'],
+      buildWhen: (previous, current) =>
+          previous['feature'] != current['feature'],
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 200),
