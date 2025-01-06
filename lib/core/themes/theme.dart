@@ -12,6 +12,17 @@ ThemeData themeData() {
     scaffoldBackgroundColor: AppColors.DarkModeBackground_lv2,
     primaryColor: AppColors.DarkModeBackground_lv1,
     secondaryHeaderColor: AppColors.PrimaryColor,
+    colorScheme: ColorScheme(
+      brightness: Brightness.light,
+      primary: AppColors.PrimaryColor,
+      onPrimary: AppColors.LightModeBackground_lv1,
+      secondary: AppColors.SecondaryColor,
+      onSecondary: AppColors.DarkModeBackground_lv1,
+      surface: AppColors.DarkModeBackground_lv2,
+      onSurface: AppColors.LightModeBackground_lv1,
+      error: Colors.red.shade400,
+      onError: Colors.white,
+    ),
     iconTheme: AppIconThemes.defaultIcon,
     textTheme: TextTheme(
       titleLarge: AppTextStyles.titleLarge,

@@ -9,7 +9,7 @@ Future<void> showSnackBar({
 }) async {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(content),
+      content: Text(content, style: const TextStyle(color: Colors.white)),
       duration: const Duration(seconds: 1),
       backgroundColor: isError ?? false 
           ? CupertinoColors.systemRed

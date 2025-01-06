@@ -50,17 +50,29 @@ class CardImageWidget extends StatelessWidget {
   }
 
   Widget _buildImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: AspectRatio(
-        aspectRatio: 3 / 4,
-        child: card?.imageUrl != null
-            ? Image.network(
-                card!.imageUrl!,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => _buildErrorImage(locale, theme),
-              )
-            : _buildErrorImage(locale, theme),
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            offset: const Offset(3, 4),
+            blurRadius: 12,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: AspectRatio(
+          aspectRatio: 3 / 4,
+          child: card?.imageUrl != null
+              ? Image.network(
+                  card!.imageUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => _buildErrorImage(locale, theme),
+                )
+              : _buildErrorImage(locale, theme),
+        ),
       ),
     );
   }
@@ -75,7 +87,7 @@ class CardImageWidget extends StatelessWidget {
             const Icon(Icons.image_not_supported, size: 36),
             const SizedBox(height: 8),
             Text(
-              locale.translate('card.no_card_image'),
+              locale.translate('text.no_card_image'),
               style: theme.textTheme.titleSmall,
             ),
           ],

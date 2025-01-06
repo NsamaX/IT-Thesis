@@ -72,7 +72,7 @@ class CardLabelWidget extends StatelessWidget {
       width: 42,
       height: 42,
       decoration: BoxDecoration(
-        color: lightTheme ? theme.appBarTheme.backgroundColor : Colors.white,
+        color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: card?.imageUrl != null

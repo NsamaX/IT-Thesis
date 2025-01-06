@@ -21,7 +21,7 @@ class CardInfoWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          locale.translate('text.description'),
+          card?.name ?? locale.translate('text.description'),
           style: theme.textTheme.titleSmall,
         ),
         const SizedBox(height: 8),

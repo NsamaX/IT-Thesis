@@ -15,11 +15,13 @@ Widget buildEditControls(
     child: Column(
       children: [
         _buildCount(theme, count ?? 0),
+        SizedBox(height: 6),
         _buildButton(
           theme,
           Icons.add,
           () => context.read<DeckManagerCubit>().addCard(card),
         ),
+        SizedBox(height: 6),
         _buildButton(
           theme,
           Icons.remove,
@@ -35,7 +37,7 @@ Widget _buildCount(ThemeData theme, int count) {
     width: 24,
     height: 24,
     decoration: BoxDecoration(
-      color: theme.scaffoldBackgroundColor,
+      color: theme.appBarTheme.backgroundColor,
       shape: BoxShape.circle,
     ),
     child: Center(
@@ -58,7 +60,7 @@ Widget _buildButton(ThemeData theme, IconData icon, VoidCallback onPressed) {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor, shape: BoxShape.circle),
+            color: theme.appBarTheme.backgroundColor, shape: BoxShape.circle),
         child: Icon(
           icon,
           size: 16,
