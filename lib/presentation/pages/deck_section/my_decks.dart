@@ -10,7 +10,19 @@ import '../../widgets/card/grid.dart';
 import '../../widgets/navigation_bar/app.dart';
 import '../../widgets/navigation_bar/bottom.dart';
 
-class MyDecksPage extends StatelessWidget {
+class MyDecksPage extends StatefulWidget {
+  @override
+  State<MyDecksPage> createState() => _MyDecksPageState();
+}
+
+class _MyDecksPageState extends State<MyDecksPage> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<DeckManagerCubit>();
+    if(cubit.state.isEditMode) cubit.toggleEditMode();
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);

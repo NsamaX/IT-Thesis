@@ -49,8 +49,4 @@ class ScanCubit extends Cubit<ScanCubitState> {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
-
-  void resetCards() {
-    emit(state.copyWith(cards: [], currentGame: null, error: null));
-  }
 }

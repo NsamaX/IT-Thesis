@@ -52,10 +52,9 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
       child: Builder(
         builder: (context) {
           return BlocListener<NFCCubit, NFCState>(
+            listenWhen: (previous, current) => previous.lastReadTag != current.lastReadTag && current.lastReadTag != null,
             listener: (context, nfcState) {
-              if (nfcState.lastReadTag != null) {
-                context.read<ScanCubit>().fetchCardById(nfcState.lastReadTag!);
-              }
+              context.read<ScanCubit>().fetchCardById(nfcState.lastReadTag!);
             },
             child: Scaffold(
               appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
