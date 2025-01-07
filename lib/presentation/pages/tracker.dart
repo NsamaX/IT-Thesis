@@ -4,14 +4,14 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
-import '../../cubits/deck_manager.dart';
-import '../../cubits/drawer.dart';
-import '../../cubits/NFC.dart';
-import '../../cubits/tracker.dart';
-import '../../widgets/dialog.dart';
-import '../../widgets/drawer/history.dart';
-import '../../widgets/label/card.dart';
-import '../../widgets/navigation_bar/app.dart';
+import '../cubits/deck_manager.dart';
+import '../cubits/drawer.dart';
+import '../cubits/NFC.dart';
+import '../cubits/tracker.dart';
+import '../widgets/dialog.dart';
+import '../widgets/drawer/history.dart';
+import '../widgets/label/card.dart';
+import '../widgets/navigation_bar/app.dart';
 
 class TrackerPage extends StatefulWidget {
   @override

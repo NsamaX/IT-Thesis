@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/core/constants/api_config.dart';
 import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import '../../widgets/label/supported_game.dart';
-import '../../widgets/navigation_bar/app.dart';
+import '../widgets/label/supported_game.dart';
+import '../widgets/navigation_bar/app.dart';
 
 class GamesPage extends StatelessWidget {
   @override

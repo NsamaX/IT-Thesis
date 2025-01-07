@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
-import '../../cubits/drawer.dart';
-import '../../cubits/NFC.dart';
-import '../../cubits/scan.dart';
-import '../../widgets/drawer/features.dart';
-import '../../widgets/drawer/history.dart';
-import '../../widgets/navigation_bar/app.dart';
-import '../../widgets/navigation_bar/bottom.dart';
-import '../../widgets/nfc.dart';
+import '../cubits/drawer.dart';
+import '../cubits/NFC.dart';
+import '../cubits/scan.dart';
+import '../widgets/drawer/features.dart';
+import '../widgets/drawer/history.dart';
+import '../widgets/navigation_bar/app.dart';
+import '../widgets/navigation_bar/bottom.dart';
+import '../widgets/nfc.dart';
 
 class ReaderPage extends StatefulWidget {
   @override

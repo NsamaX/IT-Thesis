@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
-import '../../cubits/settings.dart';
-import '../../widgets/label/settings.dart';
-import '../../widgets/navigation_bar/app.dart';
-import '../../widgets/navigation_bar/bottom.dart';
+import '../cubits/settings.dart';
+import '../widgets/label/settings.dart';
+import '../widgets/navigation_bar/app.dart';
+import '../widgets/navigation_bar/bottom.dart';
 
 class SettingsPage extends StatelessWidget {
   @override

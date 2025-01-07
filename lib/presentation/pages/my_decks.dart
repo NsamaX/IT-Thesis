@@ -4,11 +4,11 @@ import 'package:uuid/uuid.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
-import '../../cubits/deck_manager.dart';
-import '../../cubits/NFC.dart';
-import '../../widgets/card/grid.dart';
-import '../../widgets/navigation_bar/app.dart';
-import '../../widgets/navigation_bar/bottom.dart';
+import '../cubits/deck_manager.dart';
+import '../cubits/NFC.dart';
+import '../widgets/card/grid.dart';
+import '../widgets/navigation_bar/app.dart';
+import '../widgets/navigation_bar/bottom.dart';
 
 class MyDecksPage extends StatefulWidget {
   @override

@@ -1,4 +1,13 @@
-export 'deck_section/@export.dart';
-export 'read_section/@export.dart';
-export 'settings_section/@export.dart';
-export 'sign_in_section/@export.dart';
+export 'about.dart';
+export 'card.dart';
+export 'games.dart';
+export 'index.dart';
+export 'library.dart';
+export 'my_decks.dart';
+export 'new_deck.dart';
+export 'privacy.dart';
+export 'scan.dart';
+export 'search.dart';
+export 'settings.dart';
+export 'sign_in.dart';
+export 'tracker.dart';

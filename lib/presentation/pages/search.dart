@@ -4,10 +4,10 @@ import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
-import '../../cubits/search.dart';
-import '../../widgets/label/card.dart';
-import '../../widgets/navigation_bar/app.dart';
-import '../../widgets/search.dart';
+import '../cubits/search.dart';
+import '../widgets/label/card.dart';
+import '../widgets/navigation_bar/app.dart';
+import '../widgets/search.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key? key}) : super(key: key);
