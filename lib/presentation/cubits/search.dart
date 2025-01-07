@@ -35,24 +35,32 @@ class SearchCubit extends Cubit<SearchState> {
 
   SearchCubit(this.syncCardsUseCase) : super(SearchState());
 
+  void safeEmit(SearchState newState) {
+    if (!isClosed) emit(newState);
+  }
+
   Future<void> syncCards(String game) async {
-    if (state.isLoading) return;
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    if (state.isLoading || isClosed) return;
+    safeEmit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final syncedCards = await syncCardsUseCase(game);
-      emit(state.copyWith(allCards: syncedCards, cards: syncedCards, isLoading: false));
+      safeEmit(state.copyWith(allCards: syncedCards, cards: syncedCards, isLoading: false));
     } catch (e) {
-      emit(state.copyWith(errorMessage: 'Failed to sync cards: $e', isLoading: false));
+      safeEmit(state.copyWith(errorMessage: 'Failed to sync cards: $e', isLoading: false));
     }
   }
 
   void searchCards(String query) {
-    emit(state.copyWith(
+    if (isClosed) return;
+    safeEmit(state.copyWith(
       cards: state.allCards
           .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
           .toList(),
     ));
   }
 
-  void clearSearch() => emit(state.copyWith(cards: state.allCards));
+  void clearSearch() {
+    if (isClosed) return;
+    safeEmit(state.copyWith(cards: state.allCards));
+  }
 }

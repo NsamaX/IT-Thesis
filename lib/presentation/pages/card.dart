@@ -20,6 +20,7 @@ class CardPage extends StatefulWidget {
 class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
+  late TextEditingController _deckNameController;
 
   @override
   void initState() {
@@ -30,19 +31,26 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = AppLocalizations.of(context);
+    _deckNameController = TextEditingController(text: locale.translate('text.card_name'));
+  }
+
+  @override
   void dispose() {
     _nfcSessionHandler.disposeNFCSessionHandler();
+    _deckNameController.dispose();
     super.dispose();
   }
 
-  Map<dynamic, dynamic> _buildAppBarMenu(
-    BuildContext context,
-    AppLocalizations locale,
-    CardEntity? card,
-    bool isAdd,
-    bool isCustom,
-    TextEditingController deckNameController,
-  ) {
+  Map<dynamic, dynamic> _buildAppBarMenu({
+    required BuildContext context,
+    required AppLocalizations locale,
+    required CardEntity? card,
+    required bool isAdd,
+    required bool isCustom,
+  }) {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
@@ -51,7 +59,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       Icons.arrow_back_ios_new_rounded: '/back',
       isCustom
           ? TextField(
-              controller: deckNameController,
+              controller: _deckNameController,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
@@ -59,16 +67,15 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
                 hintText: locale.translate('text.card_name'),
               ),
               onSubmitted: (value) {
-                final newName = value.trim().isNotEmpty
+                _deckNameController.text = value.trim().isNotEmpty
                     ? value.trim()
                     : locale.translate('text.card_name');
-                deckNameController.text = newName;
               },
             )
           : locale.translate('title.card'): null,
       if (isAdd)
         locale.translate('toggle.add'): () {
-          context.read<DeckManagerCubit>().addCard(card!, deckManagerCubit.state.quantity);
+          deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
           Navigator.of(context).pop();
           showSnackBar(
             context: context,
@@ -95,23 +102,19 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-    final deckNameController = TextEditingController(text: locale.translate('text.card_name'));
 
     return Scaffold(
       appBar: AppBarWidget(
         menu: _buildAppBarMenu(
-          context,
-          locale,
-          card,
-          isAdd,
-          isCustom,
-          deckNameController,
+          context: context,
+          locale: locale,
+          card: card,
+          isAdd: isAdd,
+          isCustom: isCustom,
         ),
       ),
       body: BlocBuilder<DeckManagerCubit, DeckManagerState>(
         builder: (context, state) {
-          final deckManagerCubit = context.read<DeckManagerCubit>();
-
           return ListView(
             padding: const EdgeInsets.all(40),
             children: [
@@ -123,7 +126,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
                 QuantityWidget(
                   quantityCount: 4,
                   selectedQuantity: state.quantity,
-                  onSelected: (quantity) => deckManagerCubit.setQuantity(quantity),
+                  onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
                 ),
               ],
             ],

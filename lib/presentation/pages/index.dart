@@ -3,7 +3,5 @@ import '../widgets/sign_in/index.dart';
 
 class IndexPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return IndexWidget();
-  }
+  Widget build(BuildContext context) => IndexWidget();
 }
