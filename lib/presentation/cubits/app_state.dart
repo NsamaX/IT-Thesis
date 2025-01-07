@@ -25,16 +25,12 @@ class AppStateCubit extends Cubit<AppState> {
   AppStateCubit() : super(AppState(currentPageIndex: 0, selectedGame: 'vanguard'));
 
   String getRouteForIndex(int index) {
-    switch (index) {
-      case 0:
-        return AppRoutes.myDecks;
-      case 1:
-        return AppRoutes.scan;
-      case 2:
-        return AppRoutes.setting;
-      default:
-        return AppRoutes.index;
-    }
+    const routes = {
+      0: AppRoutes.myDecks,
+      1: AppRoutes.scan,
+      2: AppRoutes.setting,
+    };
+    return routes[index] ?? AppRoutes.index;
   }
 
   void updatePageIndex(int index) => emit(state.copyWith(currentPageIndex: index));

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -13,18 +12,22 @@ class DeckManagerState {
   final DeckEntity deck;
   final CardEntity? selectedCard;
   final int quantity;
-  final bool isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode;
+  final bool isShareEnabled;
+  final bool isEditMode;
+  final bool isNfcReadEnabled;
+  final bool isDeleteEnabled;
+  final bool isLoading;
 
   DeckManagerState({
     required this.allDecks,
     required this.deck,
     this.selectedCard,
     this.quantity = 1,
-    this.isLoading = false,
     this.isShareEnabled = false,
+    this.isEditMode = false,
     this.isNfcReadEnabled = false,
     this.isDeleteEnabled = false,
-    this.isEditMode = false,
+    this.isLoading = false,
   });
 
   DeckManagerState copyWith({
@@ -32,20 +35,22 @@ class DeckManagerState {
     DeckEntity? deck,
     CardEntity? selectedCard,
     int? quantity,
-    bool? isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode,
-  }) {
-    return DeckManagerState(
-      allDecks: allDecks ?? this.allDecks,
-      deck: deck ?? this.deck,
-      isLoading: isLoading ?? this.isLoading,
-      isShareEnabled: isShareEnabled ?? this.isShareEnabled,
-      isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
-      isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
-      isEditMode: isEditMode ?? this.isEditMode,
-      selectedCard: selectedCard ?? this.selectedCard,
-      quantity: quantity ?? this.quantity,
-    );
-  }
+    bool? isShareEnabled,
+    bool? isEditMode,
+    bool? isNfcReadEnabled,
+    bool? isDeleteEnabled,
+    bool? isLoading,
+  }) => DeckManagerState(
+    allDecks: allDecks ?? this.allDecks,
+    deck: deck ?? this.deck,
+    selectedCard: selectedCard ?? this.selectedCard,
+    quantity: quantity ?? this.quantity,
+    isShareEnabled: isShareEnabled ?? this.isShareEnabled,
+    isEditMode: isEditMode ?? this.isEditMode,
+    isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
+    isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
+    isLoading: isLoading ?? this.isLoading,
+  );
 }
 
 class DeckManagerCubit extends Cubit<DeckManagerState> {
@@ -61,126 +66,75 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     required this.saveDeckUseCase,
     required this.deleteDeckUseCase,
     required this.loadDecksUseCase,
-  }) : super(
-          DeckManagerState(
-            allDecks: [],
-            deck: DeckEntity(
-              deckId: Uuid().v4(),
-              deckName: 'Default Deck',
-              cards: {},
-            ),
-          ),
-        );
+  }) : super(DeckManagerState(
+    allDecks: [],
+    deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
+  ));
 
   void setDeck(DeckEntity deck) => emit(state.copyWith(deck: deck));
 
   void toggleShare() {
-    final deck = state.deck;
-    final StringBuffer clipboardContent = StringBuffer()
-      ..writeln('Deck Name: ${deck.deckName}')
-      ..writeln('Total Cards: ${deck.totalCards}')
-      ..writeln('\nCards:');
-    deck.cards.forEach((card, count) {
-      clipboardContent..writeln('- ${card.name} x$count');
-    });
-    Clipboard.setData(ClipboardData(text: clipboardContent.toString()));
+    Clipboard.setData(ClipboardData(
+      text: [
+        'Deck Name: ${state.deck.deckName}',
+        'Total Cards: ${state.deck.totalCards}',
+        ...state.deck.cards.entries.map((e) => '- [${e.value}] ${e.key.name}')
+      ].join('\n'),
+    ));
     emit(state.copyWith(isShareEnabled: true));
   }
 
-  void renameDeck(String newDeckName) {
-    final updatedDeck = state.deck.copyWith(deckName: newDeckName);
-    emit(state.copyWith(deck: updatedDeck));
-  }
+  void toggleEditMode() => emit(state.copyWith(
+    isEditMode: !state.isEditMode,
+    isNfcReadEnabled: false,
+  ));
 
   void toggleNfcRead(NFCCubit nfcCubit) {
-    final bool newState = !state.isNfcReadEnabled;
-    emit(state.copyWith(isNfcReadEnabled: newState));
-    if (!newState) {
-      NFCHelper.handleToggleNFC(
-        nfcCubit,
-        enable: false,
-        reason: 'NFC read disabled by user',
-      );
-    }
+    final enabled = !state.isNfcReadEnabled;
+    emit(state.copyWith(isNfcReadEnabled: enabled));
+    if (!enabled) NFCHelper.handleToggleNFC(nfcCubit, enable: false, reason: 'NFC disabled');
   }
 
-  void toggleSelectedCard(CardEntity card) {
-    emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
-  }
+  void toggleSelectedCard(CardEntity card) => emit(
+    state.copyWith(selectedCard: state.selectedCard == card ? null : card));
 
-  void writeSelectedCardToNFC(NFCCubit nfcCubit) async {
-    if (!state.isNfcReadEnabled) {
-      debugPrint('NFC read is disabled. Cannot write to NFC.');
-      return;
-    }
-    if (state.selectedCard == null) {
-      debugPrint('No card selected. Cannot write to NFC.');
-      return;
-    }
+  Future<void> writeSelectedCardToNFC(NFCCubit nfcCubit) async {
+    if (!state.isNfcReadEnabled || state.selectedCard == null) return;
     try {
       emit(state.copyWith(isLoading: true));
-      await NFCHelper.handleToggleNFC(
-        nfcCubit,
-        enable: true,
-        card: state.selectedCard!,
-        reason: 'Writing selected card to NFC',
-      );
-      emit(state.copyWith(isLoading: false));
-    } catch (e) {
-      debugPrint('Error writing card to NFC: $e');
+      await NFCHelper.handleToggleNFC(nfcCubit, enable: true, card: state.selectedCard!);
+    } finally {
       emit(state.copyWith(isLoading: false));
     }
   }
 
-  void toggleDelete() {
-    final clearedDeck = state.deck.copyWith(cards: {});
-    emit(state.copyWith(deck: clearedDeck));
-  }
+  void toggleDelete() => emit(
+    state.copyWith(deck: state.deck.copyWith(cards: {})));
 
-  void toggleEditMode() {
-    emit(state.copyWith(isEditMode: !state.isEditMode));
-    emit(state.copyWith(isNfcReadEnabled: false));
-  }
+  void renameDeck(String newDeckName) => emit(
+    state.copyWith(deck: state.deck.copyWith(deckName: newDeckName)));
 
-  void setQuantity(int quantity) {
-    emit(state.copyWith(quantity: quantity));
-  }
+  void setQuantity(int quantity) => emit(
+    state.copyWith(quantity: quantity));
 
-  void addCard(CardEntity card, int count) {
-    final updatedDeck = addCardUseCase(state.deck, card, count);
-    emit(state.copyWith(deck: updatedDeck));
-  }
+  void addCard(CardEntity card, int count) => emit(
+    state.copyWith(deck: addCardUseCase(state.deck, card, count)));
 
-  void removeCard(CardEntity card) {
-    final updatedDeck = removeCardUseCase(state.deck, card);
-    emit(state.copyWith(deck: updatedDeck));
-  }
-
-  Future<void> loadDecks() async {
-    final decks = await loadDecksUseCase.call();
-    final filteredDecks = decks.where((deck) => deck.cards.isNotEmpty).toList();
-    emit(state.copyWith(allDecks: filteredDecks));
-  }
+  void removeCard(CardEntity card) => emit(
+    state.copyWith(deck: removeCardUseCase(state.deck, card)));
 
   Future<void> saveDeck(NFCCubit nfcCubit) async {
     emit(state.copyWith(isLoading: true));
     try {
       await saveDeckUseCase(state.deck);
-      final updatedDecks = List<DeckEntity>.from(state.allDecks);
-      final existingIndex = updatedDecks.indexWhere((deck) => deck.deckId == state.deck.deckId);
-      if (existingIndex != -1) {
-        updatedDecks[existingIndex] = state.deck;
+      final updatedDecks = [...state.allDecks];
+      final index = updatedDecks.indexWhere((d) => d.deckId == state.deck.deckId);
+      if (index != -1) {
+        updatedDecks[index] = state.deck;
       } else {
         updatedDecks.add(state.deck);
       }
       emit(state.copyWith(allDecks: updatedDecks));
-      await NFCHelper.handleToggleNFC(
-        nfcCubit,
-        enable: false,
-        reason: 'Deck saved successfully',
-      );
-    } catch (e) {
-      debugPrint("Error saving deck: $e");
     } finally {
       emit(state.copyWith(isLoading: false));
     }
@@ -188,14 +142,17 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
 
   Future<void> deleteDeck(DeckEntity deckToDelete) async {
     await deleteDeckUseCase(deckToDelete.deckId);
-    final updatedDecks = state.allDecks
-        .where((deck) => deck.deckId != deckToDelete.deckId)
-        .toList();
+    final updatedDecks = state.allDecks.where((d) => d.deckId != deckToDelete.deckId).toList();
     emit(state.copyWith(
       allDecks: updatedDecks,
       deck: updatedDecks.isNotEmpty
           ? updatedDecks.first
           : DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
     ));
+  }
+
+  Future<void> loadDecks() async {
+    final decks = await loadDecksUseCase.call();
+    emit(state.copyWith(allDecks: decks.where((d) => d.cards.isNotEmpty).toList()));
   }
 }

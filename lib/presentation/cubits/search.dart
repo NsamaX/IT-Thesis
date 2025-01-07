@@ -3,27 +3,29 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class SearchState {
-  final List<CardEntity> allCards, cards;
-  final bool isLoading;
+  final List<CardEntity> allCards;
+  final List<CardEntity> cards;
   final String? errorMessage;
+  final bool isLoading;
 
   SearchState({
     this.allCards = const [],
     this.cards = const [],
-    this.isLoading = false,
     this.errorMessage,
+    this.isLoading = false,
   });
 
   SearchState copyWith({
-    List<CardEntity>? allCards, cards,
-    bool? isLoading,
+    List<CardEntity>? allCards,
+    List<CardEntity>? cards,
     String? errorMessage,
+    bool? isLoading,
   }) {
     return SearchState(
       allCards: allCards ?? this.allCards,
       cards: cards ?? this.cards,
+      errorMessage: errorMessage ?? this.errorMessage,
       isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage,
     );
   }
 }
@@ -37,25 +39,19 @@ class SearchCubit extends Cubit<SearchState> {
     if (state.isLoading) return;
     emit(state.copyWith(isLoading: true, errorMessage: null));
     try {
-      final syncedCards = await syncCardsUseCase.call(game);
-      emit(state.copyWith(
-        allCards: syncedCards,
-        cards: syncedCards,
-        isLoading: false,
-      ));
+      final syncedCards = await syncCardsUseCase(game);
+      emit(state.copyWith(allCards: syncedCards, cards: syncedCards, isLoading: false));
     } catch (e) {
-      emit(state.copyWith(
-        errorMessage: 'Failed to sync cards: $e',
-        isLoading: false,
-      ));
+      emit(state.copyWith(errorMessage: 'Failed to sync cards: $e', isLoading: false));
     }
   }
 
   void searchCards(String query) {
-    final filteredCards = state.allCards
-        .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    emit(state.copyWith(cards: filteredCards));
+    emit(state.copyWith(
+      cards: state.allCards
+          .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
+          .toList(),
+    ));
   }
 
   void clearSearch() => emit(state.copyWith(cards: state.allCards));

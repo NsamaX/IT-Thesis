@@ -5,26 +5,28 @@ import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class ScanCubitState {
   final List<CardEntity>? cards;
+  final String? currentGame;
+  final String? error;
   final bool isLoading;
-  final String? currentGame, error;
 
   ScanCubitState({
     this.cards,
-    this.isLoading = false,
     this.currentGame,
     this.error,
+    this.isLoading = false,
   });
 
   ScanCubitState copyWith({
     List<CardEntity>? cards,
+    String? currentGame,
+    String? error,
     bool? isLoading,
-    String? currentGame, error,
   }) {
     return ScanCubitState(
       cards: cards ?? this.cards,
-      isLoading: isLoading ?? this.isLoading,
       currentGame: currentGame ?? this.currentGame,
-      error: error,
+      error: error ?? this.error,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

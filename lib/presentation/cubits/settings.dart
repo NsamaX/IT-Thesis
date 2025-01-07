@@ -4,22 +4,24 @@ import 'package:nfc_project/domain/usecases/settings.dart';
 
 class SettingsState {
   final Locale locale;
-  final bool firstLoad, isDarkMode;
+  final bool isDarkMode;
+  final bool firstLoad;
 
   const SettingsState({
     required this.locale,
-    required this.firstLoad,
     required this.isDarkMode,
+    required this.firstLoad,
   });
 
   SettingsState copyWith({
     Locale? locale,
-    bool? firstLoad, isDarkMode,
+    bool? firstLoad,
+    bool? isDarkMode,
   }) {
     return SettingsState(
       locale: locale ?? this.locale,
-      firstLoad: firstLoad ?? this.firstLoad,
       isDarkMode: isDarkMode ?? this.isDarkMode,
+      firstLoad: firstLoad ?? this.firstLoad,
     );
   }
 }
@@ -31,7 +33,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     required this.saveSettingUsecase,
     required this.loadSettingUsecase,
-  }) : super(SettingsState(
+  }) : super(const SettingsState(
           locale: Locale('en'),
           isDarkMode: true,
           firstLoad: true,
@@ -40,10 +42,10 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> initialize() async {
     try {
       final localeCode = await loadSettingUsecase('locale') ?? 'en';
-      final firstLoad = await loadSettingUsecase('firstLoad') ?? true;
       final isDarkMode = await loadSettingUsecase('isDarkMode') ?? true;
+      final firstLoad = await loadSettingUsecase('firstLoad') ?? true;
 
-      emit(SettingsState(
+      emit(state.copyWith(
         locale: Locale(localeCode),
         firstLoad: firstLoad,
         isDarkMode: isDarkMode,
@@ -54,17 +56,33 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> updateLanguage(String languageCode) async {
-    await saveSettingUsecase('locale', languageCode);
-    emit(state.copyWith(locale: Locale(languageCode)));
+    await _updateSetting('locale', languageCode, (state) {
+      emit(state.copyWith(locale: Locale(languageCode)));
+    });
   }
 
   Future<void> updateTheme(bool isDarkMode) async {
-    await saveSettingUsecase('isDarkMode', isDarkMode);
-    emit(state.copyWith(isDarkMode: isDarkMode));
+    await _updateSetting('isDarkMode', isDarkMode, (state) {
+      emit(state.copyWith(isDarkMode: isDarkMode));
+    });
   }
 
   Future<void> updateFirstLoad(bool firstLoad) async {
-    await saveSettingUsecase('firstLoad', firstLoad);
-    emit(state.copyWith(firstLoad: firstLoad));
+    await _updateSetting('firstLoad', firstLoad, (state) {
+      emit(state.copyWith(firstLoad: firstLoad));
+    });
+  }
+
+  Future<void> _updateSetting<T>(
+    String key,
+    T value,
+    void Function(SettingsState) onUpdate,
+  ) async {
+    try {
+      await saveSettingUsecase(key, value);
+      onUpdate(state);
+    } catch (e) {
+      debugPrint('Error updating $key: $e');
+    }
   }
 }
