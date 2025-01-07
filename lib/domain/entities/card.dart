@@ -25,15 +25,4 @@ class CardEntity {
       additionalData: additionalData ?? this.additionalData,
     );
   }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is CardEntity &&
-        other.cardId == cardId &&
-        other.game == game &&
-        other.name == name;
-  }
 }

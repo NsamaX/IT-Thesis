@@ -4,24 +4,22 @@ import 'package:nfc_project/domain/usecases/settings.dart';
 
 class SettingsState {
   final Locale locale;
-  final bool isDarkMode;
-  final bool firstLoad;
+  final bool firstLoad, isDarkMode;
 
   const SettingsState({
     required this.locale,
-    required this.isDarkMode,
     required this.firstLoad,
+    required this.isDarkMode,
   });
 
   SettingsState copyWith({
     Locale? locale,
-    bool? isDarkMode,
-    bool? firstLoad,
+    bool? firstLoad, isDarkMode,
   }) {
     return SettingsState(
       locale: locale ?? this.locale,
-      isDarkMode: isDarkMode ?? this.isDarkMode,
       firstLoad: firstLoad ?? this.firstLoad,
+      isDarkMode: isDarkMode ?? this.isDarkMode,
     );
   }
 }
@@ -42,13 +40,13 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> initialize() async {
     try {
       final localeCode = await loadSetting('locale') ?? 'en';
-      final isDarkMode = await loadSetting('isDarkMode') ?? true;
       final firstLoad = await loadSetting('firstLoad') ?? true;
+      final isDarkMode = await loadSetting('isDarkMode') ?? true;
 
       emit(SettingsState(
         locale: Locale(localeCode),
-        isDarkMode: isDarkMode,
         firstLoad: firstLoad,
+        isDarkMode: isDarkMode,
       ));
     } catch (e) {
       debugPrint('Error loading settings: $e');

@@ -1,33 +1,15 @@
 import 'package:sqflite/sqflite.dart';
-import '../exceptions/local_data.dart';
 import 'database.dart';
 
-abstract class SQLiteServiceInterface {
-  Future<Database> getDatabase();
-  Future<List<Map<String, dynamic>>> query(
-    String table, {
-    String? where,
-    List<dynamic>? whereArgs,
-    String? orderBy,
-    int? limit,
-  });
-  Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList);
-  Future<void> insert(String table, Map<String, dynamic> data);
-  Future<void> delete(String table, String column, dynamic value);
-  Future<void> clear(String table);
-}
-
-class SQLiteService implements SQLiteServiceInterface {
+class SQLiteService {
   final DatabaseService _databaseService;
 
   SQLiteService(DatabaseService databaseService) : _databaseService = databaseService;
 
-  @override
   Future<Database> getDatabase() async {
     return await _databaseService.database;
   }
 
-  @override
   Future<List<Map<String, dynamic>>> query(
     String table, {
     String? where,
@@ -42,7 +24,7 @@ class SQLiteService implements SQLiteServiceInterface {
         [table],
       );
       if (tableExists.isEmpty) {
-        throw LocalDataException('Table $table does not exist in the database.');
+        throw Exception('Table $table does not exist in the database.');
       }
       final result = await db.query(
         table,
@@ -53,11 +35,10 @@ class SQLiteService implements SQLiteServiceInterface {
       );
       return result.isNotEmpty ? result : [];
     } catch (e) {
-      throw LocalDataException('Failed to query table $table', details: e.toString());
+      throw Exception('Failed to query table $table ${e.toString()}');
     }
   }
 
-  @override
   Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
     const chunkSize = 500;
     final db = await _databaseService.database;
@@ -73,14 +54,13 @@ class SQLiteService implements SQLiteServiceInterface {
     });
   }
 
-  @override
   Future<void> insert(String table, Map<String, dynamic> data) async {
     try {
       final db = await _databaseService.database;
       await _ensureTableExists(db, table);
       await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
-      throw LocalDataException('Failed to insert data into $table', details: e.toString());
+      throw Exception('Failed to insert data into $table ${e.toString()}');
     }
   }
 
@@ -90,27 +70,25 @@ class SQLiteService implements SQLiteServiceInterface {
       [table],
     );
     if (tableExists.isEmpty) {
-      throw LocalDataException('Table $table does not exist.');
+      throw Exception('Table $table does not exist.');
     }
   }
 
-  @override
   Future<void> delete(String table, String column, dynamic value) async {
     try {
       final db = await _databaseService.database;
       await db.delete(table, where: '$column = ?', whereArgs: [value]);
     } catch (e) {
-      throw LocalDataException('Failed to delete data from $table', details: e.toString());
+      throw Exception('Failed to delete data from $table ${e.toString()}');
     }
   }
 
-  @override
   Future<void> clear(String table) async {
     try {
       final db = await _databaseService.database;
       await db.delete(table);
     } catch (e) {
-      throw LocalDataException('Failed to clear table $table', details: e.toString());
+      throw Exception('Failed to clear table $table ${e.toString()}');
     }
   }
 }

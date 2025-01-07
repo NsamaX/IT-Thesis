@@ -9,7 +9,6 @@
     [] privacy
 
 # widget
-    [] Add by count
     [] Animations
 
 # structure

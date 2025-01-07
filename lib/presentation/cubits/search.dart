@@ -3,8 +3,7 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class SearchState {
-  final List<CardEntity> allCards;
-  final List<CardEntity> cards;
+  final List<CardEntity> allCards, cards;
   final bool isLoading;
   final String? errorMessage;
 
@@ -16,8 +15,7 @@ class SearchState {
   });
 
   SearchState copyWith({
-    List<CardEntity>? allCards,
-    List<CardEntity>? cards,
+    List<CardEntity>? allCards, cards,
     bool? isLoading,
     String? errorMessage,
   }) {

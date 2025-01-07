@@ -5,7 +5,9 @@ import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
-import '@export.dart';
+import 'database.dart';
+import 'shared_preferences.dart';
+import 'sqlite.dart';
 
 /// Dependency Injection handler using GetIt
 final GetIt locator = GetIt.instance;
@@ -22,12 +24,12 @@ Future<void> setupLocator() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences));
 
-  //---------------------------- Local DataSource ----------------------------//
+  //------------------------------- DataSource -------------------------------//
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
 
-  //----------------------------- Repositories -------------------------------//
+  //------------------------------ Repositories ------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) {
     return GameFactory.createApi(game);
   });
@@ -39,24 +41,24 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
 
-  //------------------------------- Use Cases --------------------------------//
-  locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) {
-    final cardRepository = locator<CardRepository>(param1: game);
-    return SyncCardsUseCase(cardRepository);
-  });
+  //-------------------------------- UseCases --------------------------------//
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>((game, _) {
     final cardRepository = locator<CardRepository>(param1: game);
     return FetchCardByIdUseCase(cardRepository);
   });
+  locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) {
+    final cardRepository = locator<CardRepository>(param1: game);
+    return SyncCardsUseCase(cardRepository);
+  });
 
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());
-  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
+  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
 
-  locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
+  locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
 
   //-------------------------------- Cubits ----------------------------------//
   locator.registerLazySingleton(() => NFCCubit());
@@ -67,13 +69,13 @@ Future<void> setupLocator() async {
   locator.registerFactory(() => DeckManagerCubit(
         addCardUseCase: locator<AddCardUseCase>(),
         removeCardUseCase: locator<RemoveCardUseCase>(),
-        loadDecksUseCase: locator<LoadDecksUseCase>(),
         saveDeckUseCase: locator<SaveDeckUseCase>(),
         deleteDeckUseCase: locator<DeleteDeckUseCase>(),
+        loadDecksUseCase: locator<LoadDecksUseCase>(),
       ));
   locator.registerLazySingleton(() => AppStateCubit());
   locator.registerLazySingleton(() => SettingsCubit(
-        loadSetting: locator<LoadSettingUseCase>(),
         saveSetting: locator<SaveSettingUseCase>(),
+        loadSetting: locator<LoadSettingUseCase>(),
       ));
 }

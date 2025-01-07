@@ -1,31 +1,29 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
-import 'package:nfc_project/domain/usecases/@export.dart';
+import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class ScanCubitState {
   final List<CardEntity>? cards;
-  final String? currentGame;
   final bool isLoading;
-  final String? error;
+  final String? currentGame, error;
 
   ScanCubitState({
     this.cards,
-    this.currentGame,
     this.isLoading = false,
+    this.currentGame,
     this.error,
   });
 
   ScanCubitState copyWith({
     List<CardEntity>? cards,
-    String? currentGame,
     bool? isLoading,
-    String? error,
+    String? currentGame, error,
   }) {
     return ScanCubitState(
       cards: cards ?? this.cards,
-      currentGame: currentGame ?? this.currentGame,
       isLoading: isLoading ?? this.isLoading,
+      currentGame: currentGame ?? this.currentGame,
       error: error,
     );
   }

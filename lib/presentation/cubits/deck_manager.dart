@@ -11,28 +11,28 @@ import 'NFC.dart';
 class DeckManagerState {
   final List<DeckEntity> allDecks;
   final DeckEntity deck;
-  final bool isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode;
   final CardEntity? selectedCard;
   final int quantity;
+  final bool isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode;
 
   DeckManagerState({
     required this.allDecks,
     required this.deck,
+    this.selectedCard,
+    this.quantity = 1,
     this.isLoading = false,
     this.isShareEnabled = false,
     this.isNfcReadEnabled = false,
     this.isDeleteEnabled = false,
     this.isEditMode = false,
-    this.selectedCard,
-    this.quantity = 1,
   });
 
   DeckManagerState copyWith({
     List<DeckEntity>? allDecks,
     DeckEntity? deck,
-    bool? isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode,
     CardEntity? selectedCard,
     int? quantity,
+    bool? isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode,
   }) {
     return DeckManagerState(
       allDecks: allDecks ?? this.allDecks,
@@ -51,16 +51,16 @@ class DeckManagerState {
 class DeckManagerCubit extends Cubit<DeckManagerState> {
   final AddCardUseCase addCardUseCase;
   final RemoveCardUseCase removeCardUseCase;
-  final LoadDecksUseCase loadDecksUseCase;
   final SaveDeckUseCase saveDeckUseCase;
   final DeleteDeckUseCase deleteDeckUseCase;
+  final LoadDecksUseCase loadDecksUseCase;
 
   DeckManagerCubit({
     required this.addCardUseCase,
     required this.removeCardUseCase,
-    required this.loadDecksUseCase,
     required this.saveDeckUseCase,
     required this.deleteDeckUseCase,
+    required this.loadDecksUseCase,
   }) : super(
           DeckManagerState(
             allDecks: [],
@@ -72,9 +72,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
           ),
         );
 
-  void setDeck(DeckEntity deck) {
-    emit(state.copyWith(deck: deck));
-  }
+  void setDeck(DeckEntity deck) => emit(state.copyWith(deck: deck));
 
   void toggleShare() {
     final deck = state.deck;
@@ -115,12 +113,10 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
       debugPrint('NFC read is disabled. Cannot write to NFC.');
       return;
     }
-
     if (state.selectedCard == null) {
       debugPrint('No card selected. Cannot write to NFC.');
       return;
     }
-
     try {
       emit(state.copyWith(isLoading: true));
       await NFCHelper.handleToggleNFC(

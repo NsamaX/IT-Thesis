@@ -1,5 +1,4 @@
 import 'package:nfc_project/core/constants/api_config.dart';
-import 'package:nfc_project/core/exceptions/factory.dart';
 import '../../models/card.dart';
 import 'factories/@export.dart';
 
@@ -13,7 +12,7 @@ class GameFactory {
     try {
       final baseUrl = ApiConfig.getBaseUrl(game);
       if (baseUrl.isEmpty) {
-        throw FactoryException('Base URL for game "$game" is not configured properly.');
+        throw Exception('Base URL for game "$game" is not configured properly.');
       }
       final apiRegistry = {
         'vanguard': () => VanguardApi(baseUrl),
@@ -21,10 +20,10 @@ class GameFactory {
       if (apiRegistry.containsKey(game)) {
         return apiRegistry[game]!();
       } else {
-        throw FactoryException('Unsupported game: $game');
+        throw Exception('Unsupported game: $game');
       }
     } catch (e) {
-      throw FactoryException('Failed to create API for game "$game"', details: e.toString());
+      throw Exception('Failed to create API for game "$game" ${e.toString()}');
     }
   }
 }

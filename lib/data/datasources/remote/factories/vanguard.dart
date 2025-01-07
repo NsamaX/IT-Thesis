@@ -1,6 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:nfc_project/core/exceptions/api.dart';
 import '../../../models/card.dart';
 import '../game_factory.dart';
 
@@ -18,7 +17,7 @@ class VanguardApi implements GameApi {
       final cardData = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       return _parseCardData(cardData);
     } catch (e) {
-      throw ApiException('Failed to fetch card by ID $id: $e');
+      throw Exception('Failed to fetch card by ID $id: $e');
     }
   }
 
@@ -32,7 +31,7 @@ class VanguardApi implements GameApi {
       final data = body['data'] as List<dynamic>?;
       return data != null ? _filterCardData(data) : [];
     } catch (e) {
-      throw ApiException('Failed to fetch cards on page $page: $e');
+      throw Exception('Failed to fetch cards on page $page: $e');
     }
   }
 
@@ -49,7 +48,7 @@ class VanguardApi implements GameApi {
 
   void _validateResponse(http.Response response) {
     if (response.statusCode != 200) {
-      throw ApiException('API Error: ${response.statusCode}, ${response.reasonPhrase}');
+      throw Exception('API Error: ${response.statusCode}, ${response.reasonPhrase}');
     }
   }
 

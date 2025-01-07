@@ -9,8 +9,7 @@ class TrackState {
   final DeckEntity deck;
   final RecordEntity record;
   final List<CardEntity> history;
-  final bool isDialogShown;
-  final bool isProcessing;
+  final bool isDialogShown, isProcessing;
 
   TrackState({
     required this.deck,
@@ -24,8 +23,7 @@ class TrackState {
     DeckEntity? deck,
     RecordEntity? record,
     List<CardEntity>? history,
-    bool? isDialogShown,
-    bool? isProcessing,
+    bool? isDialogShown, isProcessing,
   }) {
     return TrackState(
       deck: deck ?? this.deck,
@@ -50,11 +48,11 @@ class TrackCubit extends Cubit<TrackState> {
         )) {
     }
 
+  int get totalCards => state.deck.cards.values.fold(0, (total, count) => total + count);
+
   void showDialog() {
     emit(state.copyWith(isDialogShown: true));
   }
-
-  int get totalCards => state.deck.cards.values.fold(0, (total, count) => total + count);
 
   void toggleReset(DeckEntity deck) {
     emit(state.copyWith(

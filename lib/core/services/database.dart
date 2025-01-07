@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../exceptions/local_data.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -27,7 +26,6 @@ class DatabaseService {
         path,
         version: 1,
         onCreate: (db, version) async {
-          // Create the 'decks' table
           await db.execute('''
             CREATE TABLE decks (
               deckId TEXT PRIMARY KEY,
@@ -35,7 +33,6 @@ class DatabaseService {
               cards TEXT NOT NULL
             )
           ''');
-          // Create the 'cards' table
           await db.execute('''
             CREATE TABLE cards (
               id TEXT PRIMARY KEY,
@@ -46,7 +43,6 @@ class DatabaseService {
               additionalData TEXT
             )
           ''');
-          // Create the 'pages' table with a foreign key reference to 'cards'
           await db.execute('''
             CREATE TABLE pages (
               game TEXT PRIMARY KEY REFERENCES cards(game),
@@ -55,14 +51,13 @@ class DatabaseService {
           ''');
         },
       );
-      // Optimize database performance
       await db.rawQuery('PRAGMA synchronous = NORMAL');
       await db.rawQuery('PRAGMA journal_mode = MEMORY');
       await db.rawQuery('PRAGMA cache_size = -8000');
       await db.rawQuery('PRAGMA temp_store = MEMORY');
       return db;
     } catch (e) {
-      throw LocalDataException('Failed to initialize the database', details: e.toString());
+      throw Exception('Failed to initialize the database ${e.toString()}');
     }
   }
 }

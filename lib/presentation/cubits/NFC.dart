@@ -239,7 +239,7 @@ class NFCCubit extends Cubit<NFCState> {
       addToBuffer('[Validation] Creation failed: Incomplete data');
       throw Exception('[NFC Entity Creation] Incomplete data.');
     }
-    return TagEntity(tagId: tagId, cardId: cardId, game: game, timestamp: DateTime.now());
+    return TagEntity(tagId: tagId, cardId: cardId, game: game);
   }
 
   String _extractTagId(NfcTag tag) {
