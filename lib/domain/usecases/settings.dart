@@ -5,7 +5,9 @@ class SaveSettingUseCase {
 
   SaveSettingUseCase(this.repository);
 
-  Future<void> call(String key, dynamic value) async => repository.saveSetting(key, value);
+  Future<void> call(String key, dynamic value) async {
+    return repository.saveSetting(key, value);
+  }
 }
 
 class LoadSettingUseCase {
@@ -13,5 +15,7 @@ class LoadSettingUseCase {
 
   LoadSettingUseCase(this.repository);
 
-  Future<dynamic> call(String key) async => repository.loadSetting(key);
+  Future<dynamic> call(String key) async {
+    return repository.loadSetting(key);
+  }
 }

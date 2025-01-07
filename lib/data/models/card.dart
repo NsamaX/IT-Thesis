@@ -1,6 +1,9 @@
 class CardModel {
-  final String cardId, game, name;
-  final String? imageUrl, description;
+  final String cardId;
+  final String game;
+  final String name;
+  final String? imageUrl; 
+  final String? description;
   final Map<String, dynamic>? additionalData;
 
   CardModel({

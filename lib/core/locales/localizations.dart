@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppLocalizations {
-  final Locale locale;
-
-  AppLocalizations(this.locale);
-
   static AppLocalizations of(BuildContext context) => Localizations.of<AppLocalizations>(context, AppLocalizations)!;
-
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
+  final Locale locale;
   late final Map<String, dynamic> localizedStrings;
+
+  AppLocalizations(this.locale);
 
   Future<bool> load() async {
     try {

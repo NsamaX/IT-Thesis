@@ -18,11 +18,7 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
 
   @override
   Future<CardModel?> fetchCardById(String game, String id) async {
-    final result = await _sqliteService.query(
-      'cards',
-      where: 'game = ? AND id = ?',
-      whereArgs: [game, id],
-    );
+    final result = await _sqliteService.query('cards', where: 'game = ? AND id = ?', whereArgs: [game, id]);
     return result.isNotEmpty ? _parseCards(result).first : null;
   }
 
@@ -64,11 +60,7 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
 
   @override
   Future<bool> isPageExists(String game, int page) async {
-    final result = await _sqliteService.query(
-      'pages',
-      where: 'game = ? AND page = ?',
-      whereArgs: [game, page],
-    );
+    final result = await _sqliteService.query('pages', where: 'game = ? AND page = ?', whereArgs: [game, page]);
     return result.isNotEmpty;
   }
 

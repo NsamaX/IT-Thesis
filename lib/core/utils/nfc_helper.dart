@@ -9,7 +9,6 @@ class NFCHelper {
     String? reason,
   }) async {
     if (cubit.isClosed) return;
-
     try {
       if (enable) {
         await _enableNFC(cubit, card);

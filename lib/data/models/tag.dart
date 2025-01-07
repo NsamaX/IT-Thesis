@@ -17,9 +17,11 @@ class TagModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'tagId': tagId,
-    'cardId': cardId,
-    'game': game,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'tagId': tagId,
+      'cardId': cardId,
+      'game': game,
+    };
+  }
 }
