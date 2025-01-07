@@ -6,53 +6,69 @@ class QuantityWidget extends StatelessWidget {
   final ValueChanged<int> onSelected;
 
   const QuantityWidget({
-    super.key,
+    Key? key,
     this.quantityCount = 4,
     required this.selectedQuantity,
     required this.onSelected,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     const double borderRadiusValue = 12;
+    const double boxWidth = 60;
+    const double boxHeight = 40;
 
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: theme.appBarTheme.backgroundColor,
-            borderRadius: BorderRadius.circular(borderRadiusValue),
+    return SizedBox(
+      height: boxHeight + 20,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: boxWidth * quantityCount + boxWidth / 2,
+            height: boxHeight,
+            decoration: BoxDecoration(
+              color: theme.appBarTheme.backgroundColor,
+              borderRadius: BorderRadius.circular(borderRadiusValue),
+            ),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          AnimatedAlign(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            alignment: Alignment(
+              -1 + (2 * (selectedQuantity - 1) / (quantityCount - 1)),
+              0,
+            ),
+            child: Container(
+              width: boxWidth,
+              height: boxHeight,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(borderRadiusValue),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(
               quantityCount,
               (index) {
                 final isSelected = selectedQuantity == index + 1;
-
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => onSelected(index + 1),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.white
-                            : theme.appBarTheme.backgroundColor,
-                        borderRadius: BorderRadius.circular(borderRadiusValue),
-                        border: Border.all(
-                          color: isSelected ? Colors.black : Colors.transparent,
-                          width: 2,
-                        ),
-                      ),
-                      child: Text(
-                        '${index + 1}',
+                return GestureDetector(
+                  onTap: () => onSelected(index + 1),
+                  child: SizedBox(
+                    width: boxWidth,
+                    height: boxHeight,
+                    child: Center(
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 300),
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: isSelected
-                              ? Colors.black
-                              : theme.textTheme.titleMedium?.color,
-                        ),
-                        textAlign: TextAlign.center,
+                              color: isSelected
+                                  ? theme.colorScheme.surface
+                                  : theme.textTheme.titleMedium?.color,
+                            ) ??
+                            const TextStyle(),
+                        child: Text('${index + 1}'),
                       ),
                     ),
                   ),
@@ -60,8 +76,8 @@ class QuantityWidget extends StatelessWidget {
               },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -33,6 +33,7 @@ class NFCWidget extends StatelessWidget {
               const SizedBox(width: 4),
               AnimatedContainer(
                 duration: animationDuration,
+                curve: Curves.easeInOut,
                 width: iconSize / 1.2,
                 height: iconSize / 1.2,
                 decoration: BoxDecoration(
@@ -62,18 +63,22 @@ class NFCWidget extends StatelessWidget {
     required Offset offset,
     required bool isNFCEnabled,
   }) {
+    final double radians = angle * 3.1415927 / 180;
+    final Color iconColor = isNFCEnabled
+        ? (theme.colorScheme.primary)
+        : (theme.appBarTheme.backgroundColor ?? Colors.grey);
+
     return Transform.translate(
       offset: offset,
       child: Transform.rotate(
-        angle: angle * 3.1415927 / 180,
+        angle: radians,
         child: AnimatedContainer(
           duration: animationDuration,
+          curve: Curves.easeInOut,
           child: Icon(
             Icons.wifi_rounded,
             size: 120,
-            color: isNFCEnabled
-                ? theme.colorScheme.primary
-                : theme.appBarTheme.backgroundColor,
+            color: iconColor,
           ),
         ),
       ),

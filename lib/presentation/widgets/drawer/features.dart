@@ -26,22 +26,19 @@ class FeaturesDrawerWidget extends StatelessWidget {
                 theme: theme,
                 image: AppImages.game[currentGame],
                 label: null,
-                onTapFunction: () => _navigateToSearch(context, currentGame),
+                onTap: () => _navigateToSearch(context, currentGame),
               ),
               _buildFeatureItem(
                 theme: theme,
                 image: null,
                 label: locale.translate('title.games'),
-                onTapFunction: () => Navigator.of(context).pushNamed(AppRoutes.games),
+                onTap: () => _navigateToGames(context),
               ),
               _buildFeatureItem(
                 theme: theme,
                 image: null,
                 label: locale.translate('title.custom'),
-                onTapFunction: () => Navigator.of(context).pushNamed(
-                  AppRoutes.card,
-                  arguments: {'isCustom': true},
-                ),
+                onTap: () => _navigateToCustom(context),
               ),
             ],
           ),
@@ -54,14 +51,14 @@ class FeaturesDrawerWidget extends StatelessWidget {
     required ThemeData theme,
     String? image,
     String? label,
-    VoidCallback? onTapFunction,
+    VoidCallback? onTap,
   }) {
     const double boxSize = 60;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
-        onTap: onTapFunction,
+        onTap: onTap,
         child: Container(
           width: boxSize,
           height: boxSize,
@@ -69,26 +66,47 @@ class FeaturesDrawerWidget extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: image != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(image, fit: BoxFit.cover),
-                )
-              : Center(
-                  child: Text(
-                    label ?? '',
-                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
-                  ),
-                ),
+          child: _buildFeatureContent(image: image, label: label, theme: theme),
         ),
       ),
     );
+  }
+
+  Widget _buildFeatureContent({
+    String? image,
+    String? label,
+    required ThemeData theme,
+  }) {
+    if (image != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.asset(image, fit: BoxFit.cover),
+      );
+    } else {
+      return Center(
+        child: Text(
+          label ?? '',
+          style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
+        ),
+      );
+    }
   }
 
   void _navigateToSearch(BuildContext context, String? currentGame) {
     Navigator.of(context).pushNamed(
       AppRoutes.search,
       arguments: {'game': currentGame},
+    );
+  }
+
+  void _navigateToGames(BuildContext context) {
+    Navigator.of(context).pushNamed(AppRoutes.games);
+  }
+
+  void _navigateToCustom(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.card,
+      arguments: {'isCustom': true},
     );
   }
 }

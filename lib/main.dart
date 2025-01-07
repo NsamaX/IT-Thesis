@@ -9,71 +9,87 @@ import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
 import 'presentation/cubits/@export.dart';
 
-// ignore: unused_import
-import 'package:shared_preferences/shared_preferences.dart';
-
-void main() async { 
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    // Option for deleting the shared preferences (for debugging)
-    // final pref = await SharedPreferences.getInstance();
-    // pref.clear();
-    await setupLocator();
-    await ApiConfig.loadConfig(environment: 'development');
 
-    final settingsCubit = locator<SettingsCubit>();
-    await settingsCubit.initialize();
+  // Set preferred orientations
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-    final initialRoute = settingsCubit.state.firstLoad
-        ? AppRoutes.index
-        : AppRoutes.myDecks;
+  // Setup dependencies and configurations
+  await setupLocator();
+  await ApiConfig.loadConfig(environment: 'development');
 
-    runApp(MyApp(initialRoute: initialRoute));
-  } catch (e, stackTrace) {
-    debugPrint('Error occurred during app initialization: $e');
-    debugPrint(stackTrace.toString());
-  }
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget { 
-  final String initialRoute;
-
-  const MyApp({Key? key, required this.initialRoute}) : super(key: key);
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<NFCCubit>(create: (_) => locator<NFCCubit>()),
-        BlocProvider<DeckManagerCubit>(create: (_) => locator<DeckManagerCubit>()),
-        BlocProvider<AppStateCubit>(create: (_) => AppStateCubit()),
-        BlocProvider<SettingsCubit>(create: (_) => locator<SettingsCubit>()),
-      ],
-      child: BlocBuilder<SettingsCubit, SettingsState>(
-        builder: (context, state) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: true,
-            locale: state.locale,
-            supportedLocales: [
-              Locale('en'),
-              Locale('ja'),
-            ],
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            theme: themeData(),
-            onGenerateRoute: AppRoutes.generateRoute,
-            initialRoute: initialRoute,
+    return FutureBuilder<void>(
+      future: _initializeApp(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            ),
           );
-        },
-      ),
+        }
+        if (snapshot.hasError) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              body: Center(
+                child: Text(
+                  'Error initializing app: ${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          );
+        }
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => locator<NFCCubit>()),
+            BlocProvider(create: (_) => locator<DeckManagerCubit>()),
+            BlocProvider(create: (_) => AppStateCubit()),
+            BlocProvider(create: (_) => locator<SettingsCubit>()),
+          ],
+          child: BlocBuilder<SettingsCubit, SettingsState>(
+            builder: (context, state) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: true,
+                locale: state.locale,
+                supportedLocales: const [Locale('en'), Locale('ja')],
+                localizationsDelegates: _localizationsDelegates,
+                theme: themeData(),
+                onGenerateRoute: AppRoutes.generateRoute,
+                initialRoute: _getInitialRoute(state),
+              );
+            },
+          ),
+        );
+      },
     );
   }
+
+  Future<void> _initializeApp() async {
+    final settingsCubit = locator<SettingsCubit>();
+    await settingsCubit.initialize();
+  }
+
+  String _getInitialRoute(SettingsState state) {
+    return state.firstLoad ? AppRoutes.index : AppRoutes.myDecks;
+  }
+
+  static const _localizationsDelegates = [
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ];
 }

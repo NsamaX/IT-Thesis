@@ -13,19 +13,19 @@ class HistoryDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reversedTags = savedTags.reversed.toList();
+    final shadow = BoxShadow(
+      color: Colors.black.withOpacity(0.4),
+      spreadRadius: 2,
+      blurRadius: 6,
+      offset: const Offset(0, 2),
+    );
+
     return Container(
       width: 200,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            spreadRadius: 2,
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [shadow],
       ),
       child: ListView.builder(
         itemCount: reversedTags.length,
