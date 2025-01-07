@@ -30,7 +30,7 @@ void main() async {
 
     final initialRoute = settingsCubit.state.firstLoad
         ? AppRoutes.index
-        : AppRoutes.my_decks;
+        : AppRoutes.myDecks;
 
     runApp(MyApp(initialRoute: initialRoute));
   } catch (e, stackTrace) {

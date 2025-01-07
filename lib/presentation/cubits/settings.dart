@@ -25,12 +25,12 @@ class SettingsState {
 }
 
 class SettingsCubit extends Cubit<SettingsState> {
-  final SaveSettingUseCase saveSetting;
-  final LoadSettingUseCase loadSetting;
+  final SaveSettingUseCase saveSettingUsecase;
+  final LoadSettingUseCase loadSettingUsecase;
 
   SettingsCubit({
-    required this.saveSetting,
-    required this.loadSetting,
+    required this.saveSettingUsecase,
+    required this.loadSettingUsecase,
   }) : super(SettingsState(
           locale: Locale('en'),
           isDarkMode: true,
@@ -39,9 +39,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> initialize() async {
     try {
-      final localeCode = await loadSetting('locale') ?? 'en';
-      final firstLoad = await loadSetting('firstLoad') ?? true;
-      final isDarkMode = await loadSetting('isDarkMode') ?? true;
+      final localeCode = await loadSettingUsecase('locale') ?? 'en';
+      final firstLoad = await loadSettingUsecase('firstLoad') ?? true;
+      final isDarkMode = await loadSettingUsecase('isDarkMode') ?? true;
 
       emit(SettingsState(
         locale: Locale(localeCode),
@@ -54,17 +54,17 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> updateLanguage(String languageCode) async {
-    await saveSetting('locale', languageCode);
+    await saveSettingUsecase('locale', languageCode);
     emit(state.copyWith(locale: Locale(languageCode)));
   }
 
   Future<void> updateTheme(bool isDarkMode) async {
-    await saveSetting('isDarkMode', isDarkMode);
+    await saveSettingUsecase('isDarkMode', isDarkMode);
     emit(state.copyWith(isDarkMode: isDarkMode));
   }
 
   Future<void> updateFirstLoad(bool firstLoad) async {
-    await saveSetting('firstLoad', firstLoad);
+    await saveSettingUsecase('firstLoad', firstLoad);
     emit(state.copyWith(firstLoad: firstLoad));
   }
 }

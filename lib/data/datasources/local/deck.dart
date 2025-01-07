@@ -14,17 +14,29 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
 
   @override
   Future<void> saveDeck(DeckModel deck) async {
-    await _sqliteService.insert('decks', deck.toJson());
+    try {
+      await _sqliteService.insert('decks', deck.toJson());
+    } catch (e) {
+      throw Exception('Failed to save deck: ${e.toString()}');
+    }
   }
 
   @override
   Future<void> deleteDeck(String deckId) async {
-    await _sqliteService.delete('decks', 'deckId', deckId);
+    try {
+      await _sqliteService.delete('decks', 'deckId', deckId);
+    } catch (e) {
+      throw Exception('Failed to delete deck with ID $deckId: ${e.toString()}');
+    }
   }
 
   @override
   Future<List<DeckModel>> loadDecks() async {
-    final decks = await _sqliteService.query('decks');
-    return decks.map((deck) => DeckModel.fromJson(deck)).toList();
+    try {
+      final decks = await _sqliteService.query('decks');
+      return decks.map((deck) => DeckModel.fromJson(deck)).toList();
+    } catch (e) {
+      throw Exception('Failed to load decks: ${e.toString()}');
+    }
   }
 }

@@ -1,5 +1,7 @@
 class TagModel {
-  final String tagId, cardId, game;
+  final String tagId;
+  final String cardId;
+  final String game;
 
   TagModel({
     required this.tagId,
@@ -9,17 +11,15 @@ class TagModel {
 
   factory TagModel.fromJson(Map<String, dynamic> json) {
     return TagModel(
-      tagId: json['tagId'] ?? '',
-      cardId: json['cardId'] ?? '',
-      game: json['game'] ?? '',
+      tagId: json['tagId'] as String? ?? '',
+      cardId: json['cardId'] as String? ?? '',
+      game: json['game'] as String? ?? '',
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'tagId': tagId,
-      'cardId': cardId,
-      'game': game,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'tagId': tagId,
+    'cardId': cardId,
+    'game': game,
+  };
 }

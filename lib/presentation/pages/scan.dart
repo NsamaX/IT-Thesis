@@ -36,11 +36,6 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _nfcSessionHandler.handleAppLifecycleState(state);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
 

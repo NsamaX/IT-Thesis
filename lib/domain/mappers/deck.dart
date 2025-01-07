@@ -18,4 +18,12 @@ class DeckMapper {
       cards: model.cards.map((card, count) => MapEntry(CardMapper.toEntity(card), count)),
     );
   }
+
+  static List<DeckModel> toModelList(List<DeckEntity> entities) {
+    return entities.map(toModel).toList();
+  }
+
+  static List<DeckEntity> toEntityList(List<DeckModel> models) {
+    return models.map(toEntity).toList();
+  }
 }

@@ -9,22 +9,29 @@ class NFCHelper {
     String? reason,
   }) async {
     if (cubit.isClosed) return;
-    if (enable) {
-      if (!cubit.state.isNFCEnabled) {
-        cubit.toggleNFC();
+
+    try {
+      if (enable) {
+        await _enableNFC(cubit, card);
+      } else {
+        await _disableNFC(cubit, reason);
       }
-      if (!cubit.state.isProcessing) {
-        try {
-          await cubit.startSession(card: card);
-        } catch (e) {
-          cubit.clearErrorMessage();
-        }
-      } else if (card != null && cubit.state.isNFCEnabled) {
-        await cubit.restartSessionIfNeeded(card: card);
-      }
-    } else {
-      await cubit.stopSession(reason: reason ?? 'User toggled off NFC');
-      await Future.delayed(Duration(milliseconds: 300));
+    } catch (e) {
+      cubit.clearErrorMessage();
     }
+  }
+
+  static Future<void> _enableNFC(NFCCubit cubit, CardEntity? card) async {
+    if (!cubit.state.isNFCEnabled) cubit.toggleNFC();
+    if (!cubit.state.isProcessing) {
+      await cubit.startSession(card: card);
+    } else if (card != null) {
+      await cubit.restartSessionIfNeeded(card: card);
+    }
+  }
+
+  static Future<void> _disableNFC(NFCCubit cubit, String? reason) async {
+    await cubit.stopSession(reason: reason ?? 'User toggled off NFC');
+    await Future.delayed(const Duration(milliseconds: 300));
   }
 }

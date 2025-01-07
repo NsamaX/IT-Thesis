@@ -14,16 +14,28 @@ class DeckRepositoryImpl implements DeckRepository {
 
   @override
   Future<void> saveDeck(DeckModel deck) async {
-    await localDataSource.saveDeck(deck);
+    try {
+      await localDataSource.saveDeck(deck);
+    } catch (e) {
+      throw Exception('Failed to save deck: ${e.toString()}');
+    }
   }
 
   @override
   Future<void> deleteDeck(String deckId) async {
-    await localDataSource.deleteDeck(deckId);
+    try {
+      await localDataSource.deleteDeck(deckId);
+    } catch (e) {
+      throw Exception('Failed to delete deck with ID $deckId: ${e.toString()}');
+    }
   }
 
   @override
   Future<List<DeckModel>> loadDecks() async {
-    return await localDataSource.loadDecks();
+    try {
+      return await localDataSource.loadDecks();
+    } catch (e) {
+      throw Exception('Failed to load decks: ${e.toString()}');
+    }
   }
 }

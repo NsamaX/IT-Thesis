@@ -36,11 +36,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _nfcSessionHandler.handleAppLifecycleState(state);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;

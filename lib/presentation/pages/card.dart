@@ -35,11 +35,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _nfcSessionHandler.handleAppLifecycleState(state);
-  }
-
   Map<dynamic, dynamic> _buildAppBarMenu(
     BuildContext context,
     AppLocalizations locale,

@@ -1,6 +1,9 @@
 class CardEntity {
-  final String cardId, game, name;
-  final String? description, imageUrl;
+  final String cardId;
+  final String game;
+  final String name;
+  final String? description;
+  final String? imageUrl;
   final Map<String, dynamic>? additionalData;
 
   CardEntity({
@@ -13,7 +16,11 @@ class CardEntity {
   });
 
   CardEntity copyWith({
-    String? cardId, game, name, description, imageUrl,
+    String? cardId,
+    String? game,
+    String? name,
+    String? description,
+    String? imageUrl,
     Map<String, dynamic>? additionalData,
   }) {
     return CardEntity(

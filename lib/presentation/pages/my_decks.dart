@@ -63,7 +63,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     if (context.read<DeckManagerCubit>().state.isEditMode) {
       cubit.toggleEditMode();
     }
-    Navigator.of(context).pushNamed(AppRoutes.new_deck);
+    Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 
   Widget _buildBody(BuildContext context) {

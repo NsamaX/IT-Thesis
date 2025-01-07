@@ -1,6 +1,9 @@
 class UserModel {
-  final String userId, email;
-  final List<String> tagIds, deckIds, recordIds;
+  final String userId;
+  final String email;
+  final List<String> tagIds;
+  final List<String> deckIds;
+  final List<String> recordIds;
 
   UserModel({
     required this.userId,
@@ -12,21 +15,19 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      userId: json['userId'] ?? '',
-      email: json['email'] ?? '',
-      tagIds: List<String>.from(json['tagIds'] ?? []),
-      deckIds: List<String>.from(json['deckIds'] ?? []),
-      recordIds: List<String>.from(json['recordIds'] ?? []),
+      userId: json['userId'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      tagIds: List<String>.from(json['tagIds'] as List<dynamic>? ?? []),
+      deckIds: List<String>.from(json['deckIds'] as List<dynamic>? ?? []),
+      recordIds: List<String>.from(json['recordIds'] as List<dynamic>? ?? []),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'userId': userId,
-      'email': email,
-      'tagIds': tagIds,
-      'deckIds': deckIds,
-      'recordIds': recordIds,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'userId': userId,
+    'email': email,
+    'tagIds': tagIds,
+    'deckIds': deckIds,
+    'recordIds': recordIds,
+  };
 }

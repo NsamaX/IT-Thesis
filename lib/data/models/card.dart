@@ -14,14 +14,14 @@ class CardModel {
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
     return CardModel(
-      cardId: json['cardId'] ?? '',
-      game: json['game'] ?? '',
-      name: json['name'] ?? '',
-      imageUrl: json['imageUrl'],
-      description: json['description'],
-      additionalData: json['additionalData'] is Map<String, dynamic>
-          ? Map<String, dynamic>.from(json['additionalData'])
-          : null,
+      cardId: json['cardId'] as String? ?? '',
+      game: json['game'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      imageUrl: json['imageUrl'] as String?,
+      description: json['description'] as String?,
+      additionalData: (json['additionalData'] as Map<String, dynamic>?)?.map(
+        (key, value) => MapEntry(key, value),
+      ),
     );
   }
 

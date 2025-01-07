@@ -12,16 +12,28 @@ class SettingsRepositoryImpl implements SettingsRepository {
 
   @override
   Future<void> saveSetting(String key, dynamic value) async {
-    final settings = Map<String, dynamic>.from(await localDataSource.loadSettings());
-    settings[key] = value;
-    await localDataSource.saveSettings(settings);
+    try {
+      final settings = Map<String, dynamic>.from(await localDataSource.loadSettings());
+      settings[key] = value;
+      await localDataSource.saveSettings(settings);
+    } catch (e) {
+      throw Exception('Failed to save setting for key "$key": ${e.toString()}');
+    }
   }
 
   @override
   Future<dynamic> loadSetting(String key) async {
-    final settings = await localDataSource.loadSettings();
+    try {
+      final settings = await localDataSource.loadSettings();
+      return settings[key] ?? _getDefaultSetting(key);
+    } catch (e) {
+      throw Exception('Failed to load setting for key "$key": ${e.toString()}');
+    }
+  }
+
+  dynamic _getDefaultSetting(String key) {
     if (SettingsLocalDataSourceImpl.defaultSettings.containsKey(key)) {
-      return settings[key] ?? SettingsLocalDataSourceImpl.defaultSettings[key];
+      return SettingsLocalDataSourceImpl.defaultSettings[key];
     } else {
       throw Exception('Invalid key: $key');
     }

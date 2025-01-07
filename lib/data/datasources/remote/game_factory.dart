@@ -14,16 +14,17 @@ class GameFactory {
       if (baseUrl.isEmpty) {
         throw Exception('Base URL for game "$game" is not configured properly.');
       }
-      final apiRegistry = {
+      final apiRegistry = <String, GameApi Function()>{
         'vanguard': () => VanguardApi(baseUrl),
       };
-      if (apiRegistry.containsKey(game)) {
-        return apiRegistry[game]!();
+      final apiCreator = apiRegistry[game];
+      if (apiCreator != null) {
+        return apiCreator();
       } else {
         throw Exception('Unsupported game: $game');
       }
     } catch (e) {
-      throw Exception('Failed to create API for game "$game" ${e.toString()}');
+      throw Exception('Failed to create API for game "$game": ${e.toString()}');
     }
   }
 }

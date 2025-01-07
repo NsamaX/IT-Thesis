@@ -6,6 +6,7 @@ abstract class SettingsLocalDataSource {
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
+  final SharedPreferencesService _sharedPreferencesService;
   static const String _settingsKey = 'settings';
   static const Map<String, dynamic> defaultSettings = {
     'locale': 'en',
@@ -13,18 +14,24 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
     'firstLoad': true,
   };
 
-  final SharedPreferencesService _sharedPreferencesService;
-
   SettingsLocalDataSourceImpl(this._sharedPreferencesService);
 
   @override
-  Future<Map<String, dynamic>> loadSettings() async {
-    final settings = _sharedPreferencesService.getMap(_settingsKey);
-    return settings ?? defaultSettings;
+  Future<void> saveSettings(Map<String, dynamic> settings) async {
+    try {
+      await _sharedPreferencesService.saveMap(_settingsKey, settings);
+    } catch (e) {
+      throw Exception('Failed to save settings: ${e.toString()}');
+    }
   }
 
   @override
-  Future<void> saveSettings(Map<String, dynamic> settings) async {
-    await _sharedPreferencesService.saveMap(_settingsKey, settings);
+  Future<Map<String, dynamic>> loadSettings() async {
+    try {
+      final settings = _sharedPreferencesService.getMap(_settingsKey);
+      return settings ?? defaultSettings;
+    } catch (e) {
+      throw Exception('Failed to load settings: ${e.toString()}');
+    }
   }
 }

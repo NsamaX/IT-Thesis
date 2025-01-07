@@ -4,13 +4,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesService {
   final SharedPreferences _sharedPreferences;
 
-  SharedPreferencesService(SharedPreferences sharedPreferences) : _sharedPreferences = sharedPreferences;
+  SharedPreferencesService(this._sharedPreferences);
 
   String? getString(String key) {
     try {
       return _sharedPreferences.getString(key);
     } catch (e) {
-      throw Exception('Unable to retrieve String data ${e.toString()}');
+      throw Exception('Unable to retrieve String data: ${e.toString()}');
     }
   }
 
@@ -18,59 +18,41 @@ class SharedPreferencesService {
     try {
       return _sharedPreferences.getStringList(key);
     } catch (e) {
-      throw Exception('Unable to retrieve List<String> data ${e.toString()}');
+      throw Exception('Unable to retrieve List<String> data: ${e.toString()}');
     }
   }
 
   Map<String, dynamic>? getMap(String key) {
     try {
-      final jsonString = _sharedPreferences.getString(key);
-      return jsonString != null
-          ? json.decode(jsonString) as Map<String, dynamic>
-          : null;
+      final String? jsonString = _sharedPreferences.getString(key);
+      return jsonString != null ? json.decode(jsonString) as Map<String, dynamic> : null;
     } catch (e) {
-      throw Exception('Unable to retrieve Map data ${e.toString()}');
+      throw Exception('Unable to retrieve Map data: ${e.toString()}');
     }
   }
 
-  Future<void> saveString(String key, String value) async {
-    try {
-      await _sharedPreferences.setString(key, value);
-    } catch (e) {
-      throw Exception('Unable to save String data ${e.toString()}');
-    }
-  }
+  Future<void> saveString(String key, String value) async => _handleAsync(
+    () => _sharedPreferences.setString(key, value), 'String');
 
-  Future<void> saveStringList(String key, List<String> value) async {
-    try {
-      await _sharedPreferences.setStringList(key, value);
-    } catch (e) {
-      throw Exception('Unable to save List<String> data ${e.toString()}');
-    }
-  }
+  Future<void> saveStringList(String key, List<String> value) async => _handleAsync(
+    () => _sharedPreferences.setStringList(key, value), 'List<String>');
 
   Future<void> saveMap(String key, Map<String, dynamic> map) async {
-    try {
-      final jsonString = json.encode(map);
-      await _sharedPreferences.setString(key, jsonString);
-    } catch (e) {
-      throw Exception('Unable to save Map data ${e.toString()}');
-    }
+    final String jsonString = json.encode(map);
+    await _handleAsync(() => _sharedPreferences.setString(key, jsonString), 'Map');
   }
 
-  Future<void> clearKey(String key) async {
-    try {
-      await _sharedPreferences.remove(key);
-    } catch (e) {
-      throw Exception('Unable to clear data for the given key ${e.toString()}');
-    }
-  }
+  Future<void> clearKey(String key) async => _handleAsync(
+    () => _sharedPreferences.remove(key), 'clear data for key');
 
-  Future<void> clearAll() async {
+  Future<void> clearAll() async => _handleAsync(
+    () => _sharedPreferences.clear(), 'clear all data');
+
+  Future<void> _handleAsync(Future<bool> Function() action, String dataType) async {
     try {
-      await _sharedPreferences.clear();
+      await action();
     } catch (e) {
-      throw Exception('Unable to clear all data in Shared Preferences ${e.toString()}');
+      throw Exception('Unable to $dataType: ${e.toString()}');
     }
   }
 }

@@ -8,8 +8,8 @@ class FetchCardByIdUseCase {
   FetchCardByIdUseCase(this.repository);
 
   Future<CardEntity> call(String game, String id) async {
-    final cardModel = await repository.fetchCardById(game, id);
-    return CardMapper.toEntity(cardModel);
+    final localCard = await repository.fetchCardById(game, id);
+    return CardMapper.toEntity(localCard);
   }
 }
 
@@ -20,6 +20,6 @@ class SyncCardsUseCase {
 
   Future<List<CardEntity>> call(String game) async {
     final cardModels = await repository.syncCards(game);
-    return cardModels.map((model) => CardMapper.toEntity(model)).toList();
+    return cardModels.map(CardMapper.toEntity).toList();
   }
 }

@@ -10,7 +10,3 @@
 
 # widget
     [] Animations
-
-# structure
-    [] cleanup code
-    [] refactor code

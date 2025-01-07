@@ -7,9 +7,7 @@ class RecordMapper {
     return RecordEntity(
       recordId: model.recordId,
       createdAt: model.createdAt,
-      data: model.data
-          .map((dataModel) => DataMapper.toEntity(dataModel))
-          .toList(),
+      data: model.data.map(DataMapper.toEntity).toList(),
     );
   }
 
@@ -17,7 +15,15 @@ class RecordMapper {
     return RecordModel(
       recordId: entity.recordId,
       createdAt: entity.createdAt,
-      data: entity.data.map((data) => DataMapper.toModel(data)).toList(),
+      data: entity.data.map(DataMapper.toModel).toList(),
     );
+  }
+
+  static List<RecordEntity> toEntityList(List<RecordModel> models) {
+    return models.map(toEntity).toList();
+  }
+
+  static List<RecordModel> toModelList(List<RecordEntity> entities) {
+    return entities.map(toModel).toList();
   }
 }

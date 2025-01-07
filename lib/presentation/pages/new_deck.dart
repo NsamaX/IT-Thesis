@@ -33,11 +33,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _nfcSessionHandler.handleAppLifecycleState(state);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<DeckManagerCubit>();

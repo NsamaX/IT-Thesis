@@ -1,5 +1,7 @@
 class TagEntity {
-  final String tagId, cardId, game;
+  final String tagId;
+  final String cardId;
+  final String game;
 
   TagEntity({
     required this.tagId,
@@ -8,8 +10,9 @@ class TagEntity {
   });
 
   TagEntity copyWith({
-    String? tagId, cardId, game,
-    DateTime? timestamp,
+    String? tagId,
+    String? cardId,
+    String? game,
   }) {
     return TagEntity(
       tagId: tagId ?? this.tagId,

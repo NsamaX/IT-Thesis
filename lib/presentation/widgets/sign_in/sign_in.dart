@@ -74,7 +74,7 @@ class SignInWidget extends StatelessWidget {
         onPressed: () {
           context.read<SettingsCubit>().updateFirstLoad(false);
           Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.my_decks,
+            AppRoutes.myDecks,
             (_) => false,
           );
         },

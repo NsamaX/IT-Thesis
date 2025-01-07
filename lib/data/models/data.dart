@@ -1,11 +1,12 @@
 enum ActionModel {
-  unknown,
   draw,
   returnToDeck,
+  unknown,
 }
 
 class DataModel {
-  final String tagId, location;
+  final String tagId;
+  final String location;
   final ActionModel action;
   final DateTime timestamp;
 
@@ -18,14 +19,14 @@ class DataModel {
 
   factory DataModel.fromJson(Map<String, dynamic> json) {
     return DataModel(
-      tagId: json['tagId'] ?? '',
-      location: json['location'] ?? '',
+      tagId: json['tagId'] as String? ?? '',
+      location: json['location'] as String? ?? '',
       action: ActionModel.values.firstWhere(
         (e) => e.name == json['action'],
         orElse: () => ActionModel.unknown,
       ),
       timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'])
+          ? DateTime.tryParse(json['timestamp']) ?? DateTime.now()
           : DateTime.now(),
     );
   }

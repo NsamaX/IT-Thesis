@@ -7,25 +7,27 @@ class AppLocalizations {
 
   AppLocalizations(this.locale);
 
-  static AppLocalizations of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
-  }
+  static AppLocalizations of(BuildContext context) => Localizations.of<AppLocalizations>(context, AppLocalizations)!;
 
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
-  late Map<String, dynamic> localizedStrings;
+  late final Map<String, dynamic> localizedStrings;
 
   Future<bool> load() async {
-    String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
-    localizedStrings = json.decode(jsonString);
-    return true;
+    try {
+      final String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
+      localizedStrings = json.decode(jsonString) as Map<String, dynamic>;
+      return true;
+    } catch (e) {
+      throw Exception('Failed to load localization file: ${e.toString()}');
+    }
   }
 
   String translate(String key) {
     try {
-      List<String> keys = key.split('.');
+      final List<String> keys = key.split('.');
       dynamic value = localizedStrings;
-      for (String k in keys) {
+      for (final String k in keys) {
         if (value is Map<String, dynamic> && value.containsKey(k)) {
           value = value[k];
         } else {
@@ -47,7 +49,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    AppLocalizations localizations = AppLocalizations(locale);
+    final AppLocalizations localizations = AppLocalizations(locale);
     await localizations.load();
     return localizations;
   }

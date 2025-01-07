@@ -23,4 +23,12 @@ class CardMapper {
       additionalData: entity.additionalData,
     );
   }
+
+  static List<CardEntity> toEntityList(List<CardModel> models) {
+    return models.map(toEntity).toList();
+  }
+
+  static List<CardModel> toModelList(List<CardEntity> entities) {
+    return entities.map(toModel).toList();
+  }
 }

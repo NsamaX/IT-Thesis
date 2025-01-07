@@ -11,10 +11,8 @@ class VanguardApi implements GameApi {
   @override
   Future<CardModel> fetchCardsById(String id) async {
     try {
-      final url = _buildUrl('cards/$id');
-      final response = await _getRequest(url);
-      _validateResponse(response);
-      final cardData = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final response = await _getRequest(_buildUrl('cards/$id'));
+      final cardData = _decodeResponse(response);
       return _parseCardData(cardData);
     } catch (e) {
       throw Exception('Failed to fetch card by ID $id: $e');
@@ -24,31 +22,38 @@ class VanguardApi implements GameApi {
   @override
   Future<List<CardModel>> fetchCardsPage(int page) async {
     try {
-      final url = _buildUrl('cards', {'page': page.toString()});
-      final response = await _getRequest(url);
-      _validateResponse(response);
-      final body = json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final data = body['data'] as List<dynamic>?;
-      return data != null ? _filterCardData(data) : [];
+      final response = await _getRequest(_buildUrl('cards', {'page': page.toString()}));
+      final body = _decodeResponse(response);
+      final data = body['data'] as List<dynamic>? ?? [];
+      return _filterCardData(data);
     } catch (e) {
       throw Exception('Failed to fetch cards on page $page: $e');
     }
   }
 
-  Uri _buildUrl(String path, [Map<String, String>? queryParams]) {
-    return Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
-  }
-
   Future<http.Response> _getRequest(Uri url) async {
-    return await http.get(url, headers: {
+    final response = await http.get(url, headers: {
       'Accept-Encoding': 'gzip',
       'Content-Type': 'application/json',
     });
+    _validateResponse(response);
+    return response;
   }
 
   void _validateResponse(http.Response response) {
     if (response.statusCode != 200) {
       throw Exception('API Error: ${response.statusCode}, ${response.reasonPhrase}');
+    }
+  }
+
+  Uri _buildUrl(String path, [Map<String, String>? queryParams]) =>
+      Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
+
+  Map<String, dynamic> _decodeResponse(http.Response response) {
+    try {
+      return json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    } catch (e) {
+      throw Exception('Failed to decode response: $e');
     }
   }
 

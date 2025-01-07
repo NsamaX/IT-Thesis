@@ -9,19 +9,15 @@ abstract class CardRepository {
 }
 
 class CardRepositoryImpl implements CardRepository {
-  final GameApi gameApi;
   final CardLocalDataSource cardLocalDataSource;
+  final GameApi gameApi;
 
-  CardRepositoryImpl({required this.gameApi, required this.cardLocalDataSource});
+  CardRepositoryImpl({required this.cardLocalDataSource, required this.gameApi});
 
   @override
   Future<CardModel> fetchCardById(String game, String id) async {
     final localCard = await cardLocalDataSource.fetchCardById(game, id);
-    if (localCard != null) {
-      return localCard;
-    } else {
-      return await gameApi.fetchCardsById(id);
-    }
+    return localCard ?? await gameApi.fetchCardsById(id);
   }
 
   @override
@@ -60,14 +56,14 @@ class CardRepositoryImpl implements CardRepository {
     try {
       final cards = await gameApi.fetchCardsPage(page);
       return {page: cards};
-    } catch (e) {
+    } catch (_) {
       return {page: []};
     }
   }
 
   Future<List<CardModel>> _parallelLoadAndSaveCards(String game, int startPage, int endPage) async {
     const int maxConcurrentRequests = 50;
-    final List<Future<void>> futures = [];
+    final futures = <Future<void>>[];
     for (int page = startPage; page <= endPage; page++) {
       futures.add(Future.microtask(() => _loadPageAndSave(game, page)));
       if (futures.length >= maxConcurrentRequests || page == endPage) {
@@ -89,9 +85,9 @@ class CardRepositoryImpl implements CardRepository {
           await cardLocalDataSource.saveCards(game, page, cards);
         }
         break;
-      } catch (e) {
+      } catch (_) {
         retryCount++;
-        if (retryCount == maxRetries) {
+        if (retryCount >= maxRetries) {
           throw Exception('Failed to load page $page after $maxRetries attempts.');
         }
       }
