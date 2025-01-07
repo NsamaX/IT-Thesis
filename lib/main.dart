@@ -14,17 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
-
   try {
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
     // Option for deleting the shared preferences (for debugging)
     // final pref = await SharedPreferences.getInstance();
     // pref.clear();
-
     await setupLocator();
     await ApiConfig.loadConfig(environment: 'development');
 

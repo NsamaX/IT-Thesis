@@ -85,7 +85,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       child: Text(
                         locale.translate('button.cancel'),
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.secondaryHeaderColor,
+                          color: theme.colorScheme.primary,
                           fontSize: 16,
                         ),
                       ),

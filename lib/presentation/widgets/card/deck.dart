@@ -67,7 +67,7 @@ class DeckWidget extends StatelessWidget {
           height: 30,
           child: Icon(
             Icons.close_rounded,
-            color: theme.secondaryHeaderColor,
+            color: theme.colorScheme.primary,
             size: 26,
           ),
         ),

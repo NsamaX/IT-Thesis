@@ -38,7 +38,7 @@ class NFCWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isNFCEnabled
-                      ? theme.secondaryHeaderColor
+                      ? theme.colorScheme.primary
                       : theme.appBarTheme.backgroundColor,
                 ),
               ),
@@ -72,7 +72,7 @@ class NFCWidget extends StatelessWidget {
             Icons.wifi_rounded,
             size: 120,
             color: isNFCEnabled
-                ? theme.secondaryHeaderColor
+                ? theme.colorScheme.primary
                 : theme.appBarTheme.backgroundColor,
           ),
         ),

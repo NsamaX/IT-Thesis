@@ -43,8 +43,7 @@ Widget _buildCount(ThemeData theme, int count) {
     child: Center(
       child: Text(
         count.toString(),
-        style: theme.textTheme.bodyMedium
-            ?.copyWith(color: theme.secondaryHeaderColor),
+        style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.primary),
         textAlign: TextAlign.center,
       ),
     ),
@@ -60,11 +59,13 @@ Widget _buildButton(ThemeData theme, IconData icon, VoidCallback onPressed) {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-            color: theme.appBarTheme.backgroundColor, shape: BoxShape.circle),
+          color: theme.appBarTheme.backgroundColor,
+          shape: BoxShape.circle,
+        ),
         child: Icon(
           icon,
           size: 16,
-          color: theme.secondaryHeaderColor,
+          color: theme.colorScheme.primary,
         ),
       ),
     ),

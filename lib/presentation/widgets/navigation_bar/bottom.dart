@@ -17,7 +17,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
           currentIndex: state.currentPageIndex,
           onTap: (index) => _handleNavigation(context, state, index),
           items: _buildNavigationBarItems(locale),
-          selectedItemColor: theme.secondaryHeaderColor,
+          selectedItemColor: theme.colorScheme.primary,
           unselectedItemColor: theme.iconTheme.color,
         );
       },

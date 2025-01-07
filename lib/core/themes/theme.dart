@@ -11,7 +11,6 @@ ThemeData themeData() {
   return ThemeData(
     scaffoldBackgroundColor: AppColors.DarkModeBackground_lv2,
     primaryColor: AppColors.DarkModeBackground_lv1,
-    secondaryHeaderColor: AppColors.PrimaryColor,
     colorScheme: ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.PrimaryColor,

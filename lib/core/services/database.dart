@@ -21,10 +21,8 @@ class DatabaseService {
     try {
       final dbPath = await getDatabasesPath();
       final path = join(dbPath, 'nfc_project.db');
-
       // Option for deleting the database (for debugging)
       // await deleteDatabase(path);
-
       final db = await openDatabase(
         path,
         version: 1,
@@ -57,13 +55,11 @@ class DatabaseService {
           ''');
         },
       );
-
       // Optimize database performance
       await db.rawQuery('PRAGMA synchronous = NORMAL');
       await db.rawQuery('PRAGMA journal_mode = MEMORY');
       await db.rawQuery('PRAGMA cache_size = -8000');
       await db.rawQuery('PRAGMA temp_store = MEMORY');
-      
       return db;
     } catch (e) {
       throw LocalDataException('Failed to initialize the database', details: e.toString());
