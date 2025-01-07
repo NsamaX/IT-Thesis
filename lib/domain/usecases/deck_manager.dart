@@ -4,12 +4,12 @@ import '../entities/deck.dart';
 import '../mappers/deck.dart';
 
 class AddCardUseCase {
-  DeckEntity call(DeckEntity deck, CardEntity card) {
+  DeckEntity call(DeckEntity deck, CardEntity card, int count) {
     final updatedCards = Map<CardEntity, int>.from(deck.cards);
     if (updatedCards.containsKey(card)) {
-      updatedCards[card] = updatedCards[card]! + 1;
+      updatedCards[card] = updatedCards[card]! + count;
     } else {
-      updatedCards[card] = 1;
+      updatedCards[card] = count;
     }
     return deck.copyWith(cards: updatedCards);
   }

@@ -11,12 +11,9 @@ import 'NFC.dart';
 class DeckManagerState {
   final List<DeckEntity> allDecks;
   final DeckEntity deck;
-  final bool isLoading;
-  final bool isShareEnabled;
-  final bool isNfcReadEnabled;
-  final bool isDeleteEnabled;
-  final bool isEditMode;
+  final bool isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode;
   final CardEntity? selectedCard;
+  final int quantity;
 
   DeckManagerState({
     required this.allDecks,
@@ -27,17 +24,15 @@ class DeckManagerState {
     this.isDeleteEnabled = false,
     this.isEditMode = false,
     this.selectedCard,
+    this.quantity = 1,
   });
 
   DeckManagerState copyWith({
     List<DeckEntity>? allDecks,
     DeckEntity? deck,
-    bool? isLoading,
-    bool? isShareEnabled,
-    bool? isNfcReadEnabled,
-    bool? isDeleteEnabled,
-    bool? isEditMode,
+    bool? isLoading, isShareEnabled, isNfcReadEnabled, isDeleteEnabled, isEditMode,
     CardEntity? selectedCard,
+    int? quantity,
   }) {
     return DeckManagerState(
       allDecks: allDecks ?? this.allDecks,
@@ -48,6 +43,7 @@ class DeckManagerState {
       isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
       isEditMode: isEditMode ?? this.isEditMode,
       selectedCard: selectedCard ?? this.selectedCard,
+      quantity: quantity ?? this.quantity,
     );
   }
 }
@@ -150,8 +146,12 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     emit(state.copyWith(isNfcReadEnabled: false));
   }
 
-  void addCard(CardEntity card) {
-    final updatedDeck = addCardUseCase(state.deck, card);
+  void setQuantity(int quantity) {
+    emit(state.copyWith(quantity: quantity));
+  }
+
+  void addCard(CardEntity card, int count) {
+    final updatedDeck = addCardUseCase(state.deck, card, count);
     emit(state.copyWith(deck: updatedDeck));
   }
 

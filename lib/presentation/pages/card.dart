@@ -6,7 +6,7 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/card/info/count.dart';
+import '../widgets/card/info/quantity.dart';
 import '../widgets/card/info/info.dart';
 import '../widgets/card/info/image.dart';
 import '../widgets/dialog.dart';
@@ -48,6 +48,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     bool isCustom,
     TextEditingController deckNameController,
   ) {
+    final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
 
@@ -72,7 +73,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
           : locale.translate('title.card'): null,
       if (isAdd)
         locale.translate('toggle.add'): () {
-          context.read<DeckManagerCubit>().addCard(card!);
+          context.read<DeckManagerCubit>().addCard(card!, deckManagerCubit.state.quantity);
           Navigator.of(context).pop();
           showSnackBar(
             context: context,
@@ -102,23 +103,37 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final deckNameController = TextEditingController(text: locale.translate('text.card_name'));
 
     return Scaffold(
-      appBar: AppBarWidget(menu: _buildAppBarMenu(
-        context,
-        locale,
-        card,
-        isAdd,
-        isCustom,
-        deckNameController,
-      )),
-      body: ListView(
-        padding: const EdgeInsets.all(40),
-        children: [
-          CardImageWidget(card: card, isCustom: isCustom),
-          const SizedBox(height: 24),
-          CardInfoWidget(card: card, isCustom: isCustom),
-          const SizedBox(height: 24),
-          CardCountWidget(),
-        ],
+      appBar: AppBarWidget(
+        menu: _buildAppBarMenu(
+          context,
+          locale,
+          card,
+          isAdd,
+          isCustom,
+          deckNameController,
+        ),
+      ),
+      body: BlocBuilder<DeckManagerCubit, DeckManagerState>(
+        builder: (context, state) {
+          final deckManagerCubit = context.read<DeckManagerCubit>();
+
+          return ListView(
+            padding: const EdgeInsets.all(40),
+            children: [
+              CardImageWidget(card: card, isCustom: isCustom),
+              const SizedBox(height: 24),
+              CardInfoWidget(card: card, isCustom: isCustom),
+              if (isAdd) ...[
+                const SizedBox(height: 24),
+                QuantityWidget(
+                  quantityCount: 4,
+                  selectedQuantity: state.quantity,
+                  onSelected: (quantity) => deckManagerCubit.setQuantity(quantity),
+                ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }

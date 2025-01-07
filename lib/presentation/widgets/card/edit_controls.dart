@@ -19,7 +19,7 @@ Widget buildEditControls(
         _buildButton(
           theme,
           Icons.add,
-          () => context.read<DeckManagerCubit>().addCard(card),
+          () => context.read<DeckManagerCubit>().addCard(card, 1),
         ),
         SizedBox(height: 6),
         _buildButton(
