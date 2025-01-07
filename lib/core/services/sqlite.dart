@@ -16,7 +16,7 @@ class SQLiteService {
     int? limit,
   }) async {
     try {
-      final db = await getDatabase();
+      final Database db = await getDatabase();
       await _ensureTableExists(db, table);
       return await db.query(
         table,
@@ -32,7 +32,7 @@ class SQLiteService {
 
   Future<void> insert(String table, Map<String, dynamic> data) async {
     try {
-      final db = await getDatabase();
+      final Database db = await getDatabase();
       await _ensureTableExists(db, table);
       await db.insert(table, data, conflictAlgorithm: ConflictAlgorithm.replace);
     } catch (e) {
@@ -41,7 +41,7 @@ class SQLiteService {
   }
 
   Future<void> _ensureTableExists(Database db, String table) async {
-    final tableExists = await db.rawQuery(
+    final dynamic tableExists = await db.rawQuery(
       "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
       [table],
     );
@@ -51,8 +51,8 @@ class SQLiteService {
   }
 
   Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
-    const chunkSize = 500;
-    final db = await getDatabase();
+    final Database db = await getDatabase();
+    const int chunkSize = 500;
     await db.transaction((txn) async {
       for (int i = 0; i < dataList.length; i += chunkSize) {
         final chunk = dataList.skip(i).take(chunkSize);
@@ -67,7 +67,7 @@ class SQLiteService {
 
   Future<void> delete(String table, String column, dynamic value) async {
     try {
-      final db = await getDatabase();
+      final Database db = await getDatabase();
       await db.delete(table, where: '$column = ?', whereArgs: [value]);
     } catch (e) {
       throw Exception('Failed to delete data from $table: ${e.toString()}');
@@ -76,7 +76,7 @@ class SQLiteService {
 
   Future<void> clear(String table) async {
     try {
-      final db = await getDatabase();
+      final Database db = await getDatabase();
       await db.delete(table);
     } catch (e) {
       throw Exception('Failed to clear table $table: ${e.toString()}');

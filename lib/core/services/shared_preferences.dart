@@ -37,10 +37,8 @@ class SharedPreferencesService {
   Future<void> saveStringList(String key, List<String> value) async => _handleAsync(
     () => _sharedPreferences.setStringList(key, value), 'List<String>');
 
-  Future<void> saveMap(String key, Map<String, dynamic> map) async {
-    final String jsonString = json.encode(map);
-    await _handleAsync(() => _sharedPreferences.setString(key, jsonString), 'Map');
-  }
+  Future<void> saveMap(String key, Map<String, dynamic> map) async => _handleAsync(
+    () => _sharedPreferences.setString(key, json.encode(map)), 'Map');
 
   Future<void> clearKey(String key) async => _handleAsync(
     () => _sharedPreferences.remove(key), 'clear data for key');
