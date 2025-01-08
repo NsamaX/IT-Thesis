@@ -1,8 +1,10 @@
 # Feature
+    [] Game record
     [] Custom card
+    [] Pair System
     [] Sign in
-    [] Filter card
-    [] Drop down for order deck
+    [] Filter Card
+    [] Drag & Drop card for order
 
 # page
     [] About
