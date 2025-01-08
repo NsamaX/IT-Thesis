@@ -11,7 +11,6 @@ class FeaturesDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
 
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
@@ -23,22 +22,22 @@ class FeaturesDrawerWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildFeatureItem(
-                theme: theme,
+                context: context,
                 image: AppImages.game[currentGame],
                 label: null,
-                onTap: () => _navigateToSearch(context, currentGame),
+                onTap: () => _navigateToSearch(context: context, currentGame: currentGame),
               ),
               _buildFeatureItem(
-                theme: theme,
+                context: context,
                 image: null,
                 label: locale.translate('title.games'),
-                onTap: () => _navigateToGames(context),
+                onTap: () => _navigateToGames(context: context),
               ),
               _buildFeatureItem(
-                theme: theme,
+                context: context,
                 image: null,
                 label: locale.translate('title.custom'),
-                onTap: () => _navigateToCustom(context),
+                onTap: () => _navigateToCustom(context: context),
               ),
             ],
           ),
@@ -48,38 +47,38 @@ class FeaturesDrawerWidget extends StatelessWidget {
   }
 
   Widget _buildFeatureItem({
-    required ThemeData theme,
-    String? image,
-    String? label,
-    VoidCallback? onTap,
+    required BuildContext context,
+    required String? image,
+    required String? label,
+    required VoidCallback? onTap,
   }) {
-    const double boxSize = 60;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          width: boxSize,
-          height: boxSize,
-          decoration: BoxDecoration(
+          width: 60,
+          height: 60,
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
-          child: _buildFeatureContent(image: image, label: label, theme: theme),
+          child: _buildFeatureContent(context: context, image: image, label: label),
         ),
       ),
     );
   }
 
   Widget _buildFeatureContent({
-    String? image,
-    String? label,
-    required ThemeData theme,
+    required BuildContext context,
+    required String? image,
+    required String? label,
   }) {
+    final theme = Theme.of(context);
+
     if (image != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
         child: Image.asset(image, fit: BoxFit.cover),
       );
     } else {
@@ -92,18 +91,21 @@ class FeaturesDrawerWidget extends StatelessWidget {
     }
   }
 
-  void _navigateToSearch(BuildContext context, String? currentGame) {
+  void _navigateToSearch({
+      required BuildContext context,
+      required String? currentGame,
+    }) {
     Navigator.of(context).pushNamed(
       AppRoutes.search,
       arguments: {'game': currentGame},
     );
   }
 
-  void _navigateToGames(BuildContext context) {
+  void _navigateToGames({required BuildContext context}) {
     Navigator.of(context).pushNamed(AppRoutes.games);
   }
 
-  void _navigateToCustom(BuildContext context) {
+  void _navigateToCustom({required BuildContext context}) {
     Navigator.of(context).pushNamed(
       AppRoutes.card,
       arguments: {'isCustom': true},

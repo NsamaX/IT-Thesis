@@ -2,24 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-Future<void> showSnackBar({
+Future<void> snackBar({
   required BuildContext context,
   required String content,
-  bool? isError = false,
+  bool isError = false,
 }) async {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(content, style: const TextStyle(color: Colors.white)),
+      content: Text(
+        content,
+        style: const TextStyle(color: Colors.white),
+      ),
       duration: const Duration(seconds: 1),
-      backgroundColor: isError ?? false 
-          ? CupertinoColors.systemRed
+      backgroundColor: isError 
+          ? CupertinoColors.systemRed 
           : CupertinoColors.systemGreen,
     ),
   );
   await Future.delayed(const Duration(seconds: 1));
 }
 
-void showCupertinoAlertCancel({
+void cupertinoAlertDialog({
+  required BuildContext context,
+  required String title,
+  required String content,
+}) {
+  final locale = AppLocalizations.of(context);
+  final theme = Theme.of(context);
+  
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: 'Dismiss',
+    barrierColor: Colors.black.withOpacity(0.5),
+    pageBuilder: (context, animation1, animation2) {
+      return CupertinoAlertDialog(
+        title: Text(
+          title, 
+          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
+        ),
+        content: Text(
+          content, 
+          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            child: Text(
+              locale.translate('button.ok'), 
+              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      );
+    },
+    transitionDuration: const Duration(milliseconds: 200),
+  );
+}
+
+void cupertinoAlertDialogAction({
   required BuildContext context,
   required String title,
   required String content,
@@ -33,24 +74,24 @@ void showCupertinoAlertCancel({
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: Text(
-          title,
+          title, 
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         content: Text(
-          content,
+          content, 
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         actions: [
           CupertinoDialogAction(
             child: Text(
-              locale.translate('button.cancel'),
+              locale.translate('button.cancel'), 
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemRed),
             ),
             onPressed: () => Navigator.of(context).pop(),
           ),
           CupertinoDialogAction(
             child: Text(
-              locale.translate('button.confirm'),
+              locale.translate('button.confirm'), 
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
             ),
             onPressed: () {
@@ -61,42 +102,5 @@ void showCupertinoAlertCancel({
         ],
       );
     },
-  );
-}
-
-void showCupertinoAlertOK({
-  required BuildContext context,
-  required String title,
-  required String content,
-}) {
-  final locale = AppLocalizations.of(context);
-  final theme = Theme.of(context);
-
-  showGeneralDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: 'Dismiss',
-    pageBuilder: (context, animation1, animation2) {
-      return CupertinoAlertDialog(
-        title: Text(
-          title,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
-        content: Text(
-          content,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
-        actions: [
-          CupertinoDialogAction(
-            child: Text(
-              locale.translate('button.ok'),
-              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      );
-    },
-    transitionDuration: const Duration(milliseconds: 200),
   );
 }

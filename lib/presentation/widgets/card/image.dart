@@ -15,21 +15,21 @@ class CardImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return isCustom
+        ? _buildDottedBorder(context: context)
+        : _buildImage(context: context, card: card);
+  }
+
+  Widget _buildDottedBorder({required BuildContext context}) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    return isCustom
-        ? _buildDottedBorder(locale, theme)
-        : _buildImage(locale, theme, card);
-  }
-
-  Widget _buildDottedBorder(AppLocalizations locale, ThemeData theme) {
     return AspectRatio(
       aspectRatio: 3 / 4,
       child: DottedBorder(
         color: Colors.white.withOpacity(0.4),
         borderType: BorderType.RRect,
-        radius: const Radius.circular(16),
+        radius: Radius.circular(16),
         dashPattern: const [16, 26],
         strokeWidth: 2,
         child: Center(
@@ -49,35 +49,46 @@ class CardImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
+  Widget _buildImage({
+      required BuildContext context, 
+      required CardEntity? card,
+    }) {
+    final theme = Theme.of(context);
+    const borderRadius = BorderRadius.all(Radius.circular(16));
+
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
+        color: theme.appBarTheme.backgroundColor,
+        borderRadius: borderRadius,
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            offset: const Offset(3, 4),
+            color: Colors.black38,
+            offset: Offset(3, 4),
             blurRadius: 12,
             spreadRadius: 2,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: borderRadius,
         child: AspectRatio(
           aspectRatio: 3 / 4,
           child: card?.imageUrl != null
               ? Image.network(
                   card!.imageUrl!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildErrorImage(locale, theme),
+                  errorBuilder: (_, __, ___) => _buildErrorImage(context: context),
                 )
-              : _buildErrorImage(locale, theme),
+              : _buildErrorImage(context: context),
         ),
       ),
     );
   }
 
-  Widget _buildErrorImage(AppLocalizations locale, ThemeData theme) {
+  Widget _buildErrorImage({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Container(
       color: theme.appBarTheme.backgroundColor,
       child: Center(

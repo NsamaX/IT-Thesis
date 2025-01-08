@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class QuantityWidget extends StatelessWidget {
+class CardQuantityWidget extends StatelessWidget {
   final int quantityCount;
   final int selectedQuantity;
   final ValueChanged<int> onSelected;
 
-  const QuantityWidget({
+  const CardQuantityWidget({
     Key? key,
     this.quantityCount = 4,
     required this.selectedQuantity,
@@ -25,7 +25,7 @@ class QuantityWidget extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Container(
-            width: boxWidth * quantityCount + boxWidth / 2,
+            width: boxWidth * quantityCount + boxWidth,
             height: boxHeight,
             decoration: BoxDecoration(
               color: theme.appBarTheme.backgroundColor,
@@ -51,24 +51,33 @@ class QuantityWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(
-              quantityCount,
+              quantityCount * 2 - 1,
               (index) {
-                final isSelected = selectedQuantity == index + 1;
+                if (index.isOdd) {
+                  return Container(
+                    width: 1,
+                    height: boxHeight * 0.6,
+                    color: theme.dividerColor,
+                  );
+                }
+                final actualIndex = index ~/ 2;
+                final isSelected = selectedQuantity == actualIndex + 1;
                 return GestureDetector(
-                  onTap: () => onSelected(index + 1),
-                  child: SizedBox(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => onSelected(actualIndex + 1),
+                  child: Container(
                     width: boxWidth,
                     height: boxHeight,
                     child: Center(
                       child: AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 600),
                         style: theme.textTheme.titleMedium?.copyWith(
                               color: isSelected
                                   ? theme.colorScheme.surface
                                   : theme.textTheme.titleMedium?.color,
                             ) ??
                             const TextStyle(),
-                        child: Text('${index + 1}'),
+                        child: Text('${actualIndex + 1}'),
                       ),
                     ),
                   ),

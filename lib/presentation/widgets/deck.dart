@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
-import '../../cubits/deck_manager.dart';
+import '../cubits/deck_manager.dart';
 
 class DeckWidget extends StatelessWidget {
   final DeckEntity deck;
@@ -14,29 +14,30 @@ class DeckWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildDeckContainer(context, theme),
-        if (isEditMode) _buildDeleteButton(context, theme),
+        _buildDeckContainer(context: context),
+        if (isEditMode) _buildDeleteButton(context:context),
       ],
     );
   }
 
-  Widget _buildDeckContainer(BuildContext context, ThemeData theme) {
+  Widget _buildDeckContainer({required BuildContext context}) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
-      onTap: () => _navigateToDeckBuilder(context),
+      onTap: () => _navigateToDeckBuilder(context: context),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
           color: theme.appBarTheme.backgroundColor,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: Colors.black.withOpacity(0.6),
-              offset: const Offset(3, 4),
+              color: Colors.black54,
+              offset: Offset(3, 4),
               blurRadius: 6,
               spreadRadius: 0,
             ),
@@ -56,7 +57,14 @@ class DeckWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDeleteButton(BuildContext context, ThemeData theme) {
+  void _navigateToDeckBuilder({required BuildContext context}) {
+    context.read<DeckManagerCubit>().setDeck(deck);
+    Navigator.of(context).pushNamed(AppRoutes.newDeck);
+  }
+
+  Widget _buildDeleteButton({required BuildContext context}) {
+    final theme = Theme.of(context);
+
     return Positioned(
       top: -2,
       right: -2,
@@ -65,6 +73,10 @@ class DeckWidget extends StatelessWidget {
         child: Container(
           width: 30,
           height: 30,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+          ),
           child: Icon(
             Icons.close_rounded,
             color: theme.colorScheme.primary,
@@ -73,10 +85,5 @@ class DeckWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _navigateToDeckBuilder(BuildContext context) {
-    context.read<DeckManagerCubit>().setDeck(deck);
-    Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 }

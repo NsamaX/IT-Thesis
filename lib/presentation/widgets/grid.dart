@@ -11,9 +11,12 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDeckEntity = items.isNotEmpty && items.first is DeckEntity;
-    final bool isCardEntity = items.isNotEmpty && items.first is CardEntity;
+    if (items.isEmpty) return Container();
+
+    final isDeckEntity = items.first is DeckEntity;
+    final isCardEntity = items.first is CardEntity;
     final double spacing = isDeckEntity ? 12 : 8;
+
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -23,18 +26,27 @@ class GridWidget extends StatelessWidget {
         mainAxisSpacing: spacing,
       ),
       itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-         if (isDeckEntity) {
-          return DeckWidget(deck: item as DeckEntity);
-        } else if (isCardEntity) {
-          final card = item as CardEntity;
-          return CardWidget(card: card);
-        } else {
-          final cardEntry = item as MapEntry<CardEntity, int>;
-          return CardWidget(card: cardEntry.key, count: cardEntry.value);
-        }
-      },
+      itemBuilder: (context, index) => _buildGridItem(
+        item: items[index],
+        isDeckEntity: isDeckEntity,
+        isCardEntity: isCardEntity,
+      ),
     );
+  }
+
+  Widget _buildGridItem({
+    required dynamic item,
+    required bool isDeckEntity,
+    required bool isCardEntity,
+  }) {
+    if (isDeckEntity) {
+      return DeckWidget(deck: item as DeckEntity);
+    } else if (isCardEntity) {
+      final card = item as CardEntity;
+      return CardWidget(card: card);
+    } else {
+      final cardEntry = item as MapEntry<CardEntity, int>;
+      return CardWidget(card: cardEntry.key, count: cardEntry.value);
+    }
   }
 }

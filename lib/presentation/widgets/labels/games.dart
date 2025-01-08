@@ -3,47 +3,45 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import '../../cubits/app_state.dart';
 
-class SupportedGameLabelWidget extends StatelessWidget {
+class GamesLabelWidget extends StatelessWidget {
   final String game;
-  final String description;
   final String imagePath;
+  final String description;
   final bool isAdd;
 
-  const SupportedGameLabelWidget({
+  const GamesLabelWidget({
     Key? key,
     required this.game,
-    required this.description,
     required this.imagePath,
+    required this.description,
     this.isAdd = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cubit = context.read<AppStateCubit>();
-
     return GestureDetector(
-      onTap: () => _handleTap(context, cubit),
-      child: _buildContainer(theme),
+      onTap: () => _handleTap(context: context),
+      child: _buildContainer(context: context),
     );
   }
 
-
-  void _handleTap(BuildContext context, AppStateCubit cubit) {
-    cubit.updateSelectedGame(game);
+  void _handleTap({required BuildContext context}) {
+    context.read<AppStateCubit>().updateSelectedGame(game);
     Navigator.of(context).pushReplacementNamed(
       AppRoutes.search,
       arguments: {'game': game, 'isAdd': isAdd},
     );
   }
 
-  Widget _buildContainer(ThemeData theme) {
+  Widget _buildContainer({required BuildContext context}) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 6),
       height: 60,
       decoration: BoxDecoration(
         color: theme.appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -59,7 +57,7 @@ class SupportedGameLabelWidget extends StatelessWidget {
           children: [
             _buildImage(),
             const SizedBox(width: 12),
-            _buildGameInfo(theme),
+            _buildGameInfo(context: context),
           ],
         ),
       ),
@@ -70,30 +68,46 @@ class SupportedGameLabelWidget extends StatelessWidget {
     return Container(
       width: 36,
       height: 36,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
         child: Image.asset(imagePath),
       ),
     );
   }
 
-  Widget _buildGameInfo(ThemeData theme) {
+  Widget _buildGameInfo({required BuildContext context}) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-            Text(game, style: theme.textTheme.bodyMedium, overflow: TextOverflow.ellipsis, maxLines: 1),
-            const SizedBox(height: 4),
-            Text(_extractDescription(description), style: theme.textTheme.bodySmall, overflow: TextOverflow.ellipsis, maxLines: 1),
-          ],
+          Text(
+            game,
+            style: theme.textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _extractDescription(description: description),
+            style: theme.textTheme.bodySmall,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ],
       ),
     );
   }
 
-  String _extractDescription(String desc) => desc.split('//').length > 1 ? desc.split('//')[1] : desc;
+  String _extractDescription({required String description}) {
+    final parts = description.split('//');
+
+    return parts.length > 1 ? parts[1] : description;
+  }
 }

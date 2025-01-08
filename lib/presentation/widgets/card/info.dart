@@ -25,47 +25,46 @@ class CardInfoWidget extends StatelessWidget {
           style: theme.textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
-        _buildDescription(locale, theme),
+        _buildDescription(context: context),
       ],
     );
   }
 
-  Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
-    if (isCustom) {
-      return _buildEditableDescription();
-    }
-    if (card == null) {
-      return Container();
-    }
-    if (card!.additionalData == null) {
-      return _buildDescriptionText(
-        theme,
-        card!.description ?? locale.translate('text.no_card_description'),
-      );
-    }
-    return _buildAdditionalDataDescription(theme);
+  Widget _buildDescription({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+
+    if (isCustom) return _buildEditableDescription();
+    if (card == null) return const SizedBox();
+    if (card!.additionalData != null) return _buildAdditionalDataDescription(context: context);
+
+    return _buildDescriptionText(
+      context: context,
+      text: card!.description ?? locale.translate('text.no_card_description'),
+    );
   }
 
   Widget _buildEditableDescription() {
-    return Opacity(
+    return const Opacity(
       opacity: 0.6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
+        children: [
           Icon(Icons.edit_rounded),
         ],
       ),
     );
   }
 
-  Widget _buildAdditionalDataDescription(ThemeData theme) {
+  Widget _buildAdditionalDataDescription({required BuildContext context}) {
+    final theme = Theme.of(context);
+
     return Opacity(
       opacity: 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: card!.additionalData!.entries.map((entry) {
           final value = entry.value;
-          if (value is String && value.isNotEmpty || value is num) {
+          if ((value is String && value.isNotEmpty) || value is num) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: RichText(
@@ -90,10 +89,18 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText(ThemeData theme, String text) {
+  Widget _buildDescriptionText({
+      required BuildContext context,
+      required String text,
+    }) {
+    final theme = Theme.of(context);
+
     return Opacity(
       opacity: 0.6,
-      child: Text(text, style: theme.textTheme.bodyMedium),
+      child: Text(
+        text,
+        style: theme.textTheme.bodyMedium,
+      ),
     );
   }
 }

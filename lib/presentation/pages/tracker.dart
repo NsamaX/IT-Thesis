@@ -8,10 +8,10 @@ import '../cubits/deck_manager.dart';
 import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
-import '../widgets/dialog.dart';
-import '../widgets/drawer/history.dart';
-import '../widgets/label/card.dart';
-import '../widgets/navigation_bar/app.dart';
+import '../widgets/drawers/history.dart';
+import '../widgets/labels/card.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/notifications.dart';
 
 class TrackerPage extends StatefulWidget {
   @override
@@ -101,12 +101,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     if (tag != null) {
       try {
         context.read<TrackCubit>().readTag(tag);
-        showSnackBar(
+        snackBar(
           context: context,
           content: locale.translate('snack_bar.nfc.read_success'),
         );
       } catch (e) {
-        showSnackBar(
+        snackBar(
           context: context,
           content: locale.translate('snack_bar.nfc.read_failed'),
         );
@@ -117,7 +117,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   void _showTrackerDialog(BuildContext context, AppLocalizations locale) {
     Future.microtask(() {
       context.read<TrackCubit>().showDialog();
-      showCupertinoAlertOK(
+      cupertinoAlertDialog(
         context: context,
         title: locale.translate('dialog.tracker.title'),
         content: locale.translate('dialog.tracker.content'),

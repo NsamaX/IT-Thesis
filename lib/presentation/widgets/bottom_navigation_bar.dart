@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import '../../cubits/app_state.dart';
+import '../cubits/app_state.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   const BottomNavigationBarWidget({Key? key}) : super(key: key);
@@ -21,13 +21,8 @@ class BottomNavigationBarWidget extends StatelessWidget {
       builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: state.currentPageIndex,
-          onTap: (index) => _navigateToPage(context, index),
-          items: navigationItems.map((item) {
-            return BottomNavigationBarItem(
-              icon: Icon(item['icon'] as IconData),
-              label: locale.translate(item['label'] as String),
-            );
-          }).toList(),
+          onTap: (index) => _navigateToPage(context: context, index: index),
+          items: _buildNavigationItems(items: navigationItems, locale: locale),
           selectedItemColor: theme.colorScheme.primary,
           unselectedItemColor: theme.iconTheme.color,
           backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
@@ -36,15 +31,33 @@ class BottomNavigationBarWidget extends StatelessWidget {
     );
   }
 
-  void _navigateToPage(BuildContext context, int index) {
-    final appStateCubit = context.read<AppStateCubit>();
-    if (index != appStateCubit.state.currentPageIndex) {
-      appStateCubit.updatePageIndex(index);
+  void _navigateToPage({
+      required BuildContext context,
+      required int index,
+    }) {
+    final cubit = context.read<AppStateCubit>();
+
+    if (index != cubit.state.currentPageIndex) {
+      cubit.updatePageIndex(index);
       Navigator.pushNamedAndRemoveUntil(
         context,
-        appStateCubit.getRouteForIndex(index),
+        cubit.getRouteForIndex(index),
         (_) => false,
       );
     }
+  }
+
+  List<BottomNavigationBarItem> _buildNavigationItems({
+      required List<Map<String, Object>> items,
+      required AppLocalizations locale,
+    }) {
+    return items
+        .map(
+          (item) => BottomNavigationBarItem(
+            icon: Icon(item['icon'] as IconData),
+            label: locale.translate(item['label'] as String),
+          ),
+        )
+        .toList();
   }
 }

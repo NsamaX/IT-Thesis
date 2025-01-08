@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/card/grid.dart';
-import '../widgets/navigation_bar/app.dart';
+import '../widgets/grid.dart';
+import '../widgets/app_bar.dart';
 
 class LibraryPage extends StatelessWidget {
   @override

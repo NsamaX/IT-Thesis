@@ -6,11 +6,11 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/card/info/quantity.dart';
-import '../widgets/card/info/info.dart';
-import '../widgets/card/info/image.dart';
-import '../widgets/dialog.dart';
-import '../widgets/navigation_bar/app.dart';
+import '../widgets/card/quantity.dart';
+import '../widgets/card/info.dart';
+import '../widgets/card/image.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/notifications.dart';
 
 class CardPage extends StatefulWidget {
   @override
@@ -35,6 +35,12 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.didChangeDependencies();
     final locale = AppLocalizations.of(context);
     _deckNameController = TextEditingController(text: locale.translate('text.card_name'));
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final card = arguments?['card'] as CardEntity?;
+    if (card != null) {
+      final deckManagerCubit = context.read<DeckManagerCubit>();
+      deckManagerCubit.setQuantity(1);
+    }
   }
 
   @override
@@ -77,7 +83,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
         locale.translate('toggle.add'): () {
           deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
           Navigator.of(context).pop();
-          showSnackBar(
+          snackBar(
             context: context,
             content: locale.translate('snack_bar.card.add_success'),
           );
@@ -123,7 +129,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
               CardInfoWidget(card: card, isCustom: isCustom),
               if (isAdd) ...[
                 const SizedBox(height: 24),
-                QuantityWidget(
+                CardQuantityWidget(
                   quantityCount: 4,
                   selectedQuantity: state.quantity,
                   onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),

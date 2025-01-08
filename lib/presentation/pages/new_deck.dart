@@ -5,9 +5,9 @@ import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/card/grid.dart';
-import '../widgets/dialog.dart';
-import '../widgets/navigation_bar/app.dart';
+import '../widgets/grid.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/notifications.dart';
 
 class NewDeckPage extends StatefulWidget {
   @override
@@ -58,14 +58,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     _nfcCubit.markSnackBarDisplayed();
     if (state.isOperationSuccessful) {
       final successMessage = locale.translate('snack_bar.nfc.write_success');
-      await showSnackBar(
+      await snackBar(
         context: context,
         content: successMessage,
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage.isNotEmpty) {
       final errorMessage = locale.translate('snack_bar.nfc.write_failed');
-      await showSnackBar(
+      await snackBar(
         context: context,
         content: errorMessage,
         isError: true,
@@ -129,13 +129,13 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     DeckManagerCubit cubit,
     AppLocalizations locale,
   ) {
-    showCupertinoAlertCancel(
+    cupertinoAlertDialogAction(
       context: context,
       title: locale.translate('dialog.deck.title'),
       content: locale.translate('dialog.deck.content'),
       onConfirm: () {
         cubit.toggleDelete();
-        showSnackBar(
+        snackBar(
           context: context,
           content: locale.translate('snack_bar.deck.deleted'),
         );
@@ -158,7 +158,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
 
   void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
-    showSnackBar(
+    snackBar(
       context: context,
       content: locale.translate('snack_bar.deck.share'),
     );

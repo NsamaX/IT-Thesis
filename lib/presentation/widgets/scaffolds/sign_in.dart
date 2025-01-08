@@ -2,34 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import '../../cubits/app_state.dart';
 import '../../cubits/settings.dart';
 
-class SignInWidget extends StatelessWidget {
-  const SignInWidget({Key? key}) : super(key: key);
+class SignInScaffoldWidget extends StatelessWidget {
+  const SignInScaffoldWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTitle(theme, locale),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 80),
-              child: _buildGoogleIcon(context),
-            ),
-            _buildSignInButton(context, locale),
+            _buildTitle(context: context),
+            const SizedBox(height: 80),
+            _buildGoogleIcon(),
+            const SizedBox(height: 80),
+            _buildSignInButton(context: context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTitle(ThemeData theme, AppLocalizations locale) {
+  Widget _buildTitle({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Text(
       locale.translate('title.sign_in'),
       style: theme.textTheme.titleLarge,
@@ -37,15 +37,9 @@ class SignInWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildGoogleIcon(BuildContext context) {
+  Widget _buildGoogleIcon() {
     return GestureDetector(
-      onTap: () {
-        // context.read<SettingsCubit>().updateFirstLoad(false);
-        // Navigator.of(context).pushNamedAndRemoveUntil(
-        //   AppRoutes.my_decks,
-        //   (_) => false,
-        // );
-      },
+      onTap: () {},
       child: Container(
         width: 60,
         height: 60,
@@ -61,18 +55,23 @@ class SignInWidget extends StatelessWidget {
             ),
           ],
         ),
-        child: Image.asset('assets/images/google.png'),
+        child: const Image(
+          image: AssetImage('assets/images/google.png'),
+        ),
       ),
     );
   }
 
-  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) {
+  Widget _buildSignInButton({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+
     return SizedBox(
       width: 132,
       height: 46,
       child: ElevatedButton(
         onPressed: () {
           context.read<SettingsCubit>().updateFirstLoad(false);
+          context.read<AppStateCubit>().updatePageIndex(0);
           Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.myDecks,
             (_) => false,

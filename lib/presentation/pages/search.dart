@@ -5,9 +5,9 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
 import '../cubits/search.dart';
-import '../widgets/label/card.dart';
-import '../widgets/navigation_bar/app.dart';
-import '../widgets/search.dart';
+import '../widgets/labels/card.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/search_bar.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/sign_in/sign_in.dart';
+import '../widgets/scaffolds/sign_in.dart';
 
 class SignInPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => SignInWidget();
+  Widget build(BuildContext context) => SignInScaffoldWidget();
 }

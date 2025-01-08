@@ -6,10 +6,10 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/scan.dart';
-import '../widgets/drawer/features.dart';
-import '../widgets/drawer/history.dart';
-import '../widgets/navigation_bar/app.dart';
-import '../widgets/navigation_bar/bottom.dart';
+import '../widgets/drawers/features.dart';
+import '../widgets/drawers/history.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/nfc.dart';
 
 class ReaderPage extends StatefulWidget {
@@ -50,6 +50,9 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
             listenWhen: (previous, current) => previous.lastReadTag != current.lastReadTag && current.lastReadTag != null,
             listener: (context, nfcState) {
               context.read<ScanCubit>().fetchCardById(nfcState.lastReadTag!);
+              if (nfcState.lastReadTag != null && context.read<DrawerCubit>().isDrawerVisible('history') == false) {
+                context.read<DrawerCubit>().toggleDrawer('history');
+              }
             },
             child: Scaffold(
               appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
@@ -94,8 +97,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
           left: state['history']! ? 0 : -200,
           child: BlocBuilder<ScanCubit, ScanCubitState>(
             builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(
-                  savedTags: scanHistoryState.cards ?? []);
+              return HistoryDrawerWidget(savedTags: scanHistoryState.cards ?? []);
             },
           ),
         );
@@ -105,8 +107,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
 
   Widget _buildFeaturesDrawer(BuildContext context) {
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) =>
-          previous['feature'] != current['feature'],
+      buildWhen: (previous, current) => previous['feature'] != current['feature'],
       builder: (context, state) {
         return AnimatedPositioned(
           duration: const Duration(milliseconds: 200),

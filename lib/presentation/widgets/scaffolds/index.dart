@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 
-class IndexWidget extends StatelessWidget {
-  const IndexWidget({Key? key}) : super(key: key);
+class IndexScaffoldWidget extends StatelessWidget {
+  const IndexScaffoldWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -17,11 +14,11 @@ class IndexWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildTitle(theme, locale),
+              _buildTitle(context: context),
               const SizedBox(height: 30),
-              _buildDescription(theme, locale),
+              _buildDescription(context: context),
               const SizedBox(height: 38),
-              _buildSignInButton(context, locale),
+              _buildSignInButton(context: context),
             ],
           ),
         ),
@@ -29,7 +26,10 @@ class IndexWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(ThemeData theme, AppLocalizations locale) {
+  Widget _buildTitle({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    
     return Text(
       locale.translate('title.index'),
       style: theme.textTheme.titleLarge,
@@ -37,7 +37,10 @@ class IndexWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(ThemeData theme, AppLocalizations locale) {
+  Widget _buildDescription({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Text(
       locale.translate('tutorial.index'),
       style: theme.textTheme.bodyMedium,
@@ -45,7 +48,9 @@ class IndexWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) {
+  Widget _buildSignInButton({required BuildContext context}) {
+    final locale = AppLocalizations.of(context);
+
     return SizedBox(
       width: 132,
       height: 46,
