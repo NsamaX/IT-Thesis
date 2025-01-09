@@ -4,15 +4,20 @@ import '../labels/card.dart';
 
 class HistoryDrawerWidget extends StatelessWidget {
   final List<CardEntity> cards;
+  final double height;
 
-  const HistoryDrawerWidget({Key? key, required this.cards}) : super(key: key);
+  const HistoryDrawerWidget({
+    Key? key,
+    required this.cards,
+    required this.height,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final reversedTags = cards.reversed.toList();
+    final reversedCards = cards.reversed.toList();
     return Container(
       width: 200,
-      height: MediaQuery.of(context).size.height,
+      height: height,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -25,10 +30,10 @@ class HistoryDrawerWidget extends StatelessWidget {
         ],
       ),
       child: ListView.builder(
-        itemCount: reversedTags.length,
+        itemCount: reversedCards.length,
         itemBuilder: (context, index) {
           return CardLabelWidget(
-            card: reversedTags[index],
+            card: reversedCards[index],
             lightTheme: true,
           );
         },

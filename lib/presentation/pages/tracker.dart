@@ -35,7 +35,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
@@ -64,25 +63,23 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             }
             return Scaffold(
               appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
-              body: Stack(
-                children: [
-                  _buildCardList(context, state),
-                  _buildHistoryDrawer(context),
-                  BlocBuilder<DrawerCubit, Map<String, bool>>(
-                    builder: (context, state) {
-                      if (state['history'] == true) {
-                        return GestureDetector(
-                          onTap: () => context.read<DrawerCubit>().closeDrawer(),
-                          behavior: HitTestBehavior.opaque,
-                          child: Container(
-                            color: Colors.transparent,
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
+              body: GestureDetector(
+                onTap: () => context.read<DrawerCubit>().closeDrawer(),
+                behavior: HitTestBehavior.opaque,
+                child: BlocBuilder<DrawerCubit, Map<String, bool>>(
+                  builder: (context, drawerState) {
+                    final isDrawerOpen = drawerState['history'] ?? false;
+                    return Stack(
+                      children: [
+                        AbsorbPointer(
+                          absorbing: isDrawerOpen,
+                          child: _buildCardList(context, state),
+                        ),
+                        _buildHistoryDrawer(context),
+                      ],
+                    );
+                  },
+                ),
               ),
             );
           },
@@ -156,6 +153,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   }
 
   Widget _buildHistoryDrawer(BuildContext context) {
+    final double appBarHeight = AppBar().preferredSize.height;
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
       builder: (context, drawerState) {
@@ -165,7 +163,10 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           left: drawerState['history']! ? 0 : -200,
           child: BlocBuilder<TrackCubit, TrackState>(
             builder: (context, trackState) {
-              return HistoryDrawerWidget(cards: trackState.history);
+              return HistoryDrawerWidget(
+                height: MediaQuery.of(context).size.height - appBarHeight - 30,
+                cards: trackState.history,
+              );
             },
           ),
         );

@@ -88,6 +88,8 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   }
 
   Widget _buildHistoryDrawer(BuildContext context) {
+    final double appBarHeight = AppBar().preferredSize.height;
+    final double bottomNavBarHeight = kBottomNavigationBarHeight;
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
       builder: (context, state) {
@@ -97,7 +99,10 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
           left: state['history']! ? 0 : -200,
           child: BlocBuilder<ScanCubit, ScanCubitState>(
             builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(cards: scanHistoryState.cards ?? []);
+              return HistoryDrawerWidget(
+                height: MediaQuery.of(context).size.height - appBarHeight - bottomNavBarHeight - 30,
+                cards: scanHistoryState.cards ?? [],
+              );
             },
           ),
         );
