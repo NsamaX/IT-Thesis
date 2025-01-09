@@ -102,12 +102,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       try {
         context.read<TrackCubit>().readTag(tag);
         snackBar(
-          context: context,
+          context,
           content: locale.translate('snack_bar.nfc.read_success'),
         );
       } catch (e) {
         snackBar(
-          context: context,
+          context,
           content: locale.translate('snack_bar.nfc.read_failed'),
         );
       }
@@ -118,7 +118,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     Future.microtask(() {
       context.read<TrackCubit>().showDialog();
       cupertinoAlertDialog(
-        context: context,
+        context,
         title: locale.translate('dialog.tracker.title'),
         content: locale.translate('dialog.tracker.content'),
       );
@@ -188,7 +188,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           left: drawerState['history']! ? 0 : -200,
           child: BlocBuilder<TrackCubit, TrackState>(
             builder: (context, trackState) {
-              return HistoryDrawerWidget(savedTags: trackState.history);
+              return HistoryDrawerWidget(cards: trackState.history);
             },
           ),
         );

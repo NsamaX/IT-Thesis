@@ -27,7 +27,7 @@ class CardWidget extends StatelessWidget {
     return Stack(
       children: [
         _buildCardContainer(context, isSelected, isNfcReadEnabled),
-        if (isEditMode && !isNfcReadEnabled) buildEditControls(context: context, card: card, count: count),
+        if (isEditMode && !isNfcReadEnabled) buildEditControls(context, card: card, count: count),
       ],
     );
   }

@@ -15,9 +15,9 @@ class IndexScaffoldWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildTitle(context),
-              const SizedBox(height: 30),
+              const SizedBox(height: 30.0),
               _buildDescription(context),
-              const SizedBox(height: 38),
+              const SizedBox(height: 38.0),
               _buildSignInButton(context),
             ],
           ),
@@ -29,7 +29,6 @@ class IndexScaffoldWidget extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Text(
       locale.translate('title.index'),
       style: theme.textTheme.titleLarge,
@@ -40,7 +39,6 @@ class IndexScaffoldWidget extends StatelessWidget {
   Widget _buildDescription(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Text(
       locale.translate('tutorial.index'),
       style: theme.textTheme.bodyMedium,
@@ -50,10 +48,9 @@ class IndexScaffoldWidget extends StatelessWidget {
 
   Widget _buildSignInButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
-
     return SizedBox(
-      width: 132,
-      height: 46,
+      width: 132.0,
+      height: 46.0,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
         child: Text(locale.translate('button.start')),

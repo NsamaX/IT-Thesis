@@ -8,59 +8,52 @@ class CardInfoWidget extends StatelessWidget {
 
   const CardInfoWidget({
     Key? key,
-    required this.card,
+    this.card,
     this.isCustom = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          card?.name ?? locale.translate('text.description'),
-          style: theme.textTheme.titleSmall,
-        ),
-        const SizedBox(height: 8),
+        _buildTitle(context),
+        const SizedBox(height: 8.0),
         _buildDescription(context),
       ],
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    if (isCustom) return _buildEditableDescription();
-
-    final cardData = card;
-    if (cardData == null) return const SizedBox();
-    if (cardData.additionalData != null) return _buildAdditionalDataDescription(context);
-
+  Widget _buildTitle(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    return _buildDescriptionText(
-      context,
-      cardData.description ?? locale.translate('text.no_card_description'),
+    return Text(
+      locale.translate('text.description'),
+      style: Theme.of(context).textTheme.titleSmall,
     );
   }
 
-  Widget _buildEditableDescription() {
+  Widget _buildDescription(BuildContext context) {
+    if (isCustom) return _buildEditable();
+    if (card == null) return const SizedBox();
+    if (card!.additionalData != null) return _buildAdditionalData(context);
+    return _buildNoAdditionalData(context, card: card!);
+  }
+
+  Widget _buildEditable() {
     return const Opacity(
       opacity: 0.6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Icon(Icons.edit_rounded),
+          const Icon(Icons.edit_rounded),
         ],
       ),
     );
   }
 
-  Widget _buildAdditionalDataDescription(BuildContext context) {
+  Widget _buildAdditionalData(BuildContext context) {
     final additionalData = card?.additionalData;
-
     if (additionalData == null) return const SizedBox();
-
     final theme = Theme.of(context);
     return Opacity(
       opacity: 0.6,
@@ -93,13 +86,16 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText(BuildContext context, String text) {
+  Widget _buildNoAdditionalData(
+    BuildContext context, {
+    required CardEntity card,
+  }) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Opacity(
       opacity: 0.6,
       child: Text(
-        text,
+        card.description ?? locale.translate('text.no_card_description'),
         style: theme.textTheme.bodyMedium,
       ),
     );

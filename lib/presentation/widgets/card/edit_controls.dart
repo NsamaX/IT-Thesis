@@ -3,41 +3,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../cubits/deck_manager.dart';
 
-Widget buildEditControls({
-  required BuildContext context,
+Widget buildEditControls(
+  BuildContext context, {
   required CardEntity card,
-  int count = 0,
+  required int count,
 }) {
-  const double buttonSize = 24;
-
+  const double buttonSize = 24.0;
+  const double spacing = 12.0;
   return Positioned(
-    top: 0,
-    right: 0,
+    top: 0.0,
+    right: 0.0,
     child: Column(
       children: [
-        _buildCount(context, count, buttonSize),
-        const SizedBox(height: 6),
-        _buildButton(
+        _buildCardCount(context, count: count, size: buttonSize),
+        const SizedBox(height: spacing),
+        _buildOperatorButton(
           context,
+          onPressed: () => context.read<DeckManagerCubit>().addCard(card, 1),
           icon: Icons.add,
           size: buttonSize,
-          onPressed: () => context.read<DeckManagerCubit>().addCard(card, 1),
         ),
-        const SizedBox(height: 6),
-        _buildButton(
+        const SizedBox(height: spacing),
+        _buildOperatorButton(
           context,
+          onPressed: () => context.read<DeckManagerCubit>().removeCard(card),
           icon: Icons.remove,
           size: buttonSize,
-          onPressed: () => context.read<DeckManagerCubit>().removeCard(card),
         ),
       ],
     ),
   );
 }
 
-Widget _buildCount(BuildContext context, int count, double size) {
+Widget _buildCardCount(
+  BuildContext context, {
+  required int count,
+  required double size,
+}) {
   final theme = Theme.of(context);
-
   return Container(
     width: size,
     height: size,
@@ -55,29 +58,26 @@ Widget _buildCount(BuildContext context, int count, double size) {
   );
 }
 
-Widget _buildButton(BuildContext context, {
+Widget _buildOperatorButton(
+  BuildContext context, {
+  required VoidCallback onPressed,
   required IconData icon,
   required double size,
-  required VoidCallback onPressed,
 }) {
   final theme = Theme.of(context);
-
-  return Padding(
-    padding: const EdgeInsets.only(top: 6),
-    child: GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: theme.appBarTheme.backgroundColor,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          size: size / 1.5,
-          color: theme.colorScheme.primary,
-        ),
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: theme.appBarTheme.backgroundColor,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(
+        icon,
+        size: size / 1.5,
+        color: theme.colorScheme.primary,
       ),
     ),
   );

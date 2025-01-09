@@ -11,33 +11,37 @@ class FeaturesDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-
     return BlocBuilder<AppStateCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
-
         return Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsets.only(right: 8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildFeatureItem(
                 context,
+                onTap: () => Navigator.of(context).pushNamed(
+                  AppRoutes.search,
+                  arguments: {'game': currentGame},
+                ),
                 image: AppImages.game[currentGame],
                 label: null,
-                onTap: () => _navigateToSearch(context, currentGame),
               ),
               _buildFeatureItem(
                 context,
+                onTap: () => Navigator.of(context).pushNamed(AppRoutes.games),
                 image: null,
                 label: locale.translate('title.games'),
-                onTap: () => _navigateToGames(context),
               ),
               _buildFeatureItem(
                 context,
+                onTap: () => Navigator.of(context).pushNamed(
+                  AppRoutes.card,
+                  arguments: {'isCustom': true},
+                ),
                 image: null,
                 label: locale.translate('title.custom'),
-                onTap: () => _navigateToCustom(context),
               ),
             ],
           ),
@@ -48,20 +52,20 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
   Widget _buildFeatureItem(
     BuildContext context, {
-    required String? image,
-    required String? label,
-    required VoidCallback? onTap,
+    VoidCallback? onTap,
+    String? image,
+    String? label,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20.0),
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 60,
-          height: 60,
+          width: 60.0,
+          height: 60.0,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
           child: _buildFeatureContent(context, image: image, label: label),
         ),
@@ -71,41 +75,19 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
   Widget _buildFeatureContent(
     BuildContext context, {
-    required String? image,
-    required String? label,
+    String? image,
+    String? label,
   }) {
     final theme = Theme.of(context);
-
-    if (image != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.asset(image, fit: BoxFit.cover),
-      );
-    } else {
-      return Center(
-        child: Text(
-          label ?? '',
-          style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
-        ),
-      );
-    }
-  }
-
-  void _navigateToSearch(BuildContext context, String? currentGame) {
-    Navigator.of(context).pushNamed(
-      AppRoutes.search,
-      arguments: {'game': currentGame},
+    if (image != null) return ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: Image.asset(image, fit: BoxFit.cover),
     );
-  }
-
-  void _navigateToGames(BuildContext context) {
-    Navigator.of(context).pushNamed(AppRoutes.games);
-  }
-
-  void _navigateToCustom(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      AppRoutes.card,
-      arguments: {'isCustom': true},
+    return Center(
+      child: Text(
+        label ?? '',
+        style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
+      ),
     );
   }
 }

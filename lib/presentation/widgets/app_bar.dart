@@ -16,8 +16,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           ? Center(
               child: _buildMenuItem(
                 context,
-                menu.keys.first,
-                menu.values.first,
+                onTapFunction: menu.values.first,
+                menuKey: menu.keys.first,
                 isTitle: true,
               ),
             )
@@ -27,9 +27,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   .map(
                     (entry) => _buildMenuItem(
                       context,
-                      entry.key,
-                      entry.value,
-                      isTitle: _isTitle(entry.key),
+                      onTapFunction: entry.value,
+                      menuKey: entry.key,
+                      isTitle: _isTitle(menuKey: entry.key),
                     ),
                   )
                   .toList(),
@@ -38,17 +38,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildMenuItem(
-    BuildContext context,
-    dynamic menuKey,
-    dynamic onTapFunction,
-    {required bool isTitle}
-  ) {
+    BuildContext context, {
+    required dynamic onTapFunction,
+    required dynamic menuKey,
+    required bool isTitle,
+  }) {
     final theme = Theme.of(context);
-
     return GestureDetector(
-      onTap: () => _handleMenuTap(context, onTapFunction),
+      onTap: () => _handleMenuTap(context, onTapFunction: onTapFunction),
       child: SizedBox(
-        width: isTitle ? 142 : 42,
+        width: isTitle ? 142.0 : 42.0,
         height: kToolbarHeight,
         child: Center(
           child: menuKey is IconData
@@ -67,7 +66,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  void _handleMenuTap(BuildContext context, dynamic onTapFunction) {
+  void _handleMenuTap(
+    BuildContext context, {
+    required dynamic onTapFunction,
+  }) {
     if (onTapFunction == null) return;
     if (onTapFunction is String) {
       if (onTapFunction.startsWith('/back')) {
@@ -86,7 +88,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  bool _isTitle(dynamic menuKey) {
-    return menuKey == menu.keys.elementAt(menu.length ~/ 2);
-  }
+  bool _isTitle({required dynamic menuKey}) => menuKey == menu.keys.elementAt(menu.length ~/ 2);
 }

@@ -84,7 +84,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
           deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
           Navigator.of(context).pop();
           snackBar(
-            context: context,
+            context,
             content: locale.translate('snack_bar.card.add_success'),
           );
         },
@@ -130,9 +130,9 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
               if (isAdd) ...[
                 const SizedBox(height: 24),
                 CardQuantityWidget(
+                  onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
                   quantityCount: 4,
                   selectedQuantity: state.quantity,
-                  onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
                 ),
               ],
             ],

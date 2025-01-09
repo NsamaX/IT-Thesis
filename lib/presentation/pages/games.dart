@@ -40,8 +40,8 @@ class GamesPage extends StatelessWidget {
         itemBuilder: (context, index) {
           return GamesLabelWidget(
             game: gameKeys[index],
-            description: ApiConfig.baseUrls?[gameKeys[index]] ?? '',
             imagePath: gameImages[index],
+            description: ApiConfig.baseUrls?[gameKeys[index]] ?? '',
             isAdd: isAdd,
           );
         },

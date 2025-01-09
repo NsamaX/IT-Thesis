@@ -25,19 +25,21 @@ class DeckWidget extends StatelessWidget {
 
   Widget _buildDeckContainer(BuildContext context) {
     final theme = Theme.of(context);
-
     return GestureDetector(
-      onTap: () => _navigateToDeckBuilder(context),
+      onTap: () {
+        context.read<DeckManagerCubit>().setDeck(deck);
+        Navigator.of(context).pushNamed(AppRoutes.newDeck);
+      },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.0),
           color: theme.appBarTheme.backgroundColor,
           boxShadow: const [
             BoxShadow(
               color: Colors.black54,
-              offset: Offset(3, 4),
-              blurRadius: 6,
-              spreadRadius: 0,
+              offset: Offset(3.0, 4.0),
+              blurRadius: 6.0,
+              spreadRadius: 0.0,
             ),
           ],
         ),
@@ -55,30 +57,24 @@ class DeckWidget extends StatelessWidget {
     );
   }
 
-  void _navigateToDeckBuilder(BuildContext context) {
-    context.read<DeckManagerCubit>().setDeck(deck);
-    Navigator.of(context).pushNamed(AppRoutes.newDeck);
-  }
-
   Widget _buildDeleteButton(BuildContext context) {
     final theme = Theme.of(context);
-
     return Positioned(
-      top: -2,
-      right: -2,
+      top: -2.0,
+      right: -2.0,
       child: GestureDetector(
         onTap: () => context.read<DeckManagerCubit>().deleteDeck(deck),
         child: Container(
-          width: 30,
-          height: 30,
+          width: 30.0,
+          height: 30.0,
           decoration: const BoxDecoration(
-            shape: BoxShape.circle,
             color: Colors.transparent,
+            shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.close_rounded,
             color: theme.colorScheme.primary,
-            size: 26,
+            size: 26.0,
           ),
         ),
       ),

@@ -39,10 +39,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
     return Container(
       color: theme.appBarTheme.backgroundColor,
-      padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
+      padding: const EdgeInsets.fromLTRB(26.0, 0.0, 26.0, 12.0),
       child: Row(
         children: [
           _buildSearchBar(context),
@@ -55,13 +54,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Widget _buildSearchBar(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Expanded(
       child: Container(
-        height: 32,
+        height: 32.0,
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.0),
         ),
         child: TextField(
           controller: _searchController,
@@ -72,7 +70,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             prefixIcon: const Icon(Icons.search, color: Colors.grey),
             hintText: locale.translate('text.hint_text'),
             hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-            contentPadding: const EdgeInsets.only(bottom: 14),
+            contentPadding: const EdgeInsets.only(bottom: 14.0),
           ),
           style: theme.textTheme.bodyMedium,
         ),
@@ -83,12 +81,11 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Widget _buildClearButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      width: isSearch ? 86 : 0,
-      height: 42,
+      duration: const Duration(milliseconds: 300),
+      width: isSearch ? 86.0 : 0.0,
+      height: 42.0,
       child: isSearch
           ? TextButton(
               onPressed: () {

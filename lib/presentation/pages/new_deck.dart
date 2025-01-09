@@ -59,14 +59,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     if (state.isOperationSuccessful) {
       final successMessage = locale.translate('snack_bar.nfc.write_success');
       await snackBar(
-        context: context,
+        context,
         content: successMessage,
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage.isNotEmpty) {
       final errorMessage = locale.translate('snack_bar.nfc.write_failed');
       await snackBar(
-        context: context,
+        context,
         content: errorMessage,
         isError: true,
       );
@@ -130,13 +130,13 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     AppLocalizations locale,
   ) {
     cupertinoAlertDialogAction(
-      context: context,
+      context,
       title: locale.translate('dialog.deck.title'),
       content: locale.translate('dialog.deck.content'),
       onConfirm: () {
         cubit.toggleDelete();
         snackBar(
-          context: context,
+          context,
           content: locale.translate('snack_bar.deck.deleted'),
         );
       },
@@ -159,7 +159,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
   void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cubit.toggleShare();
     snackBar(
-      context: context,
+      context,
       content: locale.translate('snack_bar.deck.share'),
     );
   }

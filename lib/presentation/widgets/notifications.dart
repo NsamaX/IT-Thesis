@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-Future<void> snackBar({
-  required BuildContext context,
+Future<void> snackBar(
+  BuildContext context, {
   required String content,
   bool isError = false,
 }) async {
@@ -22,14 +22,13 @@ Future<void> snackBar({
   await Future.delayed(const Duration(seconds: 1));
 }
 
-void cupertinoAlertDialog({
-  required BuildContext context,
+void cupertinoAlertDialog(
+  BuildContext context, {
   required String title,
   required String content,
 }) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -60,15 +59,14 @@ void cupertinoAlertDialog({
   );
 }
 
-void cupertinoAlertDialogAction({
-  required BuildContext context,
+void cupertinoAlertDialogAction(
+  BuildContext context, {
   required String title,
   required String content,
   required VoidCallback onConfirm,
 }) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-
   showCupertinoDialog(
     context: context,
     builder: (BuildContext context) {

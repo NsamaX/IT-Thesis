@@ -97,7 +97,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
           left: state['history']! ? 0 : -200,
           child: BlocBuilder<ScanCubit, ScanCubitState>(
             builder: (context, scanHistoryState) {
-              return HistoryDrawerWidget(savedTags: scanHistoryState.cards ?? []);
+              return HistoryDrawerWidget(cards: scanHistoryState.cards ?? []);
             },
           ),
         );

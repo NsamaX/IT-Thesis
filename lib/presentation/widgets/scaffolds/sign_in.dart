@@ -16,9 +16,9 @@ class SignInScaffoldWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildTitle(context),
-            const SizedBox(height: 80),
+            const SizedBox(height: 80.0),
             _buildGoogleIcon(),
-            const SizedBox(height: 80),
+            const SizedBox(height: 80.0),
             _buildSignInButton(context),
           ],
         ),
@@ -29,7 +29,6 @@ class SignInScaffoldWidget extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Text(
       locale.translate('title.sign_in'),
       style: theme.textTheme.titleLarge,
@@ -41,30 +40,27 @@ class SignInScaffoldWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 60,
-        height: 60,
+        width: 60.0,
+        height: 60.0,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(1, 1),
+              offset: const Offset(1.0, 1.0),
+              blurRadius: 3.0,
+              spreadRadius: 1.0,
             ),
           ],
         ),
-        child: const Image(
-          image: AssetImage('assets/images/google.png'),
-        ),
+        child: const Image(image: AssetImage('assets/images/google.png')),
       ),
     );
   }
 
   Widget _buildSignInButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
-
     return SizedBox(
       width: 132,
       height: 46,

@@ -7,19 +7,17 @@ class NFCWidget extends StatelessWidget {
   const NFCWidget({Key? key}) : super(key: key);
 
   static const Duration animationDuration = Duration(milliseconds: 600);
-  static const double iconSize = 40;
+  static const double iconSize = 40.0;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cubit = context.read<NFCCubit>();
-
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {
         final isNFCEnabled = state.isNFCEnabled;
         final activeColor = theme.colorScheme.primary;
         final inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
-
         return GestureDetector(
           onTap: () => NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled),
           child: Row(
@@ -28,15 +26,15 @@ class NFCWidget extends StatelessWidget {
             children: [
               _buildNFCIcon(
                 angle: -90,
-                offset: const Offset(iconSize + 6, 0),
+                offset: const Offset(iconSize + 6.0, 0.0),
                 color: isNFCEnabled ? activeColor : inactiveColor,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 4.0),
               _buildNFCCircleIcon(color: isNFCEnabled ? activeColor : inactiveColor),
-              const SizedBox(width: 4),
+              const SizedBox(width: 4.0),
               _buildNFCIcon(
                 angle: 90,
-                offset: const Offset(-iconSize - 6, 0),
+                offset: const Offset(-iconSize - 6.0, 0.0),
                 color: isNFCEnabled ? activeColor : inactiveColor,
               ),
             ],
@@ -54,13 +52,13 @@ class NFCWidget extends StatelessWidget {
     return Transform.translate(
       offset: offset,
       child: Transform.rotate(
-        angle: angle * 3.14 / 180,
+        angle: angle * 3.14 / 180.0,
         child: AnimatedContainer(
-          duration: animationDuration,
           curve: Curves.easeInOut,
+          duration: animationDuration,
           child: Icon(
             Icons.wifi_rounded,
-            size: 120,
+            size: 120.0,
             color: color,
           ),
         ),
@@ -70,13 +68,13 @@ class NFCWidget extends StatelessWidget {
 
   Widget _buildNFCCircleIcon({required Color color}) {
     return AnimatedContainer(
-      duration: animationDuration,
       curve: Curves.easeInOut,
+      duration: animationDuration,
       width: iconSize / 1.2,
       height: iconSize / 1.2,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
         color: color,
+        shape: BoxShape.circle,
       ),
     );
   }

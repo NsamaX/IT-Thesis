@@ -26,45 +26,44 @@ class CardLabelWidget extends StatelessWidget {
         AppRoutes.card,
         arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
       ),
-      child: _buildContainer(context, lightTheme ? Colors.black : null),
+      child: _buildContainer(context, color: lightTheme ? Colors.black : null),
     );
   }
 
   Widget _buildContainer(
-      BuildContext context, 
-      Color? textColor,
-    ) {
+    BuildContext context, {
+    Color? color,
+  }) {
     final theme = Theme.of(context);
-
     return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      height: 60,
+      margin: const EdgeInsets.only(bottom: 6.0),
+      height: 60.0,
       decoration: BoxDecoration(
         color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 3),
+            offset: const Offset(0.0, 3.0),
+            blurRadius: 2.0,
+            spreadRadius: 1.0,
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
           children: [
-            _buildImage(context, textColor),
-            const SizedBox(width: 12),
-            Expanded(child: _buildCardInfo(context, textColor)),
-            const SizedBox(width: 16),
+            _buildImage(context, color: color),
+            const SizedBox(width: 12.0),
+            Expanded(child: _buildCardInfo(context, color: color)),
+            const SizedBox(width: 16.0),
             if (count != null) ...[
               Text(
                 count.toString(),
-                style: theme.textTheme.titleMedium?.copyWith(color: textColor),
+                style: theme.textTheme.titleMedium?.copyWith(color: color),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 12.0),
             ],
           ],
         ),
@@ -73,52 +72,58 @@ class CardLabelWidget extends StatelessWidget {
   }
 
   Widget _buildImage(
-      BuildContext context, 
-      Color? textColor,
-    ) {
+    BuildContext context, {
+    Color? color,
+  }) {
     final theme = Theme.of(context);
-
     return Container(
-      width: 42,
-      height: 42,
+      width: 42.0,
+      height: 42.0,
       decoration: BoxDecoration(
         color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(8.0),
       ),
       child: card?.imageUrl != null
           ? ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
                 card!.imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(Icons.image_not_supported, size: 36, color: textColor),
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.image_not_supported, 
+                  size: 36.0, 
+                  color: color,
+                ),
               ),
             )
-          : Icon(Icons.image_not_supported, size: 36, color: textColor),
+          : Icon(
+              Icons.image_not_supported, 
+              size: 36.0, 
+              color: color,
+            ),
     );
   }
 
   Widget _buildCardInfo(
-      BuildContext context, 
-      Color? textColor,
-    ) {
+    BuildContext context, { 
+    Color? color,
+  }) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           card?.name ?? locale.translate('text.no_card_name'),
-          style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
+          style: theme.textTheme.bodyMedium?.copyWith(color: color),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 4.0),
         Text(
           card?.description ?? locale.translate('text.no_card_description'),
-          style: theme.textTheme.bodySmall?.copyWith(color: textColor),
+          style: theme.textTheme.bodySmall?.copyWith(color: color),
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
         ),

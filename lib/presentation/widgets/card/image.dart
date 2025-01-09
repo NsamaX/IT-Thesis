@@ -9,7 +9,7 @@ class CardImageWidget extends StatelessWidget {
 
   const CardImageWidget({
     Key? key,
-    required this.card,
+    this.card,
     this.isCustom = false,
   }) : super(key: key);
 
@@ -17,27 +17,28 @@ class CardImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return isCustom
         ? _buildDottedBorder(context)
-        : _buildImage(context, card);
+        : _buildImage(context, card: card);
   }
 
   Widget _buildDottedBorder(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return AspectRatio(
       aspectRatio: 3 / 4,
       child: DottedBorder(
         color: Colors.white.withOpacity(0.4),
         borderType: BorderType.RRect,
-        radius: const Radius.circular(16),
-        dashPattern: const [16, 26],
+        radius: const Radius.circular(16.0),
+        dashPattern: const [14.0, 24.0],
         strokeWidth: 2,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.upload_rounded, size: 36),
-              const SizedBox(height: 12),
+              const Icon(
+                Icons.upload_rounded, 
+                size: 36.0,
+              ),
               Text(
                 locale.translate('text.upload_image'),
                 style: theme.textTheme.titleSmall,
@@ -49,27 +50,28 @@ class CardImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(BuildContext context, CardEntity? card) {
+  Widget _buildImage(
+    BuildContext context, {
+    CardEntity? card,
+  }) {
     if (card == null || card.imageUrl == null) return _buildErrorImage(context);
-
+    
     final theme = Theme.of(context);
-    const borderRadius = BorderRadius.all(Radius.circular(16));
-
     return Container(
       decoration: BoxDecoration(
         color: theme.appBarTheme.backgroundColor,
-        borderRadius: borderRadius,
+        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black38,
-            offset: Offset(3, 4),
-            blurRadius: 12,
-            spreadRadius: 2,
+            color: Colors.black,
+            offset: Offset(3.0, 4.0),
+            blurRadius: 12.0,
+            spreadRadius: 2.0,
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: borderRadius,
+        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
         child: AspectRatio(
           aspectRatio: 3 / 4,
           child: Image.network(
@@ -85,15 +87,16 @@ class CardImageWidget extends StatelessWidget {
   Widget _buildErrorImage(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Container(
       color: theme.appBarTheme.backgroundColor,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.image_not_supported, size: 36),
-            const SizedBox(height: 8),
+            const Icon(
+              Icons.image_not_supported, 
+              size: 36.0,
+            ),
             Text(
               locale.translate('text.no_card_image'),
               style: theme.textTheme.titleSmall,
