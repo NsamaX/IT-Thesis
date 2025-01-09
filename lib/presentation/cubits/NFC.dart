@@ -51,8 +51,9 @@ class NFCCubit extends Cubit<NFCState> {
   NFCCubit() : super(NFCState(isNFCEnabled: false));
 
   //---------------------------- Logging Utilities ---------------------------//
-  void _logAndFlush(String message, {bool isError = false}) {
-    messageBuffer.add(message);
+  void _addMessage(String message) => messageBuffer.add(message);
+
+  void _flushMessages({bool isError = false}) {
     if (messageBuffer.isNotEmpty) {
       final log = messageBuffer.join('\n');
       logger.log(isError ? Level.error : Level.info, log);
@@ -67,7 +68,7 @@ class NFCCubit extends Cubit<NFCState> {
 
   void toggleNFC() {
     emitSafe(state.copyWith(isNFCEnabled: !state.isNFCEnabled));
-    _logAndFlush('[State Management] Toggled NFC state to ${state.isNFCEnabled}');
+    _addMessage('[State Management] Toggled NFC state to ${state.isNFCEnabled}');
   }
 
   void resetOperationStatus() => emitSafe(state.copyWith(isOperationSuccessful: false));
@@ -79,7 +80,8 @@ class NFCCubit extends Cubit<NFCState> {
   Future<void> startSession({CardEntity? card}) async {
     if (state.isProcessing) return;
     emitSafe(state.copyWith(isProcessing: true));
-    _logAndFlush('[Session Control] Starting NFC session: ${card == null ? "Read" : "Write"} mode');
+    _addMessage('[Session Control] Starting NFC session: ${card == null ? "Read" : "Write"} mode');
+    _flushMessages();
     try {
       if (!await NfcManager.instance.isAvailable()) throw Exception('NFC is not available.');
       await NfcManager.instance.startSession(onDiscovered: (tag) async {
@@ -91,11 +93,13 @@ class NFCCubit extends Cubit<NFCState> {
           }
         } catch (e) {
           emitSafe(state.copyWith(errorMessage: e.toString()));
-          _logAndFlush('[Session Control] Error during tag processing: $e', isError: true);
+          _addMessage('[Session Control] Error during tag processing: $e');
+          _flushMessages(isError: true);
         }
       });
     } catch (e) {
-      _logAndFlush('[Session Control] Error initializing NFC session: $e', isError: true);
+      _addMessage('[Session Control] Error initializing NFC session: $e');
+      _flushMessages(isError: true);
     } finally {
       emitSafe(state.copyWith(isProcessing: false));
     }
@@ -105,10 +109,12 @@ class NFCCubit extends Cubit<NFCState> {
     try {
       await NfcManager.instance.stopSession();
       emitSafe(state.copyWith(isNFCEnabled: false));
-      _logAndFlush('[Session Control] NFC session stopped. Reason: $reason');
+      _addMessage('[Session Control] NFC session stopped. Reason: $reason');
+      _flushMessages();
     } catch (e) {
       emitSafe(state.copyWith(errorMessage: 'Error stopping session: $e'));
-      _logAndFlush('[Session Control] Error stopping session: $e', isError: true);
+      _addMessage('[Session Control] Error stopping session: $e');
+      _flushMessages(isError: true);
     }
   }
 
@@ -116,15 +122,16 @@ class NFCCubit extends Cubit<NFCState> {
     if (!state.isProcessing && state.isNFCEnabled) {
       try {
         if (isCardChanged) {
-          _logAndFlush('[Error Recovery] Card changed. Restarting NFC session...');
+          _addMessage('[Error Recovery] Card changed. Restarting NFC session...');
           await stopSession(reason: 'Card changed, restarting session...');
         } else {
-          _logAndFlush('[Error Recovery] Restarting NFC session...');
+          _addMessage('[Error Recovery] Restarting NFC session...');
         }
         await startSession(card: card);
       } catch (e) {
         emitSafe(state.copyWith(errorMessage: 'Failed to restart session: ${e.toString()}'));
-        _logAndFlush('[Error Recovery] Failed to restart NFC session: ${e.toString()}', isError: true);
+        _addMessage('[Error Recovery] Failed to restart NFC session: ${e.toString()}');
+        _flushMessages(isError: true);
       }
     }
   }
@@ -135,15 +142,17 @@ class NFCCubit extends Cubit<NFCState> {
     final records = _parseNDEFRecords(ndef);
     final tagEntity = _createTagEntity(tag, records);
     emitSafe(state.copyWith(lastReadTag: tagEntity, isOperationSuccessful: true, isWriteOperation: false));
-    _logAndFlush('[Processing] Tag read successfully: $tagEntity');
+    _addMessage('[Processing] Tag read successfully for card id[${tagEntity.cardId}]');
+    _flushMessages();
   }
 
   Future<void> _processWrite(NfcTag tag, CardEntity card) async {
     final ndef = _validateNDEF(tag);
     final message = _createNDEFMessage(card);
     await ndef.write(message);
-    emitSafe(state.copyWith(isOperationSuccessful: true, isWriteOperation: true));
-    _logAndFlush('[Processing] Tag written successfully for card: ${card.cardId}');
+    emitSafe(state.copyWith(errorMessage: '', isOperationSuccessful: true, isWriteOperation: true));
+    _addMessage('[Processing] Tag written successfully for card id[${card.cardId}]');
+    _flushMessages();
   }
 
   //--------------------------- Validation Helpers ---------------------------//

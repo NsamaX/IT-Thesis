@@ -49,12 +49,11 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           BlocListener<NFCCubit, NFCState>(
             listener: (context, nfcState) {
               if (nfcState.lastReadTag != null && nfcState.isNFCEnabled) {
-                _handleNFCTag(context, nfcState, locale);
+                context.read<TrackCubit>().readTag(nfcState.lastReadTag!);
               }
             },
             listenWhen: (previous, current) {
-              return previous.lastReadTag != current.lastReadTag &&
-                  current.lastReadTag != null;
+              return previous.lastReadTag != current.lastReadTag && current.lastReadTag != null;
             },
           ),
         ],
@@ -90,28 +89,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         ),
       ),
     );
-  }
-
-  void _handleNFCTag(
-    BuildContext context,
-    NFCState nfcState,
-    AppLocalizations locale,
-  ) async {
-    final tag = nfcState.lastReadTag;
-    if (tag != null) {
-      try {
-        context.read<TrackCubit>().readTag(tag);
-        snackBar(
-          context,
-          content: locale.translate('snack_bar.nfc.read_success'),
-        );
-      } catch (e) {
-        snackBar(
-          context,
-          content: locale.translate('snack_bar.nfc.read_failed'),
-        );
-      }
-    }
   }
 
   void _showTrackerDialog(BuildContext context, AppLocalizations locale) {
