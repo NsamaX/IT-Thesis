@@ -20,12 +20,12 @@ class GamesLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _handleTap(context: context),
-      child: _buildContainer(context: context),
+      onTap: () => _handleTap(context),
+      child: _buildContainer(context),
     );
   }
 
-  void _handleTap({required BuildContext context}) {
+  void _handleTap(BuildContext context) {
     context.read<AppStateCubit>().updateSelectedGame(game);
     Navigator.of(context).pushReplacementNamed(
       AppRoutes.search,
@@ -33,7 +33,7 @@ class GamesLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildContainer({required BuildContext context}) {
+  Widget _buildContainer(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
@@ -41,7 +41,7 @@ class GamesLabelWidget extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
         color: theme.appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(12)),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -57,7 +57,7 @@ class GamesLabelWidget extends StatelessWidget {
           children: [
             _buildImage(),
             const SizedBox(width: 12),
-            _buildGameInfo(context: context),
+            _buildGameInfo(context),
           ],
         ),
       ),
@@ -73,13 +73,13 @@ class GamesLabelWidget extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.circular(8),
         child: Image.asset(imagePath),
       ),
     );
   }
 
-  Widget _buildGameInfo({required BuildContext context}) {
+  Widget _buildGameInfo(BuildContext context) {
     final theme = Theme.of(context);
 
     return Expanded(
@@ -95,7 +95,7 @@ class GamesLabelWidget extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            _extractDescription(description: description),
+            _extractDescription(description),
             style: theme.textTheme.bodySmall,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -105,9 +105,9 @@ class GamesLabelWidget extends StatelessWidget {
     );
   }
 
-  String _extractDescription({required String description}) {
+  String _extractDescription(String description) {
     final parts = description.split('//');
-
+    
     return parts.length > 1 ? parts[1] : description;
   }
 }

@@ -14,23 +14,22 @@ class HistoryDrawerWidget extends StatelessWidget {
     return Container(
       width: 200,
       height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black38,
             spreadRadius: 2,
             blurRadius: 6,
-            offset: const Offset(0, 2),
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: ListView.builder(
         itemCount: reversedTags.length,
         itemBuilder: (context, index) {
-          final card = reversedTags[index];
           return CardLabelWidget(
-            card: card,
+            card: reversedTags[index],
             lightTheme: true,
           );
         },

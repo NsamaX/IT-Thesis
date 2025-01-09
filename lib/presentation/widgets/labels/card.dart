@@ -26,14 +26,14 @@ class CardLabelWidget extends StatelessWidget {
         AppRoutes.card,
         arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
       ),
-      child: _buildContainer(context: context, textColor: lightTheme ? Colors.black : null),
+      child: _buildContainer(context, lightTheme ? Colors.black : null),
     );
   }
 
-  Widget _buildContainer({
-      required BuildContext context,
-      required Color? textColor,
-    }) {
+  Widget _buildContainer(
+      BuildContext context, 
+      Color? textColor,
+    ) {
     final theme = Theme.of(context);
 
     return Container(
@@ -55,9 +55,9 @@ class CardLabelWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           children: [
-            _buildImage(context: context, textColor: textColor),
+            _buildImage(context, textColor),
             const SizedBox(width: 12),
-            Expanded(child: _buildCardInfo(context: context, textColor: textColor)),
+            Expanded(child: _buildCardInfo(context, textColor)),
             const SizedBox(width: 16),
             if (count != null) ...[
               Text(
@@ -72,10 +72,10 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildImage({
-      required BuildContext context,
-      required Color? textColor,
-    }) {
+  Widget _buildImage(
+      BuildContext context, 
+      Color? textColor,
+    ) {
     final theme = Theme.of(context);
 
     return Container(
@@ -83,11 +83,11 @@ class CardLabelWidget extends StatelessWidget {
       height: 42,
       decoration: BoxDecoration(
         color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.circular(8),
       ),
       child: card?.imageUrl != null
           ? ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+              borderRadius: BorderRadius.circular(8),
               child: Image.network(
                 card!.imageUrl!,
                 fit: BoxFit.cover,
@@ -98,10 +98,10 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildCardInfo({
-      required BuildContext context,
-      required Color? textColor,
-    }) {
+  Widget _buildCardInfo(
+      BuildContext context, 
+      Color? textColor,
+    ) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 

@@ -25,21 +25,21 @@ class CardInfoWidget extends StatelessWidget {
           style: theme.textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
-        _buildDescription(context: context),
+        _buildDescription(context),
       ],
     );
   }
 
-  Widget _buildDescription({required BuildContext context}) {
+  Widget _buildDescription(BuildContext context) {
     final locale = AppLocalizations.of(context);
 
     if (isCustom) return _buildEditableDescription();
     if (card == null) return const SizedBox();
-    if (card!.additionalData != null) return _buildAdditionalDataDescription(context: context);
+    if (card!.additionalData != null) return _buildAdditionalDataDescription(context);
 
     return _buildDescriptionText(
-      context: context,
-      text: card!.description ?? locale.translate('text.no_card_description'),
+      context,
+      card!.description ?? locale.translate('text.no_card_description'),
     );
   }
 
@@ -55,7 +55,7 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildAdditionalDataDescription({required BuildContext context}) {
+  Widget _buildAdditionalDataDescription(BuildContext context) {
     final theme = Theme.of(context);
 
     return Opacity(
@@ -89,10 +89,7 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionText({
-      required BuildContext context,
-      required String text,
-    }) {
+  Widget _buildDescriptionText(BuildContext context, String text) {
     final theme = Theme.of(context);
 
     return Opacity(

@@ -14,11 +14,8 @@ class SettingsLabelWidget extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTitle(context: context, text: category['title'] as String),
-              ..._buildContentList(
-                context: context,
-                content: category['content'] as List<dynamic>,
-              ),
+              _buildTitle(context, category['title'] as String),
+              ..._buildContentList(context, category['content'] as List<dynamic>),
             ],
           );
         },
@@ -26,10 +23,10 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle({
-      required BuildContext context,
-      required String text,
-    }) {
+  Widget _buildTitle(
+      BuildContext context, 
+      String text,
+    ) {
     final theme = Theme.of(context);
 
     return Padding(
@@ -41,13 +38,13 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildContentList({
-      required BuildContext context,
-      required List<dynamic> content,
-    }) {
+  List<Widget> _buildContentList(
+      BuildContext context, 
+      List<dynamic> content,
+    ) {
     return content.map<Widget>((item) {
       return _buildContent(
-        context: context,
+        context,
         icon: item['icon'] as IconData,
         text: item['text'] as String,
         onTap: item['onTap'],
@@ -55,8 +52,8 @@ class SettingsLabelWidget extends StatelessWidget {
     }).toList();
   }
 
-  Widget _buildContent({
-    required BuildContext context,
+  Widget _buildContent(
+    BuildContext context, {
     required IconData icon,
     required String text,
     required dynamic onTap,
@@ -64,7 +61,7 @@ class SettingsLabelWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => _handleTap(context: context, onTap: onTap),
+      onTap: () => _handleTap(context, onTap),
       child: Container(
         height: 40,
         decoration: BoxDecoration(
@@ -93,10 +90,10 @@ class SettingsLabelWidget extends StatelessWidget {
     );
   }
 
-  void _handleTap({
-      required BuildContext context,
-      required dynamic onTap,
-    }) {
+  void _handleTap(
+      BuildContext context, 
+      dynamic onTap,
+    ) {
     if (onTap == null) return;
     if (onTap is String) {
       Navigator.pushNamed(context, onTap);

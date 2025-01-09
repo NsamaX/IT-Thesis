@@ -21,8 +21,8 @@ class BottomNavigationBarWidget extends StatelessWidget {
       builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: state.currentPageIndex,
-          onTap: (index) => _navigateToPage(context: context, index: index),
-          items: _buildNavigationItems(items: navigationItems, locale: locale),
+          onTap: (index) => _navigateToPage(context, index),
+          items: _buildNavigationItems(navigationItems, locale),
           selectedItemColor: theme.colorScheme.primary,
           unselectedItemColor: theme.iconTheme.color,
           backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
@@ -31,10 +31,10 @@ class BottomNavigationBarWidget extends StatelessWidget {
     );
   }
 
-  void _navigateToPage({
-      required BuildContext context,
-      required int index,
-    }) {
+  void _navigateToPage(
+      BuildContext context, 
+      int index,
+    ) {
     final cubit = context.read<AppStateCubit>();
 
     if (index != cubit.state.currentPageIndex) {
@@ -47,10 +47,10 @@ class BottomNavigationBarWidget extends StatelessWidget {
     }
   }
 
-  List<BottomNavigationBarItem> _buildNavigationItems({
-      required List<Map<String, Object>> items,
-      required AppLocalizations locale,
-    }) {
+  List<BottomNavigationBarItem> _buildNavigationItems(
+    List<Map<String, Object>> items,
+    AppLocalizations locale,
+  ) {
     return items
         .map(
           (item) => BottomNavigationBarItem(

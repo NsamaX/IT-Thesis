@@ -25,11 +25,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     super.dispose();
   }
 
-  void _startSearch({required bool value}) {
+  void _startSearch(bool value) {
     if (isSearch != value) {
-      setState(() {
-        isSearch = value;
-      });
+      setState(() => isSearch = value);
     }
   }
 
@@ -41,20 +39,20 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    
     return Container(
       color: theme.appBarTheme.backgroundColor,
       padding: const EdgeInsets.fromLTRB(26, 0, 26, 12),
       child: Row(
         children: [
-          _buildSearchBar(context: context),
-          _buildClearButton(context: context),
+          _buildSearchBar(context),
+          _buildClearButton(context),
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar({required BuildContext context}) {
+  Widget _buildSearchBar(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -67,9 +65,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ),
         child: TextField(
           controller: _searchController,
-          onTap: () {
-            if (!isSearch) _startSearch(value: true);
-          },
+          onTap: () => _startSearch(true),
           onChanged: widget.onSearchChanged,
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -84,10 +80,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     );
   }
 
-  Widget _buildClearButton({required BuildContext context}) {
+  Widget _buildClearButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
@@ -96,7 +92,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       child: isSearch
           ? TextButton(
               onPressed: () {
-                _startSearch(value: false);
+                _startSearch(false);
                 _clearSearch();
               },
               child: Text(

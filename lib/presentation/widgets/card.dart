@@ -26,28 +26,28 @@ class CardWidget extends StatelessWidget {
 
     return Stack(
       children: [
-        _buildCardContainer(context: context, isSelected: isSelected, isNfcReadEnabled: isNfcReadEnabled),
+        _buildCardContainer(context, isSelected, isNfcReadEnabled),
         if (isEditMode && !isNfcReadEnabled) buildEditControls(context: context, card: card, count: count),
       ],
     );
   }
 
-  Widget _buildCardContainer({
-    required BuildContext context,
-    required bool isSelected,
-    required bool isNfcReadEnabled,
-  }) {
+  Widget _buildCardContainer(
+    BuildContext context,
+    bool isSelected,
+    bool isNfcReadEnabled,
+  ) {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => _handleCardTap(context: context, isNfcReadEnabled: isNfcReadEnabled),
+      onTap: () => _handleCardTap(context, isNfcReadEnabled),
       child: AspectRatio(
         aspectRatio: 3 / 4,
         child: Opacity(
           opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              borderRadius: BorderRadius.circular(12),
               color: theme.appBarTheme.backgroundColor,
               boxShadow: const [
                 BoxShadow(
@@ -61,7 +61,7 @@ class CardWidget extends StatelessWidget {
             child: Card(
               elevation: 4,
               child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.circular(12),
                 child: card.imageUrl != null
                     ? Image.network(
                         card.imageUrl!,
@@ -77,15 +77,14 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  void _handleCardTap({
-    required BuildContext context,
-    required bool isNfcReadEnabled
-  }) {
+  void _handleCardTap(
+      BuildContext context, 
+      bool isNfcReadEnabled,
+    ) {
     final cubit = context.read<DeckManagerCubit>();
 
     if (isNfcReadEnabled) {
       cubit.toggleSelectedCard(card);
-
       if (cubit.state.selectedCard != null) {
         final nfcCubit = context.read<NFCCubit>();
         NFCHelper.handleToggleNFC(

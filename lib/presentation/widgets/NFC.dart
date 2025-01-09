@@ -16,9 +16,9 @@ class NFCWidget extends StatelessWidget {
 
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {
-        final bool isNFCEnabled = state.isNFCEnabled;
-        final Color activeColor = theme.colorScheme.primary;
-        final Color inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
+        final isNFCEnabled = state.isNFCEnabled;
+        final activeColor = theme.colorScheme.primary;
+        final inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
 
         return GestureDetector(
           onTap: () => NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled),
@@ -28,17 +28,15 @@ class NFCWidget extends StatelessWidget {
             children: [
               _buildNFCIcon(
                 angle: -90,
-                offset: Offset(iconSize + 6, 0),
+                offset: const Offset(iconSize + 6, 0),
                 color: isNFCEnabled ? activeColor : inactiveColor,
               ),
               const SizedBox(width: 4),
-              _buildNFCCircleIcon(
-                color: isNFCEnabled ? activeColor : inactiveColor,
-              ),
+              _buildNFCCircleIcon(color: isNFCEnabled ? activeColor : inactiveColor),
               const SizedBox(width: 4),
               _buildNFCIcon(
                 angle: 90,
-                offset: Offset(-iconSize - 6, 0),
+                offset: const Offset(-iconSize - 6, 0),
                 color: isNFCEnabled ? activeColor : inactiveColor,
               ),
             ],

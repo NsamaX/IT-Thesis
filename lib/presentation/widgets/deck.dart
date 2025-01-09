@@ -14,25 +14,23 @@ class DeckWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
-
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        _buildDeckContainer(context: context),
-        if (isEditMode) _buildDeleteButton(context:context),
+        _buildDeckContainer(context),
+        if (context.watch<DeckManagerCubit>().state.isEditMode) _buildDeleteButton(context),
       ],
     );
   }
 
-  Widget _buildDeckContainer({required BuildContext context}) {
+  Widget _buildDeckContainer(BuildContext context) {
     final theme = Theme.of(context);
 
     return GestureDetector(
-      onTap: () => _navigateToDeckBuilder(context: context),
+      onTap: () => _navigateToDeckBuilder(context),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.circular(12),
           color: theme.appBarTheme.backgroundColor,
           boxShadow: const [
             BoxShadow(
@@ -45,7 +43,7 @@ class DeckWidget extends StatelessWidget {
         ),
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               deck.deckName,
               style: theme.textTheme.titleSmall,
@@ -57,12 +55,12 @@ class DeckWidget extends StatelessWidget {
     );
   }
 
-  void _navigateToDeckBuilder({required BuildContext context}) {
+  void _navigateToDeckBuilder(BuildContext context) {
     context.read<DeckManagerCubit>().setDeck(deck);
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 
-  Widget _buildDeleteButton({required BuildContext context}) {
+  Widget _buildDeleteButton(BuildContext context) {
     final theme = Theme.of(context);
 
     return Positioned(

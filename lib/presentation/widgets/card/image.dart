@@ -16,11 +16,11 @@ class CardImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return isCustom
-        ? _buildDottedBorder(context: context)
-        : _buildImage(context: context, card: card);
+        ? _buildDottedBorder(context)
+        : _buildImage(context, card);
   }
 
-  Widget _buildDottedBorder({required BuildContext context}) {
+  Widget _buildDottedBorder(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -29,7 +29,7 @@ class CardImageWidget extends StatelessWidget {
       child: DottedBorder(
         color: Colors.white.withOpacity(0.4),
         borderType: BorderType.RRect,
-        radius: Radius.circular(16),
+        radius: const Radius.circular(16),
         dashPattern: const [16, 26],
         strokeWidth: 2,
         child: Center(
@@ -49,10 +49,7 @@ class CardImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildImage({
-      required BuildContext context, 
-      required CardEntity? card,
-    }) {
+  Widget _buildImage(BuildContext context, CardEntity? card) {
     final theme = Theme.of(context);
     const borderRadius = BorderRadius.all(Radius.circular(16));
 
@@ -77,15 +74,15 @@ class CardImageWidget extends StatelessWidget {
               ? Image.network(
                   card!.imageUrl!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildErrorImage(context: context),
+                  errorBuilder: (_, __, ___) => _buildErrorImage(context),
                 )
-              : _buildErrorImage(context: context),
+              : _buildErrorImage(context),
         ),
       ),
     );
   }
 
-  Widget _buildErrorImage({required BuildContext context}) {
+  Widget _buildErrorImage(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 

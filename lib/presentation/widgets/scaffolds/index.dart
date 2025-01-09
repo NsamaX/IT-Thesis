@@ -14,11 +14,11 @@ class IndexScaffoldWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildTitle(context: context),
+              _buildTitle(context),
               const SizedBox(height: 30),
-              _buildDescription(context: context),
+              _buildDescription(context),
               const SizedBox(height: 38),
-              _buildSignInButton(context: context),
+              _buildSignInButton(context),
             ],
           ),
         ),
@@ -26,10 +26,10 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle({required BuildContext context}) {
+  Widget _buildTitle(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    
+
     return Text(
       locale.translate('title.index'),
       style: theme.textTheme.titleLarge,
@@ -37,7 +37,7 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription({required BuildContext context}) {
+  Widget _buildDescription(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -48,7 +48,7 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton({required BuildContext context}) {
+  Widget _buildSignInButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
 
     return SizedBox(

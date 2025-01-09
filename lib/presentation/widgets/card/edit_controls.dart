@@ -15,17 +15,17 @@ Widget buildEditControls({
     right: 0,
     child: Column(
       children: [
-        _buildCount(context: context, count: count ?? 0, size: buttonSize),
+        _buildCount(context, count ?? 0, buttonSize),
         const SizedBox(height: 6),
         _buildButton(
-          context: context,
+          context,
           icon: Icons.add,
           onPressed: () => context.read<DeckManagerCubit>().addCard(card, 1),
           size: buttonSize,
         ),
         const SizedBox(height: 6),
         _buildButton(
-          context: context,
+          context,
           icon: Icons.remove,
           onPressed: () => context.read<DeckManagerCubit>().removeCard(card),
           size: buttonSize,
@@ -35,11 +35,7 @@ Widget buildEditControls({
   );
 }
 
-Widget _buildCount({
-  required BuildContext context,
-  required int count,
-  required double size,
-}) {
+Widget _buildCount(BuildContext context, int count, double size) {
   final theme = Theme.of(context);
 
   return Container(
@@ -59,8 +55,7 @@ Widget _buildCount({
   );
 }
 
-Widget _buildButton({
-  required BuildContext context,
+Widget _buildButton(BuildContext context, {
   required IconData icon,
   required VoidCallback onPressed,
   required double size,

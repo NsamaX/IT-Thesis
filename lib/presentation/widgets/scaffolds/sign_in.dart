@@ -15,18 +15,18 @@ class SignInScaffoldWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTitle(context: context),
+            _buildTitle(context),
             const SizedBox(height: 80),
             _buildGoogleIcon(),
             const SizedBox(height: 80),
-            _buildSignInButton(context: context),
+            _buildSignInButton(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTitle({required BuildContext context}) {
+  Widget _buildTitle(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -62,7 +62,7 @@ class SignInScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton({required BuildContext context}) {
+  Widget _buildSignInButton(BuildContext context) {
     final locale = AppLocalizations.of(context);
 
     return SizedBox(

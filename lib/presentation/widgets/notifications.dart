@@ -14,8 +14,8 @@ Future<void> snackBar({
         style: const TextStyle(color: Colors.white),
       ),
       duration: const Duration(seconds: 1),
-      backgroundColor: isError 
-          ? CupertinoColors.systemRed 
+      backgroundColor: isError
+          ? CupertinoColors.systemRed
           : CupertinoColors.systemGreen,
     ),
   );
@@ -29,7 +29,7 @@ void cupertinoAlertDialog({
 }) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-  
+
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -38,20 +38,20 @@ void cupertinoAlertDialog({
     pageBuilder: (context, animation1, animation2) {
       return CupertinoAlertDialog(
         title: Text(
-          title, 
+          title,
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         content: Text(
-          content, 
+          content,
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         actions: [
           CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              locale.translate('button.ok'), 
+              locale.translate('button.ok'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
             ),
-            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       );
@@ -74,30 +74,30 @@ void cupertinoAlertDialogAction({
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: Text(
-          title, 
+          title,
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         content: Text(
-          content, 
+          content,
           style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
         ),
         actions: [
           CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              locale.translate('button.cancel'), 
+              locale.translate('button.cancel'),
               style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemRed),
             ),
-            onPressed: () => Navigator.of(context).pop(),
           ),
           CupertinoDialogAction(
-            child: Text(
-              locale.translate('button.confirm'), 
-              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
-            ),
             onPressed: () {
               Navigator.of(context).pop();
               onConfirm();
             },
+            child: Text(
+              locale.translate('button.confirm'),
+              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
+            ),
           ),
         ],
       );

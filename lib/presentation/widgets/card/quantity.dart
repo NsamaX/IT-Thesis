@@ -33,7 +33,7 @@ class CardQuantityWidget extends StatelessWidget {
             ),
           ),
           AnimatedAlign(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 200),
             curve: Curves.easeInOut,
             alignment: Alignment(
               -1 + (2 * (selectedQuantity - 1) / (quantityCount - 1)),
@@ -65,12 +65,12 @@ class CardQuantityWidget extends StatelessWidget {
                 return GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => onSelected(actualIndex + 1),
-                  child: Container(
+                  child: SizedBox(
                     width: boxWidth,
                     height: boxHeight,
                     child: Center(
                       child: AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 600),
+                        duration: const Duration(milliseconds: 400),
                         style: theme.textTheme.titleMedium?.copyWith(
                               color: isSelected
                                   ? theme.colorScheme.surface

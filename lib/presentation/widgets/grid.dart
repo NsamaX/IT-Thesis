@@ -11,17 +11,17 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return Container();
+    if (items.isEmpty) return const SizedBox.shrink();
 
-    final isDeckEntity = items.first is DeckEntity;
-    final isCardEntity = items.first is CardEntity;
-    final double spacing = isDeckEntity ? 12 : 8;
+    final bool isDeckEntity = items.first is DeckEntity;
+    final bool isCardEntity = items.first is CardEntity;
+    final double spacing = isDeckEntity ? 12.0 : 8.0;
 
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16.0),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: isDeckEntity ? 1 : 3 / 4,
+        childAspectRatio: isDeckEntity ? 1.0 : 3 / 4,
         crossAxisSpacing: spacing,
         mainAxisSpacing: spacing,
       ),
@@ -42,8 +42,7 @@ class GridWidget extends StatelessWidget {
     if (isDeckEntity) {
       return DeckWidget(deck: item as DeckEntity);
     } else if (isCardEntity) {
-      final card = item as CardEntity;
-      return CardWidget(card: card);
+      return CardWidget(card: item as CardEntity);
     } else {
       final cardEntry = item as MapEntry<CardEntity, int>;
       return CardWidget(card: cardEntry.key, count: cardEntry.value);

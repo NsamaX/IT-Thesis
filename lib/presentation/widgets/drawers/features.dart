@@ -22,22 +22,22 @@ class FeaturesDrawerWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildFeatureItem(
-                context: context,
+                context,
                 image: AppImages.game[currentGame],
                 label: null,
-                onTap: () => _navigateToSearch(context: context, currentGame: currentGame),
+                onTap: () => _navigateToSearch(context, currentGame),
               ),
               _buildFeatureItem(
-                context: context,
+                context,
                 image: null,
                 label: locale.translate('title.games'),
-                onTap: () => _navigateToGames(context: context),
+                onTap: () => _navigateToGames(context),
               ),
               _buildFeatureItem(
-                context: context,
+                context,
                 image: null,
                 label: locale.translate('title.custom'),
-                onTap: () => _navigateToCustom(context: context),
+                onTap: () => _navigateToCustom(context),
               ),
             ],
           ),
@@ -46,8 +46,8 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureItem({
-    required BuildContext context,
+  Widget _buildFeatureItem(
+    BuildContext context, {
     required String? image,
     required String? label,
     required VoidCallback? onTap,
@@ -63,14 +63,14 @@ class FeaturesDrawerWidget extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
-          child: _buildFeatureContent(context: context, image: image, label: label),
+          child: _buildFeatureContent(context, image: image, label: label),
         ),
       ),
     );
   }
 
-  Widget _buildFeatureContent({
-    required BuildContext context,
+  Widget _buildFeatureContent(
+    BuildContext context, {
     required String? image,
     required String? label,
   }) {
@@ -78,7 +78,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
     if (image != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.circular(8),
         child: Image.asset(image, fit: BoxFit.cover),
       );
     } else {
@@ -91,21 +91,18 @@ class FeaturesDrawerWidget extends StatelessWidget {
     }
   }
 
-  void _navigateToSearch({
-      required BuildContext context,
-      required String? currentGame,
-    }) {
+  void _navigateToSearch(BuildContext context, String? currentGame) {
     Navigator.of(context).pushNamed(
       AppRoutes.search,
       arguments: {'game': currentGame},
     );
   }
 
-  void _navigateToGames({required BuildContext context}) {
+  void _navigateToGames(BuildContext context) {
     Navigator.of(context).pushNamed(AppRoutes.games);
   }
 
-  void _navigateToCustom({required BuildContext context}) {
+  void _navigateToCustom(BuildContext context) {
     Navigator.of(context).pushNamed(
       AppRoutes.card,
       arguments: {'isCustom': true},
