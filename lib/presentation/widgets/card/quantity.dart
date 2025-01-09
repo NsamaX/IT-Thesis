@@ -10,7 +10,9 @@ class CardQuantityWidget extends StatelessWidget {
     this.quantityCount = 4,
     required this.selectedQuantity,
     required this.onSelected,
-  }) : super(key: key);
+  })  : assert(quantityCount > 0, 'quantityCount must be greater than 0'),
+        assert(selectedQuantity > 0 && selectedQuantity <= quantityCount, 'selectedQuantity must be within 1 to quantityCount'),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

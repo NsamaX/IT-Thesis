@@ -9,7 +9,7 @@ import 'card/edit_controls.dart';
 
 class CardWidget extends StatelessWidget {
   final CardEntity card;
-  final int? count;
+  final int count;
 
   const CardWidget({
     Key? key,

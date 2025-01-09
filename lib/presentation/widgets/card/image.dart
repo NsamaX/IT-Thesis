@@ -9,7 +9,7 @@ class CardImageWidget extends StatelessWidget {
 
   const CardImageWidget({
     Key? key,
-    this.card,
+    required this.card,
     this.isCustom = false,
   }) : super(key: key);
 
@@ -50,6 +50,8 @@ class CardImageWidget extends StatelessWidget {
   }
 
   Widget _buildImage(BuildContext context, CardEntity? card) {
+    if (card == null || card.imageUrl == null) return _buildErrorImage(context);
+
     final theme = Theme.of(context);
     const borderRadius = BorderRadius.all(Radius.circular(16));
 
@@ -70,13 +72,11 @@ class CardImageWidget extends StatelessWidget {
         borderRadius: borderRadius,
         child: AspectRatio(
           aspectRatio: 3 / 4,
-          child: card?.imageUrl != null
-              ? Image.network(
-                  card!.imageUrl!,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _buildErrorImage(context),
-                )
-              : _buildErrorImage(context),
+          child: Image.network(
+            card.imageUrl!,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => _buildErrorImage(context),
+          ),
         ),
       ),
     );

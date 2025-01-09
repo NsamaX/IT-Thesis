@@ -8,7 +8,7 @@ class CardInfoWidget extends StatelessWidget {
 
   const CardInfoWidget({
     Key? key,
-    this.card,
+    required this.card,
     this.isCustom = false,
   }) : super(key: key);
 
@@ -31,15 +31,16 @@ class CardInfoWidget extends StatelessWidget {
   }
 
   Widget _buildDescription(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-
     if (isCustom) return _buildEditableDescription();
-    if (card == null) return const SizedBox();
-    if (card!.additionalData != null) return _buildAdditionalDataDescription(context);
 
+    final cardData = card;
+    if (cardData == null) return const SizedBox();
+    if (cardData.additionalData != null) return _buildAdditionalDataDescription(context);
+
+    final locale = AppLocalizations.of(context);
     return _buildDescriptionText(
       context,
-      card!.description ?? locale.translate('text.no_card_description'),
+      cardData.description ?? locale.translate('text.no_card_description'),
     );
   }
 
@@ -56,13 +57,16 @@ class CardInfoWidget extends StatelessWidget {
   }
 
   Widget _buildAdditionalDataDescription(BuildContext context) {
-    final theme = Theme.of(context);
+    final additionalData = card?.additionalData;
 
+    if (additionalData == null) return const SizedBox();
+
+    final theme = Theme.of(context);
     return Opacity(
       opacity: 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: card!.additionalData!.entries.map((entry) {
+        children: additionalData.entries.map((entry) {
           final value = entry.value;
           if ((value is String && value.isNotEmpty) || value is num) {
             return Padding(

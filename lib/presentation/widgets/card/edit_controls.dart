@@ -6,7 +6,7 @@ import '../../cubits/deck_manager.dart';
 Widget buildEditControls({
   required BuildContext context,
   required CardEntity card,
-  required int? count,
+  int count = 0,
 }) {
   const double buttonSize = 24;
 
@@ -15,20 +15,20 @@ Widget buildEditControls({
     right: 0,
     child: Column(
       children: [
-        _buildCount(context, count ?? 0, buttonSize),
+        _buildCount(context, count, buttonSize),
         const SizedBox(height: 6),
         _buildButton(
           context,
           icon: Icons.add,
-          onPressed: () => context.read<DeckManagerCubit>().addCard(card, 1),
           size: buttonSize,
+          onPressed: () => context.read<DeckManagerCubit>().addCard(card, 1),
         ),
         const SizedBox(height: 6),
         _buildButton(
           context,
           icon: Icons.remove,
-          onPressed: () => context.read<DeckManagerCubit>().removeCard(card),
           size: buttonSize,
+          onPressed: () => context.read<DeckManagerCubit>().removeCard(card),
         ),
       ],
     ),
@@ -57,8 +57,8 @@ Widget _buildCount(BuildContext context, int count, double size) {
 
 Widget _buildButton(BuildContext context, {
   required IconData icon,
-  required VoidCallback onPressed,
   required double size,
+  required VoidCallback onPressed,
 }) {
   final theme = Theme.of(context);
 
