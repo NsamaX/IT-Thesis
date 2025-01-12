@@ -61,9 +61,9 @@ class CardImageWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.appBarTheme.backgroundColor,
         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Colors.black,
+            color: Colors.black.withOpacity(0.2),
             offset: Offset(3.0, 4.0),
             blurRadius: 12.0,
             spreadRadius: 2.0,

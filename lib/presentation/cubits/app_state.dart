@@ -27,7 +27,7 @@ class AppStateCubit extends Cubit<AppState> {
   String getRouteForIndex(int index) {
     const routes = {
       0: AppRoutes.myDecks,
-      1: AppRoutes.scan,
+      1: AppRoutes.read,
       2: AppRoutes.setting,
     };
     return routes[index] ?? AppRoutes.index;

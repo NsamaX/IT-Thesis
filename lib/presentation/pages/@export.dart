@@ -6,7 +6,7 @@ export 'library.dart';
 export 'my_decks.dart';
 export 'new_deck.dart';
 export 'privacy.dart';
-export 'scan.dart';
+export 'read.dart';
 export 'search.dart';
 export 'settings.dart';
 export 'sign_in.dart';

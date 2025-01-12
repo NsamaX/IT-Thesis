@@ -5,7 +5,7 @@
     "my_decks": "My Decks",
     "new_deck": "New Deck",
     "tracker": "Deck Tracker",
-    "scan": "Scan Card",
+    "read": "Tag Reader",
     "games": "Games",
     "search": "Search",
     "card": "Card Info",
@@ -13,7 +13,8 @@
     "settings": "Settings",
     "library": "Library",
     "about": "About",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "language": "Language"
   },
   "toggle": {
     "add": "Add",
@@ -43,7 +44,7 @@
   },
   "navigation": {
     "decks": "Decks",
-    "scan": "Scan",
+    "read": "Read",
     "settings": "Settings"
   },
   "settings": {

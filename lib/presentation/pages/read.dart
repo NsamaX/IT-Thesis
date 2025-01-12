@@ -12,12 +12,12 @@ import '../widgets/app_bar.dart';
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/nfc.dart';
 
-class ReaderPage extends StatefulWidget {
+class ReadPage extends StatefulWidget {
   @override
-  State<ReaderPage> createState() => _ReaderPageState();
+  State<ReadPage> createState() => _ReaderPageState();
 }
 
-class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
+class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
@@ -82,7 +82,7 @@ class _ReaderPageState extends State<ReaderPage> with WidgetsBindingObserver {
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     return {
       Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-      locale.translate('title.scan'): null,
+      locale.translate('title.read'): null,
       Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
     };
   }

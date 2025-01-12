@@ -13,7 +13,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
     final navigationItems = [
       {'icon': Icons.web_stories_rounded, 'label': 'navigation.decks'},
-      {'icon': Icons.insert_page_break_outlined, 'label': 'navigation.scan'},
+      {'icon': Icons.insert_page_break_outlined, 'label': 'navigation.read'},
       {'icon': Icons.settings, 'label': 'navigation.settings'},
     ];
 

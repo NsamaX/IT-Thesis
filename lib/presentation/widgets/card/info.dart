@@ -24,10 +24,10 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
+  Widget _buildTitle(BuildContext context, ) {
     final locale = AppLocalizations.of(context);
     return Text(
-      locale.translate('text.description'),
+      card == null ? locale.translate('text.no_card_name') : card!.name,
       style: Theme.of(context).textTheme.titleSmall,
     );
   }
