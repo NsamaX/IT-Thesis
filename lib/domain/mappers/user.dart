@@ -6,7 +6,6 @@ class UserMapper {
     return UserEntity(
       email: model.email,
       userId: model.userId,
-      tagIds: model.tagIds,
       deckIds: model.deckIds,
       recordIds: model.recordIds,
     );
@@ -16,7 +15,6 @@ class UserMapper {
     return UserModel(
       email: entity.email,
       userId: entity.userId,
-      tagIds: entity.tagIds,
       deckIds: entity.deckIds,
       recordIds: entity.recordIds,
     );
