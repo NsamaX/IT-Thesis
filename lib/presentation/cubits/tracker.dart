@@ -11,6 +11,7 @@ class TrackState {
   final List<CardEntity> history;
   final bool isDialogShown;
   final bool isProcessing;
+  final bool isAdvance;
 
   TrackState({
     required this.deck,
@@ -18,6 +19,7 @@ class TrackState {
     this.history = const [],
     this.isDialogShown = false,
     this.isProcessing = false,
+    this.isAdvance = false,
   });
 
   TrackState copyWith({
@@ -26,6 +28,7 @@ class TrackState {
     List<CardEntity>? history,
     bool? isDialogShown,
     bool? isProcessing,
+    bool? isAdvance,
   }) {
     return TrackState(
       deck: deck ?? this.deck,
@@ -33,35 +36,39 @@ class TrackState {
       history: history ?? this.history,
       isDialogShown: isDialogShown ?? this.isDialogShown,
       isProcessing: isProcessing ?? this.isProcessing,
+      isAdvance: isAdvance ?? this.isAdvance,
     );
   }
 }
 
 class TrackCubit extends Cubit<TrackState> {
-  TrackCubit(DeckEntity deck) : super(TrackState(
-    deck: deck.copyWith(cards: Map.of(deck.cards)),
-    record: RecordEntity(
-      recordId: DateTime.now().toIso8601String(),
-      createdAt: DateTime.now(),
-      data: [],
-    ),
-  ));
+  TrackCubit(DeckEntity deck)
+      : super(TrackState(
+          deck: deck.copyWith(cards: Map.of(deck.cards)),
+          record: RecordEntity(
+            recordId: DateTime.now().toIso8601String(),
+            createdAt: DateTime.now(),
+            data: [],
+          ),
+        ));
 
   int get totalCards => state.deck.cards.values.fold(0, (total, count) => total + count);
 
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
+  void toggleAdvanceMode() => emit(state.copyWith(isAdvance: !state.isAdvance));
+
   void toggleReset(DeckEntity deck) => emit(state.copyWith(
-    isProcessing: false,
-    isDialogShown: true,
-    deck: deck.copyWith(cards: Map.of(deck.cards)),
-    record: RecordEntity(
-      recordId: DateTime.now().toIso8601String(),
-      createdAt: DateTime.now(),
-      data: [],
-    ),
-    history: [],
-  ));
+        isProcessing: false,
+        isDialogShown: true,
+        deck: deck.copyWith(cards: Map.of(deck.cards)),
+        record: RecordEntity(
+          recordId: DateTime.now().toIso8601String(),
+          createdAt: DateTime.now(),
+          data: [],
+        ),
+        history: [],
+      ));
 
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
@@ -93,7 +100,8 @@ class TrackCubit extends Cubit<TrackState> {
     }
   }
 
-  void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
+  void _updateCardCount(
+      TagEntity tag, Action action, String location, int delta) {
     final cardEntry = state.deck.cards.entries.firstWhere(
       (entry) => entry.key.cardId == tag.cardId,
       orElse: () => throw Exception("Card not found in deck"),
@@ -125,7 +133,8 @@ class TrackCubit extends Cubit<TrackState> {
     );
     updatedCards.remove(cardEntry.key);
     emit(state.copyWith(
-      deck: state.deck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
+      deck: state.deck
+          .copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
     ));
   }
 }

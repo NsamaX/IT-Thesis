@@ -9,6 +9,7 @@ import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
 import '../widgets/drawers/history.dart';
+import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/notifications.dart';
@@ -106,17 +107,23 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
+    return context.watch<TrackCubit>().state.isAdvance ? {
       Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+      Icons.equalizer_sharp: null,
       locale.translate('title.tracker'): null,
       Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
+      Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
+    } : {
+      Icons.arrow_back_ios_new_rounded: '/back',
+      Icons.people_rounded: null,
+      locale.translate('title.tracker'): null,
       isNFCEnabled
               ? Icons.wifi_tethering_rounded
               : Icons.wifi_tethering_off_rounded:
           () => NFCHelper.handleToggleNFC(nfcCubit,
               enable: !isNFCEnabled,
               reason: 'User toggled NFC in Tracker Page'),
+      Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
     };
   }
 
@@ -149,6 +156,20 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPlayerDrawer(BuildContext context) {
+    return BlocBuilder<DrawerCubit, Map<String, bool>>(
+      buildWhen: (previous, current) => previous['player'] != current['player'],
+      builder: (context, drawerState) {
+        return AnimatedPositioned(
+          duration: const Duration(milliseconds: 200),
+          top: drawerState['player']! ? 0 : -200,
+          left: 0,
+          child: PlayerDrawerWidget(),
+        );
+      },
     );
   }
 
