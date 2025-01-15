@@ -3,20 +3,29 @@ import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 class AppTextStyles {
-  static TextStyle titleLarge = textStyle(AppColors.DarkModeText, 28, true);
-  static TextStyle titleMedium = textStyle(AppColors.DarkModeText, 20, true);
-  static TextStyle titleSmall = textStyle(AppColors.DarkModeText, 12, true);
-  
-  static TextStyle bodyLarge = textStyle(AppColors.DarkModeText, 18, false);
-  static TextStyle bodyMedium = textStyle(AppColors.DarkModeText, 14, false);
-  static TextStyle bodySmall = textStyle(AppColors.DarkModeText, 10, false);
+  final bool isDarkMode;
 
-  static TextStyle textStyle(Color color, double fontSize, bool isBold) {
+  AppTextStyles(this.isDarkMode);
+
+  Color get _textColor => isDarkMode ? AppColors.DarkModeText : AppColors.LightModeText;
+
+  /// Title styles
+  TextStyle get titleLarge => _textStyle(_textColor, 28, true);
+  TextStyle get titleMedium => _textStyle(_textColor, 20, true);
+  TextStyle get titleSmall => _textStyle(_textColor, 12, true);
+
+  /// Body styles
+  TextStyle get bodyLarge => _textStyle(_textColor, 18, false);
+  TextStyle get bodyMedium => _textStyle(_textColor, 14, false);
+  TextStyle get bodySmall => _textStyle(_textColor, 10, false);
+
+  /// Factory method to create TextStyle
+  TextStyle _textStyle(Color color, double fontSize, bool isBold) {
     return TextStyle(
-      fontFamily: GoogleFonts.inter().fontFamily,
+      color: color,
       fontSize: fontSize,
       fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-      color: color,
+      fontFamily: GoogleFonts.inter().fontFamily,
     );
   }
 }

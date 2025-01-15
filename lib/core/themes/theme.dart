@@ -7,35 +7,49 @@ import 'nav_bar.dart';
 import 'progress_indicator.dart';
 import 'text.dart';
 
-ThemeData themeData() {
+/// Returns ThemeData based on the current mode (Dark/Light).
+ThemeData themeData({required bool isDarkMode}) {
+  final appBarStyles = AppBarStyles(isDarkMode);
+  final buttonStyles = AppButtonStyles(isDarkMode);
+  final iconThemes = AppIconThemes(isDarkMode);
+  final navBarStyles = AppBottomNavBarStyles(isDarkMode);
+  final progressIndicatorStyles = AppProgressIndicatorStyles(isDarkMode);
+  final textStyles = AppTextStyles(isDarkMode);
+
   return ThemeData(
-    scaffoldBackgroundColor: AppColors.DarkModeBackground_lv2,
-    primaryColor: AppColors.DarkModeBackground_lv1,
-    colorScheme: ColorScheme(
-      brightness: Brightness.light,
-      primary: AppColors.PrimaryColor,
-      onPrimary: AppColors.LightModeBackground_lv1,
-      secondary: AppColors.SecondaryColor,
-      onSecondary: AppColors.DarkModeBackground_lv1,
-      surface: AppColors.DarkModeBackground_lv2,
-      onSurface: AppColors.LightModeBackground_lv1,
-      error: Colors.red.shade400,
-      onError: Colors.white,
-    ),
-    iconTheme: AppIconThemes.defaultIcon,
+    // Background Colors
+    scaffoldBackgroundColor: isDarkMode
+        ? AppColors.DarkModeBackground_lv2
+        : AppColors.LightModeBackground_lv2,
+
+    // Primary Colors
+    primaryColor: AppColors.PrimaryColor,
+
+    // Icon Theme
+    iconTheme: iconThemes.defaultIcon,
+
+    // Text Theme
     textTheme: TextTheme(
-      titleLarge: AppTextStyles.titleLarge,
-      titleMedium: AppTextStyles.titleMedium,
-      titleSmall: AppTextStyles.titleSmall,
-      bodyLarge: AppTextStyles.bodyLarge,
-      bodyMedium: AppTextStyles.bodyMedium,
-      bodySmall: AppTextStyles.bodySmall,
+      titleLarge: textStyles.titleLarge,
+      titleMedium: textStyles.titleMedium,
+      titleSmall: textStyles.titleSmall,
+      bodyLarge: textStyles.bodyLarge,
+      bodyMedium: textStyles.bodyMedium,
+      bodySmall: textStyles.bodySmall,
     ),
-    appBarTheme: AppBarStyles.appBarTheme,
-    bottomNavigationBarTheme: AppBottomNavBarStyles.bottomNavBarTheme,
+
+    // AppBar Theme
+    appBarTheme: appBarStyles.appBarTheme,
+
+    // Bottom Navigation Bar Theme
+    bottomNavigationBarTheme: navBarStyles.bottomNavBarTheme,
+
+    // Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: AppButtonStyles.elevatedButton,
+      style: buttonStyles.elevatedButton,
     ),
-    progressIndicatorTheme: AppProgressIndicatorStyles.progressIndicatorTheme,
+
+    // Progress Indicator Theme
+    progressIndicatorTheme: progressIndicatorStyles.progressIndicatorTheme,
   );
 }

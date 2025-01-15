@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 class AppLocalizations {
   static AppLocalizations of(BuildContext context) => Localizations.of<AppLocalizations>(context, AppLocalizations)!;
+
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   final Locale locale;
@@ -17,7 +18,7 @@ class AppLocalizations {
       localizedStrings = json.decode(jsonString) as Map<String, dynamic>;
       return true;
     } catch (e) {
-      throw Exception('Failed to load localization file: ${e.toString()}');
+      throw Exception('Failed to load localization file for ${locale.languageCode}: ${e.toString()}');
     }
   }
 
@@ -42,8 +43,10 @@ class AppLocalizations {
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
+  static const List<String> supportedLanguages = ['en', 'ja'];
+
   @override
-  bool isSupported(Locale locale) => ['en', 'ja'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => supportedLanguages.contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) async {

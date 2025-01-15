@@ -1,5 +1,7 @@
 class AppImages {
+  static const _basePath = 'assets/images';
+
   static const game = {
-    'vanguard': 'assets/images/vanguard.png',
+    'vanguard': '$_basePath/vanguard.png',
   };
 }

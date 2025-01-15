@@ -5,9 +5,7 @@ import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
-import 'database.dart';
-import 'shared_preferences.dart';
-import 'sqlite.dart';
+import '@export.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -24,7 +22,9 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
 
   //------------------------------ Repositories ------------------------------//
-  locator.registerFactoryParam<GameApi, String, void>((game, _) => GameFactory.createApi(game));
+  locator.registerFactoryParam<GameApi, String, void>(
+    (game, _) => GameFactory.createApi(game),
+  );
   locator.registerFactoryParam<CardRepository, String, void>((game, _) {
     return CardRepositoryImpl(
       gameApi: locator<GameApi>(param1: game),

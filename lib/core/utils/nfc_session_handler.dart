@@ -6,13 +6,16 @@ class NFCSessionHandler with WidgetsBindingObserver {
 
   NFCSessionHandler(this.nfcCubit);
 
-  void initNFCSessionHandler() => WidgetsBinding.instance.addObserver(this);
+  void initNFCSessionHandler() {
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   void disposeNFCSessionHandler() {
     WidgetsBinding.instance.removeObserver(this);
     _stopNFCSession('Page disposed');
   }
 
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached ||

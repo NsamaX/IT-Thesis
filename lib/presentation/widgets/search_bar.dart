@@ -70,9 +70,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             prefixIcon: const Icon(Icons.search, color: Colors.grey),
             hintText: locale.translate('text.hint_text'),
             hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-            contentPadding: const EdgeInsets.only(bottom: 14.0),
+            contentPadding: const EdgeInsets.only(bottom: 12.0),
           ),
-          style: theme.textTheme.bodyMedium,
+          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
         ),
       ),
     );
@@ -94,7 +94,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               },
               child: Text(
                 locale.translate('button.cancel'),
-                style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.primary),
+                style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
               ),
             )
           : null,

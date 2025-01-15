@@ -3,8 +3,16 @@ import 'colors.dart';
 import 'text.dart';
 
 class AppButtonStyles {
-  static ButtonStyle elevatedButton = ElevatedButton.styleFrom(
-    textStyle: AppTextStyles.bodyLarge,
-    backgroundColor: AppColors.DarkModeText,
-  );
+  final bool isDarkMode;
+
+  AppButtonStyles(this.isDarkMode);
+
+  ButtonStyle get elevatedButton {
+    return ElevatedButton.styleFrom(
+      backgroundColor: isDarkMode
+          ? AppColors.DarkModeText
+          : AppColors.LightModeText,
+      textStyle: AppTextStyles(isDarkMode).bodyLarge,
+    );
+  }
 }

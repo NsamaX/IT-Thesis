@@ -4,9 +4,19 @@ import 'icon.dart';
 import 'text.dart';
 
 class AppBarStyles {
-  static AppBarTheme appBarTheme = AppBarTheme(
-    backgroundColor: AppColors.DarkModeBackground_lv3,
-    iconTheme: AppIconThemes.appBarIcon,
-    titleTextStyle: AppTextStyles.textStyle(AppColors.PrimaryColor, 12, true),
-  );
+  final bool isDarkMode;
+
+  AppBarStyles(this.isDarkMode);
+
+  AppBarTheme get appBarTheme {
+    return AppBarTheme(
+      backgroundColor: isDarkMode
+          ? AppColors.DarkModeBackground_lv3
+          : AppColors.LightModeBackground_lv3,
+      iconTheme: AppIconThemes(isDarkMode).appBarIcon,
+      titleTextStyle: AppTextStyles(isDarkMode).titleSmall.copyWith(
+        color: AppColors.PrimaryColor,
+      ),
+    );
+  }
 }

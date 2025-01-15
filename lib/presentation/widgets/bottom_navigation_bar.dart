@@ -9,7 +9,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
 
     final navigationItems = [
       {'icon': Icons.web_stories_rounded, 'label': 'navigation.decks'},
@@ -23,9 +22,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
           currentIndex: state.currentPageIndex,
           onTap: (index) => _navigateToPage(context, index),
           items: _buildNavigationItems(navigationItems, locale),
-          selectedItemColor: theme.colorScheme.primary,
-          unselectedItemColor: theme.iconTheme.color,
-          backgroundColor: theme.bottomNavigationBarTheme.backgroundColor,
         );
       },
     );

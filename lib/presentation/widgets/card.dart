@@ -49,17 +49,9 @@ class CardWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: theme.appBarTheme.backgroundColor,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black54,
-                  offset: Offset(3, 4),
-                  blurRadius: 6,
-                  spreadRadius: 0,
-                ),
-              ],
             ),
             child: Card(
-              elevation: 4,
+              color: Colors.transparent,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: card.imageUrl != null

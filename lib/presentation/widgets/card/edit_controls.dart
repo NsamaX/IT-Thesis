@@ -77,7 +77,7 @@ Widget _buildOperatorButton(
       child: Icon(
         icon,
         size: size / 1.5,
-        color: theme.colorScheme.primary,
+        color: theme.primaryColor,
       ),
     ),
   );

@@ -16,7 +16,7 @@ class NFCWidget extends StatelessWidget {
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {
         final isNFCEnabled = state.isNFCEnabled;
-        final activeColor = theme.colorScheme.primary;
+        final activeColor = theme.primaryColor;
         final inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
         return GestureDetector(
           onTap: () => NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled),
