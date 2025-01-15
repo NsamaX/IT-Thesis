@@ -9,22 +9,17 @@ abstract class GameApi {
 
 class GameFactory {
   static GameApi createApi(String game) {
-    try {
-      final baseUrl = ApiConfig.getBaseUrl(game);
-      if (baseUrl.isEmpty) {
-        throw Exception('Base URL for game "$game" is not configured properly.');
-      }
-      final apiRegistry = <String, GameApi Function()>{
-        'vanguard': () => VanguardApi(baseUrl),
-      };
-      final apiCreator = apiRegistry[game];
-      if (apiCreator != null) {
-        return apiCreator();
-      } else {
-        throw Exception('Unsupported game: $game');
-      }
-    } catch (e) {
-      throw Exception('Failed to create API for game "$game": ${e.toString()}');
+    final baseUrl = ApiConfig.getBaseUrl(game);
+    if (baseUrl.isEmpty) {
+      throw Exception('Base URL for game "$game" is not configured properly.');
     }
+    final apiRegistry = <String, GameApi Function()>{
+      'vanguard': () => VanguardApi(baseUrl),
+    };
+    final apiCreator = apiRegistry[game];
+    if (apiCreator != null) {
+      return apiCreator();
+    }
+    throw Exception('Unsupported game: $game');
   }
 }

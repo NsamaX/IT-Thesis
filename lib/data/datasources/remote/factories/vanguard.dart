@@ -1,60 +1,24 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:nfc_project/core/constants/api_config.dart';
 import '../../../models/card.dart';
 import '../game_factory.dart';
+import '3ase_api.dart';
 
-class VanguardApi implements GameApi {
-  final String baseUrl;
-
-  VanguardApi(this.baseUrl);
+class VanguardApi extends BaseApi implements GameApi {
+  VanguardApi(String baseUrl) : super(baseUrl);
 
   @override
   Future<CardModel> fetchCardsById(String id) async {
-    try {
-      final response = await _getRequest(_buildUrl('cards/$id'));
-      final cardData = _decodeResponse(response);
-      return _parseCardData(cardData);
-    } catch (e) {
-      throw Exception('Failed to fetch card by ID $id: $e');
-    }
+    final response = await getRequest('cards/$id');
+    final cardData = decodeResponse(response);
+    return _parseCardData(cardData);
   }
 
   @override
   Future<List<CardModel>> fetchCardsPage(int page) async {
-    try {
-      final response = await _getRequest(_buildUrl('cards', {'page': page.toString()}));
-      final body = _decodeResponse(response);
-      final data = body['data'] as List<dynamic>? ?? [];
-      return _filterCardData(data);
-    } catch (e) {
-      throw Exception('Failed to fetch cards on page $page: $e');
-    }
-  }
-
-  Future<http.Response> _getRequest(Uri url) async {
-    final response = await http.get(url, headers: {
-      'Accept-Encoding': 'gzip',
-      'Content-Type': 'application/json',
-    });
-    _validateResponse(response);
-    return response;
-  }
-
-  void _validateResponse(http.Response response) {
-    if (response.statusCode != 200) {
-      throw Exception('API Error: ${response.statusCode}, ${response.reasonPhrase}');
-    }
-  }
-
-  Uri _buildUrl(String path, [Map<String, String>? queryParams]) =>
-      Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
-
-  Map<String, dynamic> _decodeResponse(http.Response response) {
-    try {
-      return json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-    } catch (e) {
-      throw Exception('Failed to decode response: $e');
-    }
+    final response = await getRequest('cards', {'page': page.toString()});
+    final body = decodeResponse(response);
+    final data = body['data'] as List<dynamic>? ?? [];
+    return _filterCardData(data);
   }
 
   List<CardModel> _filterCardData(List<dynamic> cardsData) {

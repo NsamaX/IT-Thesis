@@ -29,13 +29,16 @@ class CardRepositoryImpl implements CardRepository {
     if (localLastPage >= remoteLastPage && localCards.isNotEmpty) {
       return localCards;
     }
-    final updatedCards = await _parallelLoadAndSaveCards(game, localLastPage + 1, remoteLastPage);
+    final updatedCards = await _parallelLoadAndSaveCards(
+      game,
+      startPage: localLastPage + 1,
+      endPage: remoteLastPage,
+    );
     stopwatch.stop();
     return updatedCards;
   }
 
-  Future<int> _getLastPageFromApi(int startPage) async {
-    const int batchSize = 30;
+  Future<int> _getLastPageFromApi(int startPage, {int batchSize = 30}) async {
     int currentPage = startPage;
     while (true) {
       final batchResults = await Future.wait(
@@ -56,13 +59,18 @@ class CardRepositoryImpl implements CardRepository {
     try {
       final cards = await gameApi.fetchCardsPage(page);
       return {page: cards};
-    } catch (_) {
+    } catch (e) {
       return {page: []};
     }
   }
 
-  Future<List<CardModel>> _parallelLoadAndSaveCards(String game, int startPage, int endPage) async {
-    const int maxConcurrentRequests = 50;
+
+  Future<List<CardModel>> _parallelLoadAndSaveCards(
+    String game, {
+    required int startPage,
+    required int endPage,
+    int maxConcurrentRequests = 50,
+  }) async {
     final futures = <Future<void>>[];
     for (int page = startPage; page <= endPage; page++) {
       futures.add(Future.microtask(() => _loadPageAndSave(game, page)));
@@ -74,9 +82,8 @@ class CardRepositoryImpl implements CardRepository {
     return cardLocalDataSource.fetchCards(game);
   }
 
-  Future<void> _loadPageAndSave(String game, int page) async {
+  Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
     if (await cardLocalDataSource.isPageExists(game, page)) return;
-    const int maxRetries = 3;
     int retryCount = 0;
     while (retryCount < maxRetries) {
       try {
@@ -85,10 +92,11 @@ class CardRepositoryImpl implements CardRepository {
           await cardLocalDataSource.saveCards(game, page, cards);
         }
         break;
-      } catch (_) {
+      } catch (e) {
         retryCount++;
         if (retryCount >= maxRetries) {
-          throw Exception('Failed to load page $page after $maxRetries attempts.');
+          print('Failed to load page $page after $maxRetries attempts. Error: $e');
+          throw Exception('Failed to load page $page.');
         }
       }
     }
