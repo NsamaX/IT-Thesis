@@ -32,7 +32,7 @@ class SettingsLabelWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
       child: Text(
         title,
-        style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.primary),
+        style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
       ),
     );
   }

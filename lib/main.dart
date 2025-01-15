@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
                 locale: state.locale,
                 supportedLocales: const [Locale('en'), Locale('ja')],
                 localizationsDelegates: _localizationsDelegates,
-                theme: themeData(isDarkMode: true),
+                theme: themeData(isDarkMode: state.isDarkMode),
                 onGenerateRoute: AppRoutes.generateRoute,
                 initialRoute: _getInitialRoute(state),
               );

@@ -41,9 +41,9 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> initialize() async {
     try {
-      final localeCode = await loadSettingUsecase('locale') ?? 'en';
-      final isDarkMode = await loadSettingUsecase('isDarkMode') ?? true;
-      final firstLoad = await loadSettingUsecase('firstLoad') ?? true;
+      final localeCode = await loadSettingUsecase('locale');
+      final isDarkMode = await loadSettingUsecase('isDarkMode');
+      final firstLoad = await loadSettingUsecase('firstLoad');
 
       emit(state.copyWith(
         locale: Locale(localeCode),
