@@ -3,14 +3,6 @@ import '../entities/deck.dart';
 import 'card.dart';
 
 class DeckMapper {
-  static DeckModel toModel(DeckEntity entity) {
-    return DeckModel(
-      deckId: entity.deckId,
-      deckName: entity.deckName,
-      cards: entity.cards.map((card, count) => MapEntry(CardMapper.toModel(card), count)),
-    );
-  }
-
   static DeckEntity toEntity(DeckModel model) {
     return DeckEntity(
       deckId: model.deckId,
@@ -19,11 +11,11 @@ class DeckMapper {
     );
   }
 
-  static List<DeckModel> toModelList(List<DeckEntity> entities) {
-    return entities.map(toModel).toList();
-  }
-
-  static List<DeckEntity> toEntityList(List<DeckModel> models) {
-    return models.map(toEntity).toList();
+  static DeckModel toModel(DeckEntity entity) {
+    return DeckModel(
+      deckId: entity.deckId,
+      deckName: entity.deckName,
+      cards: entity.cards.map((card, count) => MapEntry(CardMapper.toModel(card), count)),
+    );
   }
 }

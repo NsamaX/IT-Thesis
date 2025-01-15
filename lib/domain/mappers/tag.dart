@@ -17,12 +17,4 @@ class TagMapper {
       game: entity.game,
     );
   }
-
-  static List<TagEntity> toEntityList(List<TagModel> models) {
-    return models.map(toEntity).toList();
-  }
-
-  static List<TagModel> toModelList(List<TagEntity> entities) {
-    return entities.map(toModel).toList();
-  }
 }

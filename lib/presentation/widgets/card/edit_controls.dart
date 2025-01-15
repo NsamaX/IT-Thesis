@@ -51,7 +51,7 @@ Widget _buildCardCount(
     child: Center(
       child: Text(
         count.toString(),
-        style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.primary),
+        style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
         textAlign: TextAlign.center,
       ),
     ),

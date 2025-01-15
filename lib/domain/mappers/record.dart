@@ -18,12 +18,4 @@ class RecordMapper {
       data: entity.data.map(DataMapper.toModel).toList(),
     );
   }
-
-  static List<RecordEntity> toEntityList(List<RecordModel> models) {
-    return models.map(toEntity).toList();
-  }
-
-  static List<RecordModel> toModelList(List<RecordEntity> entities) {
-    return entities.map(toModel).toList();
-  }
 }

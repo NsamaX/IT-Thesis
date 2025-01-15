@@ -67,7 +67,7 @@ class SignInScaffoldWidget extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           context.read<SettingsCubit>().updateFirstLoad(false);
-          context.read<AppStateCubit>().updatePageIndex(0);
+          context.read<AppCubit>().updatePageIndex(0);
           Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.myDecks,
             (_) => false,

@@ -19,12 +19,4 @@ class DataMapper {
       timestamp: entity.timestamp,
     );
   }
-
-  static List<DataEntity> toEntityList(List<DataModel> models) {
-    return models.map(toEntity).toList();
-  }
-
-  static List<DataModel> toModelList(List<DataEntity> entities) {
-    return entities.map(toModel).toList();
-  }
 }

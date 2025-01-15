@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(create: (_) => locator<NFCCubit>()),
             BlocProvider(create: (_) => locator<DeckManagerCubit>()),
-            BlocProvider(create: (_) => AppStateCubit()),
+            BlocProvider(create: (_) => AppCubit()),
             BlocProvider(create: (_) => locator<SettingsCubit>()),
           ],
           child: BlocBuilder<SettingsCubit, SettingsState>(

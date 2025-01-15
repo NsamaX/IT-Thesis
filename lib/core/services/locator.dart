@@ -61,7 +61,7 @@ Future<void> setupLocator() async {
     deleteDeckUseCase: locator<DeleteDeckUseCase>(),
     loadDecksUseCase: locator<LoadDecksUseCase>(),
   ));
-  locator.registerLazySingleton(() => AppStateCubit());
+  locator.registerLazySingleton(() => AppCubit());
   locator.registerLazySingleton(() => SettingsCubit(
     saveSettingUsecase: locator<SaveSettingUseCase>(),
     loadSettingUsecase: locator<LoadSettingUseCase>(),

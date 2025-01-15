@@ -12,8 +12,8 @@ class DeckManagerState {
   final DeckEntity deck;
   final CardEntity? selectedCard;
   final int quantity;
-  final bool isShareEnabled;
   final bool isEditMode;
+  final bool isShareEnabled;
   final bool isNfcReadEnabled;
   final bool isDeleteEnabled;
   final bool isLoading;
@@ -23,8 +23,8 @@ class DeckManagerState {
     required this.deck,
     this.selectedCard,
     this.quantity = 1,
-    this.isShareEnabled = false,
     this.isEditMode = false,
+    this.isShareEnabled = false,
     this.isNfcReadEnabled = false,
     this.isDeleteEnabled = false,
     this.isLoading = false,
@@ -35,22 +35,24 @@ class DeckManagerState {
     DeckEntity? deck,
     CardEntity? selectedCard,
     int? quantity,
-    bool? isShareEnabled,
     bool? isEditMode,
+    bool? isShareEnabled,
     bool? isNfcReadEnabled,
     bool? isDeleteEnabled,
     bool? isLoading,
-  }) => DeckManagerState(
-    allDecks: allDecks ?? this.allDecks,
-    deck: deck ?? this.deck,
-    selectedCard: selectedCard ?? this.selectedCard,
-    quantity: quantity ?? this.quantity,
-    isShareEnabled: isShareEnabled ?? this.isShareEnabled,
-    isEditMode: isEditMode ?? this.isEditMode,
-    isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
-    isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
-    isLoading: isLoading ?? this.isLoading,
-  );
+  }) { 
+    return DeckManagerState(
+      allDecks: allDecks ?? this.allDecks,
+      deck: deck ?? this.deck,
+      selectedCard: selectedCard ?? this.selectedCard,
+      quantity: quantity ?? this.quantity,
+      isEditMode: isEditMode ?? this.isEditMode,
+      isShareEnabled: isShareEnabled ?? this.isShareEnabled,
+      isNfcReadEnabled: isNfcReadEnabled ?? this.isNfcReadEnabled,
+      isDeleteEnabled: isDeleteEnabled ?? this.isDeleteEnabled,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 }
 
 class DeckManagerCubit extends Cubit<DeckManagerState> {
@@ -71,23 +73,22 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
   ));
 
-  void setDeck(DeckEntity deck) => emit(state.copyWith(deck: deck));
+  //--------------------------------- toggle ---------------------------------//
+  void toggleEditMode() => emit(state.copyWith(
+    isEditMode: !state.isEditMode,
+    isNfcReadEnabled: false,
+  ));
 
   void toggleShare() {
     Clipboard.setData(ClipboardData(
       text: [
         'Deck Name: ${state.deck.deckName}',
-        'Total Cards: ${state.deck.totalCards}',
+        'Total Cards: ${state.deck.cards.values.fold(0, (total, count) => total + count)}',
         ...state.deck.cards.entries.map((e) => '- [${e.value}] ${e.key.name}')
       ].join('\n'),
     ));
     emit(state.copyWith(isShareEnabled: true));
   }
-
-  void toggleEditMode() => emit(state.copyWith(
-    isEditMode: !state.isEditMode,
-    isNfcReadEnabled: false,
-  ));
 
   void toggleNfcRead(NFCCubit nfcCubit) {
     final enabled = !state.isNfcReadEnabled;
@@ -95,37 +96,24 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     if (!enabled) NFCHelper.handleToggleNFC(nfcCubit, enable: false, reason: 'NFC disabled');
   }
 
-  void toggleSelectedCard(CardEntity card) => emit(
-    state.copyWith(selectedCard: state.selectedCard == card ? null : card));
+  void toggleSelectedCard(CardEntity card) => emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
 
-  Future<void> writeSelectedCardToNFC(NFCCubit nfcCubit) async {
-    if (!state.isNfcReadEnabled || state.selectedCard == null) return;
-    try {
-      emit(state.copyWith(isLoading: true));
-      await NFCHelper.handleToggleNFC(nfcCubit, enable: true, card: state.selectedCard!);
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
-  }
+  void toggleDelete() => emit(state.copyWith(deck: state.deck.copyWith(cards: {})));
 
-  void toggleDelete() => emit(
-    state.copyWith(deck: state.deck.copyWith(cards: {})));
+  //---------------------------------- card ----------------------------------//
+  void setQuantity(int quantity) => emit(state.copyWith(quantity: quantity));
 
-  void renameDeck(String newDeckName) => emit(
-    state.copyWith(deck: state.deck.copyWith(deckName: newDeckName)));
+  void addCard(CardEntity card, int count) => emit(state.copyWith(deck: addCardUseCase(state.deck, card, count)));
 
-  void setQuantity(int quantity) => emit(
-    state.copyWith(quantity: quantity));
+  void removeCard(CardEntity card) => emit(state.copyWith(deck: removeCardUseCase(state.deck, card)));
 
-  void addCard(CardEntity card, int count) => emit(
-    state.copyWith(deck: addCardUseCase(state.deck, card, count)));
+  //---------------------------------- deck ----------------------------------//
+  void setDeck(DeckEntity deck) => emit(state.copyWith(deck: deck));
 
-  void removeCard(CardEntity card) => emit(
-    state.copyWith(deck: removeCardUseCase(state.deck, card)));
+  void renameDeck(String newDeckName) => emit(state.copyWith(deck: state.deck.copyWith(deckName: newDeckName)));
 
   Future<void> saveDeck(NFCCubit nfcCubit) async {
-    emit(state.copyWith(isLoading: true));
-    try {
+    await _performWithLoading(() async {
       await saveDeckUseCase(state.deck);
       final updatedDecks = [...state.allDecks];
       final index = updatedDecks.indexWhere((d) => d.deckId == state.deck.deckId);
@@ -135,9 +123,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
         updatedDecks.add(state.deck);
       }
       emit(state.copyWith(allDecks: updatedDecks));
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
+    });
   }
 
   Future<void> deleteDeck(DeckEntity deckToDelete) async {
@@ -154,5 +140,14 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   Future<void> loadDecks() async {
     final decks = await loadDecksUseCase.call();
     emit(state.copyWith(allDecks: decks.where((d) => d.cards.isNotEmpty).toList()));
+  }
+
+  Future<void> _performWithLoading(Future<void> Function() task) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      await task();
+    } finally {
+      emit(state.copyWith(isLoading: false));
+    }
   }
 }

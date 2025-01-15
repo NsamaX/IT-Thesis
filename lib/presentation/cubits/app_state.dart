@@ -21,8 +21,8 @@ class AppState {
   }
 }
 
-class AppStateCubit extends Cubit<AppState> {
-  AppStateCubit() : super(AppState(currentPageIndex: 0, selectedGame: 'vanguard'));
+class AppCubit extends Cubit<AppState> {
+  AppCubit() : super(AppState(currentPageIndex: 0, selectedGame: 'vanguard'));
 
   String getRouteForIndex(int index) {
     const routes = {

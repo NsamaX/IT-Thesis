@@ -21,7 +21,7 @@ class GamesLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.read<AppStateCubit>().updateSelectedGame(game);
+        context.read<AppCubit>().updateSelectedGame(game);
         Navigator.of(context).pushReplacementNamed(
           AppRoutes.search,
           arguments: {'game': game, 'isAdd': isAdd},

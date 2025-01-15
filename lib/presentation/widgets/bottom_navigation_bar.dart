@@ -16,7 +16,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       {'icon': Icons.settings, 'label': 'navigation.settings'},
     ];
 
-    return BlocBuilder<AppStateCubit, AppState>(
+    return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         return BottomNavigationBar(
           currentIndex: state.currentPageIndex,
@@ -31,7 +31,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       BuildContext context, 
       int index,
     ) {
-    final cubit = context.read<AppStateCubit>();
+    final cubit = context.read<AppCubit>();
 
     if (index != cubit.state.currentPageIndex) {
       cubit.updatePageIndex(index);

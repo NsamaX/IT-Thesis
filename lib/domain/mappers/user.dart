@@ -19,12 +19,4 @@ class UserMapper {
       recordIds: entity.recordIds,
     );
   }
-
-  static List<UserEntity> toEntityList(List<UserModel> models) {
-    return models.map(toEntity).toList();
-  }
-
-  static List<UserModel> toModelList(List<UserEntity> entities) {
-    return entities.map(toModel).toList();
-  }
 }

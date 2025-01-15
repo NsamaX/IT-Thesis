@@ -11,7 +11,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    return BlocBuilder<AppStateCubit, AppState>(
+    return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
         return Padding(

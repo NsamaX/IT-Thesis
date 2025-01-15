@@ -22,6 +22,4 @@ class DeckEntity {
       cards: cards ?? this.cards,
     );
   }
-
-  int get totalCards => cards.values.fold(0, (total, count) => total + count);
 }

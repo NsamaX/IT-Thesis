@@ -47,19 +47,6 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     return _parseCards(result);
   }
 
-  List<CardModel> _parseCards(List<Map<String, dynamic>> rows) {
-    return rows.map((row) {
-      return CardModel(
-        cardId: row[columnId],
-        game: row[columnGame],
-        name: row[columnName],
-        description: row[columnDescription],
-        imageUrl: row[columnImageUrl],
-        additionalData: json.decode(row[columnAdditionalData] ?? '{}'),
-      );
-    }).toList();
-  }
-
   @override
   Future<int> fetchLastPage(String game) async {
     final result = await _sqliteService.query(
@@ -94,15 +81,6 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     await _savePageIfNotExists(game, page);
   }
 
-  Future<void> _savePageIfNotExists(String game, int page) async {
-    if (!await isPageExists(game, page)) {
-      await _sqliteService.insert(
-        pagesTable,
-        {columnGame: game, columnPage: page},
-      );
-    }
-  }
-
   @override
   Future<void> clearCards(String game) async {
     final db = await _sqliteService.getDatabase();
@@ -110,5 +88,27 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
       await txn.delete(cardsTable, where: '$columnGame = ?', whereArgs: [game]);
       await txn.delete(pagesTable, where: '$columnGame = ?', whereArgs: [game]);
     });
+  }
+
+  List<CardModel> _parseCards(List<Map<String, dynamic>> rows) {
+    return rows.map((row) {
+      return CardModel(
+        cardId: row[columnId],
+        game: row[columnGame],
+        name: row[columnName],
+        description: row[columnDescription],
+        imageUrl: row[columnImageUrl],
+        additionalData: json.decode(row[columnAdditionalData] ?? '{}'),
+      );
+    }).toList();
+  }
+
+  Future<void> _savePageIfNotExists(String game, int page) async {
+    if (!await isPageExists(game, page)) {
+      await _sqliteService.insert(
+        pagesTable,
+        {columnGame: game, columnPage: page},
+      );
+    }
   }
 }
