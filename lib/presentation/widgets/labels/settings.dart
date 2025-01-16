@@ -15,7 +15,8 @@ class SettingsLabelWidget extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildTitle(context, theme, title: category['title'] as String),
+            if (category['title'] == null) SizedBox(height: 2.0)
+            else _buildTitle(context, theme, title: category['title'] as String),
             ..._buildContentList(context, theme, content: category['content'] as List<dynamic>),
           ],
         );
@@ -47,9 +48,10 @@ class SettingsLabelWidget extends StatelessWidget {
         context,
         theme,
         onTap: item['onTap'],
-        icon: item['icon'] as IconData,
+        icon: item['icon'] as IconData?,
         text: item['text'] as String,
-        arrow: item['arrow'] as String?,
+        info: item['info'] as String?,
+        select: item['select'] as bool?,
       );
     }).toList();
   }
@@ -58,9 +60,10 @@ class SettingsLabelWidget extends StatelessWidget {
     BuildContext context,
     ThemeData theme, {
     required dynamic onTap,
-    required IconData icon,
+    IconData? icon,
     required String text,
-    String? arrow,
+    String? info,
+    bool? select,
   }) {
     final hasRoute = onTap is String;
 
@@ -72,7 +75,7 @@ class SettingsLabelWidget extends StatelessWidget {
           color: theme.appBarTheme.backgroundColor,
           border: const Border(
             bottom: BorderSide(
-              color: Colors.white60,
+              color: Colors.grey,
               width: 1.0,
             ),
           ),
@@ -84,8 +87,8 @@ class SettingsLabelWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(icon),
-                  const SizedBox(width: 12.0),
+                  if (icon != null) Icon(icon),
+                  if (icon != null) const SizedBox(width: 12.0),
                   Text(
                     text,
                     style: theme.textTheme.bodySmall,
@@ -94,17 +97,19 @@ class SettingsLabelWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  if (arrow != null)
+                  if (info != null)
                     Text(
-                      arrow,
+                      info,
                       style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
                     ),
-                  SizedBox(width: arrow != null ? 6.0 : 0.0),
-                  if (hasRoute)
+                  SizedBox(width: info != null ? 6.0 : 0.0),
+                  if (hasRoute)...[
                     const Icon(
                       Icons.arrow_forward_ios_rounded,
                       color: Colors.grey,
                     ),
+                  ]
+                  else if (select == true) const Icon(Icons.check_rounded, size: 18.0),
                 ],
               ),
             ],

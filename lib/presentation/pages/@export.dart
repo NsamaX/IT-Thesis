@@ -2,6 +2,7 @@ export 'about.dart';
 export 'card.dart';
 export 'games.dart';
 export 'index.dart';
+export 'language.dart';
 export 'library.dart';
 export 'my_decks.dart';
 export 'new_deck.dart';

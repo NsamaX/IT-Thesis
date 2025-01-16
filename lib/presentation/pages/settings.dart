@@ -29,7 +29,7 @@ class SettingsPage extends StatelessWidget {
       label: [
         _buildAccountSettings(locale),
         _buildGeneralSettings(context, locale, cubit),
-        _buildSupportSettings(locale, cubit),
+        _buildSupportSettings(context, locale, cubit),
       ],
     );
   }
@@ -80,6 +80,7 @@ class SettingsPage extends StatelessWidget {
   }
 
   Map<String, dynamic> _buildSupportSettings(
+    BuildContext context,
     AppLocalizations locale,
     SettingsCubit cubit,
   ) {
@@ -87,10 +88,10 @@ class SettingsPage extends StatelessWidget {
       'title': locale.translate('settings.support.label'),
       'content': [
         {
-          'onTap': () => _toggleLanguage(cubit),
+          'onTap': AppRoutes.language,
           'icon': Icons.language_rounded,
           'text': locale.translate('settings.support.language'),
-          'arrow': 'English',
+          'info': locale.getLanguageName(locale.locale.languageCode),
         },
         // {
         //   'onTap': () {},
@@ -104,10 +105,5 @@ class SettingsPage extends StatelessWidget {
   void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
     cubit.updateFirstLoad(true);
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
-  }
-
-  void _toggleLanguage(SettingsCubit cubit) {
-    final currentLanguage = cubit.state.locale.languageCode;
-    cubit.updateLanguage(currentLanguage == 'en' ? 'ja' : 'en');
   }
 }

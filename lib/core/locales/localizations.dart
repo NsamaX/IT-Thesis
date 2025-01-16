@@ -9,6 +9,7 @@ class AppLocalizations {
 
   final Locale locale;
   late final Map<String, dynamic> localizedStrings;
+  late final Map<String, String> languageNames;
 
   AppLocalizations(this.locale);
 
@@ -16,6 +17,12 @@ class AppLocalizations {
     try {
       final String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
       localizedStrings = json.decode(jsonString) as Map<String, dynamic>;
+
+      languageNames = {
+        'en': 'English',
+        'ja': '日本'
+      };
+
       return true;
     } catch (e) {
       throw Exception('Failed to load localization file for ${locale.languageCode}: ${e.toString()}');
@@ -37,6 +44,10 @@ class AppLocalizations {
     } catch (e) {
       return key;
     }
+  }
+
+  String getLanguageName(String languageCode) {
+    return languageNames[languageCode] ?? languageCode;
   }
 }
 
