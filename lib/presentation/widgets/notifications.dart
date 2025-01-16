@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
+const _snackBarDuration = Duration(seconds: 1);
+const _dialogTransitionDuration = Duration(milliseconds: 200);
+
+const _successColor = CupertinoColors.systemGreen;
+const _errorColor = CupertinoColors.systemRed;
+
 Future<void> snackBar(
   BuildContext context, {
   required String content,
@@ -13,13 +19,11 @@ Future<void> snackBar(
         content,
         style: const TextStyle(color: Colors.white),
       ),
-      duration: const Duration(seconds: 1),
-      backgroundColor: isError
-          ? CupertinoColors.systemRed
-          : CupertinoColors.systemGreen,
+      duration: _snackBarDuration,
+      backgroundColor: isError ? _errorColor : _successColor,
     ),
   );
-  await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(_snackBarDuration);
 }
 
 void cupertinoAlertDialog(
@@ -29,6 +33,7 @@ void cupertinoAlertDialog(
 }) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
+
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -36,26 +41,19 @@ void cupertinoAlertDialog(
     barrierColor: Colors.black.withOpacity(0.5),
     pageBuilder: (context, animation1, animation2) {
       return CupertinoAlertDialog(
-        title: Text(
-          title,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
-        content: Text(
-          content,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
+        title: _buildDialogTitleText(theme, title),
+        content: _buildDialogContentText(theme, content),
         actions: [
-          CupertinoDialogAction(
+          _buildDialogAction(
+            theme,
+            label: locale.translate('button.ok'),
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              locale.translate('button.ok'),
-              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
-            ),
+            color: CupertinoColors.systemBlue,
           ),
         ],
       );
     },
-    transitionDuration: const Duration(milliseconds: 200),
+    transitionDuration: _dialogTransitionDuration,
   );
 }
 
@@ -67,38 +65,60 @@ void cupertinoAlertDialogAction(
 }) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
+
   showCupertinoDialog(
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text(
-          title,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
-        content: Text(
-          content,
-          style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
-        ),
+        title: _buildDialogTitleText(theme, title),
+        content: _buildDialogContentText(theme, content),
         actions: [
-          CupertinoDialogAction(
+          _buildDialogAction(
+            theme,
+            label: locale.translate('button.cancel'),
             onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              locale.translate('button.cancel'),
-              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemRed),
-            ),
+            color: _errorColor,
           ),
-          CupertinoDialogAction(
+          _buildDialogAction(
+            theme,
+            label: locale.translate('button.confirm'),
             onPressed: () {
               Navigator.of(context).pop();
               onConfirm();
             },
-            child: Text(
-              locale.translate('button.confirm'),
-              style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.systemBlue),
-            ),
+            color: CupertinoColors.systemBlue,
           ),
         ],
       );
     },
+  );
+}
+
+Widget _buildDialogTitleText(ThemeData theme, String text) {
+  return Text(
+    text,
+    style: theme.textTheme.titleMedium?.copyWith(color: CupertinoColors.black, fontSize: 18.0),
+  );
+}
+
+Widget _buildDialogContentText(ThemeData theme, String text) {
+  return Text(
+    text,
+    style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
+  );
+}
+
+Widget _buildDialogAction(
+  ThemeData theme, {
+  required String label,
+  required VoidCallback onPressed,
+  required Color color,
+}) {
+  return CupertinoDialogAction(
+    onPressed: onPressed,
+    child: Text(
+      label,
+      style: theme.textTheme.bodyMedium?.copyWith(color: color),
+    ),
   );
 }

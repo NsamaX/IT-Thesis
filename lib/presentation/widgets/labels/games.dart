@@ -5,34 +5,37 @@ import '../../cubits/app_state.dart';
 
 class GamesLabelWidget extends StatelessWidget {
   final String game;
-  final String imagePath;
+  final String? imagePath;
   final String description;
   final bool isAdd;
 
   const GamesLabelWidget({
     Key? key,
     required this.game,
-    required this.imagePath,
+    this.imagePath,
     required this.description,
     this.isAdd = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
-      onTap: () {
-        context.read<AppCubit>().updateSelectedGame(game);
-        Navigator.of(context).pushReplacementNamed(
-          AppRoutes.search,
-          arguments: {'game': game, 'isAdd': isAdd},
-        );
-      },
-      child: _buildContainer(context),
+      onTap: () => _navigateToSearch(context),
+      child: _buildContainer(theme),
     );
   }
 
-  Widget _buildContainer(BuildContext context) {
-    final theme = Theme.of(context);
+  void _navigateToSearch(BuildContext context) {
+    context.read<AppCubit>().updateSelectedGame(game);
+    Navigator.of(context).pushReplacementNamed(
+      AppRoutes.search,
+      arguments: {'game': game, 'isAdd': isAdd},
+    );
+  }
+
+  Widget _buildContainer(ThemeData theme) {
     return Container(
       margin: const EdgeInsets.only(bottom: 6.0),
       height: 60.0,
@@ -54,7 +57,7 @@ class GamesLabelWidget extends StatelessWidget {
           children: [
             _buildImage(),
             const SizedBox(width: 12.0),
-            _buildGameInfo(context),
+            _buildGameInfo(theme),
           ],
         ),
       ),
@@ -67,17 +70,18 @@ class GamesLabelWidget extends StatelessWidget {
       height: 36.0,
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset(imagePath),
+        child: imagePath != null
+            ? Image.asset(imagePath!, fit: BoxFit.cover)
+            : const Icon(Icons.videogame_asset, size: 24.0),
       ),
     );
   }
 
-  Widget _buildGameInfo(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget _buildGameInfo(ThemeData theme) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +95,7 @@ class GamesLabelWidget extends StatelessWidget {
           ),
           const SizedBox(height: 4.0),
           Text(
-            _extractDescription(description: description),
+            _extractDescription(description),
             style: theme.textTheme.bodySmall,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
@@ -101,7 +105,7 @@ class GamesLabelWidget extends StatelessWidget {
     );
   }
 
-  String _extractDescription({required String description}) {
+  String _extractDescription(String description) {
     final parts = description.split('//');
     return parts.length > 1 ? parts[1] : description;
   }

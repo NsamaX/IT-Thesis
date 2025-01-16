@@ -8,16 +8,6 @@ class SQLiteService {
 
   Future<Database> getDatabase() async => _databaseService.database;
 
-  Future<void> _ensureTableExists(Database db, String table) async {
-    final dynamic tableExists = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-      [table],
-    );
-    if (tableExists.isEmpty) {
-      throw Exception('Table "$table" does not exist.');
-    }
-  }
-
   Future<List<Map<String, dynamic>>> query(
     String table, {
     String? where,
@@ -100,6 +90,16 @@ class SQLiteService {
       await db.delete(table, where: '$column = ?', whereArgs: [value]);
     } catch (e) {
       throw Exception('Failed to delete data from "$table": ${e.toString()}');
+    }
+  }
+
+  Future<void> _ensureTableExists(Database db, String table) async {
+    final dynamic tableExists = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+      [table],
+    );
+    if (tableExists.isEmpty) {
+      throw Exception('Table "$table" does not exist.');
     }
   }
 }

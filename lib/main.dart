@@ -11,15 +11,12 @@ import 'presentation/cubits/@export.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
   await setupLocator();
   await ApiConfig.loadConfig(environment: 'development');
-
   runApp(MyApp());
 }
 

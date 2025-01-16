@@ -17,28 +17,28 @@
     "language": "Language"
   },
   "toggle": {
-    "add": "Add",
-    "done": "Done",
     "edit": "Edit",
-    "save": "Save"
+    "save": "Save",
+    "add": "Add",
+    "done": "Done"
   },
   "button": {
+    "start": "Start",
+    "guest": "Guest",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "guest": "Guest",
-    "start": "Start",
     "ok": "OK"
   },
   "text": {
     "hint_text": "Got a card in mind?",
     "internet_error": "No internet connection. Please connect to the internet and try again.",
     "no_results": "No results found.",
-    "upload_image": "Upload image",
     "card_name": "Card name",
     "description": "Description",
-    "no_card_image": "No card image",
+    "upload_image": "Upload image",
     "no_card_name": "No card name",
     "no_card_description": "No card description",
+    "no_card_image": "No card image",
     "deck_empty": "No cards in the deck.",
     "total_cards": "Cards"
   },
@@ -77,23 +77,12 @@
     }
   },
   "snack_bar": {
-    "general": {
-      "error": "An unexpected error occurred. Please try again."
-    },
-    "sign_in": {
-      "authentication_failed": "Sign-in failed. Please check your credentials and try again.",
-      "sign_out_failed": "Sign-out failed. Please try again later."
+    "card": {
+      "add_success": "Card successfully added to your deck!"
     },
     "deck": {
-      "save_failed": "Could not save your deck. Please check your connection and try again.",
-      "load_failed": "Unable to load decks. Please check your connection and try again.",
-      "remove_failed": "Failed to remove the card from your deck. Please try again.",
       "share": "Your deck log has been copied to the clipboard for easy sharing.",
       "deleted": "All cards in the deck deleted successfully."
-    },
-    "card": {
-      "add_failed": "Could not add the card to your deck. Please check the details and try again.",
-      "add_success": "Card successfully added to your deck!"
     },
     "nfc": {
       "unavailable": "NFC is unavailable on this device. Ensure that NFC is enabled and supported, then try again.",

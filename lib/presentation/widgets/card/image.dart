@@ -15,14 +15,15 @@ class CardImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isCustom
-        ? _buildDottedBorder(context)
-        : _buildImage(context, card: card);
-  }
-
-  Widget _buildDottedBorder(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
+    return isCustom
+        ? _buildDottedPlaceholder(locale, theme)
+        : _buildCardImage(locale, theme, card: card);
+  }
+
+  Widget _buildDottedPlaceholder(AppLocalizations locale, ThemeData theme) {
     return AspectRatio(
       aspectRatio: 3 / 4,
       child: DottedBorder(
@@ -31,79 +32,80 @@ class CardImageWidget extends StatelessWidget {
         radius: const Radius.circular(16.0),
         dashPattern: const [14.0, 24.0],
         strokeWidth: 2,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.upload_rounded, 
-                size: 36.0,
-              ),
-              Text(
-                locale.translate('text.upload_image'),
-                style: theme.textTheme.titleSmall,
-              ),
-            ],
-          ),
+        child: _buildPlaceholderContent(
+          locale,
+          theme,
+          icon: Icons.upload_rounded,
+          textKey: 'text.upload_image',
         ),
       ),
     );
   }
 
-  Widget _buildImage(
-    BuildContext context, {
+  Widget _buildCardImage(
+    AppLocalizations locale,
+    ThemeData theme,{
     CardEntity? card,
   }) {
-    if (card == null || card.imageUrl == null) return _buildErrorImage(context);
-    
-    final theme = Theme.of(context);
+    if (card?.imageUrl == null) return _buildErrorImage(locale, theme);
     return Container(
-      decoration: BoxDecoration(
-        color: theme.appBarTheme.backgroundColor,
-        borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            offset: Offset(3.0, 4.0),
-            blurRadius: 12.0,
-            spreadRadius: 2.0,
-          ),
-        ],
-      ),
+      decoration: _buildBoxDecoration(theme),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(16.0)),
         child: AspectRatio(
           aspectRatio: 3 / 4,
           child: Image.network(
-            card.imageUrl!,
+            card!.imageUrl!,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => _buildErrorImage(context),
+            errorBuilder: (_, __, ___) => _buildErrorImage(locale, theme),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildErrorImage(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
-    return Container(
-      color: theme.appBarTheme.backgroundColor,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.image_not_supported, 
-              size: 36.0,
-            ),
-            Text(
-              locale.translate('text.no_card_image'),
-              style: theme.textTheme.titleSmall,
-            ),
-          ],
-        ),
+  Widget _buildErrorImage(AppLocalizations locale, ThemeData theme) {
+    return _buildPlaceholderContent(
+      locale,
+      theme,
+      icon: Icons.image_not_supported,
+      textKey: 'text.no_card_image',
+    );
+  }
+
+  Widget _buildPlaceholderContent(
+    AppLocalizations locale,
+    ThemeData theme, {
+    required IconData icon,
+    required String textKey,
+  }) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 36.0, color: Colors.grey),
+          const SizedBox(height: 8.0),
+          Text(
+            locale.translate(textKey),
+            style: theme.textTheme.titleSmall,
+          ),
+        ],
       ),
+    );
+  }
+
+  BoxDecoration _buildBoxDecoration(ThemeData theme) {
+    return BoxDecoration(
+      color: theme.appBarTheme.backgroundColor,
+      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          offset: const Offset(3.0, 4.0),
+          blurRadius: 12.0,
+          spreadRadius: 2.0,
+        ),
+      ],
     );
   }
 }

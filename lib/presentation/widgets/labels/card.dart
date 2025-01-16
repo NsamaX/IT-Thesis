@@ -21,20 +21,25 @@ class CardLabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        AppRoutes.card,
-        arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
-      ),
-      child: _buildContainer(context, color: lightTheme ? Colors.black : null),
+      onTap: () => _navigateToCardPage(context),
+      child: _buildContainer(locale, theme),
     );
   }
 
-  Widget _buildContainer(
-    BuildContext context, {
-    Color? color,
-  }) {
-    final theme = Theme.of(context);
+  void _navigateToCardPage(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.card,
+      arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
+    );
+  }
+
+  Widget _buildContainer(AppLocalizations locale, ThemeData theme) {
+    final color = lightTheme ? Colors.black : null;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 6.0),
       height: 60.0,
@@ -54,28 +59,18 @@ class CardLabelWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
           children: [
-            _buildImage(context, color: color),
+            _buildImage(theme, color: color),
             const SizedBox(width: 12.0),
-            Expanded(child: _buildCardInfo(context, color: color)),
+            Expanded(child: _buildCardInfo(locale, theme, color: color)),
             const SizedBox(width: 16.0),
-            if (count != null) ...[
-              Text(
-                count.toString(),
-                style: theme.textTheme.titleMedium?.copyWith(color: color),
-              ),
-              const SizedBox(width: 12.0),
-            ],
+            if (count != null) _buildCount(theme, color),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildImage(
-    BuildContext context, {
-    Color? color,
-  }) {
-    final theme = Theme.of(context);
+  Widget _buildImage(ThemeData theme, {Color? color}) {
     return Container(
       width: 42.0,
       height: 42.0,
@@ -89,27 +84,22 @@ class CardLabelWidget extends StatelessWidget {
               child: Image.network(
                 card!.imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.image_not_supported, 
-                  size: 36.0, 
-                  color: color,
-                ),
+                errorBuilder: (_, __, ___) => _buildFallbackIcon(color),
               ),
             )
-          : Icon(
-              Icons.image_not_supported, 
-              size: 36.0, 
-              color: color,
-            ),
+          : _buildFallbackIcon(color),
     );
   }
 
-  Widget _buildCardInfo(
-    BuildContext context, { 
-    Color? color,
-  }) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  Widget _buildFallbackIcon(Color? color) {
+    return Icon(
+      Icons.image_not_supported,
+      size: 36.0,
+      color: color,
+    );
+  }
+
+  Widget _buildCardInfo(AppLocalizations locale, ThemeData theme, {Color? color}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -128,6 +118,13 @@ class CardLabelWidget extends StatelessWidget {
           maxLines: 1,
         ),
       ],
+    );
+  }
+
+  Widget _buildCount(ThemeData theme, Color? color) {
+    return Text(
+      count.toString(),
+      style: theme.textTheme.titleMedium?.copyWith(color: color),
     );
   }
 }

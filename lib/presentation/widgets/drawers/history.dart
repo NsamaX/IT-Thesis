@@ -15,6 +15,7 @@ class HistoryDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reversedCards = cards.reversed.toList();
+    
     return Container(
       width: 200,
       height: height,

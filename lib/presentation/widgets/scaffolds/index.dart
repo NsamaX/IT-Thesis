@@ -7,6 +7,9 @@ class IndexScaffoldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26),
@@ -14,11 +17,11 @@ class IndexScaffoldWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildTitle(context),
+              _buildTitle(locale, theme),
               const SizedBox(height: 30.0),
-              _buildDescription(context),
+              _buildDescription(locale, theme),
               const SizedBox(height: 38.0),
-              _buildSignInButton(context),
+              _buildSignInButton(context, locale),
             ],
           ),
         ),
@@ -26,9 +29,7 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
     return Text(
       locale.translate('title.index'),
       style: theme.textTheme.titleLarge,
@@ -36,9 +37,7 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
     return Text(
       locale.translate('tutorial.index'),
       style: theme.textTheme.bodyMedium,
@@ -46,15 +45,18 @@ class IndexScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton(BuildContext context) {
-    final locale = AppLocalizations.of(context);
+  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) {
     return SizedBox(
       width: 132.0,
       height: 46.0,
       child: ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
+        onPressed: () => _navigateToSignIn(context),
         child: Text(locale.translate('button.start')),
       ),
     );
+  }
+
+  void _navigateToSignIn(BuildContext context) {
+    Navigator.of(context).pushNamed(AppRoutes.signIn);
   }
 }

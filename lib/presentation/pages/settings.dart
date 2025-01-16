@@ -90,6 +90,7 @@ class SettingsPage extends StatelessWidget {
           'onTap': () => _toggleLanguage(cubit),
           'icon': Icons.language_rounded,
           'text': locale.translate('settings.support.language'),
+          'arrow': 'English',
         },
         // {
         //   'onTap': () {},

@@ -11,36 +11,30 @@ class FeaturesDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
+
         return Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildFeatureItem(
-                context,
-                onTap: () => Navigator.of(context).pushNamed(
-                  AppRoutes.search,
-                  arguments: {'game': currentGame},
-                ),
+                theme,
+                onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
                 image: AppImages.game[currentGame],
-                label: null,
               ),
               _buildFeatureItem(
-                context,
-                onTap: () => Navigator.of(context).pushNamed(AppRoutes.games),
-                image: null,
+                theme,
+                onTap: () => _navigateToRoute(context, AppRoutes.games),
                 label: locale.translate('title.games'),
               ),
               _buildFeatureItem(
-                context,
-                onTap: () => Navigator.of(context).pushNamed(
-                  AppRoutes.card,
-                  arguments: {'isCustom': true},
-                ),
-                image: null,
+                theme,
+                onTap: () => _navigateToRoute(context, AppRoutes.card, {'isCustom': true}),
                 label: locale.translate('title.custom'),
               ),
             ],
@@ -50,8 +44,12 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
+  void _navigateToRoute(BuildContext context, String route, [Map<String, dynamic>? arguments]) {
+    Navigator.of(context).pushNamed(route, arguments: arguments);
+  }
+
   Widget _buildFeatureItem(
-    BuildContext context, {
+    ThemeData theme, {
     VoidCallback? onTap,
     String? image,
     String? label,
@@ -63,26 +61,40 @@ class FeaturesDrawerWidget extends StatelessWidget {
         child: Container(
           width: 60.0,
           height: 60.0,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 4.0,
+                spreadRadius: 1.0,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          child: _buildFeatureContent(context, image: image, label: label),
+          child: _buildFeatureContent(theme, image: image, label: label),
         ),
       ),
     );
   }
 
   Widget _buildFeatureContent(
-    BuildContext context, {
+    ThemeData theme, {
     String? image,
     String? label,
   }) {
-    final theme = Theme.of(context);
-    if (image != null) return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: Image.asset(image, fit: BoxFit.cover),
-    );
+    if (image != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: Image.asset(
+          image,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+        ),
+      );
+    }
+
     return Center(
       child: Text(
         label ?? '',

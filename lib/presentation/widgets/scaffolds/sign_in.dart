@@ -10,25 +10,26 @@ class SignInScaffoldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _buildTitle(context),
+            _buildTitle(locale, theme),
             const SizedBox(height: 80.0),
-            _buildGoogleIcon(),
+            _buildGoogleSignInButton(),
             const SizedBox(height: 80.0),
-            _buildSignInButton(context),
+            _buildGuestSignInButton(context, locale),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTitle(BuildContext context) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
     return Text(
       locale.translate('title.sign_in'),
       style: theme.textTheme.titleLarge,
@@ -36,9 +37,11 @@ class SignInScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildGoogleIcon() {
+  Widget _buildGoogleSignInButton() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // TODO: Implement Google sign-in functionality
+      },
       child: Container(
         width: 60.0,
         height: 60.0,
@@ -59,22 +62,26 @@ class SignInScaffoldWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildSignInButton(BuildContext context) {
-    final locale = AppLocalizations.of(context);
+  Widget _buildGuestSignInButton(BuildContext context, AppLocalizations locale) {
     return SizedBox(
       width: 132,
       height: 46,
       child: ElevatedButton(
-        onPressed: () {
-          context.read<SettingsCubit>().updateFirstLoad(false);
-          context.read<AppCubit>().updatePageIndex(0);
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.myDecks,
-            (_) => false,
-          );
-        },
+        onPressed: () => _handleGuestSignIn(context),
         child: Text(locale.translate('button.guest')),
       ),
+    );
+  }
+
+  void _handleGuestSignIn(BuildContext context) {
+    final settingsCubit = context.read<SettingsCubit>();
+    final appCubit = context.read<AppCubit>();
+
+    settingsCubit.updateFirstLoad(false);
+    appCubit.updatePageIndex(0);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      AppRoutes.myDecks,
+      (_) => false,
     );
   }
 }

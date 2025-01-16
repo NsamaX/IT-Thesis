@@ -19,32 +19,35 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final deckManagerState = context.watch<DeckManagerCubit>().state;
-    final isSelected = deckManagerState.selectedCard == card;
-    final isNfcReadEnabled = deckManagerState.isNfcReadEnabled;
-    final isEditMode = deckManagerState.isEditMode;
 
     return Stack(
       children: [
-        _buildCardContainer(context, isSelected, isNfcReadEnabled),
-        if (isEditMode && !isNfcReadEnabled) buildEditControls(context, card: card, count: count),
+        _buildCardContainer(
+          context,
+          theme,
+          isSelected: deckManagerState.selectedCard == card,
+          isNfcReadEnabled: deckManagerState.isNfcReadEnabled,
+        ),
+        if (deckManagerState.isEditMode && !deckManagerState.isNfcReadEnabled)
+          buildEditControls(context, card: card, count: count),
       ],
     );
   }
 
   Widget _buildCardContainer(
     BuildContext context,
-    bool isSelected,
-    bool isNfcReadEnabled,
-  ) {
-    final theme = Theme.of(context);
-
+    ThemeData theme, {
+    required bool isSelected,
+    required bool isNfcReadEnabled,
+  }) {
     return GestureDetector(
       onTap: () => _handleCardTap(context, isNfcReadEnabled),
       child: AspectRatio(
         aspectRatio: 3 / 4,
         child: Opacity(
-          opacity: isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0,
+          opacity: _calculateOpacity(isNfcReadEnabled, isSelected),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
@@ -69,23 +72,12 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  void _handleCardTap(
-      BuildContext context, 
-      bool isNfcReadEnabled,
-    ) {
+  void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
     final cubit = context.read<DeckManagerCubit>();
 
     if (isNfcReadEnabled) {
       cubit.toggleSelectedCard(card);
-      if (cubit.state.selectedCard != null) {
-        final nfcCubit = context.read<NFCCubit>();
-        NFCHelper.handleToggleNFC(
-          nfcCubit,
-          enable: true,
-          card: cubit.state.selectedCard,
-          reason: 'User selected a card to write to NFC tag.',
-        );
-      }
+      _handleNfcToggle(context, cubit);
     } else {
       Navigator.of(context).pushNamed(
         AppRoutes.card,
@@ -94,11 +86,30 @@ class CardWidget extends StatelessWidget {
     }
   }
 
+  void _handleNfcToggle(BuildContext context, DeckManagerCubit cubit) {
+    final selectedCard = cubit.state.selectedCard;
+
+    if (selectedCard != null) {
+      final nfcCubit = context.read<NFCCubit>();
+      NFCHelper.handleToggleNFC(
+        nfcCubit,
+        enable: true,
+        card: selectedCard,
+        reason: 'User selected a card to write to NFC tag.',
+      );
+    }
+  }
+
+  double _calculateOpacity(bool isNfcReadEnabled, bool isSelected) {
+    return isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
+  }
+
   Widget _buildImageError() {
     return const Center(
       child: Icon(
         Icons.image_not_supported,
         size: 36,
+        color: Colors.grey
       ),
     );
   }

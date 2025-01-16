@@ -25,35 +25,59 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     super.dispose();
   }
 
-  void _startSearch(bool value) {
-    if (isSearch != value) {
-      setState(() => isSearch = value);
+  void _toggleSearch({required bool startSearch}) {
+    setState(() => isSearch = startSearch);
+    if (!startSearch) {
+      _searchController.clear();
+      widget.onSearchCleared();
     }
-  }
-
-  void _clearSearch() {
-    _searchController.clear();
-    widget.onSearchCleared();
   }
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    
     return Container(
       color: theme.appBarTheme.backgroundColor,
       padding: const EdgeInsets.fromLTRB(26.0, 0.0, 26.0, 12.0),
       child: Row(
         children: [
-          _buildSearchBar(context),
-          _buildClearButton(context),
+          _SearchInputField(
+            controller: _searchController,
+            onTap: () => _toggleSearch(startSearch: true),
+            onChanged: widget.onSearchChanged,
+            hintText: locale.translate('text.hint_text'),
+          ),
+          _ClearButton(
+            isVisible: isSearch,
+            onPressed: () => _toggleSearch(startSearch: false),
+            label: locale.translate('button.cancel'),
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildSearchBar(BuildContext context) {
-    final locale = AppLocalizations.of(context);
+class _SearchInputField extends StatelessWidget {
+  final TextEditingController controller;
+  final VoidCallback onTap;
+  final ValueChanged<String> onChanged;
+  final String hintText;
+
+  const _SearchInputField({
+    Key? key,
+    required this.controller,
+    required this.onTap,
+    required this.onChanged,
+    required this.hintText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Expanded(
       child: Container(
         height: 32.0,
@@ -62,13 +86,13 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: TextField(
-          controller: _searchController,
-          onTap: () => _startSearch(true),
-          onChanged: widget.onSearchChanged,
+          controller: controller,
+          onTap: onTap,
+          onChanged: onChanged,
           decoration: InputDecoration(
             border: InputBorder.none,
             prefixIcon: const Icon(Icons.search, color: Colors.grey),
-            hintText: locale.translate('text.hint_text'),
+            hintText: hintText,
             hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
             contentPadding: const EdgeInsets.only(bottom: 12.0),
           ),
@@ -77,23 +101,34 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       ),
     );
   }
+}
 
-  Widget _buildClearButton(BuildContext context) {
-    final locale = AppLocalizations.of(context);
+class _ClearButton extends StatelessWidget {
+  final bool isVisible;
+  final VoidCallback onPressed;
+  final String label;
+
+  const _ClearButton({
+    Key? key,
+    required this.isVisible,
+    required this.onPressed,
+    required this.label,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return AnimatedContainer(
       curve: Curves.easeInOut,
       duration: const Duration(milliseconds: 300),
-      width: isSearch ? 86.0 : 0.0,
+      width: isVisible ? 86.0 : 0.0,
       height: 42.0,
-      child: isSearch
+      child: isVisible
           ? TextButton(
-              onPressed: () {
-                _startSearch(false);
-                _clearSearch();
-              },
+              onPressed: onPressed,
               child: Text(
-                locale.translate('button.cancel'),
+                label,
                 style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
               ),
             )

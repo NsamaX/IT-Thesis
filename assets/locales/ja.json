@@ -17,28 +17,28 @@
     "language": "言語"
   },
   "toggle": {
-    "add": "追加",
-    "done": "完了",
     "edit": "編集",
-    "save": "保存"
+    "save": "保存",
+    "add": "追加",
+    "done": "完了"
   },
   "button": {
+    "start": "開始",
+    "guest": "ゲスト",
     "cancel": "キャンセル",
     "confirm": "確認",
-    "guest": "ゲスト",
-    "start": "開始",
     "ok": "OK"
   },
   "text": {
     "hint_text": "探しているカードはありますか？",
     "internet_error": "インターネットに接続されていません。接続して再試行してください。",
     "no_results": "結果が見つかりません。",
-    "upload_image": "画像をアップロード",
     "card_name": "カード名",
     "description": "説明",
-    "no_card_image": "カード画像がありません",
+    "upload_image": "画像をアップロード",
     "no_card_name": "カード名がありません",
     "no_card_description": "説明がありません",
+    "no_card_image": "カード画像がありません",
     "deck_empty": "デッキにカードがありません。",
     "total_cards": "カードの総数"
   },
@@ -77,23 +77,12 @@
     }
   },
   "snack_bar": {
-    "general": {
-      "error": "予期しないエラーが発生しました。もう一度お試しください。"
-    },
-    "sign_in": {
-      "authentication_failed": "サインインに失敗しました。認証情報を確認して再試行してください。",
-      "sign_out_failed": "サインアウトに失敗しました。後でもう一度お試しください。"
+    "card": {
+      "add_success": "カードがデッキに正常に追加されました！"
     },
     "deck": {
-      "save_failed": "デッキを保存できませんでした。接続を確認して再試行してください。",
-      "load_failed": "デッキを読み込めませんでした。接続を確認して再試行してください。",
-      "remove_failed": "デッキからカードを削除できませんでした。再試行してください。",
       "share": "デッキログがクリップボードにコピーされ、簡単に共有できます。",
       "deleted": "デッキ内のすべてのカードが正常に削除されました。"
-    },
-    "card": {
-      "add_failed": "カードをデッキに追加できませんでした。詳細を確認して再試行してください。",
-      "add_success": "カードがデッキに正常に追加されました！"
     },
     "nfc": {
       "unavailable": "このデバイスでNFCを利用できません。NFCが有効でサポートされていることを確認し、再試行してください。",

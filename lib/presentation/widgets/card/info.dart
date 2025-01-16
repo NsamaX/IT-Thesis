@@ -14,84 +14,84 @@ class CardInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTitle(context),
+        _buildTitle(locale, theme),
         const SizedBox(height: 8.0),
-        _buildDescription(context),
+        _buildDescription(locale, theme),
       ],
     );
   }
 
-  Widget _buildTitle(BuildContext context, ) {
-    final locale = AppLocalizations.of(context);
+  Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
+    final title = isCustom
+        ? locale.translate('text.description')
+        : card?.name ?? locale.translate('text.no_card_name');
+
     return Text(
-      card == null ? locale.translate('text.no_card_name') : card!.name,
-      style: Theme.of(context).textTheme.titleSmall,
+      title,
+      style: theme.textTheme.titleSmall,
     );
   }
 
-  Widget _buildDescription(BuildContext context) {
-    if (isCustom) return _buildEditable();
-    if (card == null) return const SizedBox();
-    if (card!.additionalData != null) return _buildAdditionalData(context);
-    return _buildNoAdditionalData(context, card: card!);
+  Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
+    if (isCustom) return _buildEditableHint();
+    if (card == null) return const SizedBox.shrink();
+    return card?.additionalData != null
+        ? _buildAdditionalData(theme, card!.additionalData!)
+        : _buildDefaultDescription(locale, theme, card!);
   }
 
-  Widget _buildEditable() {
-    return const Opacity(
+  Widget _buildEditableHint() {
+    return Opacity(
       opacity: 0.6,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Icon(Icons.edit_rounded),
+        children: const [
+          Icon(Icons.edit_rounded),
         ],
       ),
     );
   }
 
-  Widget _buildAdditionalData(BuildContext context) {
-    final additionalData = card?.additionalData;
-    if (additionalData == null) return const SizedBox();
-    final theme = Theme.of(context);
+  Widget _buildAdditionalData(ThemeData theme, Map<String, dynamic> additionalData) {
+    final List<Widget> dataEntries = additionalData.entries.map((entry) {
+      final value = entry.value;
+      if ((value is String && value.isNotEmpty) || value is num) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '${entry.key}: ',
+                  style: theme.textTheme.bodyMedium,
+                ),
+                TextSpan(
+                  text: '$value',
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      return const SizedBox.shrink();
+    }).toList();
     return Opacity(
       opacity: 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: additionalData.entries.map((entry) {
-          final value = entry.value;
-          if ((value is String && value.isNotEmpty) || value is num) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${entry.key}: ',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    TextSpan(
-                      text: '$value',
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-          return const SizedBox();
-        }).toList(),
+        children: dataEntries,
       ),
     );
   }
 
-  Widget _buildNoAdditionalData(
-    BuildContext context, {
-    required CardEntity card,
-  }) {
-    final locale = AppLocalizations.of(context);
-    final theme = Theme.of(context);
+  Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) {
     return Opacity(
       opacity: 0.6,
       child: Text(
