@@ -9,7 +9,6 @@ import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
 import '../widgets/drawers/history.dart';
-import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/notifications.dart';
@@ -66,24 +65,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             }
             return Scaffold(
               appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
-              body: GestureDetector(
-                onTap: () => context.read<DrawerCubit>().closeDrawer(),
-                behavior: HitTestBehavior.opaque,
-                child: BlocBuilder<DrawerCubit, Map<String, bool>>(
-                  builder: (context, drawerState) {
-                    final isDrawerOpen = drawerState['history'] ?? false;
-                    return Stack(
-                      children: [
-                        AbsorbPointer(
-                          absorbing: isDrawerOpen,
-                          child: _buildCardList(context, state),
-                        ),
-                        _buildHistoryDrawer(context),
-                      ],
-                    );
-                  },
-                ),
-              ),
+              body: _buildBody(context, state),
             );
           },
         ),
@@ -118,8 +100,31 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
     };
   }
+
+  //--------------------------------- Body ---------------------------------//
+
+  Widget _buildBody(BuildContext context, TrackState state) {
+    return GestureDetector(
+      onTap: () => context.read<DrawerCubit>().closeDrawer(),
+      behavior: HitTestBehavior.opaque,
+      child: BlocBuilder<DrawerCubit, Map<String, bool>>(
+        builder: (context, drawerState) {
+          final isDrawerOpen = drawerState['history'] ?? false;
+          return Stack(
+            children: [
+              AbsorbPointer(
+                absorbing: isDrawerOpen,
+                child: _buildCardList(context, state),
+              ),
+              _buildHistoryDrawer(context),
+            ],
+          );
+        },
+      ),
+    );
+  }
   
-  //--------------------------------- Widget ---------------------------------//
+  //--------------------------------- Widgets ---------------------------------//
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
     return Stack(
@@ -163,20 +168,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     });
   }
 
-  Widget _buildPlayerDrawer(BuildContext context) {
-    return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) => previous['player'] != current['player'],
-      builder: (context, drawerState) {
-        return AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          top: drawerState['player']! ? 0 : -200,
-          left: 0,
-          child: PlayerDrawerWidget(),
-        );
-      },
-    );
-  }
-
+  //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     return BlocBuilder<DrawerCubit, Map<String, bool>>(

@@ -52,7 +52,8 @@ class _MyDecksPageState extends State<MyDecksPage> {
       state.decks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
-
+  
+  //-------------------------------- Features --------------------------------//
   void _createNewDeck(
     BuildContext context,
     DeckManagerCubit cubit,
@@ -71,7 +72,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 
-  //--------------------------------- Widget ---------------------------------//
+  //---------------------------------- Body ----------------------------------//
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<DeckManagerCubit, DeckManagerState>(
       builder: (context, state) {

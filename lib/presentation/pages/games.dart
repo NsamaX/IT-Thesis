@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nfc_project/core/constants/api_config.dart';
 import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import '../widgets/labels/games.dart';
+import 'package:nfc_project/core/utils/arguments.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/games_list.dart';
 
 class GamesPage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//
@@ -12,12 +12,16 @@ class GamesPage extends StatelessWidget {
     final locale = AppLocalizations.of(context);
     final gameKeys = AppImages.game.keys.toList();
     final gameImages = AppImages.game.values.toList();
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final isAdd = arguments?['isAdd'] ?? false;
+    final arguments = getArguments(context);
+    final isAdd = arguments['isAdd'] ?? false;
 
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: _buildGameList(gameKeys, gameImages, isAdd),
+      body: GamesListWidget(
+        gameKeys: gameKeys,
+        gameImages: gameImages,
+        isAdd: isAdd,
+      ),
     );
   }
 
@@ -28,23 +32,5 @@ class GamesPage extends StatelessWidget {
       locale.translate('title.games'): null,
       null: null,
     };
-  }
-
-  //--------------------------------- Widget ---------------------------------//
-  Widget _buildGameList(List<String> gameKeys, List<String> gameImages, bool isAdd) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListView.builder(
-        itemCount: gameKeys.length,
-        itemBuilder: (context, index) {
-          return GamesLabelWidget(
-            game: gameKeys[index],
-            imagePath: gameImages[index],
-            description: ApiConfig.baseUrls?[gameKeys[index]] ?? '',
-            isAdd: isAdd,
-          );
-        },
-      ),
-    );
   }
 }

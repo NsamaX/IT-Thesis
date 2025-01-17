@@ -27,7 +27,7 @@ class LibraryPage extends StatelessWidget {
     };
   }
 
-  //--------------------------------- Widget ---------------------------------//
+  //--------------------------------- Body ---------------------------------//
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/utils/arguments.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
@@ -23,6 +24,10 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   late final NFCSessionHandler _nfcSessionHandler;
   late TextEditingController _deckNameController;
 
+  CardEntity? _card;
+  bool _isAdd = false;
+  bool _isCustom = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,13 +41,15 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.didChangeDependencies();
     final locale = AppLocalizations.of(context);
     _deckNameController.text = locale.translate('text.card_name');
-    _initializeCardData();
-  }
 
-  void _initializeCardData() {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final card = arguments?['card'] as CardEntity?;
-    if (card != null) context.read<DeckManagerCubit>().setQuantity(1);
+    final arguments = getArguments(context);
+    _card = arguments['card'] as CardEntity?;
+    _isAdd = arguments['isAdd'] ?? false;
+    _isCustom = arguments['isCustom'] ?? false;
+
+    if (_card != null) {
+      context.read<DeckManagerCubit>().setQuantity(1);
+    }
   }
 
   @override
@@ -56,47 +63,34 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final card = arguments?['card'] as CardEntity?;
-    final isAdd = arguments?['isAdd'] ?? false;
-    final isCustom = arguments?['isCustom'] ?? false;
+    
     return Scaffold(
-      appBar: AppBarWidget(
-        menu: _buildAppBarMenu(context, locale, card, isAdd, isCustom),
-      ),
-      body: BlocBuilder<DeckManagerCubit, DeckManagerState>(
-        builder: (_, state) => ListView(
-          padding: const EdgeInsets.all(40),
-          children: [
-            CardImageWidget(card: card, isCustom: isCustom),
-            const SizedBox(height: 24),
-            CardInfoWidget(card: card, isCustom: isCustom),
-            if (isAdd) _buildCardQuantitySelector(context, state),
-          ],
-        ),
-      ),
+      appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
+      body: _buildBody(),
     );
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale, CardEntity? card, bool isAdd, bool isCustom) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
+
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      isCustom
-          ? _buildCustomTextField(context, locale)
+      _isCustom
+          ? _buildTextField(context, locale)
           : locale.translate('title.card'): null,
-      if (isAdd) locale.translate('toggle.add'): () => _handleAddCard(context, locale, deckManagerCubit, card),
-      if (isCustom) locale.translate('toggle.done'): null,
-      if (!isAdd && !isCustom) (isNFCEnabled 
+      if (_isAdd) locale.translate('toggle.add'): () => _toggleAdd(context, locale, deckManagerCubit),
+      if (_isCustom) locale.translate('toggle.done'): null,
+      if (!_isAdd && !_isCustom) (isNFCEnabled 
           ? Icons.wifi_tethering_rounded 
-          : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled, card),
+          : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled),
     };
   }
 
-  Widget _buildCustomTextField(BuildContext context, AppLocalizations locale) {
+  //-------------------------------- Features --------------------------------//
+  Widget _buildTextField(BuildContext context, AppLocalizations locale) {
     return TextField(
       controller: _deckNameController,
       textAlign: TextAlign.center,
@@ -113,35 +107,45 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     );
   }
 
-  void _handleAddCard(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit, CardEntity? card) {
-    deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
-    Navigator.of(context).pop();
-    snackBar(
-      context,
-      content: locale.translate('snack_bar.card.add_success'),
-    );
+  void _toggleAdd(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit) {
+    if (_card != null) {
+      deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
+      Navigator.of(context).pop();
+      snackBar(
+        context,
+        content: locale.translate('snack_bar.card.add_success'),
+      );
+    }
   }
 
-  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled, CardEntity? card) {
+  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) {
     NFCHelper.handleToggleNFC(
       nfcCubit,
       enable: !isNFCEnabled,
-      card: card,
+      card: _card,
       reason: 'User toggled NFC in Card Page',
     );
   }
 
-  //--------------------------------- Widget ---------------------------------//
-  Widget _buildCardQuantitySelector(BuildContext context, DeckManagerState state) {
-    return Column(
-      children: [
-        const SizedBox(height: 24),
-        CardQuantityWidget(
-          onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
-          quantityCount: 4,
-          selectedQuantity: state.quantity,
-        ),
-      ],
+  //--------------------------------- Body -----------------------------------//
+  Widget _buildBody() {
+    return BlocBuilder<DeckManagerCubit, DeckManagerState>(
+      builder: (context, state) {
+        return ListView(
+          padding: const EdgeInsets.all(40),
+          children: [
+            CardImageWidget(card: _card, isCustom: _isCustom),
+            const SizedBox(height: 24),
+            CardInfoWidget(card: _card, isCustom: _isCustom),
+            if (_isAdd)
+              CardQuantityWidget(
+                onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
+                quantityCount: 4,
+                selectedQuantity: state.quantity,
+              ),
+          ],
+        );
+      },
     );
   }
 }

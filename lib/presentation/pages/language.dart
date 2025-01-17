@@ -14,7 +14,7 @@ class LanguagePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: SettingsLabelWidget(label: [_buildSupportSettings(locale, cubit)]),
+      body: SettingsLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
     );
   }
 
@@ -27,8 +27,8 @@ class LanguagePage extends StatelessWidget {
     };
   }
 
-  //--------------------------------- Widget ---------------------------------//
-  Map<String, dynamic> _buildSupportSettings(
+  //--------------------------- Supported Languages --------------------------//
+  Map<String, dynamic> _buildSupportedLanguages(
     AppLocalizations locale,
     SettingsCubit cubit,
   ) {

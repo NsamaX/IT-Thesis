@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
 import '../cubits/search.dart';
-import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/card_list.dart';
 import '../widgets/search_bar.dart';
 
 class SearchPage extends StatelessWidget {
@@ -61,7 +60,7 @@ class SearchPage extends StatelessWidget {
     };
   }
   
-  //--------------------------------- Widget ---------------------------------//
+  //---------------------------------- Body ----------------------------------//
   Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
@@ -78,32 +77,15 @@ class SearchPage extends StatelessWidget {
             ),
           );
         } else {
-          return _buildCardList(context, state.searchedCards, arguments);
+          return Expanded(
+            child: CardListWidget(
+              cards: state.searchedCards,
+              isAdd: arguments['isAdd'],
+              isCustom: arguments['isCustom'],
+            ),
+          );
         }
       },
-    );
-  }
-
-  Widget _buildCardList(BuildContext context, List<CardEntity> cards, Map<String, dynamic> arguments) {
-    if (cards.isEmpty) {
-      return Expanded(
-        child: Center(
-          child: Text(AppLocalizations.of(context).translate('text.no_results')),
-        ),
-      );
-    }
-    return Expanded(
-      child: ListView.builder(
-        itemCount: cards.length,
-        itemBuilder: (context, index) {
-          return CardLabelWidget(
-            card: cards[index],
-            isAdd: arguments['isAdd'],
-            isCustom: arguments['isCustom'],
-          );
-        },
-        cacheExtent: 1000,
-      ),
     );
   }
 }

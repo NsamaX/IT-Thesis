@@ -7,6 +7,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
     );

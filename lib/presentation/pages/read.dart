@@ -42,7 +42,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     super.dispose();
   }
 
-  //-------------------------------- RouteObserver ---------------------------//
+  //------------------------------ RouteObserver -----------------------------//
   @override
   void didPushNext() {
     _nfcSessionHandler.disposeNFCSessionHandler();
@@ -72,25 +72,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
                 context.read<DrawerCubit>().toggleDrawer('history');
               }
             },
-            child: Scaffold(
-              appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
-              body: GestureDetector(
-                onTap: () => context.read<DrawerCubit>().closeDrawer(),
-                behavior: HitTestBehavior.opaque,
-                child: BlocBuilder<ScanCubit, ScanCubitState>(
-                  builder: (context, scanState) {
-                    return Stack(
-                      children: [
-                        const Center(child: NFCWidget()),
-                        _buildHistoryDrawer(context),
-                        _buildFeaturesDrawer(context),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              bottomNavigationBar: const BottomNavigationBarWidget(),
-            ),
+            child: _buildBody(context, locale),
           );
         },
       ),
@@ -106,7 +88,30 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     };
   }
 
-  //--------------------------------- Widget ---------------------------------//
+  //--------------------------------- Body -----------------------------------//
+  Widget _buildBody(BuildContext context, AppLocalizations locale) {
+    return Scaffold(
+      appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
+      body: GestureDetector(
+        onTap: () => context.read<DrawerCubit>().closeDrawer(),
+        behavior: HitTestBehavior.opaque,
+        child: BlocBuilder<ScanCubit, ScanCubitState>(
+          builder: (context, scanState) {
+            return Stack(
+              children: [
+                const Center(child: NFCWidget()),
+                _buildHistoryDrawer(context),
+                _buildFeaturesDrawer(context),
+              ],
+            );
+          },
+        ),
+      ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
+    );
+  }
+
+  //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     final double bottomNavBarHeight = kBottomNavigationBarHeight;

@@ -16,7 +16,7 @@ class SettingsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: _buildSettingsContent(context, locale, cubit),
+      body: _buildBody(context, locale, cubit),
       bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
@@ -26,8 +26,8 @@ class SettingsPage extends StatelessWidget {
     return {locale.translate('title.settings'): null};
   }
   
-  //--------------------------------- Widget ---------------------------------//
-  Widget _buildSettingsContent(
+  //---------------------------------- Body ----------------------------------//
+  Widget _buildBody(
     BuildContext context,
     AppLocalizations locale,
     SettingsCubit cubit,
@@ -109,6 +109,7 @@ class SettingsPage extends StatelessWidget {
     };
   }
 
+  //--------------------------------- Feature --------------------------------//
   void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
     cubit.updateFirstLoad(true);
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);

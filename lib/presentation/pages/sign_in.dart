@@ -28,7 +28,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  //--------------------------------- Widget ---------------------------------//
+  //--------------------------------- Widgets --------------------------------//
   Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
     return Text(
       locale.translate('title.sign_in'),

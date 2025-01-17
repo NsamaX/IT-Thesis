@@ -20,16 +20,21 @@ class CardQuantityWidget extends StatelessWidget {
     const double boxWidth = 60.0;
     const double boxHeight = 40.0;
 
-    return SizedBox(
-      height: boxHeight + 20.0,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _buildBackground(theme, quantityCount, boxWidth, boxHeight, borderRadiusValue),
-          _buildSelectedBox(boxWidth, boxHeight, borderRadiusValue),
-          _buildQuantityBox(theme, quantityCount, boxWidth, boxHeight),
-        ],
-      ),
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        SizedBox(
+          height: boxHeight + 20.0,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              _buildBackground(theme, quantityCount, boxWidth, boxHeight, borderRadiusValue),
+              _buildSelectedBox(boxWidth, boxHeight, borderRadiusValue),
+              _buildQuantityBox(theme, quantityCount, boxWidth, boxHeight),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -102,8 +107,7 @@ class CardQuantityWidget extends StatelessWidget {
                         color: isSelected
                             ? theme.scaffoldBackgroundColor
                             : theme.textTheme.titleMedium?.color,
-                      ) ??
-                      const TextStyle(),
+                      ) ?? const TextStyle(),
                   child: Text('${actualIndex + 1}'),
                 ),
               ),

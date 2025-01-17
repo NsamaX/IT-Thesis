@@ -40,7 +40,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     super.dispose();
   }
 
-  //-------------------------------- RouteObserver ---------------------------//
+  //------------------------------ RouteObserver -----------------------------//
   @override
   void didPushNext() {
     _nfcSessionHandler.disposeNFCSessionHandler();
@@ -122,6 +122,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
           };
   }
 
+  //-------------------------------- Features --------------------------------//
   void _showDeleteDialog(
     BuildContext context,
     DeckManagerCubit cubit,
@@ -162,7 +163,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     );
   }
 
-  //--------------------------------- Widget ---------------------------------//
+  //---------------------------------- Body ----------------------------------//
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final deckCards = cubit.state.deck.cards;
     if (deckCards.isEmpty) {
@@ -176,6 +177,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     return GridWidget(items: deckCards.entries.toList());
   }
 
+  //----------------------------- Snackbar Widget ----------------------------//
   void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
     final locale = AppLocalizations.of(context);
     _nfcCubit.markSnackBarDisplayed();
