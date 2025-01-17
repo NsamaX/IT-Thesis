@@ -7,6 +7,7 @@ import '../widgets/grid.dart';
 import '../widgets/app_bar.dart';
 
 class LibraryPage extends StatelessWidget {
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -17,6 +18,7 @@ class LibraryPage extends StatelessWidget {
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
@@ -25,6 +27,7 @@ class LibraryPage extends StatelessWidget {
     };
   }
 
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {

@@ -18,6 +18,7 @@ class ReadPage extends StatefulWidget {
 }
 
 class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
+  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
@@ -35,6 +36,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -79,6 +81,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     return {
       Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
@@ -87,6 +90,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
     };
   }
 
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     final double bottomNavBarHeight = kBottomNavigationBarHeight;

@@ -15,8 +15,8 @@ class NFCState {
 
   NFCState({
     this.lastReadTag,
-    required this.isNFCEnabled,
     this.errorMessage = '',
+    required this.isNFCEnabled,
     this.isProcessing = false,
     this.isWriteOperation = false,
     this.isOperationSuccessful = false,
@@ -72,8 +72,11 @@ class NFCCubit extends Cubit<NFCState> {
   }
 
   void resetOperationStatus() => emitSafe(state.copyWith(isOperationSuccessful: false));
+
   void markSnackBarDisplayed() => emitSafe(state.copyWith(isSnackBarDisplayed: true));
+  
   void resetSnackBarState() => emitSafe(state.copyWith(isSnackBarDisplayed: false));
+  
   void clearErrorMessage() => emitSafe(state.copyWith(errorMessage: ''));
 
   //----------------------------- Session Control ----------------------------//

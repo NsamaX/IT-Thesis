@@ -74,10 +74,7 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   ));
 
   //--------------------------------- toggle ---------------------------------//
-  void toggleEditMode() => emit(state.copyWith(
-    isEditMode: !state.isEditMode,
-    isNfcReadEnabled: false,
-  ));
+  void toggleEditMode() => emit(state.copyWith(isEditMode: !state.isEditMode, isNfcReadEnabled: false));
 
   void toggleShare() {
     Clipboard.setData(ClipboardData(

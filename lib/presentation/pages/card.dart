@@ -18,6 +18,7 @@ class CardPage extends StatefulWidget {
 }
 
 class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
+  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
   late TextEditingController _deckNameController;
@@ -26,21 +27,22 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
-    _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
-    _nfcSessionHandler.initNFCSessionHandler();
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
+    _deckNameController = TextEditingController();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final locale = AppLocalizations.of(context);
-    _deckNameController = TextEditingController(text: locale.translate('text.card_name'));
+    _deckNameController.text = locale.translate('text.card_name');
+    _initializeCardData();
+  }
+
+  void _initializeCardData() {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final card = arguments?['card'] as CardEntity?;
-    if (card != null) {
-      final deckManagerCubit = context.read<DeckManagerCubit>();
-      deckManagerCubit.setQuantity(1);
-    }
+    if (card != null) context.read<DeckManagerCubit>().setQuantity(1);
   }
 
   @override
@@ -50,57 +52,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Map<dynamic, dynamic> _buildAppBarMenu({
-    required BuildContext context,
-    required AppLocalizations locale,
-    required CardEntity? card,
-    required bool isAdd,
-    required bool isCustom,
-  }) {
-    final deckManagerCubit = context.read<DeckManagerCubit>();
-    final nfcCubit = context.watch<NFCCubit>();
-    final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      isCustom
-          ? TextField(
-              controller: _deckNameController,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: locale.translate('text.card_name'),
-              ),
-              onSubmitted: (value) {
-                _deckNameController.text = value.trim().isNotEmpty
-                    ? value.trim()
-                    : locale.translate('text.card_name');
-              },
-            )
-          : locale.translate('title.card'): null,
-      if (isAdd)
-        locale.translate('toggle.add'): () {
-          deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
-          Navigator.of(context).pop();
-          snackBar(
-            context,
-            content: locale.translate('snack_bar.card.add_success'),
-          );
-        },
-      if (isCustom) locale.translate('toggle.done'): null,
-      if (!isAdd && !isCustom)
-        isNFCEnabled
-            ? Icons.wifi_tethering_rounded
-            : Icons.wifi_tethering_off_rounded: () {
-          NFCHelper.handleToggleNFC(nfcCubit,
-              enable: !isNFCEnabled,
-              card: card,
-              reason: 'User toggled NFC in Card Page');
-        },
-    };
-  }
-
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -111,34 +63,93 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
     return Scaffold(
       appBar: AppBarWidget(
-        menu: _buildAppBarMenu(
-          context: context,
-          locale: locale,
-          card: card,
-          isAdd: isAdd,
-          isCustom: isCustom,
-        ),
+        menu: _buildAppBarMenu(context, locale, card, isAdd, isCustom),
       ),
       body: BlocBuilder<DeckManagerCubit, DeckManagerState>(
-        builder: (context, state) {
-          return ListView(
-            padding: const EdgeInsets.all(40),
-            children: [
-              CardImageWidget(card: card, isCustom: isCustom),
-              const SizedBox(height: 24),
-              CardInfoWidget(card: card, isCustom: isCustom),
-              if (isAdd) ...[
-                const SizedBox(height: 24),
-                CardQuantityWidget(
-                  onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
-                  quantityCount: 4,
-                  selectedQuantity: state.quantity,
-                ),
-              ],
-            ],
-          );
-        },
+        builder: (_, state) => ListView(
+          padding: const EdgeInsets.all(40),
+          children: [
+            CardImageWidget(card: card, isCustom: isCustom),
+            const SizedBox(height: 24),
+            CardInfoWidget(card: card, isCustom: isCustom),
+            if (isAdd) _buildCardQuantitySelector(context, state),
+          ],
+        ),
       ),
+    );
+  }
+
+  //--------------------------------- App Bar --------------------------------//
+  Map<dynamic, dynamic> _buildAppBarMenu(
+    BuildContext context,
+    AppLocalizations locale,
+    CardEntity? card,
+    bool isAdd,
+    bool isCustom,
+  ) {
+    final deckManagerCubit = context.read<DeckManagerCubit>();
+    final nfcCubit = context.watch<NFCCubit>();
+    final isNFCEnabled = nfcCubit.state.isNFCEnabled;
+
+    return {
+      Icons.arrow_back_ios_new_rounded: '/back',
+      isCustom
+          ? _buildCustomTextField(context, locale)
+          : locale.translate('title.card'): null,
+      if (isAdd) locale.translate('toggle.add'): () => _handleAddCard(context, locale, deckManagerCubit, card),
+      if (isCustom) locale.translate('toggle.done'): null,
+      if (!isAdd && !isCustom) (isNFCEnabled 
+          ? Icons.wifi_tethering_rounded 
+          : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled, card),
+    };
+  }
+
+  Widget _buildCustomTextField(BuildContext context, AppLocalizations locale) {
+    return TextField(
+      controller: _deckNameController,
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleMedium,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: locale.translate('text.card_name'),
+      ),
+      onSubmitted: (value) {
+        _deckNameController.text = value.trim().isNotEmpty
+            ? value.trim()
+            : locale.translate('text.card_name');
+      },
+    );
+  }
+
+  void _handleAddCard(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit, CardEntity? card) {
+    deckManagerCubit.addCard(card!, deckManagerCubit.state.quantity);
+    Navigator.of(context).pop();
+    snackBar(
+      context,
+      content: locale.translate('snack_bar.card.add_success'),
+    );
+  }
+
+  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled, CardEntity? card) {
+    NFCHelper.handleToggleNFC(
+      nfcCubit,
+      enable: !isNFCEnabled,
+      card: card,
+      reason: 'User toggled NFC in Card Page',
+    );
+  }
+
+  //--------------------------------- Widget ---------------------------------//
+  Widget _buildCardQuantitySelector(BuildContext context, DeckManagerState state) {
+    return Column(
+      children: [
+        const SizedBox(height: 24),
+        CardQuantityWidget(
+          onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
+          quantityCount: 4,
+          selectedQuantity: state.quantity,
+        ),
+      ],
     );
   }
 }

@@ -6,6 +6,7 @@ import '../widgets/labels/games.dart';
 import '../widgets/app_bar.dart';
 
 class GamesPage extends StatelessWidget {
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -19,6 +20,7 @@ class GamesPage extends StatelessWidget {
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
@@ -27,6 +29,7 @@ class GamesPage extends StatelessWidget {
     };
   }
 
+  //--------------------------------- Widget ---------------------------------//
   bool _extractIsAddArgument(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     return arguments?['isAdd'] ?? false;
