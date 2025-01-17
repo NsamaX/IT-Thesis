@@ -1,10 +1,14 @@
 # Feature
+    [] Data analysis
     [] Game record
     [] Custom card
     [] Pair System
     [] Sign in
-    [] Filter Card
-    [] Drag & Drop card for order
+
+    #optional
+        [] Filter Card
+        [] Drag & Drop card for order
+        [] Tutorail app
 
 # page
     [] About

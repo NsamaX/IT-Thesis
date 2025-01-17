@@ -102,7 +102,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   }
 
   //--------------------------------- Body ---------------------------------//
-
   Widget _buildBody(BuildContext context, TrackState state) {
     return GestureDetector(
       onTap: () => context.read<DrawerCubit>().closeDrawer(),
