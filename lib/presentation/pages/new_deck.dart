@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
@@ -14,7 +15,8 @@ class NewDeckPage extends StatefulWidget {
   State<NewDeckPage> createState() => _NewDeckPageState();
 }
 
-class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
+class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, RouteAware {
+  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
@@ -27,11 +29,30 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    locator<RouteObserver<ModalRoute>>().subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
   void dispose() {
+    locator<RouteObserver<ModalRoute>>().unsubscribe(this);
     _nfcSessionHandler.disposeNFCSessionHandler();
     super.dispose();
   }
 
+  //-------------------------------- RouteObserver ---------------------------//
+  @override
+  void didPushNext() {
+    _nfcSessionHandler.disposeNFCSessionHandler();
+  }
+
+  @override
+  void didPopNext() {
+    _nfcSessionHandler.initNFCSessionHandler();
+  }
+
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -47,36 +68,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
         }
       },
       child: Scaffold(
-        appBar: AppBarWidget(menu: _buildMenu(context, cubit, locale, deckNameController)),
+        appBar: AppBarWidget(menu: _buildAppBarMenu(context, cubit, locale, deckNameController)),
         body: _buildGridView(context, cubit, locale),
       ),
     );
   }
 
-  void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
-    final locale = AppLocalizations.of(context);
-    _nfcCubit.markSnackBarDisplayed();
-    if (state.isOperationSuccessful) {
-      final successMessage = locale.translate('snack_bar.nfc.write_success');
-      await snackBar(
-        context,
-        content: successMessage,
-      );
-      _nfcCubit.resetOperationStatus();
-    } else if (state.errorMessage.isNotEmpty) {
-      final errorMessage = locale.translate('snack_bar.nfc.write_failed');
-      await snackBar(
-        context,
-        content: errorMessage,
-        isError: true,
-      );
-      _nfcCubit.clearErrorMessage();
-      await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
-    }
-    _nfcCubit.resetSnackBarState();
-  }
-
-  Map<dynamic, dynamic> _buildMenu(
+  //--------------------------------- App Bar --------------------------------//
+  Map<dynamic, dynamic> _buildAppBarMenu(
     BuildContext context,
     DeckManagerCubit cubit,
     AppLocalizations locale,
@@ -164,6 +163,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
     );
   }
 
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final deckCards = cubit.state.deck.cards;
     if (deckCards.isEmpty) {
@@ -175,5 +175,28 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver {
       );
     }
     return GridWidget(items: deckCards.entries.toList());
+  }
+
+  void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
+    final locale = AppLocalizations.of(context);
+    _nfcCubit.markSnackBarDisplayed();
+    if (state.isOperationSuccessful) {
+      final successMessage = locale.translate('snack_bar.nfc.write_success');
+      await snackBar(
+        context,
+        content: successMessage,
+      );
+      _nfcCubit.resetOperationStatus();
+    } else if (state.errorMessage.isNotEmpty) {
+      final errorMessage = locale.translate('snack_bar.nfc.write_failed');
+      await snackBar(
+        context,
+        content: errorMessage,
+        isError: true,
+      );
+      _nfcCubit.clearErrorMessage();
+      await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
+    }
+    _nfcCubit.resetSnackBarState();
   }
 }

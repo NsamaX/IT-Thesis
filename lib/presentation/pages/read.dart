@@ -17,7 +17,7 @@ class ReadPage extends StatefulWidget {
   State<ReadPage> createState() => _ReaderPageState();
 }
 
-class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
+class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, RouteAware {
   //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
@@ -31,16 +31,33 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    locator<RouteObserver<ModalRoute>>().subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
   void dispose() {
+    locator<RouteObserver<ModalRoute>>().unsubscribe(this);
     _nfcSessionHandler.disposeNFCSessionHandler();
     super.dispose();
+  }
+
+  //-------------------------------- RouteObserver ---------------------------//
+  @override
+  void didPushNext() {
+    _nfcSessionHandler.disposeNFCSessionHandler();
+  }
+
+  @override
+  void didPopNext() {
+    _nfcSessionHandler.initNFCSessionHandler();
   }
 
   //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),

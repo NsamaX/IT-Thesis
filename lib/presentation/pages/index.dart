@@ -50,13 +50,9 @@ class IndexPage extends StatelessWidget {
       width: 132.0,
       height: 46.0,
       child: ElevatedButton(
-        onPressed: () => _navigateToSignIn(context),
+        onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
         child: Text(locale.translate('button.start')),
       ),
     );
-  }
-
-  void _navigateToSignIn(BuildContext context) {
-    Navigator.of(context).pushNamed(AppRoutes.signIn);
   }
 }

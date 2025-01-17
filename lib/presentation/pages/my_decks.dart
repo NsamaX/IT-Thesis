@@ -16,6 +16,7 @@ class MyDecksPage extends StatefulWidget {
 }
 
 class _MyDecksPageState extends State<MyDecksPage> {
+  //-------------------------------- Lifecycle -------------------------------//
   @override
   void initState() {
     super.initState();
@@ -23,6 +24,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     if(cubit.state.isEditMode) cubit.toggleEditMode();
   }
 
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -35,6 +37,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(
     BuildContext context,
     DeckManagerCubit cubit,
@@ -66,6 +69,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<DeckManagerCubit, DeckManagerState>(
       builder: (context, state) {

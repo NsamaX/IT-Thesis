@@ -19,7 +19,6 @@ void main() async {
   await ApiConfig.loadConfig(environment: 'development');
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +63,9 @@ class MyApp extends StatelessWidget {
                 theme: themeData(isDarkMode: state.isDarkMode),
                 onGenerateRoute: AppRoutes.generateRoute,
                 initialRoute: _getInitialRoute(state),
+                navigatorObservers: [
+                  locator<RouteObserver<ModalRoute>>(),
+                ],
               );
             },
           ),

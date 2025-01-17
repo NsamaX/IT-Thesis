@@ -76,7 +76,6 @@ class SignInPage extends StatelessWidget {
   void _handleGuestSignIn(BuildContext context) {
     final settingsCubit = context.read<SettingsCubit>();
     final appCubit = context.read<AppCubit>();
-
     settingsCubit.updateFirstLoad(false);
     appCubit.updatePageIndex(0);
     Navigator.of(context).pushNamedAndRemoveUntil(

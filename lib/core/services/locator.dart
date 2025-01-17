@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
@@ -36,11 +37,11 @@ Future<void> setupLocator() async {
 
   //-------------------------------- UseCases --------------------------------//
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>(
-    (game, _) => FetchCardByIdUseCase(locator<CardRepository>(param1: game),
-  ));
+    (game, _) => FetchCardByIdUseCase(locator<CardRepository>(param1: game)),
+  );
   locator.registerFactoryParam<SyncCardsUseCase, String, void>(
-    (game, _) => SyncCardsUseCase(locator<CardRepository>(param1: game),
-  ));
+    (game, _) => SyncCardsUseCase(locator<CardRepository>(param1: game)),
+  );
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());
   locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
@@ -66,4 +67,9 @@ Future<void> setupLocator() async {
     saveSettingUsecase: locator<SaveSettingUseCase>(),
     loadSettingUsecase: locator<LoadSettingUseCase>(),
   ));
+
+  //-------------------------------- Navigation ------------------------------//
+  locator.registerLazySingleton<RouteObserver<ModalRoute>>(
+    () => RouteObserver<ModalRoute>(),
+  );
 }

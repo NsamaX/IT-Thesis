@@ -8,18 +8,25 @@ import '../widgets/app_bar.dart';
 import '../widgets/bottom_navigation_bar.dart';
 
 class SettingsPage extends StatelessWidget {
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<SettingsCubit>();
 
     return Scaffold(
-      appBar: AppBarWidget(menu: {locale.translate('title.settings'): null}),
+      appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
       body: _buildSettingsContent(context, locale, cubit),
       bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
+    return {locale.translate('title.settings'): null};
+  }
+  
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildSettingsContent(
     BuildContext context,
     AppLocalizations locale,

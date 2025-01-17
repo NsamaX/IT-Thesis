@@ -20,6 +20,7 @@ class TrackerPage extends StatefulWidget {
 }
 
 class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
+  //-------------------------------- Lifecycle -------------------------------//
   late final NFCSessionHandler _nfcSessionHandler;
 
   @override
@@ -36,6 +37,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  //---------------------------------- Build ---------------------------------//
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
@@ -89,17 +91,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     );
   }
 
-  void _showTrackerDialog(BuildContext context, AppLocalizations locale) {
-    Future.microtask(() {
-      context.read<TrackCubit>().showDialog();
-      cupertinoAlertDialog(
-        context,
-        title: locale.translate('dialog.tracker.title'),
-        content: locale.translate('dialog.tracker.content'),
-      );
-    });
-  }
-
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(
     BuildContext context,
     AppLocalizations locale,
@@ -126,7 +118,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
     };
   }
-
+  
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
     return Stack(
@@ -157,6 +150,17 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         ),
       ],
     );
+  }
+
+  void _showTrackerDialog(BuildContext context, AppLocalizations locale) {
+    Future.microtask(() {
+      context.read<TrackCubit>().showDialog();
+      cupertinoAlertDialog(
+        context,
+        title: locale.translate('dialog.tracker.title'),
+        content: locale.translate('dialog.tracker.content'),
+      );
+    });
   }
 
   Widget _buildPlayerDrawer(BuildContext context) {

@@ -6,6 +6,7 @@ import '../widgets/labels/settings.dart';
 import '../widgets/app_bar.dart';
 
 class LanguagePage extends StatelessWidget {
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -17,6 +18,7 @@ class LanguagePage extends StatelessWidget {
     );
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
@@ -25,6 +27,7 @@ class LanguagePage extends StatelessWidget {
     };
   }
 
+  //--------------------------------- Widget ---------------------------------//
   Map<String, dynamic> _buildSupportSettings(
     AppLocalizations locale,
     SettingsCubit cubit,
@@ -38,15 +41,11 @@ class LanguagePage extends StatelessWidget {
     return {
       'content': supportedLanguages.map((lang) {
         return {
-          'onTap': () => _toggleLanguage(cubit, lang['code']!),
+          'onTap': () => cubit.updateLanguage(lang['code']!),
           'text': lang['name']!,
           'select': lang['code'] == locale.locale.languageCode,
         };
       }).toList(),
     };
-  }
-
-  void _toggleLanguage(SettingsCubit cubit, String languageCode) {
-    cubit.updateLanguage(languageCode);
   }
 }

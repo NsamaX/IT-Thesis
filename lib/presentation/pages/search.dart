@@ -11,7 +11,7 @@ import '../widgets/search_bar.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key? key}) : super(key: key);
-
+  //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -27,10 +27,8 @@ class SearchPage extends StatelessWidget {
             body: Column(
               children: [
                 SearchBarWidget(
-                  onSearchChanged: (query) =>
-                      context.read<SearchCubit>().searchCards(query),
-                  onSearchCleared: () =>
-                      context.read<SearchCubit>().clearSearch(),
+                  onSearchChanged: (query) => context.read<SearchCubit>().searchCards(query),
+                  onSearchCleared: () => context.read<SearchCubit>().clearSearch(),
                 ),
                 const SizedBox(height: 8),
                 _buildBody(context, arguments),
@@ -54,6 +52,7 @@ class SearchPage extends StatelessWidget {
     return {'game': '', 'isAdd': false, 'isCustom': false};
   }
 
+  //--------------------------------- App Bar --------------------------------//
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
@@ -61,7 +60,8 @@ class SearchPage extends StatelessWidget {
       null: null,
     };
   }
-
+  
+  //--------------------------------- Widget ---------------------------------//
   Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
@@ -92,7 +92,6 @@ class SearchPage extends StatelessWidget {
         ),
       );
     }
-
     return Expanded(
       child: ListView.builder(
         itemCount: cards.length,
