@@ -5,7 +5,7 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 
 class NFCState {
-  final TagEntity? lastReadTag;
+  final TagEntity? lastestReadTags;
   final String errorMessage;
   final bool isNFCEnabled;
   final bool isProcessing;
@@ -14,7 +14,7 @@ class NFCState {
   final bool isSnackBarDisplayed;
 
   NFCState({
-    this.lastReadTag,
+    this.lastestReadTags,
     this.errorMessage = '',
     required this.isNFCEnabled,
     this.isProcessing = false,
@@ -24,7 +24,7 @@ class NFCState {
   });
 
   NFCState copyWith({
-    TagEntity? lastReadTag,
+    TagEntity? lastestReadTags,
     String? errorMessage,
     bool? isNFCEnabled,
     bool? isProcessing,
@@ -33,7 +33,7 @@ class NFCState {
     bool? isSnackBarDisplayed,
   }) {
     return NFCState(
-      lastReadTag: lastReadTag ?? this.lastReadTag,
+      lastestReadTags: lastestReadTags ?? this.lastestReadTags,
       errorMessage: errorMessage ?? this.errorMessage,
       isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
       isProcessing: isProcessing ?? this.isProcessing,
@@ -144,7 +144,7 @@ class NFCCubit extends Cubit<NFCState> {
     final ndef = _validateNDEF(tag);
     final records = _parseNDEFRecords(ndef);
     final tagEntity = _createTagEntity(tag, records);
-    emitSafe(state.copyWith(lastReadTag: tagEntity, isOperationSuccessful: true, isWriteOperation: false));
+    emitSafe(state.copyWith(lastestReadTags: tagEntity, isOperationSuccessful: true, isWriteOperation: false));
     _addMessage('[Processing] Tag read successfully for card id[${tagEntity.cardId}]');
     _flushMessages();
   }

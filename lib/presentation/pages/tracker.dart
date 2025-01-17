@@ -21,14 +21,14 @@ class TrackerPage extends StatefulWidget {
 
 class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   //-------------------------------- Lifecycle -------------------------------//
+  late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
   @override
   void initState() {
     super.initState();
-    final nfcCubit = context.read<NFCCubit>();
-    _nfcSessionHandler = NFCSessionHandler(nfcCubit);
-    _nfcSessionHandler.initNFCSessionHandler();
+    _nfcCubit = context.read<NFCCubit>();
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
   }
 
   @override
@@ -50,12 +50,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         listeners: [
           BlocListener<NFCCubit, NFCState>(
             listener: (context, nfcState) {
-              if (nfcState.lastReadTag != null && nfcState.isNFCEnabled) {
-                context.read<TrackCubit>().readTag(nfcState.lastReadTag!);
+              if (nfcState.lastestReadTags != null && nfcState.isNFCEnabled) {
+                context.read<TrackCubit>().readTag(nfcState.lastestReadTags!);
               }
             },
             listenWhen: (previous, current) {
-              return previous.lastReadTag != current.lastReadTag && current.lastReadTag != null;
+              return previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null;
             },
           ),
         ],
@@ -99,7 +99,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-    return context.watch<TrackCubit>().state.isAdvance ? {
+    return context.watch<TrackCubit>().state.isAdvanceModeEnabled ? {
       Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
       Icons.equalizer_sharp: null,
       locale.translate('title.tracker'): null,

@@ -3,27 +3,27 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/cards_management.dart';
 
 class SearchState {
-  final List<CardEntity> allCards;
   final List<CardEntity> cards;
+  final List<CardEntity> searchedCards;
   final String? errorMessage;
   final bool isLoading;
 
   SearchState({
-    this.allCards = const [],
     this.cards = const [],
+    this.searchedCards = const [],
     this.errorMessage,
     this.isLoading = false,
   });
 
   SearchState copyWith({
-    List<CardEntity>? allCards,
     List<CardEntity>? cards,
+    List<CardEntity>? searchedCards,
     String? errorMessage,
     bool? isLoading,
   }) {
     return SearchState(
-      allCards: allCards ?? this.allCards,
       cards: cards ?? this.cards,
+      searchedCards: searchedCards ?? this.searchedCards,
       errorMessage: errorMessage ?? this.errorMessage,
       isLoading: isLoading ?? this.isLoading,
     );
@@ -44,7 +44,7 @@ class SearchCubit extends Cubit<SearchState> {
     safeEmit(state.copyWith(isLoading: true, errorMessage: null));
     try {
       final syncedCards = await syncCardsUseCase(game);
-      safeEmit(state.copyWith(allCards: syncedCards, cards: syncedCards, isLoading: false));
+      safeEmit(state.copyWith(cards: syncedCards, searchedCards: syncedCards, isLoading: false));
     } catch (e) {
       safeEmit(state.copyWith(errorMessage: 'Failed to sync cards: $e', isLoading: false));
     }
@@ -53,7 +53,7 @@ class SearchCubit extends Cubit<SearchState> {
   void searchCards(String query) {
     if (isClosed) return;
     safeEmit(state.copyWith(
-      cards: state.allCards
+      searchedCards: state.cards
           .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
           .toList(),
     ));
@@ -61,6 +61,6 @@ class SearchCubit extends Cubit<SearchState> {
 
   void clearSearch() {
     if (isClosed) return;
-    safeEmit(state.copyWith(cards: state.allCards));
+    safeEmit(state.copyWith(searchedCards: state.cards));
   }
 }

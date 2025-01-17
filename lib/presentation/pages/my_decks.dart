@@ -17,11 +17,13 @@ class MyDecksPage extends StatefulWidget {
 
 class _MyDecksPageState extends State<MyDecksPage> {
   //-------------------------------- Lifecycle -------------------------------//
+  late final DeckManagerCubit _DeckManagerCubit;
+
   @override
   void initState() {
     super.initState();
-    final cubit = context.read<DeckManagerCubit>();
-    if(cubit.state.isEditMode) cubit.toggleEditMode();
+    _DeckManagerCubit = context.read<DeckManagerCubit>();
+    if(_DeckManagerCubit.state.isEditModeEnabled) _DeckManagerCubit.toggleEditMode();
   }
 
   //---------------------------------- Build ---------------------------------//
@@ -47,7 +49,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     return {
       Icons.open_in_new_rounded: () => _createNewDeck(context, cubit, locale),
       locale.translate('title.my_decks'): null,
-      state.allDecks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
+      state.decks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
 
@@ -63,7 +65,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     );
     cubit.setDeck(newDeck);
     await cubit.saveDeck(context.read<NFCCubit>());
-    if (context.read<DeckManagerCubit>().state.isEditMode) {
+    if (context.read<DeckManagerCubit>().state.isEditModeEnabled) {
       cubit.toggleEditMode();
     }
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
@@ -73,7 +75,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
   Widget _buildBody(BuildContext context) {
     return BlocBuilder<DeckManagerCubit, DeckManagerState>(
       builder: (context, state) {
-        final decks = state.allDecks;
+        final decks = state.decks;
         return GridWidget(items: decks);
       },
     );

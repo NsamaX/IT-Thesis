@@ -28,9 +28,9 @@ class CardWidget extends StatelessWidget {
           context,
           theme,
           isSelected: deckManagerState.selectedCard == card,
-          isNfcReadEnabled: deckManagerState.isNfcReadEnabled,
+          isNFCEnabled: deckManagerState.isNFCEnabled,
         ),
-        if (deckManagerState.isEditMode && !deckManagerState.isNfcReadEnabled)
+        if (deckManagerState.isEditModeEnabled && !deckManagerState.isNFCEnabled)
           buildEditControls(context, card: card, count: count),
       ],
     );
@@ -40,14 +40,14 @@ class CardWidget extends StatelessWidget {
     BuildContext context,
     ThemeData theme, {
     required bool isSelected,
-    required bool isNfcReadEnabled,
+    required bool isNFCEnabled,
   }) {
     return GestureDetector(
-      onTap: () => _handleCardTap(context, isNfcReadEnabled),
+      onTap: () => _handleCardTap(context, isNFCEnabled),
       child: AspectRatio(
         aspectRatio: 3 / 4,
         child: Opacity(
-          opacity: _calculateOpacity(isNfcReadEnabled, isSelected),
+          opacity: _calculateOpacity(isNFCEnabled, isSelected),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
@@ -72,11 +72,11 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  void _handleCardTap(BuildContext context, bool isNfcReadEnabled) {
+  void _handleCardTap(BuildContext context, bool isNFCEnabled) {
     final cubit = context.read<DeckManagerCubit>();
 
-    if (isNfcReadEnabled) {
-      cubit.toggleSelectedCard(card);
+    if (isNFCEnabled) {
+      cubit.toggleSelectCard(card);
       _handleNfcToggle(context, cubit);
     } else {
       Navigator.of(context).pushNamed(
@@ -100,8 +100,8 @@ class CardWidget extends StatelessWidget {
     }
   }
 
-  double _calculateOpacity(bool isNfcReadEnabled, bool isSelected) {
-    return isNfcReadEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
+  double _calculateOpacity(bool isNFCEnabled, bool isSelected) {
+    return isNFCEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
   }
 
   Widget _buildImageError() {

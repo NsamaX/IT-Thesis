@@ -11,7 +11,7 @@ class TrackState {
   final List<CardEntity> history;
   final bool isDialogShown;
   final bool isProcessing;
-  final bool isAdvance;
+  final bool isAdvanceModeEnabled;
 
   TrackState({
     required this.deck,
@@ -19,7 +19,7 @@ class TrackState {
     this.history = const [],
     this.isDialogShown = false,
     this.isProcessing = false,
-    this.isAdvance = false,
+    this.isAdvanceModeEnabled = false,
   });
 
   TrackState copyWith({
@@ -28,7 +28,7 @@ class TrackState {
     List<CardEntity>? history,
     bool? isDialogShown,
     bool? isProcessing,
-    bool? isAdvance,
+    bool? isAdvanceModeEnabled,
   }) {
     return TrackState(
       deck: deck ?? this.deck,
@@ -36,7 +36,7 @@ class TrackState {
       history: history ?? this.history,
       isDialogShown: isDialogShown ?? this.isDialogShown,
       isProcessing: isProcessing ?? this.isProcessing,
-      isAdvance: isAdvance ?? this.isAdvance,
+      isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
     );
   }
 }
@@ -53,7 +53,7 @@ class TrackCubit extends Cubit<TrackState> {
 
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
-  void toggleAdvanceMode() => emit(state.copyWith(isAdvance: !state.isAdvance));
+  void toggleAdvanceMode() => emit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
 
   void toggleReset(DeckEntity deck) => emit(state.copyWith(
     isProcessing: false,

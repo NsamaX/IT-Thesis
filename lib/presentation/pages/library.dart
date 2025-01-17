@@ -34,7 +34,7 @@ class LibraryPage extends StatelessWidget {
         final cards = context
             .read<DeckManagerCubit>()
             .state
-            .allDecks
+            .decks
             .expand((deck) => deck.cards.keys)
             .toSet()
             .toList();

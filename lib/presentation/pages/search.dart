@@ -78,7 +78,7 @@ class SearchPage extends StatelessWidget {
             ),
           );
         } else {
-          return _buildCardList(context, state.cards, arguments);
+          return _buildCardList(context, state.searchedCards, arguments);
         }
       },
     );

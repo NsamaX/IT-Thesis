@@ -13,7 +13,7 @@ class DeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cubit = context.read<DeckManagerCubit>();
-    final isEditMode = context.watch<DeckManagerCubit>().state.isEditMode;
+    final isEditModeEnabled = context.watch<DeckManagerCubit>().state.isEditModeEnabled;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -25,7 +25,7 @@ class DeckWidget extends StatelessWidget {
           },
           child: _buildDeckContainer(theme),
         ),
-        if (isEditMode)
+        if (isEditModeEnabled)
           Positioned(
             top: -2.0,
             right: -2.0,

@@ -69,7 +69,5 @@ Future<void> setupLocator() async {
   ));
 
   //-------------------------------- Navigation ------------------------------//
-  locator.registerLazySingleton<RouteObserver<ModalRoute>>(
-    () => RouteObserver<ModalRoute>(),
-  );
+  locator.registerLazySingleton<RouteObserver<ModalRoute>>(() => RouteObserver<ModalRoute>());
 }

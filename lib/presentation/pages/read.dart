@@ -26,8 +26,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
   void initState() {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
-    _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
-    _nfcSessionHandler.initNFCSessionHandler();
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
   }
 
   @override
@@ -66,10 +65,10 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
       child: Builder(
         builder: (context) {
           return BlocListener<NFCCubit, NFCState>(
-            listenWhen: (previous, current) => previous.lastReadTag != current.lastReadTag && current.lastReadTag != null,
+            listenWhen: (previous, current) => previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null,
             listener: (context, nfcState) {
-              context.read<ScanCubit>().fetchCardById(nfcState.lastReadTag!);
-              if (nfcState.lastReadTag != null && context.read<DrawerCubit>().isDrawerVisible('history') == false) {
+              context.read<ScanCubit>().fetchCardById(nfcState.lastestReadTags!);
+              if (nfcState.lastestReadTags != null && context.read<DrawerCubit>().isDrawerVisible('history') == false) {
                 context.read<DrawerCubit>().toggleDrawer('history');
               }
             },

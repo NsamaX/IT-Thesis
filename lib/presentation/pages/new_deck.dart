@@ -24,8 +24,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   void initState() {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
-    _nfcSessionHandler = NFCSessionHandler(_nfcCubit);
-    _nfcSessionHandler.initNFCSessionHandler();
+    _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
   }
 
   @override
@@ -82,18 +81,18 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     TextEditingController deckNameController,
   ) {
     final state = context.watch<DeckManagerCubit>().state;
-    final bool isEditMode = state.isEditMode;
+    final bool isEditModeEnabled = state.isEditModeEnabled;
     final bool hasCards = state.deck.cards.isNotEmpty;
-    if (!isEditMode && !hasCards) {
+    if (!isEditModeEnabled && !hasCards) {
       return {
         Icons.arrow_back_ios_new_rounded: '/back',
         state.deck.deckName: null,
         locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
       };
     }
-    return isEditMode
+    return isEditModeEnabled
         ? {
-            Icons.nfc_rounded: () => cubit.toggleNfcRead(_nfcCubit),
+            Icons.nfc_rounded: () => cubit.toggleNFC(_nfcCubit),
             Icons.delete_outline_rounded: () => _showDeleteDialog(context, cubit, locale),
             TextField(
               controller: deckNameController,

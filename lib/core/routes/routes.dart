@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/presentation/pages/@export.dart';
 
 class AppRoutes {
-  static const String index   = '/';
-  static const String signIn  = '/sign_in';
-  static const String myDecks = '/my_decks';
-  static const String newDeck = '/new_deck';
-  static const String tracker = '/tracker';
-  static const String read    = '/read';
-  static const String games   = '/games';
-  static const String search  = '/search';
-  static const String card    = '/card';
-  static const String setting = '/setting';
-  static const String library = '/library';
-  static const String about   = '/about';
-  static const String privacy = '/privacy';
+  static const String index    = '/';
+  static const String signIn   = '/sign_in';
+  static const String myDecks  = '/my_decks';
+  static const String newDeck  = '/new_deck';
+  static const String tracker  = '/tracker';
+  static const String read     = '/read';
+  static const String games    = '/games';
+  static const String search   = '/search';
+  static const String card     = '/card';
+  static const String setting  = '/setting';
+  static const String library  = '/library';
+  static const String about    = '/about';
+  static const String privacy  = '/privacy';
   static const String language = '/language';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {

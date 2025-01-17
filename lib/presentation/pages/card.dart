@@ -60,7 +60,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final card = arguments?['card'] as CardEntity?;
     final isAdd = arguments?['isAdd'] ?? false;
     final isCustom = arguments?['isCustom'] ?? false;
-
     return Scaffold(
       appBar: AppBarWidget(
         menu: _buildAppBarMenu(context, locale, card, isAdd, isCustom),
@@ -80,17 +79,10 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(
-    BuildContext context,
-    AppLocalizations locale,
-    CardEntity? card,
-    bool isAdd,
-    bool isCustom,
-  ) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale, CardEntity? card, bool isAdd, bool isCustom) {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
       isCustom

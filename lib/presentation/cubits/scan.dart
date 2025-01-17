@@ -6,26 +6,22 @@ import 'package:nfc_project/domain/usecases/cards_management.dart';
 class ScanCubitState {
   final List<CardEntity>? cards;
   final String? currentGame;
-  final String? error;
   final bool isLoading;
 
   ScanCubitState({
     this.cards,
     this.currentGame,
-    this.error,
     this.isLoading = false,
   });
 
   ScanCubitState copyWith({
     List<CardEntity>? cards,
     String? currentGame,
-    String? error,
     bool? isLoading,
   }) {
     return ScanCubitState(
       cards: cards ?? this.cards,
       currentGame: currentGame ?? this.currentGame,
-      error: error ?? this.error,
       isLoading: isLoading ?? this.isLoading,
     );
   }
@@ -37,7 +33,7 @@ class ScanCubit extends Cubit<ScanCubitState> {
   ScanCubit({required this.fetchCardByIdUseCase}) : super(ScanCubitState());
 
   Future<void> fetchCardById(TagEntity tag) async {
-    emit(state.copyWith(isLoading: true, error: null));
+    emit(state.copyWith(isLoading: true));
     try {
       final card = await fetchCardByIdUseCase(tag.game, tag.cardId);
       emit(state.copyWith(
@@ -46,7 +42,7 @@ class ScanCubit extends Cubit<ScanCubitState> {
         isLoading: false,
       ));
     } catch (e) {
-      emit(state.copyWith(isLoading: false, error: e.toString()));
+      emit(state.copyWith(isLoading: false));
     }
   }
 }

@@ -44,7 +44,6 @@ class SettingsCubit extends Cubit<SettingsState> {
       final localeCode = await loadSettingUsecase('locale');
       final isDarkMode = await loadSettingUsecase('isDarkMode');
       final firstLoad = await loadSettingUsecase('firstLoad');
-
       emit(state.copyWith(
         locale: Locale(localeCode),
         firstLoad: firstLoad,

@@ -12,5 +12,3 @@
 
 # widget
     [] Animations
-
-2153 ไม่นับ README & /presentation
