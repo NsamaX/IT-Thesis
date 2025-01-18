@@ -6,6 +6,7 @@ import 'package:nfc_project/domain/entities/card.dart';
 class CardLabelWidget extends StatelessWidget {
   final CardEntity? card;
   final int? count;
+  final bool isNFC;
   final bool isAdd;
   final bool isCustom;
   final bool lightTheme;
@@ -14,6 +15,7 @@ class CardLabelWidget extends StatelessWidget {
     Key? key,
     this.card,
     this.count,
+    this.isNFC = true,
     this.isAdd = false,
     this.isCustom = false,
     this.lightTheme = false,
@@ -33,7 +35,7 @@ class CardLabelWidget extends StatelessWidget {
   void _navigateToCardPage(BuildContext context) {
     Navigator.of(context).pushNamed(
       AppRoutes.card,
-      arguments: {'card': card, 'isAdd': isAdd, 'isCustom': isCustom},
+      arguments: {'card': card, 'isNFC': isNFC, 'isAdd': isAdd, 'isCustom': isCustom},
     );
   }
 
@@ -55,17 +57,18 @@ class CardLabelWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Row(
-          children: [
-            _buildImage(theme, color: color),
-            const SizedBox(width: 12.0),
-            Expanded(child: _buildCardInfo(locale, theme, color: color)),
-            const SizedBox(width: 16.0),
-            if (count != null) _buildCount(theme, color),
+      child: Row(
+        children: [
+          const SizedBox(width: 8.0),
+          _buildImage(theme, color: color),
+          const SizedBox(width: 8.0),
+          Expanded(child: _buildCardInfo(locale, theme, color: color)),
+          const SizedBox(width: 8.0),
+          if (count != null)...[
+            _buildCount(theme, color),
+            const SizedBox(width: 22.0),
           ],
-        ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
+import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
@@ -83,9 +84,9 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled ? {
       Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-      Icons.equalizer_sharp: null,
-      locale.translate('title.tracker'): null,
       Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
+      locale.translate('title.tracker'): null,
+      Icons.equalizer_sharp: AppRoutes.history,
       Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
     } : {
       Icons.arrow_back_ios_new_rounded: '/back',
@@ -139,6 +140,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               return CardLabelWidget(
                 card: card,
                 count: count,
+                isNFC: false,
                 lightTheme: count > 0,
               );
             },

@@ -25,6 +25,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   late TextEditingController _deckNameController;
 
   CardEntity? _card;
+  bool _isNFC = true;
   bool _isAdd = false;
   bool _isCustom = false;
 
@@ -44,6 +45,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
     final arguments = getArguments(context);
     _card = arguments['card'] as CardEntity?;
+    _isNFC = arguments['isNFC'] ?? true;
     _isAdd = arguments['isAdd'] ?? false;
     _isCustom = arguments['isCustom'] ?? false;
 
@@ -81,11 +83,13 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       _isCustom
           ? _buildTextField(context, locale)
           : locale.translate('title.card'): null,
-      if (_isAdd) locale.translate('toggle.add'): () => _toggleAdd(context, locale, deckManagerCubit),
-      if (_isCustom) locale.translate('toggle.done'): null,
-      if (!_isAdd && !_isCustom) (isNFCEnabled 
-          ? Icons.wifi_tethering_rounded 
-          : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled),
+      if (_isAdd) locale.translate('toggle.add'): () => _toggleAdd(context, locale, deckManagerCubit)
+      else if (_isCustom) locale.translate('toggle.done'): null
+      else if (_isNFC) (
+        isNFCEnabled 
+            ? Icons.wifi_tethering_rounded 
+            : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled)
+      else null: null,
     };
   }
 

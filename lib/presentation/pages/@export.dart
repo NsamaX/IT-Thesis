@@ -1,6 +1,7 @@
 export 'about.dart';
 export 'card.dart';
 export 'games.dart';
+export 'history.dart';
 export 'index.dart';
 export 'language.dart';
 export 'library.dart';
