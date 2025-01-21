@@ -29,55 +29,55 @@ class DeckWidget extends StatelessWidget {
           Positioned(
             top: -2.0,
             right: -2.0,
-            child: GestureDetector(
-              onTap: () => cubit.deleteDeck(deck),
-              child: _buildDeleteButton(theme),
+            child: AnimatedOpacity(
+              opacity: isEditModeEnabled ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: GestureDetector(
+                onTap: () => cubit.deleteDeck(deck),
+                child: _buildDeleteButton(theme),
+              ),
             ),
           ),
       ],
     );
   }
 
-  Widget _buildDeckContainer(ThemeData theme) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0),
-        color: theme.appBarTheme.backgroundColor,
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black54,
-            offset: Offset(3.0, 4.0),
-            blurRadius: 6.0,
-            spreadRadius: 0.0,
-          ),
-        ],
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            deck.deckName,
-            style: theme.textTheme.titleSmall,
-            textAlign: TextAlign.center,
-          ),
+  Widget _buildDeckContainer(ThemeData theme) => Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12.0),
+      color: theme.appBarTheme.backgroundColor,
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.black54,
+          offset: Offset(3.0, 4.0),
+          blurRadius: 6.0,
+          spreadRadius: 0.0,
+        ),
+      ],
+    ),
+    child: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          deck.deckName,
+          style: theme.textTheme.titleSmall,
+          textAlign: TextAlign.center,
         ),
       ),
-    );
-  }
+    ),
+  );
 
-  Widget _buildDeleteButton(ThemeData theme) {
-    return Container(
-      width: 30.0,
-      height: 30.0,
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-        shape: BoxShape.circle,
-      ),
-      child: Icon(
-        Icons.close_rounded,
-        color: theme.primaryColor,
-        size: 26.0,
-      ),
-    );
-  }
+  Widget _buildDeleteButton(ThemeData theme) => Container(
+    width: 30.0,
+    height: 30.0,
+    decoration: const BoxDecoration(
+      color: Colors.transparent,
+      shape: BoxShape.circle,
+    ),
+    child: Icon(
+      Icons.close_rounded,
+      color: theme.primaryColor,
+      size: 26.0,
+    ),
+  );
 }

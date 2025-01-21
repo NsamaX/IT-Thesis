@@ -34,10 +34,10 @@ class SettingsCubit extends Cubit<SettingsState> {
     required this.saveSettingUsecase,
     required this.loadSettingUsecase,
   }) : super(const SettingsState(
-    locale: Locale('en'),
-    isDarkMode: true,
-    firstLoad: true,
-  ));
+          locale: Locale('en'),
+          isDarkMode: true,
+          firstLoad: true,
+        ));
 
   Future<void> initialize() async {
     try {

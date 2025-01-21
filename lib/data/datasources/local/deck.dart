@@ -16,14 +16,10 @@ class DeckLocalDataSourceImpl implements DeckLocalDataSource {
   DeckLocalDataSourceImpl(this._sqliteService);
 
   @override
-  Future<void> saveDeck(DeckModel deck) async {
-    await _sqliteService.insert(decksTable, deck.toJson());
-  }
+  Future<void> saveDeck(DeckModel deck) async => await _sqliteService.insert(decksTable, deck.toJson());
 
   @override
-  Future<void> deleteDeck(String deckId) async {
-    await _sqliteService.delete(decksTable, columnDeckId, deckId);
-  }
+  Future<void> deleteDeck(String deckId) async => await _sqliteService.delete(decksTable, columnDeckId, deckId);
 
   @override
   Future<List<DeckModel>> loadDecks() async {

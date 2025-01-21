@@ -16,22 +16,17 @@ class CardListWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    if (cards.isEmpty) {
-      return Center(
-        child: Text(AppLocalizations.of(context).translate('text.no_results')),
-      );
-    }
-    return ListView.builder(
-      itemCount: cards.length,
-      itemBuilder: (context, index) {
-        return CardLabelWidget(
-          card: cards[index],
-          isAdd: isAdd,
-          isCustom: isCustom,
+  Widget build(BuildContext context) => cards.isEmpty
+      ? Center(
+          child: Text(AppLocalizations.of(context).translate('text.no_results')),
+        )
+      : ListView.builder(
+          itemCount: cards.length,
+          itemBuilder: (context, index) => CardLabelWidget(
+            card: cards[index],
+            isAdd: isAdd,
+            isCustom: isCustom,
+          ),
+          cacheExtent: 1000,
         );
-      },
-      cacheExtent: 1000,
-    );
-  }
 }

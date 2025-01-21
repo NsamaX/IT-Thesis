@@ -41,36 +41,34 @@ class CardWidget extends StatelessWidget {
     ThemeData theme, {
     required bool isSelected,
     required bool isNFCEnabled,
-  }) {
-    return GestureDetector(
-      onTap: () => _handleCardTap(context, isNFCEnabled),
-      child: AspectRatio(
-        aspectRatio: 3 / 4,
-        child: Opacity(
-          opacity: _calculateOpacity(isNFCEnabled, isSelected),
-          child: Container(
-            decoration: BoxDecoration(
+  }) => GestureDetector(
+    onTap: () => _handleCardTap(context, isNFCEnabled),
+    child: AspectRatio(
+      aspectRatio: 3 / 4,
+      child: Opacity(
+        opacity: _calculateOpacity(isNFCEnabled, isSelected),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: theme.appBarTheme.backgroundColor,
+          ),
+          child: Card(
+            color: Colors.transparent,
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              color: theme.appBarTheme.backgroundColor,
-            ),
-            child: Card(
-              color: Colors.transparent,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: card.imageUrl != null
-                    ? Image.network(
-                        card.imageUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => _buildImageError(),
-                      )
-                    : _buildImageError(),
-              ),
+              child: card.imageUrl != null
+                  ? Image.network(
+                      card.imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => _buildImageError(),
+                    )
+                  : _buildImageError(),
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 
   void _handleCardTap(BuildContext context, bool isNFCEnabled) {
     final cubit = context.read<DeckManagerCubit>();
@@ -100,17 +98,13 @@ class CardWidget extends StatelessWidget {
     }
   }
 
-  double _calculateOpacity(bool isNFCEnabled, bool isSelected) {
-    return isNFCEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
-  }
+  double _calculateOpacity(bool isNFCEnabled, bool isSelected) => isNFCEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
 
-  Widget _buildImageError() {
-    return const Center(
-      child: Icon(
-        Icons.image_not_supported,
-        size: 36,
-        color: Colors.grey
-      ),
-    );
-  }
+  Widget _buildImageError() => const Center(
+    child: Icon(
+      Icons.image_not_supported,
+      size: 36,
+      color: Colors.grey,
+    ),
+  );
 }

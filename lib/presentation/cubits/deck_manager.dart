@@ -40,7 +40,7 @@ class DeckManagerState {
     bool? isNFCEnabled,
     bool? isdeleteEnabled,
     bool? isLoading,
-  }) { 
+  }) {
     return DeckManagerState(
       decks: decks ?? this.decks,
       deck: deck ?? this.deck,
@@ -69,9 +69,9 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     required this.deleteDeckUseCase,
     required this.loadDecksUseCase,
   }) : super(DeckManagerState(
-    decks: [],
-    deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
-  ));
+          decks: [],
+          deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
+        ));
 
   //--------------------------------- toggle ---------------------------------//
   void toggleEditMode() => emit(state.copyWith(isEditModeEnabled: !state.isEditModeEnabled, isNFCEnabled: false));
@@ -86,7 +86,6 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     ));
     emit(state.copyWith(isShareEnabled: true));
   }
-
 
   void toggleNFC(NFCCubit nfcCubit) {
     final enabled = !state.isNFCEnabled;

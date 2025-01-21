@@ -70,13 +70,13 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
   @override
   Future<void> saveCards(String game, int page, List<CardModel> cards) async {
     final cardDataList = cards.map((card) => {
-      columnId: card.cardId,
-      columnGame: game,
-      columnName: card.name,
-      columnDescription: card.description,
-      columnImageUrl: card.imageUrl,
-      columnAdditionalData: json.encode(card.additionalData),
-    }).toList();
+          columnId: card.cardId,
+          columnGame: game,
+          columnName: card.name,
+          columnDescription: card.description,
+          columnImageUrl: card.imageUrl,
+          columnAdditionalData: json.encode(card.additionalData),
+        }).toList();
     await _sqliteService.insertBatch(cardsTable, cardDataList);
     await _savePageIfNotExists(game, page);
   }

@@ -19,13 +19,8 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   SettingsLocalDataSourceImpl(this._sharedPreferencesService);
 
   @override
-  Future<void> saveSettings(Map<String, dynamic> settings) async {
-    await _sharedPreferencesService.saveMap(_settingsKey, settings);
-  }
+  Future<void> saveSettings(Map<String, dynamic> settings) async => await _sharedPreferencesService.saveMap(_settingsKey, settings);
 
   @override
-  Future<Map<String, dynamic>> loadSettings() async {
-    final settings = _sharedPreferencesService.getMap(_settingsKey);
-    return settings ?? defaultSettings;
-  }
+  Future<Map<String, dynamic>> loadSettings() async => _sharedPreferencesService.getMap(_settingsKey) ?? defaultSettings;
 }

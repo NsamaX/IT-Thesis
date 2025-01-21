@@ -45,35 +45,34 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     required dynamic menuKey,
     required dynamic onTapFunction,
     required bool isTitle,
-  }) {
-    return GestureDetector(
-      onTap: () => _handleMenuTap(context, onTapFunction),
-      child: SizedBox(
-        width: isTitle ? 142.0 : 42.0,
-        height: kToolbarHeight,
-        child: Center(
-          child: _getMenuItemWidget(theme, menuKey, isTitle),
-        ),
+  }) => GestureDetector(
+    onTap: () => _handleMenuTap(context, onTapFunction),
+    child: SizedBox(
+      width: isTitle ? 142.0 : 42.0,
+      height: kToolbarHeight,
+      child: Center(
+        child: _getMenuItemWidget(theme, menuKey, isTitle),
       ),
-    );
-  }
+    ),
+  );
 
   Widget _getMenuItemWidget(ThemeData theme, dynamic menuKey, bool isTitle) {
     if (menuKey == null) return const SizedBox.shrink();
-    if (menuKey is IconData) {
-      return Icon(menuKey);
-    } else if (menuKey is String) {
-      return Text(
-        menuKey,
-        style: isTitle
-            ? theme.textTheme.titleMedium
-            : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme?.color),
-        textAlign: TextAlign.center,
-      );
-    } else if (menuKey is Widget) {
-      return menuKey;
-    } else {
-      return const Icon(Icons.error_outline);
+    switch (menuKey.runtimeType) {
+      case IconData:
+        return Icon(menuKey);
+      case String:
+        return Text(
+          menuKey,
+          style: isTitle
+              ? theme.textTheme.titleMedium
+              : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme?.color),
+          textAlign: TextAlign.center,
+        );
+      case Widget:
+        return menuKey;
+      default:
+        return const Icon(Icons.error_outline);
     }
   }
 

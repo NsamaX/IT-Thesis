@@ -22,9 +22,7 @@ abstract class BaseApi {
     }
   }
 
-  Uri buildUrl(String path, [Map<String, String>? queryParams]) {
-    return Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
-  }
+  Uri buildUrl(String path, [Map<String, String>? queryParams]) => Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
 
   void validateResponse(http.Response response) {
     if (response.statusCode != 200) {

@@ -29,9 +29,7 @@ class SaveDeckUseCase {
 
   SaveDeckUseCase(this.repository);
 
-  Future<void> call(DeckEntity deck) async {
-    return repository.saveDeck(DeckMapper.toModel(deck));
-  }
+  Future<void> call(DeckEntity deck) async => repository.saveDeck(DeckMapper.toModel(deck));
 }
 
 class DeleteDeckUseCase {
@@ -39,9 +37,7 @@ class DeleteDeckUseCase {
 
   DeleteDeckUseCase(this.repository);
 
-  Future<void> call(String deckId) async {
-    return repository.deleteDeck(deckId);
-  }
+  Future<void> call(String deckId) async => repository.deleteDeck(deckId);
 }
 
 class LoadDecksUseCase {

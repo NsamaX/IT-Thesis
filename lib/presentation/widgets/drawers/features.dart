@@ -53,31 +53,29 @@ class FeaturesDrawerWidget extends StatelessWidget {
     VoidCallback? onTap,
     String? image,
     String? label,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 60.0,
-          height: 60.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 4.0,
-                spreadRadius: 1.0,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: _buildFeatureContent(theme, image: image, label: label),
+  }) => Padding(
+    padding: const EdgeInsets.only(bottom: 20.0),
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 60.0,
+        height: 60.0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4.0,
+              spreadRadius: 1.0,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
+        child: _buildFeatureContent(theme, image: image, label: label),
       ),
-    );
-  }
+    ),
+  );
 
   Widget _buildFeatureContent(
     ThemeData theme, {

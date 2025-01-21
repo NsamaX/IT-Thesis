@@ -46,17 +46,15 @@ class CardInfoWidget extends StatelessWidget {
         : _buildDefaultDescription(locale, theme, card!);
   }
 
-  Widget _buildEditableHint() {
-    return Opacity(
-      opacity: 0.6,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: const [
-          Icon(Icons.edit_rounded),
-        ],
-      ),
-    );
-  }
+  Widget _buildEditableHint() => Opacity(
+    opacity: 0.6,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: const [
+        Icon(Icons.edit_rounded),
+      ],
+    ),
+  );
 
   Widget _buildAdditionalData(ThemeData theme, Map<String, dynamic> additionalData) {
     final List<Widget> dataEntries = additionalData.entries.map((entry) {
@@ -91,13 +89,11 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) {
-    return Opacity(
-      opacity: 0.6,
-      child: Text(
-        card.description ?? locale.translate('text.no_card_description'),
-        style: theme.textTheme.bodyMedium,
-      ),
-    );
-  }
+  Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) => Opacity(
+    opacity: 0.6,
+    child: Text(
+      card.description ?? locale.translate('text.no_card_description'),
+      style: theme.textTheme.bodyMedium,
+    ),
+  );
 }

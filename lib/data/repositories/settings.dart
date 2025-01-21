@@ -23,7 +23,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     return settings[key] ?? _getDefaultSetting(key);
   }
 
-  dynamic _getDefaultSetting(String key) {
-    return SettingsLocalDataSourceImpl.defaultSettings[key] ?? (throw Exception('Invalid key: $key'));
-  }
+  dynamic _getDefaultSetting(String key) => SettingsLocalDataSourceImpl.defaultSettings[key] ?? (
+    throw Exception('Invalid key: $key')
+  );
 }

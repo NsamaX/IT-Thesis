@@ -37,11 +37,12 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    
+
     return Container(
       color: theme.appBarTheme.backgroundColor,
       padding: const EdgeInsets.fromLTRB(26.0, 0.0, 26.0, 12.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _SearchInputField(
             controller: _searchController,

@@ -15,20 +15,21 @@ class GamesListWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: ListView.builder(
-        itemCount: gameKeys.length,
-        itemBuilder: (context, index) {
-          return GamesLabelWidget(
-            game: gameKeys[index],
-            imagePath: gameImages[index],
-            description: ApiConfig.baseUrls?[gameKeys[index]] ?? '',
-            isAdd: isAdd,
-          );
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(top: 8.0),
+    child: gameKeys.isEmpty
+        ? const Center(child: Text('No games available'))
+        : ListView.builder(
+            itemCount: gameKeys.length,
+            itemBuilder: (context, index) {
+              final description = ApiConfig.baseUrls?[gameKeys[index]] ?? '';
+              return GamesLabelWidget(
+                game: gameKeys[index],
+                imagePath: gameImages[index],
+                description: description,
+                isAdd: isAdd,
+              );
+            },
+          ),
+  );
 }

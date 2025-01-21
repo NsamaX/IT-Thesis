@@ -59,8 +59,5 @@ class SearchCubit extends Cubit<SearchState> {
     ));
   }
 
-  void clearSearch() {
-    if (isClosed) return;
-    safeEmit(state.copyWith(searchedCards: state.cards));
-  }
+  void clearSearch() => safeEmit(state.copyWith(searchedCards: state.cards));
 }

@@ -23,7 +23,18 @@ class NFCWidget extends StatelessWidget {
         final currentColor = isNFCEnabled ? activeColor : inactiveColor;
 
         return GestureDetector(
-          onTap: () => NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled),
+          onTap: () async {
+            try {
+              await NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled);
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Error toggling NFC: $e'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,34 +63,30 @@ class NFCWidget extends StatelessWidget {
     required double angle,
     required Offset offset,
     required Color color,
-  }) {
-    return Transform.translate(
-      offset: offset,
-      child: Transform.rotate(
-        angle: angle * 3.14 / 180.0,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: animationDuration,
-          child: Icon(
-            Icons.wifi_rounded,
-            size: largeIconSize,
-            color: color,
-          ),
+  }) => Transform.translate(
+    offset: offset,
+    child: Transform.rotate(
+      angle: angle * 3.14 / 180.0,
+      child: AnimatedContainer(
+        curve: Curves.easeInOut,
+        duration: animationDuration,
+        child: Icon(
+          Icons.wifi_rounded,
+          size: largeIconSize,
+          color: color,
         ),
       ),
-    );
-  }
+    ),
+  );
 
-  Widget _buildCircleIcon({required Color color}) {
-    return AnimatedContainer(
-      curve: Curves.easeInOut,
-      duration: animationDuration,
-      width: iconSize,
-      height: iconSize,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
+  Widget _buildCircleIcon({required Color color}) => AnimatedContainer(
+    curve: Curves.easeInOut,
+    duration: animationDuration,
+    width: iconSize,
+    height: iconSize,
+    decoration: BoxDecoration(
+      color: color,
+      shape: BoxShape.circle,
+    ),
+  );
 }

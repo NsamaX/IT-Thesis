@@ -28,85 +28,77 @@ class GamesLabelWidget extends StatelessWidget {
   }
 
   void _navigateToSearch(BuildContext context) {
-    context.read<AppCubit>().updateSelectedGame(game);
+    final cubit = context.read<AppCubit>();
+    cubit.updateSelectedGame(game);
     Navigator.of(context).pushReplacementNamed(
       AppRoutes.search,
       arguments: {'game': game, 'isAdd': isAdd},
     );
   }
 
-  Widget _buildContainer(ThemeData theme) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 6.0),
-      height: 60.0,
-      decoration: BoxDecoration(
-        color: theme.appBarTheme.backgroundColor,
-        borderRadius: BorderRadius.circular(12.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            spreadRadius: 1.0,
-            blurRadius: 2.0,
-            offset: const Offset(0.0, 3.0),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Row(
-          children: [
-            _buildImage(),
-            const SizedBox(width: 12.0),
-            _buildGameInfo(theme),
-          ],
+  Widget _buildContainer(ThemeData theme) => Container(
+    margin: const EdgeInsets.only(bottom: 6.0),
+    height: 60.0,
+    decoration: BoxDecoration(
+      color: theme.appBarTheme.backgroundColor,
+      borderRadius: BorderRadius.circular(12.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          spreadRadius: 1.0,
+          blurRadius: 2.0,
+          offset: const Offset(0.0, 3.0),
         ),
-      ),
-    );
-  }
-
-  Widget _buildImage() {
-    return Container(
-      width: 36.0,
-      height: 36.0,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(8.0)),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: imagePath != null
-            ? Image.asset(imagePath!, fit: BoxFit.cover)
-            : const Icon(Icons.videogame_asset, size: 24.0),
-      ),
-    );
-  }
-
-  Widget _buildGameInfo(ThemeData theme) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      ],
+    ),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
         children: [
-          Text(
-            game,
-            style: theme.textTheme.bodyMedium,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            _extractDescription(description),
-            style: theme.textTheme.bodySmall,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
+          _buildImage(),
+          const SizedBox(width: 12.0),
+          _buildGameInfo(theme),
         ],
       ),
-    );
-  }
+    ),
+  );
 
-  String _extractDescription(String description) {
-    final parts = description.split('//');
-    return parts.length > 1 ? parts[1] : description;
-  }
+  Widget _buildImage() => Container(
+    width: 36.0,
+    height: 36.0,
+    decoration: const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: imagePath != null
+          ? Image.asset(imagePath!, fit: BoxFit.cover)
+          : const Icon(Icons.videogame_asset, size: 24.0),
+    ),
+  );
+
+  Widget _buildGameInfo(ThemeData theme) => Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          game,
+          style: theme.textTheme.bodyMedium,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        const SizedBox(height: 4.0),
+        Text(
+          _extractDescription(description),
+          style: theme.textTheme.bodySmall,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ],
+    ),
+  );
+
+  String _extractDescription(String description) => description.split('//').length > 1 ? description.split('//')[1] : description;
 }

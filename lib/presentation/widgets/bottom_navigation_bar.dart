@@ -17,20 +17,16 @@ class BottomNavigationBarWidget extends StatelessWidget {
     ];
 
     return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return BottomNavigationBar(
-          currentIndex: state.currentPageIndex,
-          onTap: (index) => _navigateToPage(context, index),
-          items: _buildNavigationItems(navigationItems, locale),
-        );
-      },
+      builder: (context, state) => BottomNavigationBar(
+        currentIndex: state.currentPageIndex,
+        elevation: 8.0,
+        onTap: (index) => _navigateToPage(context, index),
+        items: _buildNavigationItems(navigationItems, locale),
+      ),
     );
   }
 
-  void _navigateToPage(
-      BuildContext context, 
-      int index,
-    ) {
+  void _navigateToPage(BuildContext context, int index) {
     final cubit = context.read<AppCubit>();
 
     if (index != cubit.state.currentPageIndex) {
@@ -46,14 +42,12 @@ class BottomNavigationBarWidget extends StatelessWidget {
   List<BottomNavigationBarItem> _buildNavigationItems(
     List<Map<String, Object>> items,
     AppLocalizations locale,
-  ) {
-    return items
-        .map(
-          (item) => BottomNavigationBarItem(
-            icon: Icon(item['icon'] as IconData),
-            label: locale.translate(item['label'] as String),
-          ),
-        )
-        .toList();
-  }
+  ) => items
+          .map(
+            (item) => BottomNavigationBarItem(
+              icon: Icon(item['icon'] as IconData),
+              label: locale.translate(item['label'] as String),
+            ),
+          )
+          .toList();
 }

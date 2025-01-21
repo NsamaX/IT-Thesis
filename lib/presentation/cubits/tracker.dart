@@ -42,14 +42,15 @@ class TrackState {
 }
 
 class TrackCubit extends Cubit<TrackState> {
-  TrackCubit(DeckEntity deck) : super(TrackState(
-    deck: deck.copyWith(cards: Map.of(deck.cards)),
-    record: RecordEntity(
-      recordId: DateTime.now().toIso8601String(),
-      createdAt: DateTime.now(),
-      data: [],
-    ),
-  ));
+  TrackCubit(DeckEntity deck)
+      : super(TrackState(
+          deck: deck.copyWith(cards: Map.of(deck.cards)),
+          record: RecordEntity(
+            recordId: DateTime.now().toIso8601String(),
+            createdAt: DateTime.now(),
+            data: [],
+          ),
+        ));
 
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
@@ -128,7 +129,8 @@ class TrackCubit extends Cubit<TrackState> {
       orElse: () => throw Exception("Card not found in deck"),
     );
     updatedCards.remove(cardEntry.key);
-    emit(state.copyWith(deck: state.deck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
+    emit(state.copyWith(
+      deck: state.deck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
     ));
   }
 }

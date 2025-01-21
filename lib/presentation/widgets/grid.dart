@@ -11,7 +11,9 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return const SizedBox.shrink();
+    if (items.isEmpty) {
+      return const Center(child: Text('No items to display'));
+    }
 
     final itemType = _getItemType(items.first);
     final gridConfig = _getGridConfig(itemType);
@@ -39,14 +41,9 @@ class GridWidget extends StatelessWidget {
     return 'unknown';
   }
 
-  Map<String, double> _getGridConfig(String itemType) {
-    switch (itemType) {
-      case 'deck':
-        return {'spacing': 12.0, 'aspectRatio': 1.0};
-      default:
-        return {'spacing': 8.0, 'aspectRatio': 3 / 4};
-    }
-  }
+  Map<String, double> _getGridConfig(String itemType) => {
+    'deck': {'spacing': 12.0, 'aspectRatio': 1.0},
+  }[itemType] ?? {'spacing': 8.0, 'aspectRatio': 3 / 4};
 
   Widget _buildGridItem({required dynamic item, required String itemType}) {
     switch (itemType) {
