@@ -9,20 +9,23 @@ class SettingsLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: label.map((category) {
-        final title = category['title'] as String?;
-        final content = category['content'] as List<dynamic>;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (title != null) _buildTitle(theme, title),
-            ..._buildContentList(context, theme, content),
-          ],
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(top: 2.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: label.map((category) {
+          final title = category['title'] as String?;
+          final content = category['content'] as List<dynamic>;
+      
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title != null) _buildTitle(theme, title),
+              ..._buildContentList(context, theme, content),
+            ],
+          );
+        }).toList(),
+      ),
     );
   }
 
