@@ -11,21 +11,17 @@ class RecordModel {
     required this.data,
   });
 
-  factory RecordModel.fromJson(Map<String, dynamic> json) {
-    return RecordModel(
-      recordId: json['recordId'] as String? ?? '',
-      createdAt: DateTime.parse(json['createdAt'] as String? ?? ''),
-      data: (json['data'] as List<dynamic>? ?? [])
-          .map((item) => DataModel.fromJson(item as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  factory RecordModel.fromJson(Map<String, dynamic> json) => RecordModel(
+    recordId: json['recordId'] as String? ?? '',
+    createdAt: DateTime.parse(json['createdAt'] as String? ?? ''),
+    data: (json['data'] as List<dynamic>? ?? [])
+        .map((item) => DataModel.fromJson(item as Map<String, dynamic>))
+        .toList(),
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'recordId': recordId,
-      'createdAt': createdAt.toIso8601String(),
-      'data': data.map((item) => item.toJson()).toList(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'recordId': recordId,
+    'createdAt': createdAt.toIso8601String(),
+    'data': data.map((item) => item.toJson()).toList(),
+  };
 }

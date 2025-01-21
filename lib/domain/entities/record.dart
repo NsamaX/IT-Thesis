@@ -15,11 +15,9 @@ class RecordEntity {
     String? recordId,
     DateTime? createdAt,
     List<DataEntity>? data,
-  }) {
-    return RecordEntity(
-      recordId: recordId ?? this.recordId,
-      createdAt: createdAt ?? this.createdAt,
-      data: data ?? this.data,
-    );
-  }
+  }) => RecordEntity(
+    recordId: recordId ?? this.recordId,
+    createdAt: createdAt ?? this.createdAt,
+    data: data ?? this.data,
+  );
 }

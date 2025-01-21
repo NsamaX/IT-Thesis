@@ -17,26 +17,22 @@ class DataModel {
     required this.timestamp,
   });
 
-  factory DataModel.fromJson(Map<String, dynamic> json) {
-    return DataModel(
-      tagId: json['tagId'] as String? ?? '',
-      location: json['location'] as String? ?? '',
-      action: ActionModel.values.firstWhere(
-        (e) => e.name == json['action'],
-        orElse: () => ActionModel.unknown,
-      ),
-      timestamp: json['timestamp'] != null
-          ? DateTime.tryParse(json['timestamp']) ?? DateTime.now()
-          : DateTime.now(),
-    );
-  }
+  factory DataModel.fromJson(Map<String, dynamic> json) => DataModel(
+    tagId: json['tagId'] as String? ?? '',
+    location: json['location'] as String? ?? '',
+    action: ActionModel.values.firstWhere(
+      (e) => e.name == json['action'],
+      orElse: () => ActionModel.unknown,
+    ),
+    timestamp: json['timestamp'] != null
+        ? DateTime.tryParse(json['timestamp']) ?? DateTime.now()
+        : DateTime.now(),
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'tagId': tagId,
-      'location': location,
-      'action': action.name,
-      'timestamp': timestamp.toIso8601String(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    'tagId': tagId,
+    'location': location,
+    'action': action.name,
+    'timestamp': timestamp.toIso8601String(),
+  };
 }

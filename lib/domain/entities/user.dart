@@ -16,12 +16,10 @@ class UserEntity {
     String? userId,
     List<String>? deckIds,
     List<String>? recordIds,
-  }) {
-    return UserEntity(
-      email: email ?? this.email,
-      userId: userId ?? this.userId,
-      deckIds: deckIds ?? this.deckIds,
-      recordIds: recordIds ?? this.recordIds,
-    );
-  }
+  }) => UserEntity(
+    email: email ?? this.email,
+    userId: userId ?? this.userId,
+    deckIds: deckIds ?? this.deckIds,
+    recordIds: recordIds ?? this.recordIds,
+  );
 }

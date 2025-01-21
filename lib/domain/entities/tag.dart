@@ -13,11 +13,9 @@ class TagEntity {
     String? tagId,
     String? cardId,
     String? game,
-  }) {
-    return TagEntity(
-      tagId: tagId ?? this.tagId,
-      cardId: cardId ?? this.cardId,
-      game: game ?? this.game,
-    );
-  }
+  }) => TagEntity(
+    tagId: tagId ?? this.tagId,
+    cardId: cardId ?? this.cardId,
+    game: game ?? this.game,
+  );
 }

@@ -95,7 +95,9 @@ class CardRepositoryImpl implements CardRepository {
   }
 
   Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
-    if (await cardLocalDataSource.isPageExists(game, page)) return;
+    if (await cardLocalDataSource.isPageExists(game, page)) {
+      return;
+    }
 
     int retryCount = 0;
     while (retryCount < maxRetries) {

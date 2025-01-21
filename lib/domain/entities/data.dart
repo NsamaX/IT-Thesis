@@ -22,12 +22,10 @@ class DataEntity {
     String? location,
     Action? action,
     DateTime? timestamp,
-  }) {
-    return DataEntity(
-      tagId: tagId ?? this.tagId,
-      location: location ?? this.location,
-      action: action ?? this.action,
-      timestamp: timestamp ?? this.timestamp,
-    );
-  }
+  }) => DataEntity(
+    tagId: tagId ?? this.tagId,
+    location: location ?? this.location,
+    action: action ?? this.action,
+    timestamp: timestamp ?? this.timestamp,
+  );
 }

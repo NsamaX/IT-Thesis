@@ -15,27 +15,24 @@ class CardModel {
     this.additionalData,
   });
 
-  factory CardModel.fromJson(Map<String, dynamic> json) {
-    return CardModel(
-      cardId: json['cardId'] as String? ?? '',
-      game: json['game'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      imageUrl: json['imageUrl'] as String?,
-      description: json['description'] as String?,
-      additionalData: (json['additionalData'] as Map<String, dynamic>?)?.map(
-        (key, value) => MapEntry(key, value),
-      ),
-    );
-  }
+  factory CardModel.fromJson(Map<String, dynamic> json) => CardModel(
+    cardId: json['cardId'] as String? ?? '',
+    game: json['game'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    imageUrl: json['imageUrl'] as String?,
+    description: json['description'] as String?,
+    additionalData: (json['additionalData'] as Map<String, dynamic>?)?.map(
+      (key, value) => MapEntry(key, value),
+    ),
+  );
 
-  Map<String, dynamic> toJson() {
-    return {
-      'cardId': cardId,
-      'game': game,
-      'name': name,
-      'imageUrl': imageUrl,
-      'description': description,
-      'additionalData': additionalData,
-    };
-  }
+
+  Map<String, dynamic> toJson() => {
+    'cardId': cardId,
+    'game': game,
+    'name': name,
+    'imageUrl': imageUrl,
+    'description': description,
+    'additionalData': additionalData,
+  };
 }

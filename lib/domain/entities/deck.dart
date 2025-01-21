@@ -15,11 +15,9 @@ class DeckEntity {
     String? deckId,
     String? deckName,
     Map<CardEntity, int>? cards,
-  }) {
-    return DeckEntity(
-      deckId: deckId ?? this.deckId,
-      deckName: deckName ?? this.deckName,
-      cards: cards ?? this.cards,
-    );
-  }
+  }) => DeckEntity(
+    deckId: deckId ?? this.deckId,
+    deckName: deckName ?? this.deckName,
+    cards: cards ?? this.cards,
+  );
 }
