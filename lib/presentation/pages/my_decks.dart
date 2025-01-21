@@ -73,12 +73,10 @@ class _MyDecksPageState extends State<MyDecksPage> {
   }
 
   //---------------------------------- Body ----------------------------------//
-  Widget _buildBody(BuildContext context) {
-    return BlocBuilder<DeckManagerCubit, DeckManagerState>(
-      builder: (context, state) {
-        final decks = state.decks;
-        return GridWidget(items: decks);
-      },
-    );
-  }
+  Widget _buildBody(BuildContext context) => BlocBuilder<DeckManagerCubit, DeckManagerState>(
+    builder: (context, state) {
+      final decks = state.decks;
+      return GridWidget(items: decks);
+    },
+  );
 }

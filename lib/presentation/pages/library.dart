@@ -19,27 +19,23 @@ class LibraryPage extends StatelessWidget {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('title.library'): null,
-      null: null,
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
+    Icons.arrow_back_ios_new_rounded: '/back',
+    locale.translate('title.library'): null,
+    null: null,
+  };
 
   //--------------------------------- Body ---------------------------------//
-  Widget _buildBody(BuildContext context) {
-    return BlocBuilder<NFCCubit, NFCState>(
-      builder: (context, state) {
-        final cards = context
-            .read<DeckManagerCubit>()
-            .state
-            .decks
-            .expand((deck) => deck.cards.keys)
-            .toSet()
-            .toList();
-        return GridWidget(items: cards);
-      },
-    );
-  }
+  Widget _buildBody(BuildContext context) => BlocBuilder<NFCCubit, NFCState>(
+    builder: (context, state) {
+      final cards = context
+          .read<DeckManagerCubit>()
+          .state
+          .decks
+          .expand((deck) => deck.cards.keys)
+          .toSet()
+          .toList();
+      return GridWidget(items: cards);
+    },
+  );
 }

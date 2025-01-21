@@ -19,12 +19,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
+  late TextEditingController _deckNameController;
 
   @override
   void initState() {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
+    _deckNameController = TextEditingController(text: context.read<DeckManagerCubit>().state.deck.deckName);
   }
 
   @override
@@ -37,6 +39,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   void dispose() {
     locator<RouteObserver<ModalRoute>>().unsubscribe(this);
     _nfcSessionHandler.disposeNFCSessionHandler();
+    _deckNameController.dispose();
     super.dispose();
   }
 
@@ -95,14 +98,15 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
             Icons.nfc_rounded: () => cubit.toggleNFC(_nfcCubit),
             Icons.delete_outline_rounded: () => _showDeleteDialog(context, cubit, locale),
             TextField(
-              controller: deckNameController,
+              controller: _deckNameController,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: locale.translate('title.new_deck'),
               ),
-              onSubmitted: (value) => _renameDeck(cubit, deckNameController, locale, value),
+              onChanged: (value) => cubit.renameDeck(value.trim().isNotEmpty ? value.trim() : locale.translate('title.new_deck')),
+              onSubmitted: (value) => _renameDeck(cubit, _deckNameController, locale, value),
             ): null,
             Icons.add_rounded: {
               'route': AppRoutes.games,

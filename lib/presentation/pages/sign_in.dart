@@ -29,49 +29,43 @@ class SignInPage extends StatelessWidget {
   }
 
   //--------------------------------- Widgets --------------------------------//
-  Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
-    return Text(
-      locale.translate('title.sign_in'),
-      style: theme.textTheme.titleLarge,
-      textAlign: TextAlign.center,
-    );
-  }
+  Widget _buildTitle(AppLocalizations locale, ThemeData theme) => Text(
+    locale.translate('title.sign_in'),
+    style: theme.textTheme.titleLarge,
+    textAlign: TextAlign.center,
+  );
 
-  Widget _buildGoogleSignInButton() {
-    return GestureDetector(
-      onTap: () {
-        // TODO: Implement Google sign-in functionality
-      },
-      child: Container(
-        width: 60.0,
-        height: 60.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              offset: const Offset(1.0, 1.0),
-              blurRadius: 3.0,
-              spreadRadius: 1.0,
-            ),
-          ],
-        ),
-        child: const Image(image: AssetImage('assets/images/google.png')),
+  Widget _buildGoogleSignInButton() => GestureDetector(
+    onTap: () {
+      // TODO: Implement Google sign-in functionality
+    },
+    child: Container(
+      width: 60.0,
+      height: 60.0,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            offset: const Offset(1.0, 1.0),
+            blurRadius: 3.0,
+            spreadRadius: 1.0,
+          ),
+        ],
       ),
-    );
-  }
+      child: const Image(image: AssetImage('assets/images/google.png')),
+    ),
+  );
 
-  Widget _buildGuestSignInButton(BuildContext context, AppLocalizations locale) {
-    return SizedBox(
-      width: 132,
-      height: 46,
-      child: ElevatedButton(
-        onPressed: () => _handleGuestSignIn(context),
-        child: Text(locale.translate('button.guest')),
-      ),
-    );
-  }
+  Widget _buildGuestSignInButton(BuildContext context, AppLocalizations locale) => SizedBox(
+    width: 132,
+    height: 46,
+    child: ElevatedButton(
+      onPressed: () => _handleGuestSignIn(context),
+      child: Text(locale.translate('button.guest')),
+    ),
+  );
 
   void _handleGuestSignIn(BuildContext context) {
     final settingsCubit = context.read<SettingsCubit>();

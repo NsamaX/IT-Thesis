@@ -57,6 +57,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
@@ -80,41 +81,38 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
-    return {
-      Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-      locale.translate('title.read'): null,
-      Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) => {
+    Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+    locale.translate('title.read'): null,
+    Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
+  };
 
   //--------------------------------- Body -----------------------------------//
-  Widget _buildBody(BuildContext context, AppLocalizations locale) {
-    return Scaffold(
-      appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
-      body: GestureDetector(
-        onTap: () => context.read<DrawerCubit>().closeDrawer(),
-        behavior: HitTestBehavior.opaque,
-        child: BlocBuilder<ScanCubit, ScanCubitState>(
-          builder: (context, scanState) {
-            return Stack(
-              children: [
-                const Center(child: NFCWidget()),
-                _buildHistoryDrawer(context),
-                _buildFeaturesDrawer(context),
-              ],
-            );
-          },
-        ),
+  Widget _buildBody(BuildContext context, AppLocalizations locale) => Scaffold(
+    appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
+    body: GestureDetector(
+      onTap: () => context.read<DrawerCubit>().closeDrawer(),
+      behavior: HitTestBehavior.opaque,
+      child: BlocBuilder<ScanCubit, ScanCubitState>(
+        builder: (context, scanState) {
+          return Stack(
+            children: [
+              const Center(child: NFCWidget()),
+              _buildHistoryDrawer(context),
+              _buildFeaturesDrawer(context),
+            ],
+          );
+        },
       ),
-      bottomNavigationBar: const BottomNavigationBarWidget(),
-    );
-  }
+    ),
+    bottomNavigationBar: const BottomNavigationBarWidget(),
+  );
 
   //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     final double bottomNavBarHeight = kBottomNavigationBarHeight;
+
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
       builder: (context, state) {
@@ -135,17 +133,15 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     );
   }
 
-  Widget _buildFeaturesDrawer(BuildContext context) {
-    return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) => previous['feature'] != current['feature'],
-      builder: (context, state) {
-        return AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          top: 20,
-          right: state['feature']! ? 0 : -200,
-          child: const FeaturesDrawerWidget(),
-        );
-      },
-    );
-  }
+  Widget _buildFeaturesDrawer(BuildContext context) => BlocBuilder<DrawerCubit, Map<String, bool>>(
+    buildWhen: (previous, current) => previous['feature'] != current['feature'],
+    builder: (context, state) {
+      return AnimatedPositioned(
+        duration: const Duration(milliseconds: 200),
+        top: 20,
+        right: state['feature']! ? 0 : -200,
+        child: const FeaturesDrawerWidget(),
+      );
+    },
+  );
 }

@@ -94,62 +94,56 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   }
 
   //-------------------------------- Features --------------------------------//
-  Widget _buildTextField(BuildContext context, AppLocalizations locale) {
-    return TextField(
-      controller: _deckNameController,
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.titleMedium,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: locale.translate('text.card_name'),
-      ),
-      onSubmitted: (value) {
-        _deckNameController.text = value.trim().isNotEmpty
-            ? value.trim()
-            : locale.translate('text.card_name');
-      },
-    );
-  }
+  Widget _buildTextField(BuildContext context, AppLocalizations locale) => TextField(
+    controller: _deckNameController,
+    textAlign: TextAlign.center,
+    style: Theme.of(context).textTheme.titleMedium,
+    decoration: InputDecoration(
+      border: InputBorder.none,
+      hintText: locale.translate('text.card_name'),
+    ),
+    onSubmitted: (value) {
+      _deckNameController.text = value.trim().isNotEmpty
+          ? value.trim()
+          : locale.translate('text.card_name');
+    },
+  );
 
-  void _toggleAdd(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit) {
-    if (_card != null) {
-      deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
-      Navigator.of(context).pop();
-      snackBar(
-        context,
-        content: locale.translate('snack_bar.card.add_success'),
-      );
-    }
-  }
-
-  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) {
-    NFCHelper.handleToggleNFC(
-      nfcCubit,
-      enable: !isNFCEnabled,
-      card: _card,
-      reason: 'User toggled NFC in Card Page',
+  void _toggleAdd(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
+  if (_card != null) {
+    deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
+    await snackBar(
+      context,
+      content: locale.translate('snack_bar.card.add_success'),
     );
+    Navigator.of(context).pop();
   }
+}
+
+  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) => NFCHelper.handleToggleNFC(
+    nfcCubit,
+    enable: !isNFCEnabled,
+    card: _card,
+    reason: 'User toggled NFC in Card Page',
+  );
 
   //--------------------------------- Body -----------------------------------//
-  Widget _buildBody() {
-    return BlocBuilder<DeckManagerCubit, DeckManagerState>(
-      builder: (context, state) {
-        return ListView(
-          padding: const EdgeInsets.all(40),
-          children: [
-            CardImageWidget(card: _card, isCustom: _isCustom),
-            const SizedBox(height: 24),
-            CardInfoWidget(card: _card, isCustom: _isCustom),
-            if (_isAdd)
-              CardQuantityWidget(
-                onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
-                quantityCount: 4,
-                selectedQuantity: state.quantity,
-              ),
-          ],
-        );
-      },
-    );
-  }
+  Widget _buildBody() => BlocBuilder<DeckManagerCubit, DeckManagerState>(
+    builder: (context, state) {
+      return ListView(
+        padding: const EdgeInsets.all(40),
+        children: [
+          CardImageWidget(card: _card, isCustom: _isCustom),
+          const SizedBox(height: 24),
+          CardInfoWidget(card: _card, isCustom: _isCustom),
+          if (_isAdd)
+            CardQuantityWidget(
+              onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
+              quantityCount: 4,
+              selectedQuantity: state.quantity,
+            ),
+        ],
+      );
+    },
+  );
 }

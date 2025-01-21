@@ -29,30 +29,24 @@ class IndexPage extends StatelessWidget {
   }
 
   //--------------------------------- Widgets --------------------------------//
-  Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
-    return Text(
-      locale.translate('title.index'),
-      style: theme.textTheme.titleLarge,
-      textAlign: TextAlign.center,
-    );
-  }
+  Widget _buildTitle(AppLocalizations locale, ThemeData theme) => Text(
+    locale.translate('title.index'),
+    style: theme.textTheme.titleLarge,
+    textAlign: TextAlign.center,
+  );
 
-  Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
-    return Text(
-      locale.translate('tutorial.index'),
-      style: theme.textTheme.bodyMedium,
-      textAlign: TextAlign.center,
-    );
-  }
+  Widget _buildDescription(AppLocalizations locale, ThemeData theme) => Text(
+    locale.translate('tutorial.index'),
+    style: theme.textTheme.bodyMedium,
+    textAlign: TextAlign.center,
+  );
 
-  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) {
-    return SizedBox(
-      width: 132.0,
-      height: 46.0,
-      child: ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
-        child: Text(locale.translate('button.start')),
-      ),
-    );
-  }
+  Widget _buildSignInButton(BuildContext context, AppLocalizations locale) => SizedBox(
+    width: 132.0,
+    height: 46.0,
+    child: ElevatedButton(
+      onPressed: () => Navigator.of(context).pushNamed(AppRoutes.signIn),
+      child: Text(locale.translate('button.start')),
+    ),
+  );
 }

@@ -14,11 +14,9 @@ class HistoryPage extends StatelessWidget {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('title.history'): null,
-      null: null,
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
+    Icons.arrow_back_ios_new_rounded: '/back',
+    locale.translate('title.history'): null,
+    null: null,
+  };
 }

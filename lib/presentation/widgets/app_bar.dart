@@ -58,21 +58,20 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _getMenuItemWidget(ThemeData theme, dynamic menuKey, bool isTitle) {
     if (menuKey == null) return const SizedBox.shrink();
-    switch (menuKey.runtimeType) {
-      case IconData:
-        return Icon(menuKey);
-      case String:
-        return Text(
-          menuKey,
-          style: isTitle
-              ? theme.textTheme.titleMedium
-              : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme?.color),
-          textAlign: TextAlign.center,
-        );
-      case Widget:
-        return menuKey;
-      default:
-        return const Icon(Icons.error_outline);
+    if (menuKey is IconData) {
+      return Icon(menuKey);
+    } else if (menuKey is String) {
+      return Text(
+        menuKey,
+        style: isTitle
+            ? theme.textTheme.titleMedium
+            : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme?.color),
+        textAlign: TextAlign.center,
+      );
+    } else if (menuKey is Widget) {
+      return menuKey;
+    } else {
+      return const Icon(Icons.error_outline);
     }
   }
 

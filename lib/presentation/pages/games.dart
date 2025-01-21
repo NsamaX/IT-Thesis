@@ -10,8 +10,10 @@ class GamesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+    
     final gameKeys = AppImages.game.keys.toList();
     final gameImages = AppImages.game.values.toList();
+
     final arguments = getArguments(context);
     final isAdd = arguments['isAdd'] ?? false;
 
@@ -26,11 +28,9 @@ class GamesPage extends StatelessWidget {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('title.games'): null,
-      null: null,
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
+    Icons.arrow_back_ios_new_rounded: '/back',
+    locale.translate('title.games'): null,
+    null: null,
+  };
 }

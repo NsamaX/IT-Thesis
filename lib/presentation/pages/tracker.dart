@@ -29,6 +29,14 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
+
+    if (!_nfcCubit.state.isNFCEnabled) {
+      NFCHelper.handleToggleNFC(
+        _nfcCubit,
+        enable: true,
+        reason: 'Auto-enable NFC when entering Tracker Page',
+      );
+    }
   }
 
   @override
@@ -41,6 +49,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
@@ -55,7 +64,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               }
             },
             listenWhen: (previous, current) {
-              return previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null;
+              return previous.lastestReadTags != current.lastestReadTags &&
+                  current.lastestReadTags != null;
             },
           ),
         ],
@@ -82,51 +92,57 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-    return context.watch<TrackCubit>().state.isAdvanceModeEnabled ? {
-      Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-      Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
-      locale.translate('title.tracker'): null,
-      Icons.equalizer_sharp: AppRoutes.history,
-      Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
-    } : {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      Icons.people_rounded: null,
-      locale.translate('title.tracker'): null,
-      isNFCEnabled
-              ? Icons.wifi_tethering_rounded
-              : Icons.wifi_tethering_off_rounded:
-          () => NFCHelper.handleToggleNFC(nfcCubit,
-              enable: !isNFCEnabled,
-              reason: 'User toggled NFC in Tracker Page'),
-      Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
-    };
+
+    return context.watch<TrackCubit>().state.isAdvanceModeEnabled
+        ? {
+            Icons.access_time_rounded: () =>
+                context.read<DrawerCubit>().toggleDrawer('history'),
+            Icons.refresh_rounded: () =>
+                context.read<TrackCubit>().toggleReset(deck),
+            locale.translate('title.tracker'): null,
+            Icons.equalizer_sharp: AppRoutes.history,
+            Icons.build_rounded: () =>
+                context.read<TrackCubit>().toggleAdvanceMode(),
+          }
+        : {
+            Icons.arrow_back_ios_new_rounded: '/back',
+            Icons.people_rounded: null,
+            locale.translate('title.tracker'): null,
+            isNFCEnabled
+                    ? Icons.wifi_tethering_rounded
+                    : Icons.wifi_tethering_off_rounded:
+                () => NFCHelper.handleToggleNFC(nfcCubit,
+                    enable: !isNFCEnabled,
+                    reason: 'User toggled NFC in Tracker Page'),
+            Icons.build_outlined: () =>
+                context.read<TrackCubit>().toggleAdvanceMode(),
+          };
   }
 
   //--------------------------------- Body ---------------------------------//
-  Widget _buildBody(BuildContext context, TrackState state) {
-    return GestureDetector(
-      onTap: () => context.read<DrawerCubit>().closeDrawer(),
-      behavior: HitTestBehavior.opaque,
-      child: BlocBuilder<DrawerCubit, Map<String, bool>>(
-        builder: (context, drawerState) {
-          final isDrawerOpen = drawerState['history'] ?? false;
-          return Stack(
-            children: [
-              AbsorbPointer(
-                absorbing: isDrawerOpen,
-                child: _buildCardList(context, state),
-              ),
-              _buildHistoryDrawer(context),
-            ],
-          );
-        },
-      ),
-    );
-  }
-  
+  Widget _buildBody(BuildContext context, TrackState state) => GestureDetector(
+    onTap: () => context.read<DrawerCubit>().closeDrawer(),
+    behavior: HitTestBehavior.opaque,
+    child: BlocBuilder<DrawerCubit, Map<String, bool>>(
+      builder: (context, drawerState) {
+        final isDrawerOpen = drawerState['history'] ?? false;
+        return Stack(
+          children: [
+            AbsorbPointer(
+              absorbing: isDrawerOpen,
+              child: _buildCardList(context, state),
+            ),
+            _buildHistoryDrawer(context),
+          ],
+        );
+      },
+    ),
+  );
+
   //--------------------------------- Widgets ---------------------------------//
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
+    
     return Stack(
       children: [
         Padding(
@@ -158,20 +174,19 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     );
   }
 
-  void _showTrackerDialog(BuildContext context, AppLocalizations locale) {
-    Future.microtask(() {
-      context.read<TrackCubit>().showDialog();
-      cupertinoAlertDialog(
-        context,
-        title: locale.translate('dialog.tracker.title'),
-        content: locale.translate('dialog.tracker.content'),
-      );
-    });
-  }
+  void _showTrackerDialog(BuildContext context, AppLocalizations locale) => Future.microtask(() {
+    context.read<TrackCubit>().showDialog();
+    cupertinoAlertDialog(
+      context,
+      title: locale.translate('dialog.tracker.title'),
+      content: locale.translate('dialog.tracker.content'),
+    );
+  });
 
   //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
+
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
       builder: (context, drawerState) {

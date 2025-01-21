@@ -41,6 +41,7 @@ class SearchPage extends StatelessWidget {
 
   Map<String, dynamic> _getArguments(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments;
+    
     if (arguments is Map<String, dynamic>) {
       return {
         'game': arguments['game'] ?? '',
@@ -52,40 +53,36 @@ class SearchPage extends StatelessWidget {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('title.search'): null,
-      null: null,
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
+    Icons.arrow_back_ios_new_rounded: '/back',
+    locale.translate('title.search'): null,
+    null: null,
+  };
   
   //---------------------------------- Body ----------------------------------//
-  Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) {
-    return BlocBuilder<SearchCubit, SearchState>(
-      builder: (context, state) {
-        if (state.isLoading) {
-          return const Expanded(
-            child: Center(child: CircularProgressIndicator()),
-          );
-        } else if (state.errorMessage != null) {
-          return Expanded(
-            child: Center(
-              child: Text(state.errorMessage!.isNotEmpty
-                  ? state.errorMessage!
-                  : AppLocalizations.of(context).translate('text.internet_error')),
-            ),
-          );
-        } else {
-          return Expanded(
-            child: CardListWidget(
-              cards: state.searchedCards,
-              isAdd: arguments['isAdd'],
-              isCustom: arguments['isCustom'],
-            ),
-          );
-        }
-      },
-    );
-  }
+  Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) => BlocBuilder<SearchCubit, SearchState>(
+    builder: (context, state) {
+      if (state.isLoading) {
+        return const Expanded(
+          child: Center(child: CircularProgressIndicator()),
+        );
+      } else if (state.errorMessage != null) {
+        return Expanded(
+          child: Center(
+            child: Text(state.errorMessage!.isNotEmpty
+                ? state.errorMessage!
+                : AppLocalizations.of(context).translate('text.internet_error')),
+          ),
+        );
+      } else {
+        return Expanded(
+          child: CardListWidget(
+            cards: state.searchedCards,
+            isAdd: arguments['isAdd'],
+            isCustom: arguments['isCustom'],
+          ),
+        );
+      }
+    },
+  );
 }

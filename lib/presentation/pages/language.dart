@@ -19,32 +19,26 @@ class LanguagePage extends StatelessWidget {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) {
-    return {
-      Icons.arrow_back_ios_new_rounded: '/back',
-      locale.translate('title.language'): null,
-      null: null,
-    };
-  }
+  Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
+    Icons.arrow_back_ios_new_rounded: '/back',
+    locale.translate('title.language'): null,
+    null: null,
+  };
 
   //--------------------------- Supported Languages --------------------------//
   Map<String, dynamic> _buildSupportedLanguages(
     AppLocalizations locale,
     SettingsCubit cubit,
   ) {
-    final supportedLanguages = locale.languageNames.entries.map((entry) {
-      return {
-        'code': entry.key,
-        'name': entry.value,
-      };
+    final supportedLanguages = locale.languageNames.entries.map((entry) => {
+      'code': entry.key,
+      'name': entry.value,
     }).toList();
     return {
-      'content': supportedLanguages.map((lang) {
-        return {
-          'onTap': () => cubit.updateLanguage(lang['code']!),
-          'text': lang['name']!,
-          'select': lang['code'] == locale.locale.languageCode,
-        };
+      'content': supportedLanguages.map((lang) => {
+        'onTap': () => cubit.updateLanguage(lang['code']!),
+        'text': lang['name']!,
+        'select': lang['code'] == locale.locale.languageCode,
       }).toList(),
     };
   }
