@@ -7,7 +7,6 @@ class AppRoutes {
   static const String myDecks  = '/my_decks';
   static const String newDeck  = '/new_deck';
   static const String tracker  = '/tracker';
-  static const String history  = '/history';
   static const String read     = '/read';
   static const String games    = '/games';
   static const String search   = '/search';
@@ -25,7 +24,6 @@ class AppRoutes {
       myDecks:  (_) => MyDecksPage(),
       newDeck:  (_) => NewDeckPage(),
       tracker:  (_) => TrackerPage(),
-      history:  (_) => HistoryPage(),
       read:     (_) => ReadPage(),
       games:    (_) => GamesPage(),
       search:   (_) => SearchPage(),

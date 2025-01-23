@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
-import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
@@ -90,7 +89,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
             Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
             locale.translate('title.tracker'): null,
-            Icons.equalizer_sharp: AppRoutes.history,
+            isNFCEnabled
+                    ? Icons.wifi_tethering_rounded
+                    : Icons.wifi_tethering_off_rounded:
+                () => NFCHelper.handleToggleNFC(nfcCubit,
+                    enable: !isNFCEnabled,
+                    reason: 'User toggled NFC in Tracker Page'),
             Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
           }
         : {
