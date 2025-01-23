@@ -88,7 +88,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-            Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
+            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
             locale.translate('title.tracker'): null,
             Icons.equalizer_sharp: AppRoutes.history,
             Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
@@ -105,6 +105,35 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
                     reason: 'User toggled NFC in Tracker Page'),
             Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
           };
+  }
+
+  //-------------------------------- Features --------------------------------//
+  void _resetMultipleChoicesDialog(BuildContext context, DeckEntity deck) {
+    cupertinoMultipleChoicesDialog(
+      context,
+      AppLocalizations.of(context).translate('dialog.reset_deck.title'),
+      AppLocalizations.of(context).translate('dialog.reset_deck.content'),
+      {
+        AppLocalizations.of(context).translate('button.reset'): {
+          'onPressed': () {
+            context.read<TrackCubit>().toggleReset(deck);
+            Navigator.of(context).pop();
+          },
+          'isCancel': false,
+        },
+        AppLocalizations.of(context).translate('toggle.save'): {
+          'onPressed': () {
+            // TODO: Save deck
+            Navigator.of(context).pop();
+          },
+          'isCancel': false,
+        },
+        AppLocalizations.of(context).translate('button.cancel'): {
+          'onPressed': () => Navigator.of(context).pop(),
+          'isCancel': true,
+        },
+      },
+    );
   }
 
   //--------------------------------- Body ---------------------------------//
@@ -165,8 +194,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     context.read<TrackCubit>().showDialog();
     cupertinoAlertDialog(
       context,
-      locale.translate('dialog.tracker.title'),
-      locale.translate('dialog.tracker.content'),
+      locale.translate('dialog.tracker_tutorial.title'),
+      locale.translate('dialog.tracker_tutorial.content'),
     );
   });
 

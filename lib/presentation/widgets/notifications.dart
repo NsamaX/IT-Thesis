@@ -8,25 +8,26 @@ const _dialogTransitionDuration = Duration(milliseconds: 200);
 const _successColor = CupertinoColors.systemGreen;
 const _errorColor = CupertinoColors.systemRed;
 
-Future<void> snackBar(BuildContext context, String content, {bool isError = false}) async => Future.delayed(
-  _snackBarDuration,
-  () => ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(content, style: const TextStyle(color: Colors.white)),
-      duration: _snackBarDuration,
-      backgroundColor: isError ? _errorColor : _successColor,
-    ),
-  ),
-);
+Future<void> snackBar(BuildContext context, String content, {bool isError = false}) async =>
+    Future.delayed(
+      _snackBarDuration,
+      () => ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(content, style: const TextStyle(color: Colors.white)),
+          duration: _snackBarDuration,
+          backgroundColor: isError ? _errorColor : _successColor,
+        ),
+      ),
+    );
 
 void cupertinoAlertDialog(BuildContext context, String title, String content) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
   showGeneralDialog(
     context: context,
-    barrierDismissible: true,
+    barrierDismissible: false,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withOpacity(0.2),
     pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
       title: _buildDialogTitleText(theme, title),
       content: _buildDialogContentText(theme, content),
@@ -46,9 +47,12 @@ void cupertinoAlertDialog(BuildContext context, String title, String content) {
 void cupertinoAlertDialogAction(BuildContext context, String title, String content, VoidCallback onConfirm) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-  showCupertinoDialog(
+  showGeneralDialog(
     context: context,
-    builder: (BuildContext context) => CupertinoAlertDialog(
+    barrierDismissible: false,
+    barrierLabel: 'Dismiss',
+    barrierColor: Colors.black.withOpacity(0.2),
+    pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
       title: _buildDialogTitleText(theme, title),
       content: _buildDialogContentText(theme, content),
       actions: [
@@ -72,20 +76,61 @@ void cupertinoAlertDialogAction(BuildContext context, String title, String conte
   );
 }
 
+void cupertinoMultipleChoicesDialog(
+  BuildContext context,
+  String title,
+  String content,
+  Map<String, Map<String, dynamic>> choices,
+) {
+  final theme = Theme.of(context);
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: false,
+    barrierLabel: 'Dismiss',
+    barrierColor: Colors.black.withOpacity(0.2),
+    pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
+      title: _buildDialogTitleText(theme, title),
+      content: _buildDialogContentText(theme, content),
+      actions: choices.entries.map((entry) {
+        final isCancel = entry.value['isCancel'] ?? false;
+        final callback = entry.value['onPressed'] as VoidCallback;
+        return _buildDialogAction(
+          theme,
+          entry.key,
+          callback,
+          isCancel ? CupertinoColors.destructiveRed : CupertinoColors.activeBlue,
+        );
+      }).toList(),
+    ),
+  );
+}
+
 Widget _buildDialogTitleText(ThemeData theme, String text) => Text(
   text,
-  style: theme.textTheme.titleMedium?.copyWith(color: CupertinoColors.black, fontSize: 18.0),
+  style: TextStyle(
+    color: Colors.black,
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold,
+  ),
 );
 
 Widget _buildDialogContentText(ThemeData theme, String text) => Text(
   text,
-  style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
+  style: TextStyle(
+    color: Colors.black,
+    fontSize: 12.0,
+    fontWeight: FontWeight.w100,
+  ),
 );
 
 Widget _buildDialogAction(ThemeData theme, String label, VoidCallback onPressed, Color color) => CupertinoDialogAction(
   onPressed: onPressed,
   child: Text(
     label,
-    style: theme.textTheme.bodyMedium?.copyWith(color: color),
+    style: TextStyle(
+      color: color,
+      fontSize: 12.0,
+      fontWeight: FontWeight.w100,
+    ),
   ),
 );

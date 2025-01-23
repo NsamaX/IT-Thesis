@@ -125,8 +125,8 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cupertinoAlertDialogAction(
       context,
-      locale.translate('dialog.deck.title'),
-      locale.translate('dialog.deck.content'),
+      locale.translate('dialog.delete_deck.title'),
+      locale.translate('dialog.delete_deck.content'),
       () {
         cubit.toggleDelete();
         snackBar(

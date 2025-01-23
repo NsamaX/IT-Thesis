@@ -26,6 +26,7 @@
   "button": {
     "start": "Start",
     "guest": "Guest",
+    "reset": "Reset",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "ok": "OK"
@@ -68,13 +69,17 @@
     }
   },
   "dialog": {
-    "deck": {
+    "delete_deck": {
       "title": "Delete All Cards",
       "content": "Are you sure you want to delete all cards in this deck? This action cannot be undone."
     },
-    "tracker": {
+    "tracker_tutorial": {
       "title": "Card Tracking Tutorial",
       "content": "On this page, you can scan cards while playing. When a card is scanned, it will be removed from the deck. Scanning it again adds it back. Tap OK to proceed."
+    },
+    "reset_deck": {
+      "title": "Would you like to reset?",
+      "content": "You can choose to save your game or just reset."
     }
   },
   "snack_bar": {
