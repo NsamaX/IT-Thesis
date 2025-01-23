@@ -82,23 +82,16 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(
-    BuildContext context,
-    AppLocalizations locale,
-    DeckEntity deck,
-  ) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale, DeckEntity deck) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled
         ? {
-            Icons.access_time_rounded: () =>
-                context.read<DrawerCubit>().toggleDrawer('history'),
-            Icons.refresh_rounded: () =>
-                context.read<TrackCubit>().toggleReset(deck),
+            Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
+            Icons.refresh_rounded: () => context.read<TrackCubit>().toggleReset(deck),
             locale.translate('title.tracker'): null,
             Icons.equalizer_sharp: AppRoutes.history,
-            Icons.build_rounded: () =>
-                context.read<TrackCubit>().toggleAdvanceMode(),
+            Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
@@ -110,8 +103,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
                 () => NFCHelper.handleToggleNFC(nfcCubit,
                     enable: !isNFCEnabled,
                     reason: 'User toggled NFC in Tracker Page'),
-            Icons.build_outlined: () =>
-                context.read<TrackCubit>().toggleAdvanceMode(),
+            Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
           };
   }
 

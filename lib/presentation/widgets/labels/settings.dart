@@ -85,7 +85,10 @@ class SettingsLabelWidget extends StatelessWidget {
   }
 
   void _handleOnTap(BuildContext context, dynamic onTap) {
-    if (onTap is String) Navigator.pushNamed(context, onTap);
-    else if (onTap is VoidCallback) onTap();
+    if (onTap is String) {
+      Navigator.pushNamed(context, onTap);
+    } else if (onTap is VoidCallback) {
+      onTap();
+    }
   }
 }
