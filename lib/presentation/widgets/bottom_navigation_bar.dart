@@ -9,13 +9,11 @@ class BottomNavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-
     final navigationItems = [
       {'icon': Icons.web_stories_rounded, 'label': 'navigation.decks'},
       {'icon': Icons.insert_page_break_outlined, 'label': 'navigation.read'},
       {'icon': Icons.settings, 'label': 'navigation.settings'},
     ];
-
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) => BottomNavigationBar(
         currentIndex: state.currentPageIndex,
@@ -28,7 +26,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
   void _navigateToPage(BuildContext context, int index) {
     final cubit = context.read<AppCubit>();
-
     if (index != cubit.state.currentPageIndex) {
       cubit.updatePageIndex(index);
       Navigator.pushNamedAndRemoveUntil(

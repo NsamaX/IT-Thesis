@@ -8,7 +8,6 @@ class SettingsLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Padding(
       padding: const EdgeInsets.only(top: 2.0),
       child: Column(
@@ -16,7 +15,6 @@ class SettingsLabelWidget extends StatelessWidget {
         children: label.map((category) {
           final title = category['title'] as String?;
           final content = category['content'] as List<dynamic>;
-      
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -37,31 +35,17 @@ class SettingsLabelWidget extends StatelessWidget {
     ),
   );
 
-  List<Widget> _buildContentList(
-    BuildContext context,
-    ThemeData theme,
-    List<dynamic> content,
-  ) => content.map((item) {
+  List<Widget> _buildContentList(BuildContext context, ThemeData theme, List<dynamic> content) => content.map((item) {
     final icon = item['icon'] as IconData?;
     final text = item['text'] as String;
     final info = item['info'] as String?;
     final select = item['select'] as bool?;
     final onTap = item['onTap'];
-
     return _buildContentItem(context, theme, onTap, icon, text, info, select);
   }).toList();
 
-  Widget _buildContentItem(
-    BuildContext context,
-    ThemeData theme,
-    dynamic onTap,
-    IconData? icon,
-    String text,
-    String? info,
-    bool? select,
-  ) {
+  Widget _buildContentItem(BuildContext context, ThemeData theme, dynamic onTap, IconData? icon, String text, String? info, bool? select) {
     final hasRoute = onTap is String;
-
     return GestureDetector(
       onTap: () => _handleOnTap(context, onTap),
       child: Container(
@@ -101,10 +85,7 @@ class SettingsLabelWidget extends StatelessWidget {
   }
 
   void _handleOnTap(BuildContext context, dynamic onTap) {
-    if (onTap is String) {
-      Navigator.pushNamed(context, onTap);
-    } else if (onTap is VoidCallback) {
-      onTap();
-    }
+    if (onTap is String) Navigator.pushNamed(context, onTap);
+    else if (onTap is VoidCallback) onTap();
   }
 }

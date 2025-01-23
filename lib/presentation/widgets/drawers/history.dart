@@ -15,7 +15,6 @@ class HistoryDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final reversedCards = cards.reversed.toList();
-    
     return Container(
       width: 200,
       height: height,
@@ -32,12 +31,10 @@ class HistoryDrawerWidget extends StatelessWidget {
       ),
       child: ListView.builder(
         itemCount: reversedCards.length,
-        itemBuilder: (context, index) {
-          return CardLabelWidget(
-            card: reversedCards[index],
-            lightTheme: true,
-          );
-        },
+        itemBuilder: (context, index) => CardLabelWidget(
+          card: reversedCards[index],
+          lightTheme: true,
+        ),
       ),
     );
   }

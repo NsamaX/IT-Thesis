@@ -90,18 +90,16 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
     });
   }
 
-  List<CardModel> _parseCards(List<Map<String, dynamic>> rows) {
-    return rows.map((row) {
-      return CardModel(
-        cardId: row[columnId],
-        game: row[columnGame],
-        name: row[columnName],
-        description: row[columnDescription],
-        imageUrl: row[columnImageUrl],
-        additionalData: json.decode(row[columnAdditionalData] ?? '{}'),
-      );
-    }).toList();
-  }
+  List<CardModel> _parseCards(List<Map<String, dynamic>> rows) => rows.map((row) {
+    return CardModel(
+      cardId: row[columnId],
+      game: row[columnGame],
+      name: row[columnName],
+      description: row[columnDescription],
+      imageUrl: row[columnImageUrl],
+      additionalData: json.decode(row[columnAdditionalData] ?? '{}'),
+    );
+  }).toList();
 
   Future<void> _savePageIfNotExists(String game, int page) async {
     if (!await isPageExists(game, page)) {

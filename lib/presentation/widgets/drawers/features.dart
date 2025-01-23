@@ -12,11 +12,9 @@ class FeaturesDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
-
         return Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Column(
@@ -48,12 +46,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
     Navigator.of(context).pushNamed(route, arguments: arguments);
   }
 
-  Widget _buildFeatureItem(
-    ThemeData theme, {
-    VoidCallback? onTap,
-    String? image,
-    String? label,
-  }) => Padding(
+  Widget _buildFeatureItem(ThemeData theme, {VoidCallback? onTap, String? image, String? label}) => Padding(
     padding: const EdgeInsets.only(bottom: 20.0),
     child: GestureDetector(
       onTap: onTap,
@@ -65,23 +58,19 @@ class FeaturesDrawerWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withOpacity(0.2),
               blurRadius: 4.0,
               spreadRadius: 1.0,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: _buildFeatureContent(theme, image: image, label: label),
+        child: _buildFeatureContent(theme, image, label),
       ),
     ),
   );
 
-  Widget _buildFeatureContent(
-    ThemeData theme, {
-    String? image,
-    String? label,
-  }) {
+  Widget _buildFeatureContent(ThemeData theme, String? image, String? label) {
     if (image != null) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -92,7 +81,6 @@ class FeaturesDrawerWidget extends StatelessWidget {
         ),
       );
     }
-
     return Center(
       child: Text(
         label ?? '',

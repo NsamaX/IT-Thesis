@@ -7,12 +7,10 @@ class AppButtonStyles {
 
   AppButtonStyles(this.isDarkMode);
 
-  ButtonStyle get elevatedButton {
-    return ElevatedButton.styleFrom(
-      backgroundColor: isDarkMode
-          ? AppColors.DarkModeText
-          : AppColors.LightModeText,
-      textStyle: AppTextStyles(isDarkMode).bodyLarge,
-    );
-  }
+  ButtonStyle get elevatedButton => ElevatedButton.styleFrom(
+    backgroundColor: isDarkMode
+        ? AppColors.DarkModeText
+        : AppColors.LightModeText,
+    textStyle: AppTextStyles(isDarkMode).bodyLarge,
+  );
 }

@@ -23,7 +23,9 @@ class _MyDecksPageState extends State<MyDecksPage> {
   void initState() {
     super.initState();
     _DeckManagerCubit = context.read<DeckManagerCubit>();
-    if(_DeckManagerCubit.state.isEditModeEnabled) _DeckManagerCubit.toggleEditMode();
+    if(_DeckManagerCubit.state.isEditModeEnabled) {
+      _DeckManagerCubit.toggleEditMode();
+    }
   }
 
   //---------------------------------- Build ---------------------------------//
@@ -40,11 +42,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(
-    BuildContext context,
-    DeckManagerCubit cubit,
-    AppLocalizations locale,
-  ) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final state = context.watch<DeckManagerCubit>().state;
     return {
       Icons.open_in_new_rounded: () => _createNewDeck(context, cubit, locale),
@@ -52,13 +50,9 @@ class _MyDecksPageState extends State<MyDecksPage> {
       state.decks.isNotEmpty ? Icons.edit_rounded : null: cubit.toggleEditMode,
     };
   }
-  
+
   //-------------------------------- Features --------------------------------//
-  void _createNewDeck(
-    BuildContext context,
-    DeckManagerCubit cubit,
-    AppLocalizations locale,
-  ) async {
+  void _createNewDeck(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) async {
     final newDeck = DeckEntity(
       deckId: const Uuid().v4(),
       deckName: locale.translate('title.new_deck'),

@@ -15,7 +15,6 @@ class DeckModel {
   factory DeckModel.fromJson(Map<String, dynamic> json) {
     final cardsJson = json['cards'] as String? ?? '{}';
     final decodedCards = jsonDecode(cardsJson) as Map<String, dynamic>;
-    
     return DeckModel(
       deckId: json['deckId'] as String? ?? '',
       deckName: json['deckName'] as String? ?? '',

@@ -8,11 +8,7 @@ const _dialogTransitionDuration = Duration(milliseconds: 200);
 const _successColor = CupertinoColors.systemGreen;
 const _errorColor = CupertinoColors.systemRed;
 
-Future<void> snackBar(
-  BuildContext context, {
-  required String content,
-  bool isError = false,
-}) async => Future.delayed(
+Future<void> snackBar(BuildContext context, String content, {bool isError = false}) async => Future.delayed(
   _snackBarDuration,
   () => ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -23,14 +19,9 @@ Future<void> snackBar(
   ),
 );
 
-void cupertinoAlertDialog(
-  BuildContext context, {
-  required String title,
-  required String content,
-}) {
+void cupertinoAlertDialog(BuildContext context, String title, String content) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
@@ -42,9 +33,9 @@ void cupertinoAlertDialog(
       actions: [
         _buildDialogAction(
           theme,
-          label: locale.translate('button.ok'),
-          onPressed: () => Navigator.of(context).pop(),
-          color: CupertinoColors.systemBlue,
+          locale.translate('button.ok'),
+          () => Navigator.of(context).pop(),
+          CupertinoColors.systemBlue,
         ),
       ],
     ),
@@ -52,15 +43,9 @@ void cupertinoAlertDialog(
   );
 }
 
-void cupertinoAlertDialogAction(
-  BuildContext context, {
-  required String title,
-  required String content,
-  required VoidCallback onConfirm,
-}) {
+void cupertinoAlertDialogAction(BuildContext context, String title, String content, VoidCallback onConfirm) {
   final locale = AppLocalizations.of(context);
   final theme = Theme.of(context);
-
   showCupertinoDialog(
     context: context,
     builder: (BuildContext context) => CupertinoAlertDialog(
@@ -69,18 +54,18 @@ void cupertinoAlertDialogAction(
       actions: [
         _buildDialogAction(
           theme,
-          label: locale.translate('button.cancel'),
-          onPressed: () => Navigator.of(context).pop(),
-          color: _errorColor,
+          locale.translate('button.cancel'),
+          () => Navigator.of(context).pop(),
+          _errorColor,
         ),
         _buildDialogAction(
           theme,
-          label: locale.translate('button.confirm'),
-          onPressed: () {
+          locale.translate('button.confirm'),
+          () {
             Navigator.of(context).pop();
             onConfirm();
           },
-          color: CupertinoColors.systemBlue,
+          CupertinoColors.systemBlue,
         ),
       ],
     ),
@@ -97,12 +82,7 @@ Widget _buildDialogContentText(ThemeData theme, String text) => Text(
   style: theme.textTheme.bodyMedium?.copyWith(color: CupertinoColors.black),
 );
 
-Widget _buildDialogAction(
-  ThemeData theme, {
-  required String label,
-  required VoidCallback onPressed,
-  required Color color,
-}) => CupertinoDialogAction(
+Widget _buildDialogAction(ThemeData theme, String label, VoidCallback onPressed, Color color) => CupertinoDialogAction(
   onPressed: onPressed,
   child: Text(
     label,

@@ -3,14 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../../cubits/deck_manager.dart';
 
-Widget buildEditControls(
-  BuildContext context, {
-  required CardEntity card,
-  required int count,
-}) {
+Widget buildEditControls(BuildContext context, CardEntity card, int count) {
   const double buttonSize = 24.0;
   const double spacing = 12.0;
-
   return Positioned(
     top: 0.0,
     right: 0.0,
@@ -50,7 +45,6 @@ class _CircleIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Container(
       width: size,
       height: size,
@@ -84,7 +78,6 @@ class _OperatorButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: onPressed,
       child: Container(

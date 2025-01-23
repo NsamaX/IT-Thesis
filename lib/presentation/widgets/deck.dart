@@ -14,7 +14,6 @@ class DeckWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final cubit = context.read<DeckManagerCubit>();
     final isEditModeEnabled = context.watch<DeckManagerCubit>().state.isEditModeEnabled;
-
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -25,19 +24,18 @@ class DeckWidget extends StatelessWidget {
           },
           child: _buildDeckContainer(theme),
         ),
-        if (isEditModeEnabled)
-          Positioned(
-            top: -2.0,
-            right: -2.0,
-            child: AnimatedOpacity(
-              opacity: isEditModeEnabled ? 1.0 : 0.0,
-              duration: const Duration(milliseconds: 300),
-              child: GestureDetector(
-                onTap: () => cubit.deleteDeck(deck),
-                child: _buildDeleteButton(theme),
-              ),
+        if (isEditModeEnabled) Positioned(
+          top: -2.0,
+          right: -2.0,
+          child: AnimatedOpacity(
+            opacity: isEditModeEnabled ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 300),
+            child: GestureDetector(
+              onTap: () => cubit.deleteDeck(deck),
+              child: _buildDeleteButton(theme),
             ),
           ),
+        ),
       ],
     );
   }

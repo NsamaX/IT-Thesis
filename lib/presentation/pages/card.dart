@@ -42,13 +42,11 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.didChangeDependencies();
     final locale = AppLocalizations.of(context);
     _deckNameController.text = locale.translate('text.card_name');
-
     final arguments = getArguments(context);
     _card = arguments['card'] as CardEntity?;
     _isNFC = arguments['isNFC'] ?? true;
     _isAdd = arguments['isAdd'] ?? false;
     _isCustom = arguments['isCustom'] ?? false;
-
     if (_card != null) {
       context.read<DeckManagerCubit>().setQuantity(1);
     }
@@ -65,7 +63,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
       body: _buildBody(),
@@ -77,7 +74,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
       _isCustom
@@ -114,7 +110,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
     await snackBar(
       context,
-      content: locale.translate('snack_bar.card.add_success'),
+      locale.translate('snack_bar.card.add_success'),
     );
     Navigator.of(context).pop();
   }
@@ -129,21 +125,18 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
   //--------------------------------- Body -----------------------------------//
   Widget _buildBody() => BlocBuilder<DeckManagerCubit, DeckManagerState>(
-    builder: (context, state) {
-      return ListView(
-        padding: const EdgeInsets.all(40),
-        children: [
-          CardImageWidget(card: _card, isCustom: _isCustom),
-          const SizedBox(height: 24),
-          CardInfoWidget(card: _card, isCustom: _isCustom),
-          if (_isAdd)
-            CardQuantityWidget(
-              onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
-              quantityCount: 4,
-              selectedQuantity: state.quantity,
-            ),
-        ],
-      );
-    },
+    builder: (context, state) => ListView(
+      padding: const EdgeInsets.all(40),
+      children: [
+        CardImageWidget(card: _card, isCustom: _isCustom),
+        const SizedBox(height: 24),
+        CardInfoWidget(card: _card, isCustom: _isCustom),
+        if (_isAdd) CardQuantityWidget(
+          onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
+          quantityCount: 4,
+          selectedQuantity: state.quantity,
+        ),
+      ],
+    ),
   );
 }

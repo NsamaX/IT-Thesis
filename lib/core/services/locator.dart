@@ -23,24 +23,20 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
 
   //------------------------------ Repositories ------------------------------//
-  locator.registerFactoryParam<GameApi, String, void>(
-    (game, _) => GameFactory.createApi(game),
-  );
-  locator.registerFactoryParam<CardRepository, String, void>((game, _) {
-    return CardRepositoryImpl(
-      gameApi: locator<GameApi>(param1: game),
-      cardLocalDataSource: locator<CardLocalDataSource>(),
-    );
-  });
+  locator.registerFactoryParam<GameApi, String, void>((game, _) => GameFactory.createApi(game));
+  locator.registerFactoryParam<CardRepository, String, void>((game, _) => CardRepositoryImpl(
+    gameApi: locator<GameApi>(param1: game),
+    cardLocalDataSource: locator<CardLocalDataSource>(),
+  ));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
 
   //-------------------------------- UseCases --------------------------------//
-  locator.registerFactoryParam<FetchCardByIdUseCase, String, void>(
-    (game, _) => FetchCardByIdUseCase(locator<CardRepository>(param1: game)),
+  locator.registerFactoryParam<FetchCardByIdUseCase, String, void>((game, _) => FetchCardByIdUseCase(
+    locator<CardRepository>(param1: game)),
   );
-  locator.registerFactoryParam<SyncCardsUseCase, String, void>(
-    (game, _) => SyncCardsUseCase(locator<CardRepository>(param1: game)),
+  locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) => SyncCardsUseCase(
+    locator<CardRepository>(param1: game)),
   );
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());

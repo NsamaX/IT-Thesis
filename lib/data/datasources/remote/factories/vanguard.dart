@@ -20,35 +20,31 @@ class VanguardApi extends BaseApi implements GameApi {
     return _filterCardData(data);
   }
 
-  List<CardModel> _filterCardData(List<dynamic> cardsData) {
-    return cardsData
-        .where((card) =>
-            card['sets'] != null &&
-            card['format'] != 'Vanguard ZERO' &&
-            (card['sets'] as List).isNotEmpty)
-        .map((cardData) => _parseCardData(cardData))
-        .toList();
-  }
+  List<CardModel> _filterCardData(List<dynamic> cardsData) => cardsData
+      .where((card) =>
+          card['sets'] != null &&
+          card['format'] != 'Vanguard ZERO' &&
+          (card['sets'] as List).isNotEmpty)
+      .map((cardData) => _parseCardData(cardData))
+      .toList();
 
-  CardModel _parseCardData(Map<String, dynamic> cardData) {
-    return CardModel(
-      cardId: cardData['id']?.toString() ?? '',
-      game: 'vanguard',
-      name: cardData['name'] ?? '',
-      description: cardData['format'] ?? '',
-      imageUrl: cardData['imageurljp'] ?? '',
-      additionalData: {
-        'cardType': cardData['cardtype'] ?? '',
-        'clan': cardData['clan'] ?? '',
-        'effect': cardData['effect'] ?? '',
-        'grade': cardData['grade'] ?? '',
-        'power': cardData['power'] ?? 0,
-        'shield': cardData['shield'] ?? 0,
-        'nation': cardData['nation'] ?? '',
-        'race': cardData['race'] ?? '',
-        'sets': cardData['sets'] ?? [],
-        'skill': cardData['skill'] ?? '',
-      },
-    );
-  }
+  CardModel _parseCardData(Map<String, dynamic> cardData) => CardModel(
+    cardId: cardData['id']?.toString() ?? '',
+    game: 'vanguard',
+    name: cardData['name'] ?? '',
+    description: cardData['format'] ?? '',
+    imageUrl: cardData['imageurljp'] ?? '',
+    additionalData: {
+      'cardType': cardData['cardtype'] ?? '',
+      'clan': cardData['clan'] ?? '',
+      'effect': cardData['effect'] ?? '',
+      'grade': cardData['grade'] ?? '',
+      'power': cardData['power'] ?? 0,
+      'shield': cardData['shield'] ?? 0,
+      'nation': cardData['nation'] ?? '',
+      'race': cardData['race'] ?? '',
+      'sets': cardData['sets'] ?? [],
+      'skill': cardData['skill'] ?? '',
+    },
+  );
 }

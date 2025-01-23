@@ -17,10 +17,9 @@ class CardImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return isCustom
         ? _buildDottedPlaceholder(locale, theme)
-        : _buildCardImage(locale, theme, card: card);
+        : _buildCardImage(locale, theme, card);
   }
 
   Widget _buildDottedPlaceholder(AppLocalizations locale, ThemeData theme) => AspectRatio(
@@ -34,18 +33,16 @@ class CardImageWidget extends StatelessWidget {
       child: _buildPlaceholderContent(
         locale,
         theme,
-        icon: Icons.upload_rounded,
-        textKey: 'text.upload_image',
+        Icons.upload_rounded,
+        'text.upload_image',
       ),
     ),
   );
 
-  Widget _buildCardImage(
-    AppLocalizations locale,
-    ThemeData theme,{
-    CardEntity? card,
-  }) {
-    if (card?.imageUrl == null) return _buildErrorImage(locale, theme);
+  Widget _buildCardImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
+    if (card?.imageUrl == null) {
+      return _buildErrorImage(locale, theme);
+    }
     return Container(
       decoration: _buildBoxDecoration(theme),
       child: ClipRRect(
@@ -65,16 +62,11 @@ class CardImageWidget extends StatelessWidget {
   Widget _buildErrorImage(AppLocalizations locale, ThemeData theme) => _buildPlaceholderContent(
     locale,
     theme,
-    icon: Icons.image_not_supported,
-    textKey: 'text.no_card_image',
+    Icons.image_not_supported,
+    'text.no_card_image',
   );
 
-  Widget _buildPlaceholderContent(
-    AppLocalizations locale,
-    ThemeData theme, {
-    required IconData icon,
-    required String textKey,
-  }) => Center(
+  Widget _buildPlaceholderContent(AppLocalizations locale, ThemeData theme, IconData icon, String textKey) => Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

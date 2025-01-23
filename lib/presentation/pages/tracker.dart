@@ -29,7 +29,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
-
     if (!_nfcCubit.state.isNFCEnabled) {
       NFCHelper.handleToggleNFC(
         _nfcCubit,
@@ -49,7 +48,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
-    
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
@@ -64,8 +62,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               }
             },
             listenWhen: (previous, current) {
-              return previous.lastestReadTags != current.lastestReadTags &&
-                  current.lastestReadTags != null;
+              return previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null;
             },
           ),
         ],
@@ -92,7 +89,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   ) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () =>
@@ -142,7 +138,6 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   //--------------------------------- Widgets ---------------------------------//
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
-    
     return Stack(
       children: [
         Padding(
@@ -178,32 +173,27 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     context.read<TrackCubit>().showDialog();
     cupertinoAlertDialog(
       context,
-      title: locale.translate('dialog.tracker.title'),
-      content: locale.translate('dialog.tracker.content'),
+      locale.translate('dialog.tracker.title'),
+      locale.translate('dialog.tracker.content'),
     );
   });
 
   //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
-
     return BlocBuilder<DrawerCubit, Map<String, bool>>(
       buildWhen: (previous, current) => previous['history'] != current['history'],
-      builder: (context, drawerState) {
-        return AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          top: 0,
-          left: drawerState['history']! ? 0 : -200,
-          child: BlocBuilder<TrackCubit, TrackState>(
-            builder: (context, trackState) {
-              return HistoryDrawerWidget(
-                height: MediaQuery.of(context).size.height - appBarHeight - 30,
-                cards: trackState.history,
-              );
-            },
+      builder: (context, drawerState) => AnimatedPositioned(
+        duration: const Duration(milliseconds: 200),
+        top: 0,
+        left: drawerState['history']! ? 0 : -200,
+        child: BlocBuilder<TrackCubit, TrackState>(
+          builder: (context, trackState) => HistoryDrawerWidget(
+            height: MediaQuery.of(context).size.height - appBarHeight - 30,
+            cards: trackState.history,
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -14,10 +14,8 @@ class GridWidget extends StatelessWidget {
     if (items.isEmpty) {
       return const Center(child: Text('No items to display'));
     }
-
     final itemType = _getItemType(items.first);
     final gridConfig = _getGridConfig(itemType);
-
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -28,8 +26,8 @@ class GridWidget extends StatelessWidget {
       ),
       itemCount: items.length,
       itemBuilder: (context, index) => _buildGridItem(
-        item: items[index],
-        itemType: itemType,
+        items[index],
+        itemType,
       ),
     );
   }
@@ -45,7 +43,7 @@ class GridWidget extends StatelessWidget {
     'deck': {'spacing': 12.0, 'aspectRatio': 1.0},
   }[itemType] ?? {'spacing': 8.0, 'aspectRatio': 3 / 4};
 
-  Widget _buildGridItem({required dynamic item, required String itemType}) {
+  Widget _buildGridItem(dynamic item, String itemType) {
     switch (itemType) {
       case 'deck':
         return DeckWidget(deck: item as DeckEntity);

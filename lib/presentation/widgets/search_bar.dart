@@ -37,7 +37,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Container(
       color: theme.appBarTheme.backgroundColor,
       padding: const EdgeInsets.fromLTRB(26.0, 0.0, 26.0, 12.0),
@@ -78,7 +77,6 @@ class _SearchInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Expanded(
       child: Container(
         height: 32.0,
@@ -119,7 +117,6 @@ class _ClearButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return AnimatedContainer(
       curve: Curves.easeInOut,
       duration: const Duration(milliseconds: 300),

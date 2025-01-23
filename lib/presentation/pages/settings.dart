@@ -13,7 +13,6 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<SettingsCubit>();
-
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
       body: _buildBody(context, locale, cubit),
@@ -25,11 +24,7 @@ class SettingsPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {locale.translate('title.settings'): null};
   
   //---------------------------------- Body ----------------------------------//
-  Widget _buildBody(
-    BuildContext context,
-    AppLocalizations locale,
-    SettingsCubit cubit,
-  ) => SettingsLabelWidget(
+  Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => SettingsLabelWidget(
     label: [
       _buildAccountSettings(locale),
       _buildGeneralSettings(context, locale, cubit),
@@ -53,11 +48,7 @@ class SettingsPage extends StatelessWidget {
     ],
   };
 
-  Map<String, dynamic> _buildGeneralSettings(
-    BuildContext context,
-    AppLocalizations locale,
-    SettingsCubit cubit,
-  ) => {
+  Map<String, dynamic> _buildGeneralSettings(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => {
     'title': locale.translate('settings.general.label'),
     'content': [
       {
@@ -78,11 +69,7 @@ class SettingsPage extends StatelessWidget {
     ],
   };
 
-  Map<String, dynamic> _buildSupportSettings(
-    BuildContext context,
-    AppLocalizations locale,
-    SettingsCubit cubit,
-  ) => {
+  Map<String, dynamic> _buildSupportSettings(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => {
     'title': locale.translate('settings.support.label'),
     'content': [
       {

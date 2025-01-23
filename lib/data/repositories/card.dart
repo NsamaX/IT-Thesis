@@ -26,24 +26,20 @@ class CardRepositoryImpl implements CardRepository {
     final localCards = await cardLocalDataSource.fetchCards(game);
     final localLastPage = await cardLocalDataSource.fetchLastPage(game);
     final remoteLastPage = await _getLastPageFromApi(localLastPage + 1);
-
     if (localLastPage >= remoteLastPage && localCards.isNotEmpty) {
       return localCards;
     }
-
     final updatedCards = await _parallelLoadAndSaveCards(
       game,
       startPage: localLastPage + 1,
       endPage: remoteLastPage,
     );
-
     stopwatch.stop();
     return updatedCards;
   }
 
   Future<int> _getLastPageFromApi(int startPage, {int batchSize = 30}) async {
     int currentPage = startPage;
-
     while (true) {
       final batchResults = await Future.wait(
         List.generate(
@@ -51,16 +47,13 @@ class CardRepositoryImpl implements CardRepository {
           (i) => _fetchCardsPageWithPageNumber(currentPage + i),
         ),
       );
-
       for (var result in batchResults) {
         final page = result.keys.first;
         final cards = result[page]!;
-
         if (cards.isEmpty) {
           return page - 1;
         }
       }
-
       currentPage += batchSize;
     }
   }
@@ -76,29 +69,23 @@ class CardRepositoryImpl implements CardRepository {
 
   Future<List<CardModel>> _parallelLoadAndSaveCards(
     String game, {
-    required int startPage,
-    required int endPage,
-    int maxConcurrentRequests = 50,
+    required int startPage, 
+    required int endPage, 
+    int maxConcurrentRequests = 50
   }) async {
     final futures = <Future<void>>[];
-
     for (int page = startPage; page <= endPage; page++) {
       futures.add(Future.microtask(() => _loadPageAndSave(game, page)));
-
       if (futures.length >= maxConcurrentRequests || page == endPage) {
         await Future.wait(futures);
         futures.clear();
       }
     }
-
     return cardLocalDataSource.fetchCards(game);
   }
 
   Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
-    if (await cardLocalDataSource.isPageExists(game, page)) {
-      return;
-    }
-
+    if (await cardLocalDataSource.isPageExists(game, page)) return;
     int retryCount = 0;
     while (retryCount < maxRetries) {
       try {

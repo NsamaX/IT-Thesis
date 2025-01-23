@@ -17,7 +17,7 @@ class AppLocalizations {
     try {
       final String jsonString = await rootBundle.loadString('assets/locales/${locale.languageCode}.json');
       localizedStrings = json.decode(jsonString) as Map<String, dynamic>;
-      languageNames = {
+      languageNames = const {
         'en': 'English',
         'ja': '日本'
       };

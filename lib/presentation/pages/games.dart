@@ -10,13 +10,10 @@ class GamesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
-    
     final gameKeys = AppImages.game.keys.toList();
     final gameImages = AppImages.game.values.toList();
-
     final arguments = getArguments(context);
     final isAdd = arguments['isAdd'] ?? false;
-
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
       body: GamesListWidget(

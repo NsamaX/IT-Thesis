@@ -19,69 +19,63 @@ void main() async {
   await ApiConfig.loadConfig(environment: 'development');
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<void>(
-      future: _initializeApp(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            ),
-          );
-        }
-        if (snapshot.hasError) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              body: Center(
-                child: Text(
-                  'Error initializing app: ${snapshot.error}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          );
-        }
-        return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => locator<NFCCubit>()),
-            BlocProvider(create: (_) => locator<DeckManagerCubit>()),
-            BlocProvider(create: (_) => AppCubit()),
-            BlocProvider(create: (_) => locator<SettingsCubit>()),
-          ],
-          child: BlocBuilder<SettingsCubit, SettingsState>(
-            builder: (context, state) {
-              return MaterialApp(
-                debugShowCheckedModeBanner: true,
-                locale: state.locale,
-                supportedLocales: const [Locale('en'), Locale('ja')],
-                localizationsDelegates: _localizationsDelegates,
-                theme: themeData(isDarkMode: state.isDarkMode),
-                onGenerateRoute: AppRoutes.generateRoute,
-                initialRoute: _getInitialRoute(state),
-                navigatorObservers: [
-                  locator<RouteObserver<ModalRoute>>(),
-                ],
-              );
-            },
+  Widget build(BuildContext context) => FutureBuilder<void>(
+    future: _initializeApp(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            body: Center(child: CircularProgressIndicator()),
           ),
         );
-      },
-    );
-  }
+      }
+      if (snapshot.hasError) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            body: Center(
+              child: Text(
+                'Error initializing app: ${snapshot.error}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        );
+      }
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => locator<NFCCubit>()),
+          BlocProvider(create: (_) => locator<DeckManagerCubit>()),
+          BlocProvider(create: (_) => AppCubit()),
+          BlocProvider(create: (_) => locator<SettingsCubit>()),
+        ],
+        child: BlocBuilder<SettingsCubit, SettingsState>(
+          builder: (context, state) => MaterialApp(
+            debugShowCheckedModeBanner: true,
+            locale: state.locale,
+            supportedLocales: const [Locale('en'), Locale('ja')],
+            localizationsDelegates: _localizationsDelegates,
+            theme: themeData(isDarkMode: state.isDarkMode),
+            onGenerateRoute: AppRoutes.generateRoute,
+            initialRoute: _getInitialRoute(state),
+            navigatorObservers: [
+              locator<RouteObserver<ModalRoute>>(),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 
   Future<void> _initializeApp() async {
-    final settingsCubit = locator<SettingsCubit>();
-    await settingsCubit.initialize();
+    await locator<SettingsCubit>().initialize();
   }
 
-  String _getInitialRoute(SettingsState state) {
-    return state.firstLoad ? AppRoutes.index : AppRoutes.myDecks;
-  }
+  String _getInitialRoute(SettingsState state) => state.firstLoad ? AppRoutes.index : AppRoutes.myDecks;
 
   static const _localizationsDelegates = [
     AppLocalizations.delegate,

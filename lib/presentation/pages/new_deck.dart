@@ -77,12 +77,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   }
 
   //--------------------------------- App Bar --------------------------------//
-  Map<dynamic, dynamic> _buildAppBarMenu(
-    BuildContext context,
-    DeckManagerCubit cubit,
-    AppLocalizations locale,
-    TextEditingController deckNameController,
-  ) {
+  Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale, TextEditingController deckNameController) {
     final state = context.watch<DeckManagerCubit>().state;
     final bool isEditModeEnabled = state.isEditModeEnabled;
     final bool hasCards = state.deck.cards.isNotEmpty;
@@ -127,20 +122,16 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
   }
 
   //-------------------------------- Features --------------------------------//
-  void _showDeleteDialog(
-    BuildContext context,
-    DeckManagerCubit cubit,
-    AppLocalizations locale,
-  ) {
+  void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cupertinoAlertDialogAction(
       context,
-      title: locale.translate('dialog.deck.title'),
-      content: locale.translate('dialog.deck.content'),
-      onConfirm: () {
+      locale.translate('dialog.deck.title'),
+      locale.translate('dialog.deck.content'),
+      () {
         cubit.toggleDelete();
         snackBar(
           context,
-          content: locale.translate('snack_bar.deck.deleted'),
+          locale.translate('snack_bar.deck.deleted'),
         );
       },
     );
@@ -163,7 +154,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     cubit.toggleShare();
     snackBar(
       context,
-      content: locale.translate('snack_bar.deck.share'),
+      locale.translate('snack_bar.deck.share'),
     );
   }
 
@@ -189,14 +180,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
       final successMessage = locale.translate('snack_bar.nfc.write_success');
       await snackBar(
         context,
-        content: successMessage,
+        successMessage,
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage.isNotEmpty) {
       final errorMessage = locale.translate('snack_bar.nfc.write_failed');
       await snackBar(
         context,
-        content: errorMessage,
+        errorMessage,
         isError: true,
       );
       _nfcCubit.clearErrorMessage();

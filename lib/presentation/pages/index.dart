@@ -8,7 +8,6 @@ class IndexPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 26),

@@ -13,12 +13,10 @@ class AppState {
   AppState copyWith({
     int? currentPageIndex,
     String? selectedGame,
-  }) {
-    return AppState(
-      currentPageIndex: currentPageIndex ?? this.currentPageIndex,
-      selectedGame: selectedGame ?? this.selectedGame,
-    );
-  }
+  }) => AppState(
+    currentPageIndex: currentPageIndex ?? this.currentPageIndex,
+    selectedGame: selectedGame ?? this.selectedGame,
+  );
 }
 
 class AppCubit extends Cubit<AppState> {

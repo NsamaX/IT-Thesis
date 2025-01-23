@@ -26,7 +26,6 @@ class CardLabelWidget extends StatelessWidget {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final color = lightTheme ? Colors.black : null;
-
     return GestureDetector(
       onTap: () => _navigateToCardPage(context),
       child: _buildContainer(locale, theme, color),

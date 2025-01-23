@@ -21,27 +21,20 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final deckManagerState = context.watch<DeckManagerCubit>().state;
-
     return Stack(
       children: [
         _buildCardContainer(
           context,
           theme,
-          isSelected: deckManagerState.selectedCard == card,
-          isNFCEnabled: deckManagerState.isNFCEnabled,
+          deckManagerState.selectedCard == card,
+          deckManagerState.isNFCEnabled,
         ),
-        if (deckManagerState.isEditModeEnabled && !deckManagerState.isNFCEnabled)
-          buildEditControls(context, card: card, count: count),
+        if (deckManagerState.isEditModeEnabled && !deckManagerState.isNFCEnabled) buildEditControls(context, card, count),
       ],
     );
   }
 
-  Widget _buildCardContainer(
-    BuildContext context,
-    ThemeData theme, {
-    required bool isSelected,
-    required bool isNFCEnabled,
-  }) => GestureDetector(
+  Widget _buildCardContainer(BuildContext context, ThemeData theme,  bool isSelected, bool isNFCEnabled) => GestureDetector(
     onTap: () => _handleCardTap(context, isNFCEnabled),
     child: AspectRatio(
       aspectRatio: 3 / 4,
@@ -72,7 +65,6 @@ class CardWidget extends StatelessWidget {
 
   void _handleCardTap(BuildContext context, bool isNFCEnabled) {
     final cubit = context.read<DeckManagerCubit>();
-
     if (isNFCEnabled) {
       cubit.toggleSelectCard(card);
       _handleNfcToggle(context, cubit);
@@ -86,7 +78,6 @@ class CardWidget extends StatelessWidget {
 
   void _handleNfcToggle(BuildContext context, DeckManagerCubit cubit) {
     final selectedCard = cubit.state.selectedCard;
-
     if (selectedCard != null) {
       final nfcCubit = context.read<NFCCubit>();
       NFCHelper.handleToggleNFC(

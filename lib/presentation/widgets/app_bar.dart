@@ -11,7 +11,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return AppBar(
       automaticallyImplyLeading: false,
       title: menu.length == 1
@@ -19,9 +18,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               child: _buildMenuItem(
                 context,
                 theme,
-                menuKey: menu.keys.first,
-                onTapFunction: menu.values.first,
-                isTitle: true,
+                menu.keys.first,
+                menu.values.first,
+                true,
               ),
             )
           : Row(
@@ -30,22 +29,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   .map((entry) => _buildMenuItem(
                         context,
                         theme,
-                        menuKey: entry.key,
-                        onTapFunction: entry.value,
-                        isTitle: _isTitle(entry.key),
+                        entry.key,
+                        entry.value,
+                        _isTitle(entry.key),
                       ))
                   .toList(),
             ),
     );
   }
 
-  Widget _buildMenuItem(
-    BuildContext context,
-    ThemeData theme, {
-    required dynamic menuKey,
-    required dynamic onTapFunction,
-    required bool isTitle,
-  }) => GestureDetector(
+  Widget _buildMenuItem(BuildContext context, ThemeData theme, menuKey, onTapFunction, bool isTitle) => GestureDetector(
     onTap: () => _handleMenuTap(context, onTapFunction),
     child: SizedBox(
       width: isTitle ? 142.0 : 42.0,
@@ -57,7 +50,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   );
 
   Widget _getMenuItemWidget(ThemeData theme, dynamic menuKey, bool isTitle) {
-    if (menuKey == null) return const SizedBox.shrink();
+    if (menuKey == null) {
+      return const SizedBox.shrink();
+    }
     if (menuKey is IconData) {
       return Icon(menuKey);
     } else if (menuKey is String) {
@@ -70,9 +65,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       );
     } else if (menuKey is Widget) {
       return menuKey;
-    } else {
-      return const Icon(Icons.error_outline);
     }
+    return const Icon(Icons.error_outline);
   }
 
   void _handleMenuTap(BuildContext context, dynamic onTapFunction) {

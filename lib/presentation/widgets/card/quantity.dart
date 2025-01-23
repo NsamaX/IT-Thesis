@@ -15,11 +15,9 @@ class CardQuantityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     const double borderRadiusValue = 12.0;
     const double boxWidth = 60.0;
     const double boxHeight = 40.0;
-
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -38,13 +36,7 @@ class CardQuantityWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildBackground(
-    ThemeData theme,
-    int count,
-    double width,
-    double height,
-    double borderRadius,
-  ) => Container(
+  Widget _buildBackground(ThemeData theme, int count, double width, double height, double borderRadius) => Container(
     width: width * count + width,
     height: height,
     decoration: BoxDecoration(
@@ -70,12 +62,7 @@ class CardQuantityWidget extends StatelessWidget {
     ),
   );
 
-  Widget _buildQuantityBox(
-    ThemeData theme,
-    int count,
-    double width,
-    double height,
-  ) => Row(
+  Widget _buildQuantityBox(ThemeData theme, int count, double width, double height) => Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: List.generate(
       count * 2 - 1,

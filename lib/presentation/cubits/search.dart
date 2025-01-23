@@ -20,14 +20,12 @@ class SearchState {
     List<CardEntity>? searchedCards,
     String? errorMessage,
     bool? isLoading,
-  }) {
-    return SearchState(
-      cards: cards ?? this.cards,
-      searchedCards: searchedCards ?? this.searchedCards,
-      errorMessage: errorMessage ?? this.errorMessage,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
+  }) => SearchState(
+    cards: cards ?? this.cards,
+    searchedCards: searchedCards ?? this.searchedCards,
+    errorMessage: errorMessage ?? this.errorMessage,
+    isLoading: isLoading ?? this.isLoading,
+  );
 }
 
 class SearchCubit extends Cubit<SearchState> {
@@ -36,7 +34,9 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit(this.syncCardsUseCase) : super(SearchState());
 
   void safeEmit(SearchState newState) {
-    if (!isClosed) emit(newState);
+    if (!isClosed) {
+      emit(newState);
+    }
   }
 
   Future<void> syncCards(String game) async {

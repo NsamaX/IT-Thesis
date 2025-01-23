@@ -6,13 +6,11 @@ class AppBottomNavBarStyles {
 
   AppBottomNavBarStyles(this.isDarkMode);
 
-  BottomNavigationBarThemeData get bottomNavBarTheme {
-    return BottomNavigationBarThemeData(
-      backgroundColor: isDarkMode
-          ? AppColors.DarkModeBackground_lv1
-          : AppColors.LightModeBackground_lv1,
-      selectedItemColor: AppColors.PrimaryColor,
-      unselectedItemColor: AppColors.TextOpacity,
-    );
-  }
+  BottomNavigationBarThemeData get bottomNavBarTheme => BottomNavigationBarThemeData(
+    backgroundColor: isDarkMode
+        ? AppColors.DarkModeBackground_lv1
+        : AppColors.LightModeBackground_lv1,
+    selectedItemColor: AppColors.PrimaryColor,
+    unselectedItemColor: AppColors.TextOpacity,
+  );
 }

@@ -6,19 +6,15 @@ class AppIconThemes {
 
   AppIconThemes(this.isDarkMode);
 
-  IconThemeData get defaultIcon {
-    return IconThemeData(
-      color: isDarkMode
-          ? AppColors.DarkModeText
-          : AppColors.LightModeText,
-      size: 16,
-    );
-  }
+  IconThemeData get defaultIcon => IconThemeData(
+    color: isDarkMode
+        ? AppColors.DarkModeText
+        : AppColors.LightModeText,
+    size: 16,
+  );
 
-  IconThemeData get appBarIcon {
-    return IconThemeData(
-      color: AppColors.PrimaryColor,
-      size: 24,
-    );
-  }
+  IconThemeData get appBarIcon => IconThemeData(
+    color: AppColors.PrimaryColor,
+    size: 24,
+  );
 }

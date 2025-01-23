@@ -14,14 +14,12 @@ class NFCWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cubit = context.read<NFCCubit>();
-
     return BlocBuilder<NFCCubit, NFCState>(
       builder: (context, state) {
         final isNFCEnabled = state.isNFCEnabled;
         final activeColor = theme.primaryColor;
         final inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
         final currentColor = isNFCEnabled ? activeColor : inactiveColor;
-
         return GestureDetector(
           onTap: () async {
             try {
@@ -40,17 +38,17 @@ class NFCWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _buildRotatingIcon(
-                angle: -90.0,
-                offset: const Offset(iconSize + 6.0, 0.0),
-                color: currentColor,
+                -90.0,
+                const Offset(iconSize + 6.0, 0.0),
+                currentColor,
               ),
               const SizedBox(width: 4.0),
-              _buildCircleIcon(color: currentColor),
+              _buildCircleIcon(currentColor),
               const SizedBox(width: 4.0),
               _buildRotatingIcon(
-                angle: 90.0,
-                offset: const Offset(-iconSize - 6.0, 0.0),
-                color: currentColor,
+                90.0,
+                const Offset(-iconSize - 6.0, 0.0),
+                currentColor,
               ),
             ],
           ),
@@ -59,11 +57,7 @@ class NFCWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildRotatingIcon({
-    required double angle,
-    required Offset offset,
-    required Color color,
-  }) => Transform.translate(
+  Widget _buildRotatingIcon(double angle, Offset offset, Color color) => Transform.translate(
     offset: offset,
     child: Transform.rotate(
       angle: angle * 3.14 / 180.0,
@@ -79,7 +73,7 @@ class NFCWidget extends StatelessWidget {
     ),
   );
 
-  Widget _buildCircleIcon({required Color color}) => AnimatedContainer(
+  Widget _buildCircleIcon(color) => AnimatedContainer(
     curve: Curves.easeInOut,
     duration: animationDuration,
     width: iconSize,

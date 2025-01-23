@@ -16,32 +16,28 @@ class SearchPage extends StatelessWidget {
     final locale = AppLocalizations.of(context);
     final arguments = _getArguments(context);
     final syncCardsUseCase = GetIt.instance<SyncCardsUseCase>(param1: arguments['game']);
-
     return BlocProvider<SearchCubit>(
       create: (_) => SearchCubit(syncCardsUseCase)..syncCards(arguments['game']),
       child: Builder(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-            body: Column(
-              children: [
-                SearchBarWidget(
-                  onSearchChanged: (query) => context.read<SearchCubit>().searchCards(query),
-                  onSearchCleared: () => context.read<SearchCubit>().clearSearch(),
-                ),
-                const SizedBox(height: 8),
-                _buildBody(context, arguments),
-              ],
-            ),
-          );
-        },
+        builder: (context) => Scaffold(
+          appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
+          body: Column(
+            children: [
+              SearchBarWidget(
+                onSearchChanged: (query) => context.read<SearchCubit>().searchCards(query),
+                onSearchCleared: () => context.read<SearchCubit>().clearSearch(),
+              ),
+              const SizedBox(height: 8),
+              _buildBody(context, arguments),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   Map<String, dynamic> _getArguments(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments;
-    
     if (arguments is Map<String, dynamic>) {
       return {
         'game': arguments['game'] ?? '',
@@ -74,15 +70,14 @@ class SearchPage extends StatelessWidget {
                 : AppLocalizations.of(context).translate('text.internet_error')),
           ),
         );
-      } else {
-        return Expanded(
-          child: CardListWidget(
-            cards: state.searchedCards,
-            isAdd: arguments['isAdd'],
-            isCustom: arguments['isCustom'],
-          ),
-        );
       }
+      return Expanded(
+        child: CardListWidget(
+          cards: state.searchedCards,
+          isAdd: arguments['isAdd'],
+          isCustom: arguments['isCustom'],
+        ),
+      );
     },
   );
 }

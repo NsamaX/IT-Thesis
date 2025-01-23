@@ -16,7 +16,6 @@ class CardInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,7 +30,6 @@ class CardInfoWidget extends StatelessWidget {
     final title = isCustom
         ? locale.translate('text.description')
         : card?.name ?? locale.translate('text.no_card_name');
-
     return Text(
       title,
       style: theme.textTheme.titleSmall,
@@ -39,11 +37,14 @@ class CardInfoWidget extends StatelessWidget {
   }
 
   Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
-    if (isCustom) return _buildEditableHint();
-    if (card == null) return const SizedBox.shrink();
-    return card?.additionalData != null
-        ? _buildAdditionalData(theme, card!.additionalData!)
-        : _buildDefaultDescription(locale, theme, card!);
+    if (isCustom) {
+      return _buildEditableHint();
+    } else if (card != null) {
+      return card?.additionalData != null
+          ? _buildAdditionalData(theme, card!.additionalData!)
+          : _buildDefaultDescription(locale, theme, card!);
+    }
+    return const SizedBox.shrink();
   }
 
   Widget _buildEditableHint() => Opacity(

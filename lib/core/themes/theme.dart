@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'app_bar.dart';
 import 'button.dart';
@@ -7,7 +8,6 @@ import 'nav_bar.dart';
 import 'progress_indicator.dart';
 import 'text.dart';
 
-/// Returns ThemeData based on the current mode (Dark/Light).
 ThemeData themeData({required bool isDarkMode}) {
   final appBarStyles = AppBarStyles(isDarkMode);
   final buttonStyles = AppButtonStyles(isDarkMode);
@@ -17,18 +17,25 @@ ThemeData themeData({required bool isDarkMode}) {
   final textStyles = AppTextStyles(isDarkMode);
 
   return ThemeData(
-    // Background Colors
     scaffoldBackgroundColor: isDarkMode
         ? AppColors.DarkModeBackground_lv2
         : AppColors.LightModeBackground_lv2,
-
-    // Primary Colors
     primaryColor: AppColors.PrimaryColor,
-
-    // Icon Theme
+    colorScheme: ColorScheme(
+      brightness: Brightness.light,
+      primary: AppColors.PrimaryColor,
+      secondary: AppColors.SecondaryColor,
+      tertiary: AppColors.TertiaryColor,
+      surface: isDarkMode
+          ? AppColors.LightModeBackground_lv2
+          : AppColors.DarkModeBackground_lv2,
+      onPrimary: Colors.white,
+      onSecondary: Colors.white,
+      onSurface: Colors.white,
+      error: CupertinoColors.systemRed,
+      onError: Colors.white,
+    ),
     iconTheme: iconThemes.defaultIcon,
-
-    // Text Theme
     textTheme: TextTheme(
       titleLarge: textStyles.titleLarge,
       titleMedium: textStyles.titleMedium,
@@ -37,19 +44,11 @@ ThemeData themeData({required bool isDarkMode}) {
       bodyMedium: textStyles.bodyMedium,
       bodySmall: textStyles.bodySmall,
     ),
-
-    // AppBar Theme
     appBarTheme: appBarStyles.appBarTheme,
-
-    // Bottom Navigation Bar Theme
     bottomNavigationBarTheme: navBarStyles.bottomNavBarTheme,
-
-    // Button Theme
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: buttonStyles.elevatedButton,
     ),
-
-    // Progress Indicator Theme
     progressIndicatorTheme: progressIndicatorStyles.progressIndicatorTheme,
   );
 }

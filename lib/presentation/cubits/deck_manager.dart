@@ -40,19 +40,17 @@ class DeckManagerState {
     bool? isNFCEnabled,
     bool? isdeleteEnabled,
     bool? isLoading,
-  }) {
-    return DeckManagerState(
-      decks: decks ?? this.decks,
-      deck: deck ?? this.deck,
-      selectedCard: selectedCard ?? this.selectedCard,
-      quantity: quantity ?? this.quantity,
-      isEditModeEnabled: isEditModeEnabled ?? this.isEditModeEnabled,
-      isShareEnabled: isShareEnabled ?? this.isShareEnabled,
-      isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
-      isdeleteEnabled: isdeleteEnabled ?? this.isdeleteEnabled,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
+  }) => DeckManagerState(
+    decks: decks ?? this.decks,
+    deck: deck ?? this.deck,
+    selectedCard: selectedCard ?? this.selectedCard,
+    quantity: quantity ?? this.quantity,
+    isEditModeEnabled: isEditModeEnabled ?? this.isEditModeEnabled,
+    isShareEnabled: isShareEnabled ?? this.isShareEnabled,
+    isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
+    isdeleteEnabled: isdeleteEnabled ?? this.isdeleteEnabled,
+    isLoading: isLoading ?? this.isLoading,
+  );
 }
 
 class DeckManagerCubit extends Cubit<DeckManagerState> {
@@ -90,7 +88,9 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
   void toggleNFC(NFCCubit nfcCubit) {
     final enabled = !state.isNFCEnabled;
     emit(state.copyWith(isNFCEnabled: enabled));
-    if (!enabled) NFCHelper.handleToggleNFC(nfcCubit, enable: false, reason: 'NFC disabled');
+    if (!enabled) {
+      NFCHelper.handleToggleNFC(nfcCubit, enable: false, reason: 'NFC disabled');
+    }
   }
 
   void toggleSelectCard(CardEntity card) => emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));

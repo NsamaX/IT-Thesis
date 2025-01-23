@@ -29,16 +29,14 @@ class TrackState {
     bool? isDialogShown,
     bool? isProcessing,
     bool? isAdvanceModeEnabled,
-  }) {
-    return TrackState(
-      deck: deck ?? this.deck,
-      record: record ?? this.record,
-      history: history ?? this.history,
-      isDialogShown: isDialogShown ?? this.isDialogShown,
-      isProcessing: isProcessing ?? this.isProcessing,
-      isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
-    );
-  }
+  }) => TrackState(
+    deck: deck ?? this.deck,
+    record: record ?? this.record,
+    history: history ?? this.history,
+    isDialogShown: isDialogShown ?? this.isDialogShown,
+    isProcessing: isProcessing ?? this.isProcessing,
+    isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
+  );
 }
 
 class TrackCubit extends Cubit<TrackState> {

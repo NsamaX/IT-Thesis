@@ -17,13 +17,11 @@ class SettingsState {
     Locale? locale,
     bool? firstLoad,
     bool? isDarkMode,
-  }) {
-    return SettingsState(
-      locale: locale ?? this.locale,
-      isDarkMode: isDarkMode ?? this.isDarkMode,
-      firstLoad: firstLoad ?? this.firstLoad,
-    );
-  }
+  }) => SettingsState(
+    locale: locale ?? this.locale,
+    isDarkMode: isDarkMode ?? this.isDarkMode,
+    firstLoad: firstLoad ?? this.firstLoad,
+  );
 }
 
 class SettingsCubit extends Cubit<SettingsState> {

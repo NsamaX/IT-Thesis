@@ -18,13 +18,11 @@ class ScanCubitState {
     List<CardEntity>? cards,
     String? currentGame,
     bool? isLoading,
-  }) {
-    return ScanCubitState(
-      cards: cards ?? this.cards,
-      currentGame: currentGame ?? this.currentGame,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
+  }) => ScanCubitState(
+    cards: cards ?? this.cards,
+    currentGame: currentGame ?? this.currentGame,
+    isLoading: isLoading ?? this.isLoading,
+  );
 }
 
 class ScanCubit extends Cubit<ScanCubitState> {

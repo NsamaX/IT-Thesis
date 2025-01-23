@@ -11,7 +11,6 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     return Scaffold(
       body: Center(
         child: Column(

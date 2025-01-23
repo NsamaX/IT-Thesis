@@ -11,7 +11,6 @@ class LanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final cubit = context.read<SettingsCubit>();
-
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
       body: SettingsLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
@@ -26,10 +25,7 @@ class LanguagePage extends StatelessWidget {
   };
 
   //--------------------------- Supported Languages --------------------------//
-  Map<String, dynamic> _buildSupportedLanguages(
-    AppLocalizations locale,
-    SettingsCubit cubit,
-  ) {
+  Map<String, dynamic> _buildSupportedLanguages(AppLocalizations locale, SettingsCubit cubit) {
     final supportedLanguages = locale.languageNames.entries.map((entry) => {
       'code': entry.key,
       'name': entry.value,
