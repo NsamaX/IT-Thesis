@@ -27,8 +27,8 @@ ThemeData themeData({required bool isDarkMode}) {
       secondary: AppColors.SecondaryColor,
       tertiary: AppColors.TertiaryColor,
       surface: isDarkMode
-          ? AppColors.LightModeBackground_lv2
-          : AppColors.DarkModeBackground_lv2,
+          ? AppColors.DarkModeBackground_lv2
+          : AppColors.LightModeBackground_lv2,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
       onSurface: Colors.white,
