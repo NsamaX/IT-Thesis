@@ -89,7 +89,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-            Icons.people_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
+            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
             locale.translate('title.tracker'): null,
             isNFCEnabled
                     ? Icons.wifi_tethering_rounded
@@ -101,7 +101,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
+            Icons.people_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
             locale.translate('title.tracker'): null,
             isNFCEnabled
                     ? Icons.wifi_tethering_rounded
