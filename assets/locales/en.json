@@ -21,7 +21,11 @@
     "edit": "Edit",
     "save": "Save",
     "add": "Add",
-    "done": "Done"
+    "done": "Done",
+    "create_room": "Create Room",
+    "join_room": "Join Room",
+    "deck": "Deck",
+    "analyze": "Analyze"
   },
   "button": {
     "start": "Start",

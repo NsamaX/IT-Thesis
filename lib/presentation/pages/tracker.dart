@@ -9,9 +9,11 @@ import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
 import '../widgets/drawers/history.dart';
+import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/notifications.dart';
+import '../widgets/switch_mode_bar.dart';
 
 class TrackerPage extends StatefulWidget {
   @override
@@ -87,7 +89,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return context.watch<TrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
+            Icons.people_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
             locale.translate('title.tracker'): null,
             isNFCEnabled
                     ? Icons.wifi_tethering_rounded
@@ -99,7 +101,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            Icons.people_rounded: null,
+            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
             locale.translate('title.tracker'): null,
             isNFCEnabled
                     ? Icons.wifi_tethering_rounded
@@ -147,13 +149,16 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     child: BlocBuilder<DrawerCubit, Map<String, bool>>(
       builder: (context, drawerState) {
         final isDrawerOpen = drawerState['history'] ?? false;
+        final isFeatureOpen = drawerState['feature'] ?? false;
         return Stack(
           children: [
             AbsorbPointer(
-              absorbing: isDrawerOpen,
+              absorbing: isDrawerOpen || isFeatureOpen,
               child: _buildCardList(context, state),
             ),
+            if (isFeatureOpen) Container(color: Colors.black.withOpacity(0.5)),
             _buildHistoryDrawer(context),
+            _buildPlayerHistoryDrawer(context),
           ],
         );
       },
@@ -163,34 +168,45 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   //--------------------------------- Widgets ---------------------------------//
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
-    return Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 46, 8, 8),
-          child: ListView.builder(
-            itemCount: state.deck.cards.length,
-            itemBuilder: (context, index) {
-              final entry = state.deck.cards.entries.elementAt(index);
-              final card = entry.key;
-              final count = entry.value;
-              return CardLabelWidget(
-                card: card,
-                count: count,
-                isNFC: false,
-                lightTheme: count > 0,
-              );
-            },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          const SizedBox(height: 8.0),
+          SwitchModeBarWidget(
+            isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
+            onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
           ),
-        ),
-        Positioned(
-          top: 8,
-          right: 16,
-          child: Text(
-            '$totalCards ${AppLocalizations.of(context).translate('text.total_cards')}',
-            style: Theme.of(context).textTheme.titleMedium,
+          const SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '$totalCards ${AppLocalizations.of(context).translate('text.total_cards')}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 8.0),
+          Expanded(
+            child: ListView.builder(
+              itemCount: state.deck.cards.length,
+              itemBuilder: (context, index) {
+                final entry = state.deck.cards.entries.elementAt(index);
+                final card = entry.key;
+                final count = entry.value;
+                return CardLabelWidget(
+                  card: card,
+                  count: count,
+                  isNFC: false,
+                  lightTheme: count > 0,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -211,14 +227,26 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       builder: (context, drawerState) => AnimatedPositioned(
         duration: const Duration(milliseconds: 200),
         top: 0,
-        left: drawerState['history']! ? 0 : -200,
+        left: drawerState['history']! ? 0.0 : -200.0,
         child: BlocBuilder<TrackCubit, TrackState>(
           builder: (context, trackState) => HistoryDrawerWidget(
-            height: MediaQuery.of(context).size.height - appBarHeight - 30,
+            height: MediaQuery.of(context).size.height - appBarHeight - 30.0,
             cards: trackState.history,
           ),
         ),
       ),
     );
   }
+
+  Widget _buildPlayerHistoryDrawer(BuildContext context) => BlocBuilder<DrawerCubit, Map<String, bool>>(
+    buildWhen: (previous, current) => previous['feature'] != current['feature'],
+    builder: (context, drawerState) => AnimatedPositioned(
+      duration: const Duration(milliseconds: 160),
+      top: drawerState['feature']! ? 0.0 : -160.0,
+      left: 0,
+      child: BlocBuilder<TrackCubit, TrackState>(
+        builder: (context, trackState) => PlayerDrawerWidget(),
+      ),
+    ),
+  );
 }

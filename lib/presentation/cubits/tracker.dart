@@ -12,6 +12,7 @@ class TrackState {
   final bool isDialogShown;
   final bool isProcessing;
   final bool isAdvanceModeEnabled;
+  final bool isAnalyzeModeEnabled;
 
   TrackState({
     required this.deck,
@@ -20,6 +21,7 @@ class TrackState {
     this.isDialogShown = false,
     this.isProcessing = false,
     this.isAdvanceModeEnabled = false,
+    this.isAnalyzeModeEnabled = false,
   });
 
   TrackState copyWith({
@@ -29,6 +31,7 @@ class TrackState {
     bool? isDialogShown,
     bool? isProcessing,
     bool? isAdvanceModeEnabled,
+    bool? isAnalyzeModeEnabled,
   }) => TrackState(
     deck: deck ?? this.deck,
     record: record ?? this.record,
@@ -36,6 +39,7 @@ class TrackState {
     isDialogShown: isDialogShown ?? this.isDialogShown,
     isProcessing: isProcessing ?? this.isProcessing,
     isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
+    isAnalyzeModeEnabled: isAnalyzeModeEnabled ?? this.isAnalyzeModeEnabled,
   );
 }
 
@@ -53,6 +57,8 @@ class TrackCubit extends Cubit<TrackState> {
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
   void toggleAdvanceMode() => emit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
+
+  void toggleAnalyzeMode() => emit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
 
   void toggleReset(DeckEntity deck) => emit(state.copyWith(
     isProcessing: false,

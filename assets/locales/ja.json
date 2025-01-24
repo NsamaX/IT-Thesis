@@ -21,7 +21,11 @@
     "edit": "編集",
     "save": "保存",
     "add": "追加",
-    "done": "完了"
+    "done": "完了",
+    "create_room": "ルームを作成",
+    "join_room": "ルームに参加",
+    "deck": "デッキ",
+    "analyze": "分析"
   },
   "button": {
     "start": "開始",
