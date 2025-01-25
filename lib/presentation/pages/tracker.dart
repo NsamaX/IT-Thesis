@@ -12,6 +12,7 @@ import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/deck_analyze_chart.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -154,7 +155,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
           children: [
             AbsorbPointer(
               absorbing: isDrawerOpen || isFeatureOpen,
-              child: _buildCardList(context, state),
+              child: _buildBodyByMode(context, state),
             ),
             if (isFeatureOpen) Container(color: Colors.black.withOpacity(0.5)),
             _buildHistoryDrawer(context),
@@ -166,47 +167,64 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   );
 
   //--------------------------------- Widgets ---------------------------------//
+  Widget _buildBodyByMode(BuildContext context, TrackState state) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: Column(
+      children: [
+        const SizedBox(height: 8.0),
+        SwitchModeBarWidget(
+          isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
+          onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
+        ),
+        const SizedBox(height: 8.0),
+        Expanded(
+          child: BlocBuilder<TrackCubit, TrackState>(
+            builder: (context, trackState) {
+              if (trackState.isAnalyzeModeEnabled) {
+                final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
+                return DeckAnalyzeChartWidget(cardStats: cardStats);
+              } else {
+                return _buildCardList(context, trackState);
+              }
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+
   Widget _buildCardList(BuildContext context, TrackState state) {
     final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 8.0),
-          SwitchModeBarWidget(
-            isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
-            onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
-          ),
-          const SizedBox(height: 8.0),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '$totalCards ${AppLocalizations.of(context).translate('text.total_cards')}',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              '$totalCards ${AppLocalizations.of(context).translate('text.total_cards')}',
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ListView.builder(
-              itemCount: state.deck.cards.length,
-              itemBuilder: (context, index) {
-                final entry = state.deck.cards.entries.elementAt(index);
-                final card = entry.key;
-                final count = entry.value;
-                return CardLabelWidget(
-                  card: card,
-                  count: count,
-                  isNFC: false,
-                  lightTheme: count > 0,
-                );
-              },
-            ),
+        ),
+        const SizedBox(height: 8.0),
+        Expanded(
+          child: ListView.builder(
+            itemCount: state.deck.cards.length,
+            itemBuilder: (context, index) {
+              final entry = state.deck.cards.entries.elementAt(index);
+              final card = entry.key;
+              final count = entry.value;
+              return CardLabelWidget(
+                card: card,
+                count: count,
+                isNFC: false,
+                lightTheme: count > 0,
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

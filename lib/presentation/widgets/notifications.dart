@@ -5,9 +5,6 @@ import 'package:nfc_project/core/locales/localizations.dart';
 const _snackBarDuration = Duration(seconds: 1);
 const _dialogTransitionDuration = Duration(milliseconds: 200);
 
-const _successColor = CupertinoColors.systemGreen;
-const _errorColor = CupertinoColors.systemRed;
-
 Future<void> snackBar(BuildContext context, String content, {bool isError = false}) async =>
     Future.delayed(
       _snackBarDuration,
@@ -15,7 +12,9 @@ Future<void> snackBar(BuildContext context, String content, {bool isError = fals
         SnackBar(
           content: Text(content, style: const TextStyle(color: Colors.white)),
           duration: _snackBarDuration,
-          backgroundColor: isError ? _errorColor : _successColor,
+          backgroundColor: isError 
+              ? CupertinoColors.destructiveRed 
+              : CupertinoColors.activeGreen,
         ),
       ),
     );
@@ -36,7 +35,7 @@ void cupertinoAlertDialog(BuildContext context, String title, String content) {
           theme,
           locale.translate('button.ok'),
           () => Navigator.of(context).pop(),
-          CupertinoColors.systemBlue,
+          CupertinoColors.activeBlue,
         ),
       ],
     ),
@@ -60,7 +59,7 @@ void cupertinoAlertDialogAction(BuildContext context, String title, String conte
           theme,
           locale.translate('button.cancel'),
           () => Navigator.of(context).pop(),
-          _errorColor,
+          CupertinoColors.destructiveRed,
         ),
         _buildDialogAction(
           theme,
@@ -69,7 +68,7 @@ void cupertinoAlertDialogAction(BuildContext context, String title, String conte
             Navigator.of(context).pop();
             onConfirm();
           },
-          CupertinoColors.systemBlue,
+          CupertinoColors.activeBlue,
         ),
       ],
     ),

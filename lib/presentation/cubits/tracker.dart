@@ -54,6 +54,7 @@ class TrackCubit extends Cubit<TrackState> {
           ),
         ));
 
+  //--------------------------------- toggle ---------------------------------//
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
   void toggleAdvanceMode() => emit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
@@ -72,6 +73,7 @@ class TrackCubit extends Cubit<TrackState> {
     history: [],
   ));
 
+  //---------------------------- update card data ----------------------------//
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
     emit(state.copyWith(isProcessing: true));
@@ -85,6 +87,7 @@ class TrackCubit extends Cubit<TrackState> {
         (data) => data.tagId == tag.tagId,
         orElse: () => DataEntity(
           tagId: tag.tagId,
+          name: matchingCard.name,
           location: "deck",
           action: Action.unknown,
           timestamp: DateTime.now(),
@@ -115,6 +118,7 @@ class TrackCubit extends Cubit<TrackState> {
       ...state.record.data,
       DataEntity(
         tagId: tag.tagId,
+        name: cardEntry.key.name,
         location: location,
         action: action,
         timestamp: DateTime.now(),
@@ -136,5 +140,30 @@ class TrackCubit extends Cubit<TrackState> {
     emit(state.copyWith(
       deck: state.deck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
     ));
+  }
+
+  //-------------------------------- get data --------------------------------//
+  List<Map<String, dynamic>> calculateDrawAndReturnCounts() {
+    final cardNames = <String, String>{};
+    final drawCounts = <String, int>{};
+    final returnCounts = <String, int>{};
+    for (final data in state.record.data) {
+      final tagId = data.tagId;
+      cardNames[tagId] = data.name;
+      if (data.action == Action.draw) {
+        drawCounts[tagId] = (drawCounts[tagId] ?? 0) + 1;
+      } else if (data.action == Action.returnToDeck) {
+        returnCounts[tagId] = (returnCounts[tagId] ?? 0) + 1;
+      }
+    }
+    final result = <Map<String, dynamic>>[];
+    for (final tagId in cardNames.keys) {
+      result.add({
+        "CardName": cardNames[tagId] ?? "Unknown",
+        "draw": drawCounts[tagId] ?? 0,
+        "return": returnCounts[tagId] ?? 0,
+      });
+    }
+    return result;
   }
 }
