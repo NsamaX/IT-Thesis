@@ -46,7 +46,9 @@
     "no_card_description": "説明がありません",
     "no_card_image": "カード画像がありません",
     "deck_empty": "デッキにカードがありません。",
-    "total_cards": "カードの総数"
+    "total_cards": "カードの総数",
+    "draws": "引く回数",
+    "returns": "戻す回数"
   },
   "navigation": {
     "decks": "デッキ",

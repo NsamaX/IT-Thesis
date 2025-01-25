@@ -46,7 +46,9 @@
     "no_card_description": "No card description",
     "no_card_image": "No card image",
     "deck_empty": "No cards in the deck.",
-    "total_cards": "Cards"
+    "total_cards": "Cards",
+    "draws": "Draws",
+    "returns": "Returns"
   },
   "navigation": {
     "decks": "Decks",

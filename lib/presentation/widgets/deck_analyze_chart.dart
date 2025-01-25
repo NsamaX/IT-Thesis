@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:nfc_project/core/locales/localizations.dart';
 
 class DeckAnalyzeChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardStats;
@@ -9,15 +10,15 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final data = _generateData();
     final drawCounts = data.map((stat) => stat['draw'] as int).toList();
     final returnCounts = data.map((stat) => stat['return'] as int).toList();
-
     return Column(
       children: [
         const SizedBox(height: 8.0),
-        _buildLabel(theme),
+        _buildLabel(locale, theme),
         const SizedBox(height: 8.0),
         _buildChart(theme, drawCounts, returnCounts, data),
       ],
@@ -25,7 +26,7 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
   }
 
   List<Map<String, dynamic>> _generateData() {
-    const maxDummy = 10;
+    const maxDummy = 8;
     final data = [...cardStats];
     if (data.length < maxDummy) {
       data.addAll(
@@ -38,14 +39,14 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
     return data;
   }
 
-  Widget _buildLabel(ThemeData theme) => Align(
+  Widget _buildLabel(AppLocalizations locale, ThemeData theme) => Align(
     alignment: Alignment.centerRight,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildLegend(theme, 'Draws', CupertinoColors.activeBlue),
+        _buildLegend(theme, locale.translate('text.draws'), CupertinoColors.activeBlue),
         const SizedBox(width: 12.0),
-        _buildLegend(theme, 'Returns', CupertinoColors.destructiveRed),
+        _buildLegend(theme, locale.translate('text.returns'), CupertinoColors.destructiveRed),
       ],
     ),
   );
@@ -64,36 +65,40 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
 
   Widget _buildChart(ThemeData theme, List<int> drawCounts, List<int> returnCounts, List<Map<String, dynamic>> data) {
     final color = theme.appBarTheme.backgroundColor ?? Colors.grey;
-    final maxDraw = drawCounts.isNotEmpty
-        ? drawCounts.reduce((a, b) => a > b ? a : b).clamp(10, double.infinity).toInt()
-        : 10;
-    final maxY = maxDraw < 10 ? 10 : maxDraw;
+    final maxY = 10;
     final double width = 40.0 * drawCounts.length;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildYAxis(theme, maxY, color),
-        const SizedBox(width: 6.0),
+        const SizedBox(width: 8.0),
         _buildLeftBorder(color),
         _buildChartBody(theme, width, maxY.toDouble(), drawCounts, returnCounts, data, color),
       ],
     );
   }
 
-  Widget _buildYAxis(ThemeData theme, int maxY, Color color) => Container(
-    height: 400.0 + 6.0,
-    child: Column(
-      children: List.generate(
-        maxY,
-        (index) => Column(
-          children: [
-            Text((maxY - index).toString(), style: theme.textTheme.bodySmall),
-            const SizedBox(height: 16.75),
-          ],
+  Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
+    const double chartHeight = 400.0;
+    final double spacerHeight = chartHeight / maxY - 26.0;
+    return Container(
+      height: chartHeight + 6.0,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 28.0),
+        child: Column(
+          children: List.generate(
+            maxY,
+            (index) => Column(
+              children: [
+                Text((maxY - index).toString(), style: theme.textTheme.bodySmall),
+                SizedBox(height: spacerHeight),
+              ],
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 
   Widget _buildLeftBorder(Color color) => Container(
     width: 1.2,
@@ -140,8 +145,9 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
                     left: BorderSide(color: Colors.transparent),
                   ),
                 ),
-                maxY: maxY,
+                maxY: maxY + 1,
                 minY: 0,
+                barTouchData: BarTouchData(enabled: false),
               ),
             ),
           ),
@@ -153,9 +159,9 @@ class DeckAnalyzeChartWidget extends StatelessWidget {
   Widget _buildBottomTitle(ThemeData theme, String cardName) {
     final truncatedName = cardName.length > 10 ? '${cardName.substring(0, 10)}...' : cardName;
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: const EdgeInsets.only(top: 18.0),
       child: Transform.rotate(
-        angle: -45 * 3.14159 / 180,
+        angle: 45 * 3.14159 / 180,
         child: Text(
           truncatedName,
           style: theme.textTheme.bodySmall,
