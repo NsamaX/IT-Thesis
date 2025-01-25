@@ -12,7 +12,7 @@ import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/deck_analyze_chart.dart';
+import '../widgets/analyze_chart.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -182,7 +182,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             builder: (context, trackState) {
               if (trackState.isAnalyzeModeEnabled) {
                 final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
-                return DeckAnalyzeChartWidget(cardStats: cardStats);
+                return AnalyzeChartWidget(cardStats: cardStats);
               } else {
                 return _buildCardList(context, trackState);
               }

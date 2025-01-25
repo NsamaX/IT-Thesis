@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-class DeckAnalyzeChartWidget extends StatelessWidget {
+class AnalyzeChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardStats;
 
-  DeckAnalyzeChartWidget({required this.cardStats});
+  AnalyzeChartWidget({required this.cardStats});
 
   @override
   Widget build(BuildContext context) {
