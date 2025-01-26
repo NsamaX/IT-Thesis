@@ -257,8 +257,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         left: drawerState['history']! ? 0.0 : -200.0,
         child: BlocBuilder<TrackCubit, TrackState>(
           builder: (context, trackState) => HistoryDrawerWidget(
-            height: MediaQuery.of(context).size.height - appBarHeight - 30.0,
             cards: trackState.history,
+            height: MediaQuery.of(context).size.height - appBarHeight - 30.0,
           ),
         ),
       ),

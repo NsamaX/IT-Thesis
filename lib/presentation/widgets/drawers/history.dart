@@ -5,11 +5,13 @@ import '../labels/card.dart';
 class HistoryDrawerWidget extends StatelessWidget {
   final List<CardEntity> cards;
   final double height;
+  final bool isNFC;
 
   const HistoryDrawerWidget({
     Key? key,
     required this.cards,
     required this.height,
+    this.isNFC = false,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class HistoryDrawerWidget extends StatelessWidget {
         itemCount: reversedCards.length,
         itemBuilder: (context, index) => CardLabelWidget(
           card: reversedCards[index],
+          isNFC: isNFC,
           lightTheme: true,
         ),
       ),

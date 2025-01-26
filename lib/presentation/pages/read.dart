@@ -115,8 +115,9 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
         left: state['history']! ? 0 : -200,
         child: BlocBuilder<ScanCubit, ScanCubitState>(
           builder: (context, scanHistoryState) => HistoryDrawerWidget(
-            height: MediaQuery.of(context).size.height - appBarHeight - bottomNavBarHeight - 30,
             cards: scanHistoryState.cards ?? [],
+            height: MediaQuery.of(context).size.height - appBarHeight - bottomNavBarHeight - 30,
+            isNFC: true,
           ),
         ),
       ),
