@@ -129,7 +129,7 @@ class AnalyzeChartWidget extends StatelessWidget {
               BarChartData(
                 barGroups: List.generate(
                   drawCounts.length,
-                  (index) => _buildBarGroup(index, drawCounts[index], returnCounts[index]),
+                  (index) => _buildBarGroup(maxY + 1, index, drawCounts[index], returnCounts[index]),
                 ),
                 titlesData: FlTitlesData(
                   bottomTitles: AxisTitles(
@@ -181,12 +181,20 @@ class AnalyzeChartWidget extends StatelessWidget {
     );
   }
 
-  BarChartGroupData _buildBarGroup(int index, int drawCount, int returnCount) => BarChartGroupData(
+  BarChartGroupData _buildBarGroup(double maxY, int index, int drawCount, int returnCount) => BarChartGroupData(
     x: index,
     barsSpace: 6.0,
     barRods: [
-      BarChartRodData(toY: drawCount.toDouble(), color: CupertinoColors.activeBlue, width: 4.0),
-      BarChartRodData(toY: returnCount.toDouble(), color: CupertinoColors.destructiveRed, width: 4.0),
+      BarChartRodData(
+        toY: drawCount > maxY ? maxY : drawCount.toDouble(),
+        color: CupertinoColors.activeBlue,
+        width: 4.0,
+      ),
+      BarChartRodData(
+        toY: returnCount > maxY ? maxY : returnCount.toDouble(),
+        color: CupertinoColors.destructiveRed,
+        width: 4.0,
+      ),
     ],
   );
 
