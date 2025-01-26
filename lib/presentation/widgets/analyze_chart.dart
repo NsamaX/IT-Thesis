@@ -6,7 +6,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 class AnalyzeChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardStats;
 
-  AnalyzeChartWidget({required this.cardStats});
+  const AnalyzeChartWidget({super.key, required this.cardStats});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,17 @@ class AnalyzeChartWidget extends StatelessWidget {
 
   List<Map<String, dynamic>> _generateData() {
     const maxDummy = 8;
-    final data = [...cardStats];
+    final aggregatedData = <String, Map<String, dynamic>>{};
+    for (final stat in cardStats) {
+      final cardName = stat['CardName'];
+      if (cardName.isEmpty) continue;
+      if (!aggregatedData.containsKey(cardName)) {
+        aggregatedData[cardName] = {'CardName': cardName, 'draw': 0, 'return': 0};
+      }
+      aggregatedData[cardName]!['draw'] += stat['draw'] as int;
+      aggregatedData[cardName]!['return'] += stat['return'] as int;
+    }
+    final data = aggregatedData.values.toList();
     if (data.length < maxDummy) {
       data.addAll(
         List.generate(
@@ -80,7 +90,7 @@ class AnalyzeChartWidget extends StatelessWidget {
 
   Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
     const double chartHeight = 400.0;
-    final double spacerHeight = chartHeight / maxY - 26.0;
+    final double spacerHeight = chartHeight / maxY - 24.0;
     return Container(
       height: chartHeight + 6.0,
       child: Padding(
@@ -102,7 +112,7 @@ class AnalyzeChartWidget extends StatelessWidget {
 
   Widget _buildLeftBorder(Color color) => Container(
     width: 1.2,
-    height: 326.0,
+    height: 346.0,
     color: color,
   );
 
@@ -125,7 +135,7 @@ class AnalyzeChartWidget extends StatelessWidget {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      reservedSize: 80.0,
+                      reservedSize: 60.0,
                       getTitlesWidget: (value, meta) {
                         return value.toInt() < data.length
                             ? _buildBottomTitle(theme, data[value.toInt()]['CardName'])

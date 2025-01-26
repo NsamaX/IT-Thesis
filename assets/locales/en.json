@@ -55,6 +55,14 @@
     "read": "Read",
     "settings": "Settings"
   },
+  "analyze": {
+    "title": "Summarize",
+    "content": {
+      "percentage_played": "?% of the deck's cards were played.",
+      "total_draw": "Total draw [?+] return [?-].",
+      "unused_cards": "There are [?] unique unused cards."
+    }
+  },
   "settings": {
     "account": {
       "label": "Account",

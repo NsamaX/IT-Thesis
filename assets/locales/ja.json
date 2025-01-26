@@ -55,6 +55,14 @@
     "read": "読み取り",
     "settings": "設定"
   },
+  "analyze": {
+    "title": "サマリー",
+    "content": {
+      "percentage_played": "デッキのカードの?%がプレイされました。",
+      "total_draw": "合計ドロー [?+] 戻し [?-]。",
+      "unused_cards": "未使用のユニークなカードは [?] 枚です。"
+    }
+  },
   "settings": {
     "account": {
       "label": "アカウント",

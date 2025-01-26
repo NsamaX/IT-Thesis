@@ -8,11 +8,12 @@ import '../cubits/deck_manager.dart';
 import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
+import '../widgets/analyze_chart.dart';
+import '../widgets/analyze_info.dart';
 import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/analyze_chart.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -182,7 +183,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
             builder: (context, trackState) {
               if (trackState.isAnalyzeModeEnabled) {
                 final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
-                return AnalyzeChartWidget(cardStats: cardStats);
+                return _buildAnalyzeInfo(state, cardStats);
               } else {
                 return _buildCardList(context, trackState);
               }
@@ -194,7 +195,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   );
 
   Widget _buildCardList(BuildContext context, TrackState state) {
-    final totalCards = state.deck.cards.values.fold<int>(0, (sum, count) => sum + count);
+    final totalCards = state.currentDeck.cards.values.fold<int>(0, (sum, count) => sum + count);
     return Column(
       children: [
         Padding(
@@ -210,9 +211,9 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         const SizedBox(height: 8.0),
         Expanded(
           child: ListView.builder(
-            itemCount: state.deck.cards.length,
+            itemCount: state.currentDeck.cards.length,
             itemBuilder: (context, index) {
-              final entry = state.deck.cards.entries.elementAt(index);
+              final entry = state.currentDeck.cards.entries.elementAt(index);
               final card = entry.key;
               final count = entry.value;
               return CardLabelWidget(
@@ -227,6 +228,14 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       ],
     );
   }
+
+  Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      AnalyzeChartWidget(cardStats: cardStats),
+      AnalyzeInfoWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
+    ],
+  );
 
   void _showTrackerDialog(BuildContext context, AppLocalizations locale) => Future.microtask(() {
     context.read<TrackCubit>().showDialog();

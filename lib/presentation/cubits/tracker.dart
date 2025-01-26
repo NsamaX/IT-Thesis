@@ -6,7 +6,8 @@ import 'package:nfc_project/domain/entities/record.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 
 class TrackState {
-  final DeckEntity deck;
+  final DeckEntity initialDeck;
+  final DeckEntity currentDeck;
   final RecordEntity record;
   final List<CardEntity> history;
   final bool isDialogShown;
@@ -15,7 +16,8 @@ class TrackState {
   final bool isAnalyzeModeEnabled;
 
   TrackState({
-    required this.deck,
+    required this.initialDeck,
+    required this.currentDeck,
     required this.record,
     this.history = const [],
     this.isDialogShown = false,
@@ -25,6 +27,7 @@ class TrackState {
   });
 
   TrackState copyWith({
+    DeckEntity? initialDeck,
     DeckEntity? deck,
     RecordEntity? record,
     List<CardEntity>? history,
@@ -33,7 +36,8 @@ class TrackState {
     bool? isAdvanceModeEnabled,
     bool? isAnalyzeModeEnabled,
   }) => TrackState(
-    deck: deck ?? this.deck,
+    initialDeck: initialDeck ?? this.initialDeck,
+    currentDeck: deck ?? this.currentDeck,
     record: record ?? this.record,
     history: history ?? this.history,
     isDialogShown: isDialogShown ?? this.isDialogShown,
@@ -46,7 +50,8 @@ class TrackState {
 class TrackCubit extends Cubit<TrackState> {
   TrackCubit(DeckEntity deck)
       : super(TrackState(
-          deck: deck.copyWith(cards: Map.of(deck.cards)),
+          initialDeck: deck,
+          currentDeck: deck.copyWith(cards: Map.of(deck.cards)),
           record: RecordEntity(
             recordId: DateTime.now().toIso8601String(),
             createdAt: DateTime.now(),
@@ -78,7 +83,7 @@ class TrackCubit extends Cubit<TrackState> {
     if (state.isProcessing) return;
     emit(state.copyWith(isProcessing: true));
     try {
-      final matchingCard = state.deck.cards.keys.firstWhere(
+      final matchingCard = state.currentDeck.cards.keys.firstWhere(
         (card) => card.cardId == tag.cardId,
         orElse: () => throw Exception("Card not found in deck"),
       );
@@ -106,13 +111,13 @@ class TrackCubit extends Cubit<TrackState> {
   }
 
   void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
-    final cardEntry = state.deck.cards.entries.firstWhere(
+    final cardEntry = state.currentDeck.cards.entries.firstWhere(
       (entry) => entry.key.cardId == tag.cardId,
       orElse: () => throw Exception("Card not found in deck"),
     );
     final currentCount = cardEntry.value;
     if ((currentCount + delta) < 0) return;
-    final updatedCards = {...state.deck.cards};
+    final updatedCards = {...state.currentDeck.cards};
     updatedCards[cardEntry.key] = (currentCount + delta).clamp(0, double.infinity).toInt();
     final updatedData = [
       ...state.record.data,
@@ -125,20 +130,20 @@ class TrackCubit extends Cubit<TrackState> {
       ),
     ];
     emit(state.copyWith(
-      deck: state.deck.copyWith(cards: updatedCards),
+      deck: state.currentDeck.copyWith(cards: updatedCards),
       record: state.record.copyWith(data: updatedData),
     ));
   }
 
   void _moveCardToTop(TagEntity tag) {
-    final updatedCards = {...state.deck.cards};
+    final updatedCards = {...state.currentDeck.cards};
     final cardEntry = updatedCards.entries.firstWhere(
       (entry) => entry.key.cardId == tag.cardId,
       orElse: () => throw Exception("Card not found in deck"),
     );
     updatedCards.remove(cardEntry.key);
     emit(state.copyWith(
-      deck: state.deck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
+      deck: state.currentDeck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
     ));
   }
 
