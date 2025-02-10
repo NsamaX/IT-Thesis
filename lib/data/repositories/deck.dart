@@ -8,16 +8,16 @@ abstract class DeckRepository {
 }
 
 class DeckRepositoryImpl implements DeckRepository {
-  final DeckLocalDataSource localDataSource;
+  final DeckLocalDataSource deckLocalDataSource;
 
-  DeckRepositoryImpl(this.localDataSource);
-
-  @override
-  Future<void> saveDeck(DeckModel deck) async => await localDataSource.saveDeck(deck);
+  DeckRepositoryImpl(this.deckLocalDataSource);
 
   @override
-  Future<void> deleteDeck(String deckId) async => await localDataSource.deleteDeck(deckId);
+  Future<void> saveDeck(DeckModel deck) async => await deckLocalDataSource.saveDeck(deck);
 
   @override
-  Future<List<DeckModel>> loadDecks() async => await localDataSource.loadDecks();
+  Future<void> deleteDeck(String deckId) async => await deckLocalDataSource.deleteDeck(deckId);
+
+  @override
+  Future<List<DeckModel>> loadDecks() async => await deckLocalDataSource.loadDecks();
 }

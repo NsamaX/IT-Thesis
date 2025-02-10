@@ -8,6 +8,7 @@ class GameLabelWidget extends StatelessWidget {
   final String? imagePath;
   final String description;
   final bool isAdd;
+  final bool isCustom;
 
   const GameLabelWidget({
     Key? key,
@@ -15,6 +16,7 @@ class GameLabelWidget extends StatelessWidget {
     this.imagePath,
     required this.description,
     this.isAdd = false,
+    this.isCustom = false,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,7 @@ class GameLabelWidget extends StatelessWidget {
     cubit.updateSelectedGame(game);
     Navigator.of(context).pushReplacementNamed(
       AppRoutes.search,
-      arguments: {'game': game, 'isAdd': isAdd},
+      arguments: {'game': isCustom ? 'my_collection' : game, 'isAdd': isAdd},
     );
   }
 
@@ -73,7 +75,11 @@ class GameLabelWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(8.0),
       child: imagePath != null
           ? Image.asset(imagePath!, fit: BoxFit.cover)
-          : const Icon(Icons.videogame_asset, size: 24.0),
+          : const Icon(
+            Icons.inbox_rounded,
+            color: Colors.black,
+            size: 24.0,
+          ),
     ),
   );
 

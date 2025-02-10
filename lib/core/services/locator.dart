@@ -21,6 +21,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
+  locator.registerLazySingleton<UserLocalDataSource>(() => UserLocalDataSourceImpl(locator<SQLiteService>()));
 
   //------------------------------ Repositories ------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) => GameFactory.createApi(game));
@@ -30,6 +31,7 @@ Future<void> setupLocator() async {
   ));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
+  locator.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(locator<UserLocalDataSource>()));
 
   //-------------------------------- UseCases --------------------------------//
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>((game, _) => FetchCardByIdUseCase(
@@ -45,6 +47,14 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
+  locator.registerLazySingleton(() => CreateUserUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => GetUserByIdUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => UpdateUserEmailUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => DeleteUserUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => AddDeckUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => AddRecordUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => DeleteUserDeckUseCase(locator<UserRepository>()));
+  locator.registerLazySingleton(() => DeleteUserRecordUseCase(locator<UserRepository>()));
 
   //-------------------------------- Cubits ----------------------------------//
   locator.registerLazySingleton(() => NFCCubit());

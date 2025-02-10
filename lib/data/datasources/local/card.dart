@@ -16,7 +16,6 @@ class CardLocalDataSourceImpl implements CardLocalDataSource {
 
   static const String cardsTable = 'cards';
   static const String pagesTable = 'pages';
-
   static const String columnId = 'id';
   static const String columnGame = 'game';
   static const String columnName = 'name';

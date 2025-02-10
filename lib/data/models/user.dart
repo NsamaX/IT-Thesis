@@ -1,19 +1,19 @@
 class UserModel {
-  final String email;
   final String userId;
+  final String email;
   final List<String> deckIds;
   final List<String> recordIds;
 
   UserModel({
-    required this.email,
     required this.userId,
+    required this.email,
     required this.deckIds,
     required this.recordIds,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    email: json['email'] as String? ?? '',
     userId: json['userId'] as String? ?? '',
+    email: json['email'] as String? ?? '',
     deckIds: List<String>.from(json['deckIds'] as List<dynamic>? ?? []),
     recordIds: List<String>.from(json['recordIds'] as List<dynamic>? ?? []),
   );

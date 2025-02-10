@@ -1,12 +1,13 @@
 # Feature
-    [] Game record
+    [] User data
     [] Custom card
+    [] Game record
     [] Pair System
     [] Sign in
 
     #optional
-        [] Filter Card
         [] Drag & Drop card for order
+        [] Filter Card
         [] Tutorail app
 
 # page

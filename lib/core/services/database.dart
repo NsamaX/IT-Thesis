@@ -34,6 +34,14 @@ class DatabaseService {
 
   Future<void> _createTables(Database db, int version) async {
     await db.execute('''
+      CREATE TABLE users (
+        userId TEXT PRIMARY KEY,
+        email TEXT,
+        deckIds TEXT,
+        recordIds TEXT
+      )
+    ''');
+    await db.execute('''
       CREATE TABLE decks (
         deckId TEXT PRIMARY KEY,
         deckName TEXT NOT NULL,
@@ -56,9 +64,23 @@ class DatabaseService {
         page INTEGER NOT NULL
       )
     ''');
+    await db.execute('''
+      CREATE TABLE records (
+        recordId TEXT PRIMARY KEY,
+        createdAt DATETIME NOT NULL,
+        data TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE my_collections (
+        userId TEXT NOT NULL REFERENCES users(userId) ON DELETE CASCADE,
+        card TEXT
+      )
+    ''');
   }
 
   Future<void> _configureDatabase(Database db) async {
+    await db.execute('PRAGMA foreign_keys = ON');
     await db.rawQuery('PRAGMA synchronous = NORMAL');
     await db.rawQuery('PRAGMA journal_mode = MEMORY');
     await db.rawQuery('PRAGMA cache_size = -8000');

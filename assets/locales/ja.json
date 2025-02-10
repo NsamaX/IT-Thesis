@@ -37,6 +37,8 @@
     "ok": "OK"
   },
   "text": {
+    "my_collection": "マイコレクション",
+    "collect_description": "私が作った全てのカード",
     "hint_text": "探しているカードはありますか？",
     "internet_error": "インターネットに接続されていません。接続して再試行してください。",
     "no_results": "結果が見つかりません。",
@@ -60,8 +62,8 @@
     "title": "サマリー",
     "content": {
       "percentage_played": "デッキのカードの?%がプレイされました。",
-      "total_draw": "合計ドロー [?+] 戻し [?-]。",
-      "unused_cards": "未使用のカード[?]。"
+      "total_draw": "合計ドロー ?+ 戻し ?-。",
+      "unused_cards": "未使用のカード?。"
     }
   },
   "settings": {

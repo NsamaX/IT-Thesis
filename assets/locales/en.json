@@ -37,6 +37,8 @@
     "ok": "OK"
   },
   "text": {
+    "my_collection": "My Collection",
+    "collection_description": "All cards I created myself.",
     "hint_text": "Got a card in mind?",
     "internet_error": "No internet connection. Please connect to the internet and try again.",
     "no_results": "No results found.",
@@ -60,8 +62,8 @@
     "title": "Summarize",
     "content": {
       "percentage_played": "?% of the deck's cards were played.",
-      "total_draw": "Total draw [?+] return [?-].",
-      "unused_cards": "Unused [?] cards."
+      "total_draw": "Total draw ?+ return ?-.",
+      "unused_cards": "Unused ? cards."
     }
   },
   "settings": {
