@@ -20,7 +20,7 @@ class SwitchModeBarWidget extends StatelessWidget {
     const double boxHeight = 40.0;
     final items = [
       locale.translate('toggle.deck'),
-      locale.translate('toggle.analyze')
+      locale.translate('toggle.insight'),
     ];
 
     return SizedBox(

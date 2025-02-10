@@ -12,7 +12,7 @@ class AnalyzeChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final data = _generateData();
+    final data = _generateData(context);
     final drawCounts = data.map((stat) => stat['draw'] as int).toList();
     final returnCounts = data.map((stat) => stat['return'] as int).toList();
     return Column(
@@ -25,8 +25,14 @@ class AnalyzeChartWidget extends StatelessWidget {
     );
   }
 
-  List<Map<String, dynamic>> _generateData() {
-    const maxDummy = 8;
+  List<Map<String, dynamic>> _generateData(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const double barWidth = 40.0;
+    const int minDummy = 8;
+
+    int maxDummy = (screenWidth / barWidth).floor();
+    maxDummy = maxDummy < minDummy ? minDummy : maxDummy;
+
     final aggregatedData = <String, Map<String, dynamic>>{};
     for (final stat in cardStats) {
       final cardName = stat['CardName'];
@@ -37,6 +43,7 @@ class AnalyzeChartWidget extends StatelessWidget {
       aggregatedData[cardName]!['draw'] += stat['draw'] as int;
       aggregatedData[cardName]!['return'] += stat['return'] as int;
     }
+    
     final data = aggregatedData.values.toList();
     if (data.length < maxDummy) {
       data.addAll(
@@ -46,6 +53,7 @@ class AnalyzeChartWidget extends StatelessWidget {
         ),
       );
     }
+
     return data;
   }
 
@@ -90,12 +98,13 @@ class AnalyzeChartWidget extends StatelessWidget {
 
   Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
     const double chartHeight = 400.0;
-    final double spacerHeight = chartHeight / maxY - 24.0;
-    return Container(
-      height: chartHeight + 6.0,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 28.0),
+    final double spacerHeight = chartHeight / maxY - 22.0;
+    return Padding(
+      padding: const EdgeInsets.only(top: 30.0),
+      child: Container(
+        height: chartHeight,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: List.generate(
             maxY,
             (index) => Column(

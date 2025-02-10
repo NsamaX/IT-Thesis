@@ -16,7 +16,7 @@ class CardQuantityWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     const double borderRadiusValue = 12.0;
-    const double boxWidth = 60.0;
+    const double boxWidth = 80.0;
     const double boxHeight = 40.0;
     return Column(
       children: [
@@ -37,7 +37,7 @@ class CardQuantityWidget extends StatelessWidget {
   }
 
   Widget _buildBackground(ThemeData theme, int count, double width, double height, double borderRadius) => Container(
-    width: width * count + width,
+    width: width * count + 20.0,
     height: height,
     decoration: BoxDecoration(
       color: theme.appBarTheme.backgroundColor,
@@ -63,13 +63,13 @@ class CardQuantityWidget extends StatelessWidget {
   );
 
   Widget _buildQuantityBox(ThemeData theme, int count, double width, double height) => Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: List.generate(
       count * 2 - 1,
       (index) {
         if (index.isOdd) {
           return Container(
-            width: 1,
+            width: 0.8,
             height: height * 0.6,
             color: theme.dividerColor,
           );
@@ -80,7 +80,7 @@ class CardQuantityWidget extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           onTap: () => onSelected(actualIndex + 1),
           child: SizedBox(
-            width: width,
+            width: width ,
             height: height,
             child: Center(
               child: AnimatedDefaultTextStyle(

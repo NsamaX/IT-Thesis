@@ -1,5 +1,4 @@
 # Feature
-    [] Data analysis
     [] Game record
     [] Custom card
     [] Pair System
