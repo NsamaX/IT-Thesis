@@ -15,8 +15,9 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await setupLocator();
+  await AppLocalizations.loadSupportedLanguages();
   await ApiConfig.loadConfig(environment: 'development');
+  await setupLocator();
   runApp(MyApp());
 }
 
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => MaterialApp(
             debugShowCheckedModeBanner: true,
             locale: state.locale,
-            supportedLocales: const [Locale('en'), Locale('ja')],
+            supportedLocales: AppLocalizations.supportedLanguages.map((lang) => Locale(lang)).toList(),
             localizationsDelegates: _localizationsDelegates,
             theme: themeData(isDarkMode: state.isDarkMode),
             onGenerateRoute: AppRoutes.generateRoute,

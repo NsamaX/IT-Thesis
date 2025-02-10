@@ -26,7 +26,7 @@ class LanguagePage extends StatelessWidget {
 
   //--------------------------- Supported Languages --------------------------//
   Map<String, dynamic> _buildSupportedLanguages(AppLocalizations locale, SettingsCubit cubit) {
-    final supportedLanguages = locale.languageNames.entries.map((entry) => {
+    final supportedLanguages = AppLocalizations.languageNames.entries.map((entry) => {
       'code': entry.key,
       'name': entry.value,
     }).toList();

@@ -76,7 +76,7 @@ class SettingsPage extends StatelessWidget {
         'onTap': AppRoutes.language,
         'icon': Icons.language_rounded,
         'text': locale.translate('settings.support.language'),
-        'info': locale.getLanguageName(locale.locale.languageCode),
+        'info': AppLocalizations.getLanguageName(locale.locale.languageCode),
       },
       // {
       //   'onTap': () {},
