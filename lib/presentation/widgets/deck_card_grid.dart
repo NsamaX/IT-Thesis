@@ -51,7 +51,7 @@ class DeckCardGridWidget extends StatelessWidget {
         final cardEntry = item as MapEntry<CardEntity, int>;
         return CardWidget(card: cardEntry.key, count: cardEntry.value);
       default:
-        return const Center(child: Text('Unsupported item type'));
+        return Container();
     }
   }
 }

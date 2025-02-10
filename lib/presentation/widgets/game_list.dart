@@ -18,7 +18,7 @@ class GameListWidget extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(top: 8.0),
     child: gameKeys.isEmpty
-        ? const Center(child: Text('No games available'))
+        ? Container()
         : ListView.builder(
             itemCount: gameKeys.length,
             itemBuilder: (context, index) {

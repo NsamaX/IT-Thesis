@@ -22,16 +22,7 @@ class NFCWidget extends StatelessWidget {
         final currentColor = isNFCEnabled ? activeColor : inactiveColor;
         return GestureDetector(
           onTap: () async {
-            try {
-              await NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled);
-            } catch (e) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Error toggling NFC: $e'),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
+            await NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
