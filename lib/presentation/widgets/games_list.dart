@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/labels/games.dart';
 import 'package:nfc_project/core/constants/api_config.dart';
+import 'labels/games.dart';
 
 class GamesListWidget extends StatelessWidget {
   final List<String> gameKeys;

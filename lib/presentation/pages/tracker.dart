@@ -8,12 +8,12 @@ import '../cubits/deck_manager.dart';
 import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/tracker.dart';
-import '../widgets/analyze_chart.dart';
-import '../widgets/analyze_info.dart';
 import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/draw&return_chart.dart';
+import '../widgets/insight.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -232,8 +232,8 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      AnalyzeChartWidget(cardStats: cardStats),
-      AnalyzeInfoWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
+      DrawReturnChartWidget(cardStats: cardStats),
+      InsightWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
     ],
   );
 

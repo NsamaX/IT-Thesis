@@ -7,9 +7,9 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/card/quantity.dart';
-import '../widgets/card/info.dart';
 import '../widgets/card/image.dart';
+import '../widgets/card/info.dart';
+import '../widgets/card/quantity.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/notifications.dart';
 

@@ -6,8 +6,8 @@ import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
-import '../widgets/grid.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/grid.dart';
 import '../widgets/notifications.dart';
 
 class NewDeckPage extends StatefulWidget {
