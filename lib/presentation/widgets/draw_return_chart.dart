@@ -62,9 +62,9 @@ class DrawReturnChartWidget extends StatelessWidget {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildLegend(theme, locale.translate('text.draws'), CupertinoColors.activeBlue),
+        _buildLegend(theme, locale.translate('text.draw'), CupertinoColors.activeBlue),
         const SizedBox(width: 12.0),
-        _buildLegend(theme, locale.translate('text.returns'), CupertinoColors.destructiveRed),
+        _buildLegend(theme, locale.translate('text.return'), CupertinoColors.destructiveRed),
       ],
     ),
   );

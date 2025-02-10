@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SettingsLabelWidget extends StatelessWidget {
+class SettingLabelWidget extends StatelessWidget {
   final List<Map<String, dynamic>> label;
 
-  const SettingsLabelWidget({Key? key, required this.label}) : super(key: key);
+  const SettingLabelWidget({Key? key, required this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

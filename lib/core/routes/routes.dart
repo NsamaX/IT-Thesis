@@ -25,7 +25,7 @@ class AppRoutes {
       newDeck:  (_) => NewDeckPage(),
       tracker:  (_) => TrackerPage(),
       read:     (_) => ReadPage(),
-      games:    (_) => GamesPage(),
+      games:    (_) => GamePage(),
       search:   (_) => SearchPage(),
       card:     (_) => CardPage(),
       setting:  (_) => SettingsPage(),

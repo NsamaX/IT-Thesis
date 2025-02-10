@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import '../cubits/settings.dart';
-import '../widgets/labels/settings.dart';
+import '../widgets/labels/setting.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/bottom_navigation_bar.dart';
 
@@ -24,7 +24,7 @@ class SettingsPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {locale.translate('title.settings'): null};
   
   //---------------------------------- Body ----------------------------------//
-  Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => SettingsLabelWidget(
+  Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => SettingLabelWidget(
     label: [
       _buildAccountSettings(locale),
       _buildGeneralSettings(context, locale, cubit),

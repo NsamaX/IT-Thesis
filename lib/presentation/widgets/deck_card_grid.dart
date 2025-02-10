@@ -4,10 +4,10 @@ import 'package:nfc_project/domain/entities/deck.dart';
 import 'card.dart';
 import 'deck.dart';
 
-class GridWidget extends StatelessWidget {
+class DeckCardGridWidget extends StatelessWidget {
   final List<dynamic> items;
 
-  const GridWidget({Key? key, required this.items}) : super(key: key);
+  const DeckCardGridWidget({Key? key, required this.items}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

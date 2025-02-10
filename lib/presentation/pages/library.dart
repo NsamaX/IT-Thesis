@@ -4,7 +4,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/grid.dart';
+import '../widgets/deck_card_grid.dart';
 
 class LibraryPage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//
@@ -34,7 +34,7 @@ class LibraryPage extends StatelessWidget {
           .expand((deck) => deck.cards.keys)
           .toSet()
           .toList();
-      return GridWidget(items: cards);
+      return DeckCardGridWidget(items: cards);
     },
   );
 }

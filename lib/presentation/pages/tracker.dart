@@ -12,8 +12,8 @@ import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/draw&return_chart.dart';
-import '../widgets/insight.dart';
+import '../widgets/draw_return_chart.dart';
+import '../widgets/in-depth_gameplay.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -233,7 +233,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       DrawReturnChartWidget(cardStats: cardStats),
-      InsightWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
+      InDepthGameplayWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
     ],
   );
 

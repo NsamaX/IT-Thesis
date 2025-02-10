@@ -3,9 +3,9 @@ import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/arguments.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/games_list.dart';
+import '../widgets/game_list.dart';
 
-class GamesPage extends StatelessWidget {
+class GamePage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class GamesPage extends StatelessWidget {
     final isAdd = arguments['isAdd'] ?? false;
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: GamesListWidget(
+      body: GameListWidget(
         gameKeys: gameKeys,
         gameImages: gameImages,
         isAdd: isAdd,

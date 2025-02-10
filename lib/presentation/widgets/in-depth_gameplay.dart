@@ -4,12 +4,12 @@ import 'package:nfc_project/domain/entities/data.dart' as Action;
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
 
-class InsightWidget extends StatelessWidget {
+class InDepthGameplayWidget extends StatelessWidget {
   final DeckEntity initialDeck;
   final RecordEntity record;
   final List<Map<String, dynamic>> cardStats;
 
-  const InsightWidget({super.key, required this.initialDeck, required this.record, required this.cardStats});
+  const InDepthGameplayWidget({super.key, required this.initialDeck, required this.record, required this.cardStats});
 
   @override
   Widget build(BuildContext context) {

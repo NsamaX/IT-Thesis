@@ -7,7 +7,7 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/grid.dart';
+import '../widgets/deck_card_grid.dart';
 import '../widgets/notifications.dart';
 
 class NewDeckPage extends StatefulWidget {
@@ -169,7 +169,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
         ),
       );
     }
-    return GridWidget(items: deckCards.entries.toList());
+    return DeckCardGridWidget(items: deckCards.entries.toList());
   }
 
   //----------------------------- Snackbar Widget ----------------------------//

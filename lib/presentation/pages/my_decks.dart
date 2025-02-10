@@ -8,7 +8,7 @@ import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/grid.dart';
+import '../widgets/deck_card_grid.dart';
 
 class MyDecksPage extends StatefulWidget {
   @override
@@ -70,7 +70,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
   Widget _buildBody(BuildContext context) => BlocBuilder<DeckManagerCubit, DeckManagerState>(
     builder: (context, state) {
       final decks = state.decks;
-      return GridWidget(items: decks);
+      return DeckCardGridWidget(items: decks);
     },
   );
 }

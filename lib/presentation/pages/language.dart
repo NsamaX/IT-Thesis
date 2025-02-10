@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import '../cubits/settings.dart';
-import '../widgets/labels/settings.dart';
+import '../widgets/labels/setting.dart';
 import '../widgets/app_bar.dart';
 
 class LanguagePage extends StatelessWidget {
@@ -13,7 +13,7 @@ class LanguagePage extends StatelessWidget {
     final cubit = context.read<SettingsCubit>();
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: SettingsLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
+      body: SettingLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
     );
   }
 

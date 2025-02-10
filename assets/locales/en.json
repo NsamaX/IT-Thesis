@@ -6,7 +6,7 @@
     "new_deck": "New Deck",
     "tracker": "Deck Tracker",
     "history": "History",
-    "read": "Tag Reader",
+    "read": "Read Tag",
     "games": "Games",
     "search": "Search",
     "card": "Card Info",
@@ -47,8 +47,8 @@
     "no_card_image": "No card image",
     "deck_empty": "No cards in the deck.",
     "total_cards": "Cards",
-    "draws": "Draws",
-    "returns": "Returns"
+    "draw": "Draw",
+    "return": "Return"
   },
   "navigation": {
     "decks": "Decks",
@@ -60,7 +60,7 @@
     "content": {
       "percentage_played": "?% of the deck's cards were played.",
       "total_draw": "Total draw [?+] return [?-].",
-      "unused_cards": "There are [?] unique unused cards."
+      "unused_cards": "Unused [?] cards."
     }
   },
   "settings": {

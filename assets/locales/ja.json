@@ -6,7 +6,7 @@
     "new_deck": "新しいデッキ",
     "tracker": "デッキトラッカー",
     "history": "履歴",
-    "read": "タグリーダー",
+    "read": "読み取り",
     "games": "ゲーム",
     "search": "検索",
     "card": "カード情報",
@@ -47,8 +47,8 @@
     "no_card_image": "カード画像がありません",
     "deck_empty": "デッキにカードがありません。",
     "total_cards": "カードの総数",
-    "draws": "引く回数",
-    "returns": "戻す回数"
+    "draw": "ドロー",
+    "return": "戻し"
   },
   "navigation": {
     "decks": "デッキ",
@@ -60,7 +60,7 @@
     "content": {
       "percentage_played": "デッキのカードの?%がプレイされました。",
       "total_draw": "合計ドロー [?+] 戻し [?-]。",
-      "unused_cards": "未使用のユニークなカードは [?] 枚です。"
+      "unused_cards": "未使用のカード[?]。"
     }
   },
   "settings": {

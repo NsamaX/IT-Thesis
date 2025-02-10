@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import '../../cubits/app_state.dart';
 
-class GamesLabelWidget extends StatelessWidget {
+class GameLabelWidget extends StatelessWidget {
   final String game;
   final String? imagePath;
   final String description;
   final bool isAdd;
 
-  const GamesLabelWidget({
+  const GameLabelWidget({
     Key? key,
     required this.game,
     this.imagePath,
