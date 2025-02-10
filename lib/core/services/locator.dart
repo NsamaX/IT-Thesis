@@ -58,11 +58,11 @@ Future<void> setupLocator() async {
     deleteDeckUseCase: locator<DeleteDeckUseCase>(),
     loadDecksUseCase: locator<LoadDecksUseCase>(),
   ));
-  locator.registerLazySingleton(() => AppCubit());
   locator.registerLazySingleton(() => SettingsCubit(
     saveSettingUsecase: locator<SaveSettingUseCase>(),
     loadSettingUsecase: locator<LoadSettingUseCase>(),
   ));
+  locator.registerLazySingleton(() => AppCubit());
 
   //-------------------------------- Navigation ------------------------------//
   locator.registerLazySingleton<RouteObserver<ModalRoute>>(() => RouteObserver<ModalRoute>());

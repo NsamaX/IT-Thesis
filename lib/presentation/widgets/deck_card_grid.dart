@@ -11,9 +11,7 @@ class DeckCardGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) {
-      return const Center(child: Text('No items to display'));
-    }
+    if (items.isEmpty) return Container();
     final itemType = _getItemType(items.first);
     final gridConfig = _getGridConfig(itemType);
     return GridView.builder(
