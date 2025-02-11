@@ -98,7 +98,7 @@ class DrawReturnChartWidget extends StatelessWidget {
 
   Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
     const double chartHeight = 400.0;
-    final double spacerHeight = chartHeight / maxY - 22.0;
+    final double spacerHeight = chartHeight / maxY - 24.0;
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
       child: Container(
