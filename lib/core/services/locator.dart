@@ -19,9 +19,9 @@ Future<void> setupLocator() async {
 
   //------------------------------- DataSource -------------------------------//
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
+  locator.registerLazySingleton<CollectionLocalDataSource>(() => CollectionLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
-  locator.registerLazySingleton<UserLocalDataSource>(() => UserLocalDataSourceImpl(locator<SQLiteService>()));
 
   //------------------------------ Repositories ------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) => GameFactory.createApi(game));
@@ -29,9 +29,9 @@ Future<void> setupLocator() async {
     gameApi: locator<GameApi>(param1: game),
     cardLocalDataSource: locator<CardLocalDataSource>(),
   ));
+  locator.registerLazySingleton<CollectionRepository>(() => CollectionRepositoryImpl(locator<CollectionLocalDataSource>()));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
-  locator.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(locator<UserLocalDataSource>()));
 
   //-------------------------------- UseCases --------------------------------//
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>((game, _) => FetchCardByIdUseCase(
@@ -40,27 +40,32 @@ Future<void> setupLocator() async {
   locator.registerFactoryParam<SyncCardsUseCase, String, void>((game, _) => SyncCardsUseCase(
     locator<CardRepository>(param1: game)),
   );
+
+  locator.registerLazySingleton(() => AddCardToCollectionUseCase(locator<CollectionRepository>()));
+  locator.registerLazySingleton(() => RemoveCardFromCollectionUseCase(locator<CollectionRepository>()));
+  locator.registerLazySingleton(() => FetchCollectionUseCase(locator<CollectionRepository>()));
+
   locator.registerLazySingleton(() => AddCardUseCase());
   locator.registerLazySingleton(() => RemoveCardUseCase());
   locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
+
   locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
-  locator.registerLazySingleton(() => CreateUserUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => GetUserByIdUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => UpdateUserEmailUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => DeleteUserUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => AddDeckUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => AddRecordUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => DeleteUserDeckUseCase(locator<UserRepository>()));
-  locator.registerLazySingleton(() => DeleteUserRecordUseCase(locator<UserRepository>()));
 
   //-------------------------------- Cubits ----------------------------------//
   locator.registerLazySingleton(() => NFCCubit());
   locator.registerFactoryParam<ScanCubit, String, void>((game, _) => ScanCubit(
     fetchCardByIdUseCase: locator<FetchCardByIdUseCase>(param1: game),
   ));
+
+  locator.registerLazySingleton(() => CollectionCubit(
+    addCardUseCase: locator<AddCardToCollectionUseCase>(),
+    removeCardUseCase: locator<RemoveCardFromCollectionUseCase>(),
+    fetchCollectionUseCase: locator<FetchCollectionUseCase>(),
+  ));
+
   locator.registerFactory(() => DeckManagerCubit(
     addCardUseCase: locator<AddCardUseCase>(),
     removeCardUseCase: locator<RemoveCardUseCase>(),
@@ -68,10 +73,12 @@ Future<void> setupLocator() async {
     deleteDeckUseCase: locator<DeleteDeckUseCase>(),
     loadDecksUseCase: locator<LoadDecksUseCase>(),
   ));
+
   locator.registerLazySingleton(() => SettingsCubit(
     saveSettingUsecase: locator<SaveSettingUseCase>(),
     loadSettingUsecase: locator<LoadSettingUseCase>(),
   ));
+
   locator.registerLazySingleton(() => AppCubit());
 
   //-------------------------------- Navigation ------------------------------//

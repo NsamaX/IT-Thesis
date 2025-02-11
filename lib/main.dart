@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
       return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => locator<NFCCubit>()),
+          BlocProvider(create: (_) => locator<CollectionCubit>()),
           BlocProvider(create: (_) => locator<DeckManagerCubit>()),
           BlocProvider(create: (_) => locator<SettingsCubit>()),
           BlocProvider(create: (_) => AppCubit()),

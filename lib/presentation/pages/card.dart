@@ -5,6 +5,7 @@ import 'package:nfc_project/core/utils/arguments.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+import '../cubits/collection.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
 import '../widgets/card/image.dart';
@@ -73,14 +74,19 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
+    final collectionCubit = context.watch<CollectionCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
+    final isValid = collectionCubit.state.isValid;
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
       _isCustom
           ? _buildTextField(context, locale)
           : locale.translate('title.card'): null,
-      if (_isAdd) locale.translate('toggle.add'): () => _toggleAdd(context, locale, deckManagerCubit)
-      else if (_isCustom) locale.translate('toggle.done'): null
+      if (_isAdd)locale.translate('toggle.add') : () => _toggleAdd(context, locale, deckManagerCubit)
+      else if (_isCustom) 
+        isValid 
+          ? locale.translate('toggle.done')
+          : null : context.read<CollectionCubit>().addCardUseCase
       else if (_isNFC) (
         isNFCEnabled 
             ? Icons.wifi_tethering_rounded 
@@ -96,7 +102,6 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     style: Theme.of(context).textTheme.titleMedium,
     decoration: InputDecoration(
       border: InputBorder.none,
-      hintText: locale.translate('text.card_name'),
     ),
     onSubmitted: (value) {
       _deckNameController.text = value.trim().isNotEmpty

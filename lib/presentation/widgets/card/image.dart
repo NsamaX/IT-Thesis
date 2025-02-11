@@ -1,9 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+import '../../cubits/collection.dart';
 
-class CardImageWidget extends StatelessWidget {
+class CardImageWidget extends StatefulWidget {
   final CardEntity? card;
   final bool isCustom;
 
@@ -14,29 +18,53 @@ class CardImageWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CardImageWidgetState createState() => _CardImageWidgetState();
+}
+
+class _CardImageWidgetState extends State<CardImageWidget> {
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      context.read<CollectionCubit>().setImageUrl(pickedFile.path);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    return isCustom
+    return widget.isCustom
         ? _buildDottedPlaceholder(locale, theme)
-        : _buildCardImage(locale, theme, card);
+        : _buildCardImage(locale, theme, widget.card);
   }
 
-  Widget _buildDottedPlaceholder(AppLocalizations locale, ThemeData theme) => AspectRatio(
-    aspectRatio: 3 / 4,
-    child: DottedBorder(
-      color: Colors.white.withOpacity(0.4),
-      borderType: BorderType.RRect,
-      radius: const Radius.circular(16.0),
-      dashPattern: const [14.0, 24.0],
-      strokeWidth: 2,
-      child: _buildPlaceholderContent(
-        locale,
-        theme,
-        Icons.upload_rounded,
-        'text.upload_image',
-      ),
-    ),
+  Widget _buildDottedPlaceholder(AppLocalizations locale, ThemeData theme) => BlocBuilder<CollectionCubit, CollectionState>(
+    builder: (context, state) {
+      final imageUrl = state.imageUrl;
+      return AspectRatio(
+        aspectRatio: 3 / 4,
+        child: GestureDetector(
+          onTap: _pickImage,
+          child: DottedBorder(
+            color: Colors.white.withOpacity(0.4),
+            borderType: BorderType.RRect,
+            radius: const Radius.circular(16.0),
+            dashPattern: const [14.0, 24.0],
+            strokeWidth: 2,
+            child: imageUrl == null
+                ? _buildPlaceholderContent(locale, theme, Icons.upload_rounded, 'text.upload_image')
+                : ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    child: AspectRatio(
+                      aspectRatio: 3 / 4,
+                      child: Image.file(File(imageUrl), fit: BoxFit.cover),
+                    ),
+                  ),
+          ),
+        ),
+      );
+    },
   );
 
   Widget _buildCardImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {

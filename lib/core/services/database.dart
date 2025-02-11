@@ -49,6 +49,19 @@ class DatabaseService {
       )
     ''');
     await db.execute('''
+      CREATE TABLE records (
+        recordId TEXT PRIMARY KEY,
+        createdAt DATETIME NOT NULL,
+        data TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE collections (
+        collectId TEXT PRIMARY KEY,
+        card TEXT NOT NULL
+      )
+    ''');
+    await db.execute('''
       CREATE TABLE cards (
         id TEXT PRIMARY KEY,
         game TEXT NOT NULL,
@@ -62,19 +75,6 @@ class DatabaseService {
       CREATE TABLE pages (
         game TEXT PRIMARY KEY REFERENCES cards(game),
         page INTEGER NOT NULL
-      )
-    ''');
-    await db.execute('''
-      CREATE TABLE records (
-        recordId TEXT PRIMARY KEY,
-        createdAt DATETIME NOT NULL,
-        data TEXT
-      )
-    ''');
-    await db.execute('''
-      CREATE TABLE my_collections (
-        userId TEXT NOT NULL REFERENCES users(userId) ON DELETE CASCADE,
-        card TEXT
       )
     ''');
   }

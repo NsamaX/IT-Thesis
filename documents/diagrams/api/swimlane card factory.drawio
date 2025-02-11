@@ -1,0 +1,123 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0" version="26.0.11">
+  <diagram name="Page-1" id="wpN1kFagauyR__H6dpYm">
+    <mxGraphModel dx="3205" dy="1445" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="T06jGqI7ylYegNHbc4W2-1" value="User" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
+          <mxGeometry x="280" y="92" width="150" height="916" as="geometry" />
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-2" value="GameFactory" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
+          <mxGeometry x="555" y="92" width="150" height="916" as="geometry" />
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-3" value="Game API (VanguardApi)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
+          <mxGeometry x="755" y="92" width="194" height="916" as="geometry" />
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-4" value="BaseApi" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
+          <mxGeometry x="1048" y="92" width="150" height="916" as="geometry" />
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-5" value="External API" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" vertex="1" parent="1">
+          <mxGeometry x="1297" y="92" width="150" height="916" as="geometry" />
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-6" value="createApi(&quot;vanguard&quot;)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-1" target="T06jGqI7ylYegNHbc4W2-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="501" y="201" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-7" value="Return VanguardApi instance" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-2" target="T06jGqI7ylYegNHbc4W2-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="504" y="255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-8" value="fetchCardsById(&quot;123&quot;)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-1" target="T06jGqI7ylYegNHbc4W2-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="612" y="309" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-9" value="getRequest(&quot;cards/123&quot;)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-3" target="T06jGqI7ylYegNHbc4W2-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="996" y="363" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-10" value="HTTP GET /cards/123" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-4" target="T06jGqI7ylYegNHbc4W2-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1256" y="417" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-11" value="Response (JSON)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-5" target="T06jGqI7ylYegNHbc4W2-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1259" y="471" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-12" value="Decoded JSON data" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-4" target="T06jGqI7ylYegNHbc4W2-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="999" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-13" value="Return CardModel" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-3" target="T06jGqI7ylYegNHbc4W2-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="579" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-14" value="fetchCardsPage(1)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-1" target="T06jGqI7ylYegNHbc4W2-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="612" y="633" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-15" value="getRequest(&quot;cards?page=1&quot;)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-3" target="T06jGqI7ylYegNHbc4W2-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="996" y="687" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-16" value="HTTP GET /cards?page=1" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-4" target="T06jGqI7ylYegNHbc4W2-5">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1256" y="741" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-17" value="Response (JSON)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-5" target="T06jGqI7ylYegNHbc4W2-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1259" y="795" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-18" value="Decoded JSON data" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-4" target="T06jGqI7ylYegNHbc4W2-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="999" y="849" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="T06jGqI7ylYegNHbc4W2-19" value="Return List&lt;CardModel&gt;" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" edge="1" parent="1" source="T06jGqI7ylYegNHbc4W2-3" target="T06jGqI7ylYegNHbc4W2-1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="615" y="903" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
