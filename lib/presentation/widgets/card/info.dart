@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+import '../../cubits/collection.dart';
 
 class CardInfoWidget extends StatelessWidget {
   final CardEntity? card;
   final bool isCustom;
+  final TextEditingController descriptionController;
 
   const CardInfoWidget({
     Key? key,
     this.card,
+    required this.descriptionController,
     this.isCustom = false,
   }) : super(key: key);
 
@@ -21,7 +25,7 @@ class CardInfoWidget extends StatelessWidget {
       children: [
         _buildTitle(locale, theme),
         const SizedBox(height: 8.0),
-        _buildDescription(locale, theme),
+        isCustom ? _buildEditableDescription(context, theme) : _buildDescription(locale, theme),
       ],
     );
   }
@@ -36,26 +40,35 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
+  Widget _buildEditableDescription(BuildContext context, ThemeData theme) {
+    final collectionCubit = context.watch<CollectionCubit>();
+    return Opacity(
+      opacity: 0.8,
+      child: TextField(
+        controller: descriptionController,
+        textAlign: TextAlign.start,
+        maxLines: null,
+        style: theme.textTheme.bodyMedium,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "...",
+          isDense: true,
+        ),
+        onChanged: (text) {
+          collectionCubit.setDescription(text);
+        },
+      ),
+    );
+  }
+
   Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
-    if (isCustom) {
-      return _buildEditableHint();
-    } else if (card != null) {
+    if (card != null) {
       return card?.additionalData != null
           ? _buildAdditionalData(theme, card!.additionalData!)
           : _buildDefaultDescription(locale, theme, card!);
     }
     return const SizedBox.shrink();
   }
-
-  Widget _buildEditableHint() => Opacity(
-    opacity: 0.6,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: const [
-        Icon(Icons.edit_rounded),
-      ],
-    ),
-  );
 
   Widget _buildAdditionalData(ThemeData theme, Map<String, dynamic> additionalData) {
     final List<Widget> dataEntries = additionalData.entries.map((entry) {
@@ -90,11 +103,13 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) => Opacity(
-    opacity: 0.6,
-    child: Text(
-      card.description ?? locale.translate('text.no_card_description'),
-      style: theme.textTheme.bodyMedium,
-    ),
-  );
+  Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) {
+    return Opacity(
+      opacity: 0.6,
+      child: Text(
+        card.description ?? locale.translate('text.no_card_description'),
+        style: theme.textTheme.bodyMedium,
+      ),
+    );
+  }
 }

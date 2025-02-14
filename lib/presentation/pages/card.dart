@@ -23,7 +23,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
-  late TextEditingController _deckNameController;
+  late TextEditingController _cardNameController;
+  late TextEditingController _descriptionController;
 
   CardEntity? _card;
   bool _isNFC = true;
@@ -35,28 +36,25 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
-    _deckNameController = TextEditingController();
+    _cardNameController = TextEditingController();
+    _descriptionController = TextEditingController(text: _card?.description ?? '');
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final locale = AppLocalizations.of(context);
-    _deckNameController.text = locale.translate('text.card_name');
     final arguments = getArguments(context);
     _card = arguments['card'] as CardEntity?;
     _isNFC = arguments['isNFC'] ?? true;
     _isAdd = arguments['isAdd'] ?? false;
     _isCustom = arguments['isCustom'] ?? false;
-    if (_card != null) {
-      context.read<DeckManagerCubit>().setQuantity(1);
-    }
   }
 
   @override
   void dispose() {
     _nfcSessionHandler.disposeNFCSessionHandler();
-    _deckNameController.dispose();
+    _cardNameController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -96,19 +94,22 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   }
 
   //-------------------------------- Features --------------------------------//
-  Widget _buildTextField(BuildContext context, AppLocalizations locale) => TextField(
-    controller: _deckNameController,
-    textAlign: TextAlign.center,
-    style: Theme.of(context).textTheme.titleMedium,
-    decoration: InputDecoration(
-      border: InputBorder.none,
-    ),
-    onSubmitted: (value) {
-      _deckNameController.text = value.trim().isNotEmpty
-          ? value.trim()
-          : locale.translate('text.card_name');
-    },
-  );
+  Widget _buildTextField(BuildContext context, AppLocalizations locale) {
+    final collectionCubit = context.watch<CollectionCubit>();
+    return TextField(
+      controller: TextEditingController(text: collectionCubit.state.name)
+        ..selection = TextSelection.collapsed(offset: collectionCubit.state.name.length),
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.titleMedium,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: locale.translate('text.card_name'),
+      ),
+      onChanged: (value) {
+        collectionCubit.setName(value.trim());
+      },
+    );
+  }
 
   void _toggleAdd(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
   if (_card != null) {
@@ -135,7 +136,11 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       children: [
         CardImageWidget(card: _card, isCustom: _isCustom),
         const SizedBox(height: 24),
-        CardInfoWidget(card: _card, isCustom: _isCustom),
+        CardInfoWidget(
+          card: _card, 
+          isCustom: _isCustom,  
+          descriptionController: _descriptionController,
+        ),
         if (_isAdd) CardQuantityWidget(
           onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
           quantityCount: 4,
