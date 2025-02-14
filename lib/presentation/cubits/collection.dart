@@ -56,7 +56,7 @@ class CollectionCubit extends Cubit<CollectionState> {
 
   Future<void> addCard() async {
     if (!state.isValid) return;
-    final newCardId = _generateNewCardId();
+    final newCardId = await _generateNewCardId();
     final newCard = CardEntity(
       cardId: newCardId,
       game: 'my_collection',
@@ -65,7 +65,7 @@ class CollectionCubit extends Cubit<CollectionState> {
       description: state.description,
     );
     await addCardUseCase(newCard);
-    emit(state.copyWith(collection: [...state.collection, newCard], name: '', description: '', imageUrl: null));
+    await fetchCollection();
   }
 
   Future<void> removeCard(String cardId) async {
@@ -80,8 +80,9 @@ class CollectionCubit extends Cubit<CollectionState> {
     emit(state.copyWith(collection: cards));
   }
 
-  String _generateNewCardId() {
-    final existingIds = state.collection.map((card) => int.tryParse(card.cardId) ?? 0).toSet();
+  Future<String> _generateNewCardId() async {
+    final cards = await fetchCollectionUseCase();
+    final existingIds = cards.map((card) => int.tryParse(card.cardId) ?? 0).toSet();
     int newId = 1;
     while (existingIds.contains(newId)) {
       newId++;

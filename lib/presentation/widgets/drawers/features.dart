@@ -20,11 +20,13 @@ class FeaturesDrawerWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildFeatureItem(
-                theme,
-                onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
-                image: AppImages.game.containsKey(currentGame) ? AppImages.game[currentGame] : 'my_collection',
-              ),
+              if (currentGame != null)...[
+                _buildFeatureItem(
+                  theme,
+                  onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
+                  image: AppImages.game.containsKey(currentGame) ? AppImages.game[currentGame] : 'my_collection',
+                ),
+              ],
               _buildFeatureItem(
                 theme,
                 onTap: () => _navigateToRoute(context, AppRoutes.games),

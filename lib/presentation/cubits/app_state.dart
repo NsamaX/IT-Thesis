@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+import 'package:nfc_project/core/services/locator.dart';
+import 'package:nfc_project/core/services/shared_preferences.dart';
 
 class AppState {
   final int currentPageIndex;
-  final String selectedGame;
+  final String? selectedGame;
 
   AppState({
     required this.currentPageIndex,
@@ -20,7 +22,12 @@ class AppState {
 }
 
 class AppCubit extends Cubit<AppState> {
-  AppCubit() : super(AppState(currentPageIndex: 0, selectedGame: 'vanguard'));
+  final SharedPreferencesService _sharedPreferencesService = locator<SharedPreferencesService>();
+
+  AppCubit() : super(AppState(
+    currentPageIndex: 0,
+    selectedGame: locator<SharedPreferencesService>().getSelectedGame(),
+  ));
 
   String getRouteForIndex(int index) => const {
     0: AppRoutes.myDecks,
@@ -30,5 +37,8 @@ class AppCubit extends Cubit<AppState> {
 
   void updatePageIndex(int index) => emit(state.copyWith(currentPageIndex: index));
 
-  void updateSelectedGame(String game) => emit(state.copyWith(selectedGame: game));
+  Future<void> updateSelectedGame(String game) async {
+    await _sharedPreferencesService.saveSelectedGame(game);
+    emit(state.copyWith(selectedGame: game));
+  }
 }

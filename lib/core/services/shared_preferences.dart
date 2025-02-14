@@ -6,6 +6,8 @@ class SharedPreferencesService {
 
   SharedPreferencesService(this._sharedPreferences);
 
+  static const String _selectedGameKey = 'selectedGame';
+
   Future<void> saveMap(String key, Map<String, dynamic> map) async {
     try {
       final String jsonString = json.encode(map);
@@ -24,5 +26,13 @@ class SharedPreferencesService {
     } catch (e) {
       return fallback;
     }
+  }
+
+  Future<void> saveSelectedGame(String game) async {
+    await _sharedPreferences.setString(_selectedGameKey, game);
+  }
+
+  String? getSelectedGame() {
+    return _sharedPreferences.getString(_selectedGameKey);
   }
 }
