@@ -30,10 +30,11 @@ class GameLabelWidget extends StatelessWidget {
 
   void _navigateToSearch(BuildContext context) {
     final cubit = context.read<AppCubit>();
-    cubit.updateSelectedGame(game);
+    final String selectedGame = isCustom ? 'my_collection' : game;
+    cubit.updateSelectedGame(selectedGame);
     Navigator.of(context).pushReplacementNamed(
       AppRoutes.search,
-      arguments: {'game': isCustom ? 'my_collection' : game, 'isAdd': isAdd},
+      arguments: {'game': selectedGame, 'isAdd': isAdd},
     );
   }
 

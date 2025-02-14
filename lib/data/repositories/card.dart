@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../datasources/local/card.dart';
+import '../datasources/local/collection.dart';
 import '../datasources/remote/game_factory.dart';
 import '../models/card.dart';
 
@@ -9,22 +10,30 @@ abstract class CardRepository {
 }
 
 class CardRepositoryImpl implements CardRepository {
-  final CardLocalDataSource datasource;
+  final CardLocalDataSource cardDatasource;
+  final CollectionLocalDataSource collectionDatasource;
   final GameApi gameApi;
 
-  CardRepositoryImpl({required this.datasource, required this.gameApi});
+  CardRepositoryImpl({
+    required this.cardDatasource, 
+    required this.collectionDatasource, 
+    required this.gameApi,
+  });
 
   @override
   Future<CardModel> fetchCardById(String game, String id) async {
-    final localCard = await datasource.fetchCardById(game, id);
+    final localCard = await cardDatasource.fetchCardById(game, id);
     return localCard ?? await gameApi.fetchCardsById(id);
   }
 
   @override
   Future<List<CardModel>> syncCards(String game) async {
+    if (game == "my_collection") {
+      return await collectionDatasource.fetchCollection();
+    }
     final stopwatch = Stopwatch()..start();
-    final localCards = await datasource.fetchCards(game);
-    final localLastPage = await datasource.fetchLastPage(game);
+    final localCards = await cardDatasource.fetchCards(game);
+    final localLastPage = await cardDatasource.fetchLastPage(game);
     final remoteLastPage = await _getLastPageFromApi(localLastPage + 1);
     if (localLastPage >= remoteLastPage && localCards.isNotEmpty) {
       return localCards;
@@ -81,17 +90,17 @@ class CardRepositoryImpl implements CardRepository {
         futures.clear();
       }
     }
-    return datasource.fetchCards(game);
+    return cardDatasource.fetchCards(game);
   }
 
   Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
-    if (await datasource.isPageExists(game, page)) return;
+    if (await cardDatasource.isPageExists(game, page)) return;
     int retryCount = 0;
     while (retryCount < maxRetries) {
       try {
         final cards = await gameApi.fetchCardsPage(page);
         if (cards.isNotEmpty) {
-          await datasource.saveCards(game, page, cards);
+          await cardDatasource.saveCards(game, page, cards);
         }
         break;
       } catch (e) {

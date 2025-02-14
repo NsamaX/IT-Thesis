@@ -23,7 +23,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
               _buildFeatureItem(
                 theme,
                 onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
-                image: AppImages.game[currentGame],
+                image: AppImages.game.containsKey(currentGame) ? AppImages.game[currentGame] : 'my_collection',
               ),
               _buildFeatureItem(
                 theme,
@@ -72,19 +72,26 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
   Widget _buildFeatureContent(ThemeData theme, String? image, String? label) {
     if (image != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.asset(
-          image,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
-        ),
-      );
+      return image == 'my_collection' 
+          ? const Icon(
+            Icons.inbox_rounded, 
+            color: Colors.black,
+            size: 36.0,
+          ) 
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                image,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+              ),
+            );
     }
     return Center(
       child: Text(
         label ?? '',
         style: theme.textTheme.bodySmall?.copyWith(color: Colors.black),
+        textAlign: TextAlign.center,
       ),
     );
   }

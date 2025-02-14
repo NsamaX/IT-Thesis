@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
@@ -67,24 +68,38 @@ class CardLabelWidget extends StatelessWidget {
     ),
   );
 
-  Widget _buildImage(ThemeData theme, Color? color) => Container(
-    width: 42.0,
-    height: 42.0,
-    decoration: BoxDecoration(
-      color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
-      borderRadius: BorderRadius.circular(8.0),
-    ),
-    child: ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: card?.imageUrl != null
-          ? Image.network(
-              card!.imageUrl!,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => _buildFallbackIcon(color),
-            )
-          : _buildFallbackIcon(color),
-    ),
-  );
+  Widget _buildImage(ThemeData theme, Color? color) {
+    if (card?.imageUrl == null || card!.imageUrl!.isEmpty) {
+      return _buildFallbackIcon(color);
+    }
+    final String imageUrl = card!.imageUrl!;
+    final bool isNetworkImage = imageUrl.startsWith('http');
+    final bool isLocalFile = File(imageUrl).existsSync();
+    return Container(
+      width: 42.0,
+      height: 42.0,
+      decoration: BoxDecoration(
+        color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: isNetworkImage
+            ? Image.network(
+                imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => _buildFallbackIcon(color),
+              )
+            : isLocalFile
+                ? Image.file(
+                    File(imageUrl),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => _buildFallbackIcon(color),
+                  )
+                : _buildFallbackIcon(color),
+      ),
+    );
+  }
 
   Widget _buildFallbackIcon(Color? color) => Icon(
     Icons.image_not_supported,

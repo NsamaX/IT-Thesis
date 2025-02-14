@@ -26,7 +26,8 @@ Future<void> setupLocator() async {
   //------------------------------ Repositories ------------------------------//
   locator.registerFactoryParam<GameApi, String, void>((game, _) => GameFactory.createApi(game));
   locator.registerFactoryParam<CardRepository, String, void>((game, _) => CardRepositoryImpl(
-    datasource: locator<CardLocalDataSource>(),
+    cardDatasource: locator<CardLocalDataSource>(),
+    collectionDatasource: locator<CollectionLocalDataSource>(),
     gameApi: locator<GameApi>(param1: game),
   ));
   locator.registerLazySingleton<CollectionRepository>(() => CollectionRepositoryImpl(locator<CollectionLocalDataSource>()));

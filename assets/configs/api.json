@@ -1,6 +1,7 @@
 {
   "environments": {
     "development": {
+      "my_collection": "?",
       "vanguard": "https://card-fight-vanguard-api.ue.r.appspot.com/api/v1"
     },
     "production": {

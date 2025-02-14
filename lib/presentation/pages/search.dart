@@ -42,10 +42,9 @@ class SearchPage extends StatelessWidget {
       return {
         'game': arguments['game'] ?? '',
         'isAdd': arguments['isAdd'] ?? false,
-        'isCustom': arguments['isCustom'] ?? false,
       };
     }
-    return {'game': '', 'isAdd': false, 'isCustom': false};
+    return {'game': '', 'isAdd': false};
   }
 
   //--------------------------------- App Bar --------------------------------//
@@ -75,7 +74,6 @@ class SearchPage extends StatelessWidget {
         child: CardListWidget(
           cards: state.searchedCards,
           isAdd: arguments['isAdd'],
-          isCustom: arguments['isCustom'],
         ),
       );
     },

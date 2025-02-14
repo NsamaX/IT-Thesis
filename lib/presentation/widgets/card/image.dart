@@ -22,14 +22,6 @@ class CardImageWidget extends StatefulWidget {
 }
 
 class _CardImageWidgetState extends State<CardImageWidget> {
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      context.read<CollectionCubit>().setImageUrl(pickedFile.path);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -52,13 +44,13 @@ class _CardImageWidgetState extends State<CardImageWidget> {
             radius: const Radius.circular(16.0),
             dashPattern: const [14.0, 24.0],
             strokeWidth: 2,
-            child: imageUrl == null
+            child: imageUrl == ''
                 ? _buildPlaceholderContent(locale, theme, Icons.upload_rounded, 'text.upload_image')
                 : ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                     child: AspectRatio(
                       aspectRatio: 3 / 4,
-                      child: Image.file(File(imageUrl), fit: BoxFit.cover),
+                      child: Image.file(File(imageUrl!), fit: BoxFit.cover),
                     ),
                   ),
           ),
@@ -66,6 +58,14 @@ class _CardImageWidgetState extends State<CardImageWidget> {
       );
     },
   );
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      context.read<CollectionCubit>().setImageUrl(pickedFile.path);
+    }
+  }
 
   Widget _buildCardImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
     if (card?.imageUrl == null) {

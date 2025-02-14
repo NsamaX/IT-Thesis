@@ -36,7 +36,8 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.initState();
     _nfcCubit = context.read<NFCCubit>();
     _nfcSessionHandler = NFCSessionHandler(_nfcCubit)..initNFCSessionHandler();
-    _cardNameController = TextEditingController();
+    context.read<CollectionCubit>().clear();
+    _cardNameController = TextEditingController(text: _card?.name ?? '');
     _descriptionController = TextEditingController(text: _card?.description ?? '');
   }
 
@@ -80,11 +81,11 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       _isCustom
           ? _buildTextField(context, locale)
           : locale.translate('title.card'): null,
-      if (_isAdd)locale.translate('toggle.add') : () => _toggleAdd(context, locale, deckManagerCubit)
+      if (_isAdd)locale.translate('toggle.add') : () => _toggleAdd(locale, deckManagerCubit)
       else if (_isCustom) 
         isValid 
           ? locale.translate('toggle.done')
-          : null : context.read<CollectionCubit>().addCardUseCase
+          : null : () => _toggleCreate()
       else if (_isNFC) (
         isNFCEnabled 
             ? Icons.wifi_tethering_rounded 
@@ -111,16 +112,21 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     );
   }
 
-  void _toggleAdd(BuildContext context, AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
-  if (_card != null) {
-    deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
-    await snackBar(
-      context,
-      locale.translate('snack_bar.card.add_success'),
-    );
+  void _toggleAdd(AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
+    if (_card != null) {
+      deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
+      await snackBar(
+        context,
+        locale.translate('snack_bar.card.add_success'),
+      );
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _toggleCreate() {
+    context.read<CollectionCubit>().addCard();
     Navigator.of(context).pop();
   }
-}
 
   void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) => NFCHelper.handleToggleNFC(
     nfcCubit,

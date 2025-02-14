@@ -14,6 +14,7 @@ class GameFactory {
       throw Exception('Base URL for game "$game" is not configured properly.');
     }
     final apiRegistry = <String, GameApi Function()>{
+      'my_collection': () => DummyApi(),
       'vanguard': () => VanguardApi(baseUrl),
     };
     final apiCreator = apiRegistry[game];

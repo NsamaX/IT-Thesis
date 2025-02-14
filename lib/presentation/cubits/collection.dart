@@ -13,7 +13,7 @@ class CollectionState {
     required this.collection,
     this.name = '',
     this.description = '',
-    this.imageUrl,
+    this.imageUrl = '',
   }) : isValid = name.isNotEmpty && description.isNotEmpty;
 
   CollectionState copyWith({
@@ -46,12 +46,20 @@ class CollectionCubit extends Cubit<CollectionState> {
 
   void setImageUrl(String? imageUrl) => emit(state.copyWith(imageUrl: imageUrl));
 
+  void clear() {
+    emit(state.copyWith(
+      name: '',
+      description: '',
+      imageUrl: '',
+    ));
+  }
+
   Future<void> addCard() async {
     if (!state.isValid) return;
     final newCardId = _generateNewCardId();
     final newCard = CardEntity(
       cardId: newCardId,
-      game: 'collection',
+      game: 'my_collection',
       name: state.name,
       imageUrl: state.imageUrl,
       description: state.description,

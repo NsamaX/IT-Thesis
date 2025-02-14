@@ -9,8 +9,12 @@ import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
 import 'presentation/cubits/@export.dart';
 
+// debug mode
+// import 'package:nfc_project/core/services/database.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await DatabaseService().printTables(); // Uncomment for debugging
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
