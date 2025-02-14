@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
-import 'package:nfc_project/domain/usecases/cards_management.dart';
+import 'package:nfc_project/domain/usecases/card.dart';
 
 class ScanCubitState {
   final List<CardEntity>? cards;

@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
-import 'package:nfc_project/domain/usecases/deck_manager.dart';
+import 'package:nfc_project/domain/usecases/deck.dart';
 import 'NFC.dart';
 
 class DeckManagerState {

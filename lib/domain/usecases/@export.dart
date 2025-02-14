@@ -1,5 +1,4 @@
-export 'cards_management.dart';
+export 'card.dart';
 export 'collection.dart';
-export 'deck_manager.dart';
+export 'deck.dart';
 export 'settings.dart';
-export 'user.dart';

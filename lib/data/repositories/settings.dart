@@ -6,20 +6,20 @@ abstract class SettingsRepository {
 }
 
 class SettingsRepositoryImpl implements SettingsRepository {
-  final SettingsLocalDataSource settingsLocalDataSource;
+  final SettingsLocalDataSource datasource;
 
-  SettingsRepositoryImpl(this.settingsLocalDataSource);
+  SettingsRepositoryImpl(this.datasource);
 
   @override
   Future<void> saveSetting(String key, dynamic value) async {
-    final settings = Map<String, dynamic>.from(await settingsLocalDataSource.loadSettings());
+    final settings = Map<String, dynamic>.from(await datasource.loadSettings());
     settings[key] = value;
-    await settingsLocalDataSource.saveSettings(settings);
+    await datasource.saveSettings(settings);
   }
 
   @override
   Future<dynamic> loadSetting(String key) async {
-    final settings = await settingsLocalDataSource.loadSettings();
+    final settings = await datasource.loadSettings();
     return settings[key] ?? _getDefaultSetting(key);
   }
 

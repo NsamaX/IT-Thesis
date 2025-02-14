@@ -6,6 +6,15 @@ class SharedPreferencesService {
 
   SharedPreferencesService(this._sharedPreferences);
 
+  Future<void> saveMap(String key, Map<String, dynamic> map) async {
+    try {
+      final String jsonString = json.encode(map);
+      await _sharedPreferences.setString(key, jsonString);
+    } catch (e) {
+      throw Exception('Failed to save Map for key "$key": ${e.toString()}');
+    }
+  }
+
   Map<String, dynamic>? getMap(String key, {Map<String, dynamic>? fallback}) {
     try {
       final String? jsonString = _sharedPreferences.getString(key);
@@ -14,15 +23,6 @@ class SharedPreferencesService {
           : fallback;
     } catch (e) {
       return fallback;
-    }
-  }
-
-  Future<void> saveMap(String key, Map<String, dynamic> map) async {
-    try {
-      final String jsonString = json.encode(map);
-      await _sharedPreferences.setString(key, jsonString);
-    } catch (e) {
-      throw Exception('Failed to save Map for key "$key": ${e.toString()}');
     }
   }
 }

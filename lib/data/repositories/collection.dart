@@ -8,22 +8,22 @@ abstract class CollectionRepository {
 }
 
 class CollectionRepositoryImpl implements CollectionRepository {
-  final CollectionLocalDataSource collectionLocalDataSource;
+  final CollectionLocalDataSource datasource;
 
-  CollectionRepositoryImpl(this.collectionLocalDataSource);
+  CollectionRepositoryImpl(this.datasource);
 
   @override
   Future<void> addCardToCollection(CardModel card) async {
-    await collectionLocalDataSource.addCardToCollection(card);
+    await datasource.addCardToCollection(card);
   }
 
   @override
   Future<void> removeCardFromCollection(String cardId) async {
-    await collectionLocalDataSource.removeCardFromCollection(cardId);
+    await datasource.removeCardFromCollection(cardId);
   }
 
   @override
   Future<List<CardModel>> fetchCollection() async {
-    return await collectionLocalDataSource.fetchCollection();
+    return await datasource.fetchCollection();
   }
 }

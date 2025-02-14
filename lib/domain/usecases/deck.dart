@@ -25,28 +25,28 @@ class RemoveCardUseCase {
 }
 
 class SaveDeckUseCase {
-  final DeckRepository deckRepository;
+  final DeckRepository repository;
 
-  SaveDeckUseCase(this.deckRepository);
+  SaveDeckUseCase(this.repository);
 
-  Future<void> call(DeckEntity deck) async => deckRepository.saveDeck(DeckMapper.toModel(deck));
+  Future<void> call(DeckEntity deck) async => repository.saveDeck(DeckMapper.toModel(deck));
 }
 
 class DeleteDeckUseCase {
-  final DeckRepository deckRepository;
+  final DeckRepository repository;
 
-  DeleteDeckUseCase(this.deckRepository);
+  DeleteDeckUseCase(this.repository);
 
-  Future<void> call(String deckId) async => deckRepository.deleteDeck(deckId);
+  Future<void> call(String deckId) async => repository.deleteDeck(deckId);
 }
 
 class LoadDecksUseCase {
-  final DeckRepository deckRepository;
+  final DeckRepository repository;
 
-  LoadDecksUseCase(this.deckRepository);
+  LoadDecksUseCase(this.repository);
 
   Future<List<DeckEntity>> call() async {
-    final decksModel = await deckRepository.loadDecks();
+    final decksModel = await repository.loadDecks();
     return decksModel.map(DeckMapper.toEntity).toList();
   }
 }

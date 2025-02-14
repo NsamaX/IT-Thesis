@@ -9,22 +9,22 @@ abstract class CardRepository {
 }
 
 class CardRepositoryImpl implements CardRepository {
-  final CardLocalDataSource cardLocalDataSource;
+  final CardLocalDataSource datasource;
   final GameApi gameApi;
 
-  CardRepositoryImpl({required this.cardLocalDataSource, required this.gameApi});
+  CardRepositoryImpl({required this.datasource, required this.gameApi});
 
   @override
   Future<CardModel> fetchCardById(String game, String id) async {
-    final localCard = await cardLocalDataSource.fetchCardById(game, id);
+    final localCard = await datasource.fetchCardById(game, id);
     return localCard ?? await gameApi.fetchCardsById(id);
   }
 
   @override
   Future<List<CardModel>> syncCards(String game) async {
     final stopwatch = Stopwatch()..start();
-    final localCards = await cardLocalDataSource.fetchCards(game);
-    final localLastPage = await cardLocalDataSource.fetchLastPage(game);
+    final localCards = await datasource.fetchCards(game);
+    final localLastPage = await datasource.fetchLastPage(game);
     final remoteLastPage = await _getLastPageFromApi(localLastPage + 1);
     if (localLastPage >= remoteLastPage && localCards.isNotEmpty) {
       return localCards;
@@ -81,23 +81,22 @@ class CardRepositoryImpl implements CardRepository {
         futures.clear();
       }
     }
-    return cardLocalDataSource.fetchCards(game);
+    return datasource.fetchCards(game);
   }
 
   Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
-    if (await cardLocalDataSource.isPageExists(game, page)) return;
+    if (await datasource.isPageExists(game, page)) return;
     int retryCount = 0;
     while (retryCount < maxRetries) {
       try {
         final cards = await gameApi.fetchCardsPage(page);
         if (cards.isNotEmpty) {
-          await cardLocalDataSource.saveCards(game, page, cards);
+          await datasource.saveCards(game, page, cards);
         }
         break;
       } catch (e) {
         retryCount++;
         if (retryCount >= maxRetries) {
-          print('Failed to load page $page after $maxRetries attempts. Error: $e');
           throw Exception('Failed to load page $page.');
         }
       }

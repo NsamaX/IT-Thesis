@@ -3,33 +3,33 @@ import '../entities/card.dart';
 import '../mappers/card.dart';
 
 class AddCardToCollectionUseCase {
-  final CollectionRepository collectionRepository;
+  final CollectionRepository repository;
 
-  AddCardToCollectionUseCase(this.collectionRepository);
+  AddCardToCollectionUseCase(this.repository);
 
   Future<void> call(CardEntity card) async {
     final cardModel = CardMapper.toModel(card);
-    await collectionRepository.addCardToCollection(cardModel);
+    await repository.addCardToCollection(cardModel);
   }
 }
 
 class RemoveCardFromCollectionUseCase {
-  final CollectionRepository collectionRepository;
+  final CollectionRepository repository;
 
-  RemoveCardFromCollectionUseCase(this.collectionRepository);
+  RemoveCardFromCollectionUseCase(this.repository);
 
   Future<void> call(String cardId) async {
-    await collectionRepository.removeCardFromCollection(cardId);
+    await repository.removeCardFromCollection(cardId);
   }
 }
 
 class FetchCollectionUseCase {
-  final CollectionRepository collectionRepository;
+  final CollectionRepository repository;
 
-  FetchCollectionUseCase(this.collectionRepository);
+  FetchCollectionUseCase(this.repository);
 
   Future<List<CardEntity>> call() async {
-    final cardModels = await collectionRepository.fetchCollection();
+    final cardModels = await repository.fetchCollection();
     return cardModels.map(CardMapper.toEntity).toList();
   }
 }
