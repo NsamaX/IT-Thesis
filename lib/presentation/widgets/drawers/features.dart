@@ -58,7 +58,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withAlpha((0.2 * 255).toInt()),
               blurRadius: 4.0,
               spreadRadius: 1.0,
               offset: const Offset(0, 2),

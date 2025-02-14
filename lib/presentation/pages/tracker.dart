@@ -158,7 +158,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
               absorbing: isDrawerOpen || isFeatureOpen,
               child: _buildBodyByMode(context, state),
             ),
-            if (isFeatureOpen) Container(color: Colors.black.withOpacity(0.5)),
+            if (isFeatureOpen) Container(color: Colors.black.withAlpha((0.5 * 255).toInt())),
             _buildHistoryDrawer(context),
             _buildPlayerHistoryDrawer(context),
           ],

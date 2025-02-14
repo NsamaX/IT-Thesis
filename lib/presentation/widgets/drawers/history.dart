@@ -24,7 +24,7 @@ class HistoryDrawerWidget extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withAlpha((0.2 * 255).toInt()),
             offset: const Offset(0.0, 3.0),
             blurRadius: 2.0,
             spreadRadius: 1.0,

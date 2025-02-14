@@ -26,7 +26,7 @@ void cupertinoAlertDialog(BuildContext context, String title, String content) {
     context: context,
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withAlpha((0.5 * 255).toInt()),
     pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
       title: _buildDialogTitleText(theme, title),
       content: _buildDialogContentText(theme, content),
@@ -50,7 +50,7 @@ void cupertinoAlertDialogAction(BuildContext context, String title, String conte
     context: context,
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withAlpha((0.5 * 255).toInt()),
     pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
       title: _buildDialogTitleText(theme, title),
       content: _buildDialogContentText(theme, content),
@@ -86,7 +86,7 @@ void cupertinoMultipleChoicesDialog(
     context: context,
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withAlpha((0.5 * 255).toInt()),
     pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
       title: _buildDialogTitleText(theme, title),
       content: _buildDialogContentText(theme, content),

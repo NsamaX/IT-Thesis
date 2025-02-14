@@ -46,7 +46,7 @@ class SignInPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withAlpha((0.5 * 255).toInt()),
             offset: const Offset(1.0, 1.0),
             blurRadius: 3.0,
             spreadRadius: 1.0,
