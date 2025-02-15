@@ -220,7 +220,10 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
                 card: card,
                 count: count,
                 isNFC: false,
+                isTrack: true,
                 lightTheme: count > 0,
+                cardColors: state.cardColors[card.cardId],
+                changeCardColor: (color) => context.read<TrackCubit>().changeCardColor(card.cardId, color),
               );
             },
           ),

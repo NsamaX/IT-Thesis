@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/data.dart';
@@ -10,6 +11,7 @@ class TrackState {
   final DeckEntity currentDeck;
   final RecordEntity record;
   final List<CardEntity> history;
+  final Map<String, Color> cardColors;
   final bool isDialogShown;
   final bool isProcessing;
   final bool isAdvanceModeEnabled;
@@ -20,6 +22,7 @@ class TrackState {
     required this.currentDeck,
     required this.record,
     this.history = const [],
+    this.cardColors = const {},
     this.isDialogShown = false,
     this.isProcessing = false,
     this.isAdvanceModeEnabled = false,
@@ -31,6 +34,7 @@ class TrackState {
     DeckEntity? deck,
     RecordEntity? record,
     List<CardEntity>? history,
+    Map<String, Color>? cardColors,
     bool? isDialogShown,
     bool? isProcessing,
     bool? isAdvanceModeEnabled,
@@ -40,6 +44,7 @@ class TrackState {
     currentDeck: deck ?? this.currentDeck,
     record: record ?? this.record,
     history: history ?? this.history,
+    cardColors: cardColors ?? this.cardColors,
     isDialogShown: isDialogShown ?? this.isDialogShown,
     isProcessing: isProcessing ?? this.isProcessing,
     isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
@@ -76,6 +81,7 @@ class TrackCubit extends Cubit<TrackState> {
       data: [],
     ),
     history: [],
+    cardColors: {},
   ));
 
   //---------------------------- update card data ----------------------------//
@@ -170,5 +176,11 @@ class TrackCubit extends Cubit<TrackState> {
       });
     }
     return result;
+  }
+
+  void changeCardColor(String cardId, Color color) {
+    final updatedColors = Map<String, Color>.from(state.cardColors);
+    updatedColors[cardId] = color;
+    emit(state.copyWith(cardColors: updatedColors));
   }
 }
