@@ -1,49 +1,49 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0" version="26.0.11">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0" version="26.0.11">
   <diagram name="Page-1" id="W4fyqxIYFmOJR6YJLGtv">
-    <mxGraphModel dx="2405" dy="1445" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2177" dy="1651" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-19" value="เริ่มต้น" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-19" value="เริ่มต้น" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1236" y="28" width="101" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-20" value="เปิด Session NFC" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-20" value="เปิด Session NFC" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1229.5" y="108" width="116" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-21" value="เปิดสำเร็จ" style="rhombus;strokeWidth=2;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-21" value="เปิดสำเร็จ" style="rhombus;strokeWidth=2;whiteSpace=wrap;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1244.5" y="187" width="86" height="86" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-23" value="รออ่านแท็ก" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-23" value="รออ่านแท็ก" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1252" y="327" width="71" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-24" value="ผู้ใช้สแกนแท็กที่มีข้อมูลการ์ด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-24" value="ผู้ใช้สแกนแท็กที่มีข้อมูลการ์ด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1211" y="407" width="153" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-25" value="เคยเล่นการ์ดใบนี้แล้ว" style="rhombus;strokeWidth=2;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-25" value="เคยเล่นการ์ดใบนี้แล้ว" style="rhombus;strokeWidth=2;whiteSpace=wrap;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1224.5" y="491" width="126" height="126" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-26" value="บันทึก tagId" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-26" value="บันทึก tagId" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1027.5" y="530" width="135" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-29" value="แสดงสถานะการ์ดใหม่" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-29" value="แสดงสถานะการ์ดใหม่" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1227" y="1014" width="119" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-30" value="การเล่นล่าสุดคือ" style="rhombus;strokeWidth=2;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-30" value="การเล่นล่าสุดคือ" style="rhombus;strokeWidth=2;whiteSpace=wrap;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1236" y="677" width="103" height="103" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-31" value="บันทึกการเล่นเป็นจั่วการ์ด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-31" value="บันทึกการเล่นเป็นจั่วการ์ด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1217.5" y="847" width="138" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-32" value="อัปเดตเด็ค: โดยการ์ดที่มี cardId ตรงกัน -1" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-32" value="อัปเดตเด็ค: โดยการ์ดที่มี cardId ตรงกัน -1" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1178.5" y="930" width="216" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-33" value="บันทึกการเล่นเป็นคืนการ์ด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-33" value="บันทึกการเล่นเป็นคืนการ์ด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1433" y="704.5" width="136" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-34" value="อัปเดตเด็ค: โดยการ์ดที่มี cardId ตรงกัน +1" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-34" value="อัปเดตเด็ค: โดยการ์ดที่มี cardId ตรงกัน +1" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1391.75" y="784" width="218.5" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="gwe4jYJQKUcS6VC4nsIh-36" value="สิ้นสุด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="gwe4jYJQKUcS6VC4nsIh-36" value="สิ้นสุด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1237" y="1252" width="99" height="50" as="geometry" />
         </mxCell>
         <mxCell id="gwe4jYJQKUcS6VC4nsIh-37" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.51;exitY=1;entryX=0.5;entryY=0;rounded=0;" parent="1" source="gwe4jYJQKUcS6VC4nsIh-19" target="gwe4jYJQKUcS6VC4nsIh-20" edge="1">
@@ -127,10 +127,10 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="t5DGwsW34uEP9tXy13Cy-4" value="จบการทำงาน" style="rhombus;strokeWidth=2;whiteSpace=wrap;" parent="1" vertex="1">
+        <mxCell id="t5DGwsW34uEP9tXy13Cy-4" value="จบการทำงาน" style="rhombus;strokeWidth=2;whiteSpace=wrap;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1240.5" y="1098" width="92" height="92" as="geometry" />
         </mxCell>
-        <mxCell id="t5DGwsW34uEP9tXy13Cy-10" value="แจ้งข้อผิดพลาดกับผู้ใช้" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="t5DGwsW34uEP9tXy13Cy-10" value="แจ้งข้อผิดพลาดกับผู้ใช้" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1027.5" y="206" width="135" height="48" as="geometry" />
         </mxCell>
         <mxCell id="t5DGwsW34uEP9tXy13Cy-16" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="t5DGwsW34uEP9tXy13Cy-4" target="gwe4jYJQKUcS6VC4nsIh-23" edge="1">

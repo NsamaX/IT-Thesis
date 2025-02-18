@@ -1,13 +1,13 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36 Edg/132.0.0.0" version="26.0.11">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0" version="26.0.11">
   <diagram name="Page-1" id="FUj5JuBEpWsL8a2AdBEq">
-    <mxGraphModel dx="1234" dy="1156" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="192" dy="578" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="6EVmLK6l6n9z2KSdd183-135" value="เริ่มต้น" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="6EVmLK6l6n9z2KSdd183-135" value="เริ่มต้น" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1253.5" y="341" width="101" height="49" as="geometry" />
         </mxCell>
-        <mxCell id="6EVmLK6l6n9z2KSdd183-148" value="สิ้นสุด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="6EVmLK6l6n9z2KSdd183-148" value="สิ้นสุด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1254.5" y="709" width="99" height="50" as="geometry" />
         </mxCell>
         <mxCell id="6EVmLK6l6n9z2KSdd183-149" value="" style="curved=1;startArrow=none;endArrow=block;exitX=0.5;exitY=1;entryX=0.5;entryY=0;rounded=0;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" parent="1" source="6EVmLK6l6n9z2KSdd183-135" target="6EVmLK6l6n9z2KSdd183-172" edge="1">
@@ -16,10 +16,10 @@
             <mxPoint x="1304" y="280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="6EVmLK6l6n9z2KSdd183-172" value="รองรับ NDEF" style="rhombus;strokeWidth=2;whiteSpace=wrap;fontStyle=0" parent="1" vertex="1">
+        <mxCell id="6EVmLK6l6n9z2KSdd183-172" value="รองรับ NDEF" style="rhombus;strokeWidth=2;whiteSpace=wrap;fontStyle=0;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1253.5" y="430" width="101" height="101" as="geometry" />
         </mxCell>
-        <mxCell id="6EVmLK6l6n9z2KSdd183-189" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+        <mxCell id="6EVmLK6l6n9z2KSdd183-189" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1294" y="659" width="20" height="20" as="geometry" />
         </mxCell>
         <mxCell id="6EVmLK6l6n9z2KSdd183-191" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="6EVmLK6l6n9z2KSdd183-189" target="6EVmLK6l6n9z2KSdd183-148" edge="1">
@@ -40,7 +40,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="6EVmLK6l6n9z2KSdd183-228" value="เขียนข้อมูลที่การ์ด" style="whiteSpace=wrap;strokeWidth=2;" parent="1" vertex="1">
+        <mxCell id="6EVmLK6l6n9z2KSdd183-228" value="เขียนข้อมูลที่การ์ด" style="whiteSpace=wrap;strokeWidth=2;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1254.5" y="576" width="99" height="50" as="geometry" />
         </mxCell>
         <mxCell id="6EVmLK6l6n9z2KSdd183-229" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="6EVmLK6l6n9z2KSdd183-228" target="6EVmLK6l6n9z2KSdd183-189" edge="1">
