@@ -78,10 +78,7 @@ class _CardImageWidgetState extends State<CardImageWidget> {
   }
 
   Widget _buildCardImage(AppLocalizations locale, ThemeData theme, CardEntity? card) {
-    if (card?.imageUrl == null || card!.imageUrl!.isEmpty) {
-      return _buildErrorImage(locale, theme);
-    }
-    final String imageUrl = card.imageUrl!;
+    final String imageUrl = card!.imageUrl!;
     final bool isNetworkImage = imageUrl.startsWith('http');
     final bool isLocalFile = File(imageUrl).existsSync();
     return Container(

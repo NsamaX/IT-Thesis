@@ -168,30 +168,27 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   );
 
   //--------------------------------- Widgets ---------------------------------//
-  Widget _buildBodyByMode(BuildContext context, TrackState state) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    child: Column(
-      children: [
-        const SizedBox(height: 8.0),
-        SwitchModeBarWidget(
-          isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
-          onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
+  Widget _buildBodyByMode(BuildContext context, TrackState state) => Column(
+    children: [
+      const SizedBox(height: 16.0),
+      SwitchModeBarWidget(
+        isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
+        onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
+      ),
+      const SizedBox(height: 8.0),
+      Expanded(
+        child: BlocBuilder<TrackCubit, TrackState>(
+          builder: (context, trackState) {
+            if (trackState.isAnalyzeModeEnabled) {
+              final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
+              return _buildAnalyzeInfo(state, cardStats);
+            } else {
+              return _buildCardList(context, trackState);
+            }
+          },
         ),
-        const SizedBox(height: 8.0),
-        Expanded(
-          child: BlocBuilder<TrackCubit, TrackState>(
-            builder: (context, trackState) {
-              if (trackState.isAnalyzeModeEnabled) {
-                final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
-                return _buildAnalyzeInfo(state, cardStats);
-              } else {
-                return _buildCardList(context, trackState);
-              }
-            },
-          ),
-        ),
-      ],
-    ),
+      ),
+    ],
   );
 
   Widget _buildCardList(BuildContext context, TrackState state) {

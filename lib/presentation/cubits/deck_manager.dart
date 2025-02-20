@@ -136,7 +136,9 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
 
   Future<void> loadDecks() async {
     final decks = await loadDecksUseCase.call();
-    emit(state.copyWith(decks: decks.where((d) => d.cards.isNotEmpty).toList()));
+    if (!isClosed) {
+      emit(state.copyWith(decks: decks.where((d) => d.cards.isNotEmpty).toList()));
+    }
   }
 
   Future<void> _performWithLoading(Future<void> Function() task) async {

@@ -47,11 +47,12 @@ class CollectionCubit extends Cubit<CollectionState> {
   void setImageUrl(String? imageUrl) => emit(state.copyWith(imageUrl: imageUrl));
 
   void clear() {
-    emit(state.copyWith(
-      name: '',
-      description: '',
-      imageUrl: '',
-    ));
+    if (!isClosed) 
+      emit(state.copyWith(
+        name: '',
+        description: '',
+        imageUrl: '',
+      ));
   }
 
   Future<void> addCard() async {

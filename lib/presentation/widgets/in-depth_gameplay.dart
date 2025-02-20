@@ -3,6 +3,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/data.dart' as Action;
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
+import 'history.dart';
 
 class InDepthGameplayWidget extends StatelessWidget {
   final DeckEntity initialDeck;
@@ -21,39 +22,46 @@ class InDepthGameplayWidget extends StatelessWidget {
     final percentagePlayed = _calculatePercentagePlayed();
     final unrecord = _calculateUnusedCards();
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            locale.translate('analyze.title'),
-            style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
-          ),
-          const SizedBox(height: 8.0),
-          Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInfoText(
-                theme,
-                locale.translate('analyze.content.percentage_played')
-                    .replaceFirst('?', percentagePlayed.toStringAsFixed(1)),
+              Text(
+                locale.translate('analyze.title'),
+                style: theme.textTheme.bodyMedium?.copyWith(color: theme.primaryColor),
               ),
-              _buildInfoText(
-                theme,
-                locale.translate('analyze.content.total_draw')
-                    .replaceAll('?+', totalDraw.toString())
-                    .replaceAll('?-', totalReturn.toString()),
-              ),
-              _buildInfoText(
-                theme,
-                locale.translate('analyze.content.unused_cards')
-                    .replaceAll('?', unrecord.toString()),
+              const SizedBox(height: 8.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoText(
+                    theme,
+                    locale.translate('analyze.content.percentage_played')
+                        .replaceFirst('?', percentagePlayed.toStringAsFixed(1)),
+                  ),
+                  _buildInfoText(
+                    theme,
+                    locale.translate('analyze.content.total_draw')
+                        .replaceAll('?+', totalDraw.toString())
+                        .replaceAll('?-', totalReturn.toString()),
+                  ),
+                  _buildInfoText(
+                    theme,
+                    locale.translate('analyze.content.unused_cards')
+                        .replaceAll('?', unrecord.toString()),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8.0),
+        HistoryWidget(),
+      ],
     );
   }
 
