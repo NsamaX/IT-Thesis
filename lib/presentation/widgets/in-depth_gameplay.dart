@@ -65,9 +65,12 @@ class InDepthGameplayWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoText(ThemeData theme, String content) => Text(
-    '     ➜ $content',
-    style: theme.textTheme.bodySmall,
+  Widget _buildInfoText(ThemeData theme, String content) => Opacity(
+    opacity: 0.6,
+    child: Text(
+      '     ➜ $content',
+      style: theme.textTheme.bodySmall,
+    ),
   );
 
   int _calculateTotal(String key) => cardStats.fold(0, (total, card) => total + (card[key] as int));

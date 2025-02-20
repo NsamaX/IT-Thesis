@@ -232,7 +232,10 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      DrawReturnChartWidget(cardStats: cardStats),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(6.0, 0.0, 16.0, 0.0),
+        child: DrawReturnChartWidget(cardStats: cardStats),
+      ),
       InDepthGameplayWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
     ],
   );

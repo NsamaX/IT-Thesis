@@ -85,7 +85,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
       else if (_isCustom) 
         isValid 
           ? locale.translate('toggle.done')
-          : null : () => _toggleCreate()
+          : null : () => _toggleCreate(locale)
       else if (_isNFC) (
         isNFCEnabled 
             ? Icons.wifi_tethering_rounded 
@@ -123,9 +123,12 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     }
   }
 
-  void _toggleCreate() {
+  void _toggleCreate(AppLocalizations locale) async {
     context.read<CollectionCubit>().addCard();
-    Navigator.of(context).pop();
+    await snackBar(
+      context,
+      locale.translate('snack_bar.card.add_success'),
+    );
   }
 
   void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) => NFCHelper.handleToggleNFC(

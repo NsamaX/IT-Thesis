@@ -65,7 +65,6 @@ class DrawReturnChartWidget extends StatelessWidget {
         _buildLegend(theme, locale.translate('text.draw'), CupertinoColors.activeBlue),
         const SizedBox(width: 12.0),
         _buildLegend(theme, locale.translate('text.return'), CupertinoColors.destructiveRed),
-        const SizedBox(width: 12.0),
       ],
     ),
   );

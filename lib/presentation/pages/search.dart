@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/usecases/card.dart';
+import '../cubits/collection.dart';
 import '../cubits/search.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/card_list.dart';
@@ -74,6 +75,9 @@ class SearchPage extends StatelessWidget {
         child: CardListWidget(
           cards: state.searchedCards,
           isAdd: arguments['isAdd'],
+          onDelete: arguments['game'] == 'my_collection' 
+              ? (cardId) => context.read<CollectionCubit>().removeCard(cardId) 
+              : null,
         ),
       );
     },

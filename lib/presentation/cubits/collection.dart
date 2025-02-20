@@ -71,9 +71,11 @@ class CollectionCubit extends Cubit<CollectionState> {
 
   Future<void> removeCard(String cardId) async {
     await removeCardUseCase(cardId);
-    emit(state.copyWith(
-      collection: state.collection.where((card) => card.cardId != cardId).toList(),
-    ));
+    if (!isClosed) {
+      emit(state.copyWith(
+        collection: state.collection.where((card) => card.cardId != cardId).toList(),
+      ));
+    }
   }
 
   Future<void> fetchCollection() async {

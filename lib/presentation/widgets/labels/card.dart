@@ -11,7 +11,7 @@ class CardLabelWidget extends StatelessWidget {
   final bool isNFC, isAdd, isCustom, isTrack, lightTheme;
   final Color? cardColors;
   final void Function(Color color)? changeCardColor;
-  final void Function()? onDelete;
+  final void Function(String cardId)? onDelete;
 
   const CardLabelWidget({
     Key? key,
@@ -71,7 +71,7 @@ class CardLabelWidget extends StatelessWidget {
             endActionPane: _buildSlidableActions(context, theme, backgroundColor),
             child: Row(
               children: [
-                _buildImage(theme, color),
+                _buildImage(theme, pinColor!, color),
                 const SizedBox(width: 8.0),
                 Expanded(child: _buildCardInfo(locale, theme, color)),
                 const SizedBox(width: 8.0),
@@ -85,31 +85,46 @@ class CardLabelWidget extends StatelessWidget {
   }
 
   ActionPane? _buildSlidableActions(BuildContext context, ThemeData theme, Color? backgroundColor) {
-    if (!isTrack) return null;
-    final colors = [
-      theme.colorScheme.primary,
-      theme.colorScheme.secondary,
-      theme.colorScheme.tertiary,
-    ];
-    return ActionPane(
-      motion: const StretchMotion(),
-      extentRatio: (60.0 * colors.length) / MediaQuery.of(context).size.width,
-      children: colors
-          .map((color) => SlidableAction(
-                onPressed: (_) => _toggleColor(color, backgroundColor),
-                backgroundColor: color,
-                foregroundColor: theme.appBarTheme.backgroundColor,
-                icon: cardColors == color ? Icons.close_rounded : Icons.push_pin_rounded,
-              ))
-          .toList(),
-    );
+    if (isTrack) {
+      final colors = [
+        theme.colorScheme.primary,
+        theme.colorScheme.secondary,
+        theme.colorScheme.tertiary,
+      ];
+      return ActionPane(
+        motion: const StretchMotion(),
+        extentRatio: (60.0 * colors.length) / MediaQuery.of(context).size.width,
+        children: colors
+            .map((color) => SlidableAction(
+                  onPressed: (_) => _toggleColor(color, backgroundColor),
+                  backgroundColor: color,
+                  foregroundColor: theme.appBarTheme.backgroundColor,
+                  icon: cardColors == color ? Icons.close_rounded : Icons.push_pin_rounded,
+                ))
+            .toList(),
+      );
+    }
+    else if (onDelete != null) {
+      return ActionPane(
+        motion: const StretchMotion(),
+        extentRatio: 0.25,
+        children: [
+          SlidableAction(
+            onPressed: (_) => onDelete!(card!.cardId),
+            backgroundColor: theme.colorScheme.error,
+            foregroundColor: theme.iconTheme.color,
+            icon: Icons.delete_outline_rounded,
+          ),
+        ],
+      );
+    } else return null;
   }
 
   void _toggleColor(Color targetColor, Color? backgroundColor) {
     changeCardColor?.call(cardColors == targetColor ? backgroundColor! : targetColor);
   }
 
-  Widget _buildImage(ThemeData theme, Color? color) {
+  Widget _buildImage(ThemeData theme, Color pinColor, Color? color) {
     final imageUrl = card?.imageUrl;
     final isNetworkImage = imageUrl?.startsWith('http') ?? false;
     final isLocalFile = imageUrl != null && File(imageUrl).existsSync();
@@ -118,7 +133,7 @@ class CardLabelWidget extends StatelessWidget {
       width: 42.0,
       height: 42.0,
       decoration: BoxDecoration(
-        color: lightTheme ? Colors.white : theme.appBarTheme.backgroundColor,
+        color: pinColor,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: ClipRRect(

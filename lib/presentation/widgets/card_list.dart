@@ -7,12 +7,14 @@ class CardListWidget extends StatelessWidget {
   final List<CardEntity> cards;
   final bool isAdd;
   final bool isCustom;
+  final void Function(String cardId)? onDelete;
 
   const CardListWidget({
     Key? key,
     required this.cards,
     this.isAdd = false,
     this.isCustom = false,
+    this.onDelete,
   }) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class CardListWidget extends StatelessWidget {
             card: cards[index],
             isAdd: isAdd,
             isCustom: isCustom,
+            onDelete: onDelete,
           ),
           cacheExtent: 1000,
         );
