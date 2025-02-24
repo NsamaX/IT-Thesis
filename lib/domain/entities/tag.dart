@@ -3,7 +3,7 @@ class TagEntity {
   final String cardId;
   final String game;
 
-  TagEntity({
+  const TagEntity({
     required this.tagId,
     required this.cardId,
     required this.game,

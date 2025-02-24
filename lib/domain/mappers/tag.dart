@@ -7,7 +7,7 @@ class TagMapper {
     cardId: entity.cardId,
     game: entity.game,
   );
-  
+
   static TagEntity toEntity(TagModel model) => TagEntity(
     tagId: model.tagId,
     cardId: model.cardId,

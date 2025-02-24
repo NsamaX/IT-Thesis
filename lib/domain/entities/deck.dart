@@ -5,7 +5,7 @@ class DeckEntity {
   final String deckName;
   final Map<CardEntity, int> cards;
 
-  DeckEntity({
+  const DeckEntity({
     required this.deckId,
     required this.deckName,
     required this.cards,

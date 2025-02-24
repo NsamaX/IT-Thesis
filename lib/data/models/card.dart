@@ -6,7 +6,7 @@ class CardModel {
   final String? description;
   final Map<String, dynamic>? additionalData;
 
-  CardModel({
+  const CardModel({
     required this.cardId,
     required this.game,
     required this.name,

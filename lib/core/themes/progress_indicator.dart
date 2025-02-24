@@ -8,11 +8,15 @@ class AppProgressIndicatorStyles {
 
   ProgressIndicatorThemeData get progressIndicatorTheme => ProgressIndicatorThemeData(
     color: AppColors.PrimaryColor,
-    refreshBackgroundColor: isDarkMode
-        ? AppColors.DarkModeBackground_lv3
-        : AppColors.LightModeBackground_lv3,
-    circularTrackColor: isDarkMode
-        ? AppColors.DarkModeBackground_lv2
-        : AppColors.LightModeBackground_lv2,
+    refreshBackgroundColor: backgroundColor,
+    circularTrackColor: trackColor,
   );
+
+  Color get backgroundColor => isDarkMode
+      ? AppColors.DarkModeBackground_lv3
+      : AppColors.LightModeBackground_lv3;
+
+  Color get trackColor => isDarkMode
+      ? AppColors.DarkModeBackground_lv2
+      : AppColors.LightModeBackground_lv2;
 }

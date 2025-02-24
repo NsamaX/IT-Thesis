@@ -12,7 +12,7 @@ class DataEntity {
   final Action action;
   final DateTime timestamp;
 
-  DataEntity({
+  const DataEntity({
     required this.tagId,
     required this.name,
     required this.imageUrl,

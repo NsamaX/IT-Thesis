@@ -12,7 +12,7 @@ class DataModel {
   final ActionModel action;
   final DateTime timestamp;
 
-  DataModel({
+  const DataModel({
     required this.tagId,
     required this.name,
     required this.imageUrl,

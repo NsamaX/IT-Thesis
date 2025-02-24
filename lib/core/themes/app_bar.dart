@@ -9,12 +9,18 @@ class AppBarStyles {
   AppBarStyles(this.isDarkMode);
 
   AppBarTheme get appBarTheme => AppBarTheme(
-    backgroundColor: isDarkMode
-        ? AppColors.DarkModeBackground_lv3
-        : AppColors.LightModeBackground_lv3,
-    iconTheme: AppIconThemes(isDarkMode).appBarIcon,
-    titleTextStyle: AppTextStyles(isDarkMode).titleSmall.copyWith(
-      color: AppColors.PrimaryColor,
-    ),
+    backgroundColor: backgroundColor,
+    iconTheme: iconTheme,
+    titleTextStyle: titleTextStyle,
+  );
+
+  Color get backgroundColor => isDarkMode
+      ? AppColors.DarkModeBackground_lv3
+      : AppColors.LightModeBackground_lv3;
+
+  IconThemeData get iconTheme => AppIconThemes(isDarkMode).appBarIcon;
+
+  TextStyle get titleTextStyle => AppTextStyles(isDarkMode).titleSmall.copyWith(
+    color: AppColors.PrimaryColor,
   );
 }

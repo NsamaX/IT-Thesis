@@ -77,7 +77,7 @@ class SettingLabelWidget extends StatelessWidget {
                 if (info != null) const SizedBox(width: 6.0),
                 if (hasRoute) const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey),
                 if (select == true) const Icon(Icons.check_rounded, size: 18.0),
-                if (arrow == true) const Icon(Icons.arrow_outward_rounded, size: 18.0),
+                if (arrow == true) const Icon(Icons.arrow_outward_rounded, size: 16.0, color: Colors.grey),
               ],
             ),
           ],

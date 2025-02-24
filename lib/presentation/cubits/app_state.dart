@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/services/locator.dart';
-import 'package:nfc_project/core/services/shared_preferences.dart';
+import 'package:nfc_project/core/storage/shared_preferences.dart';
 
 class AppState {
   final int currentPageIndex;

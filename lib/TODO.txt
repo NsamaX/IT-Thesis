@@ -1,8 +1,7 @@
 # Feature
-    [] Game record
     [] Pair System
-    [] User data
     [] Sign in
+    [] User data
 
     #optional
         [] Drag & Drop card for order

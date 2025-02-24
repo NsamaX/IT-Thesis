@@ -6,7 +6,7 @@ class DeckModel {
   final String deckName;
   final Map<CardModel, int> cards;
 
-  DeckModel({
+  const DeckModel({
     required this.deckId,
     required this.deckName,
     required this.cards,

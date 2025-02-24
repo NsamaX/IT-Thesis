@@ -4,7 +4,7 @@ class UserModel {
   final List<String> deckIds;
   final List<String> recordIds;
 
-  UserModel({
+  const UserModel({
     required this.userId,
     required this.email,
     required this.deckIds,

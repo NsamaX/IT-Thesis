@@ -6,7 +6,7 @@ class CardEntity {
   final String? imageUrl;
   final Map<String, dynamic>? additionalData;
 
-  CardEntity({
+  const CardEntity({
     required this.cardId,
     required this.game,
     required this.name,

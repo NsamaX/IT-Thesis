@@ -8,7 +8,7 @@ class UserMapper {
     deckIds: entity.deckIds,
     recordIds: entity.recordIds,
   );
-  
+
   static UserEntity toEntity(UserModel model) => UserEntity(
     email: model.email,
     userId: model.userId,

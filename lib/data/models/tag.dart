@@ -3,7 +3,7 @@ class TagModel {
   final String cardId;
   final String game;
 
-  TagModel({
+  const TagModel({
     required this.tagId,
     required this.cardId,
     required this.game,

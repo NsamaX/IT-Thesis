@@ -6,15 +6,17 @@ class AppIconThemes {
 
   AppIconThemes(this.isDarkMode);
 
-  IconThemeData get defaultIcon => IconThemeData(
-    color: isDarkMode
-        ? AppColors.DarkModeText
-        : AppColors.LightModeText,
-    size: 16,
-  );
-
-  IconThemeData get appBarIcon => IconThemeData(
+  IconThemeData get appBarIcon => const IconThemeData(
     color: AppColors.PrimaryColor,
     size: 24,
   );
+
+  IconThemeData get defaultIcon => IconThemeData(
+    color: iconColor,
+    size: 16,
+  );
+
+  Color get iconColor => isDarkMode
+      ? AppColors.DarkModeText
+      : AppColors.LightModeText;
 }

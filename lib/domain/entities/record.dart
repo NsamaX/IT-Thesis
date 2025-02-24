@@ -5,7 +5,7 @@ class RecordEntity {
   final DateTime createdAt;
   final List<DataEntity> data;
 
-  RecordEntity({
+  const RecordEntity({
     required this.recordId,
     required this.createdAt,
     required this.data,

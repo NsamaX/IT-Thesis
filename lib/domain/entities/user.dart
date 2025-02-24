@@ -4,7 +4,7 @@ class UserEntity {
   final List<String> deckIds;
   final List<String> recordIds;
 
-  UserEntity({
+  const UserEntity({
     required this.userId,
     required this.email,
     required this.deckIds,

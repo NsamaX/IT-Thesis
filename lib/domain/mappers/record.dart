@@ -8,7 +8,7 @@ class RecordMapper {
     createdAt: entity.createdAt,
     data: entity.data.map(DataMapper.toModel).toList(),
   );
-  
+
   static RecordEntity toEntity(RecordModel model) => RecordEntity(
     recordId: model.recordId,
     createdAt: model.createdAt,

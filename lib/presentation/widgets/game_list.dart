@@ -34,7 +34,7 @@ class GameListWidget extends StatelessWidget {
                   );
                 }
                 final actualIndex = index - 1;
-                final description = ApiConfig.baseUrls?[gameKeys[actualIndex]] ?? '';
+                final description = ApiConfig.baseUrls[gameKeys[actualIndex]] ?? '';
                 return GameLabelWidget(
                   game: gameKeys[actualIndex],
                   imagePath: gameImages[actualIndex],

@@ -5,7 +5,7 @@ class RecordModel {
   final DateTime createdAt;
   final List<DataModel> data;
 
-  RecordModel({
+  const RecordModel({
     required this.recordId,
     required this.createdAt,
     required this.data,

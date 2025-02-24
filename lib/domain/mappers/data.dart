@@ -10,7 +10,7 @@ class DataMapper {
     action: ActionModel.values[entity.action.index],
     timestamp: entity.timestamp,
   );
-  
+
   static DataEntity toEntity(DataModel model) => DataEntity(
     tagId: model.tagId,
     name: model.name,
