@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  /*--------------------------------- Shared ---------------------------------*/
+  /*------------------------------ Shared Colors -----------------------------*/
   static const Color PrimaryColor            = Color.fromARGB(255, 140, 200, 255);
   static const Color SecondaryColor          = Color.fromARGB(255, 255, 255, 140);
   static const Color TertiaryColor           = Color.fromARGB(255, 255, 160, 140);

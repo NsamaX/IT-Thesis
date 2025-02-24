@@ -1,6 +1,18 @@
 import 'package:nfc_project/data/models/card.dart';
 import '../entities/card.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class CardMapper {
   static CardModel toModel(CardEntity entity) => CardModel(
     cardId: entity.cardId,

@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
-import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
 import '../storage/@export.dart';
 
+import 'package:nfc_project/domain/entities/deck.dart';
+
 final GetIt locator = GetIt.instance;
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน setupLocator
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Dependency Injection สำหรับ Database, DataSources,
- |      Repositories, UseCases, และ Cubits โดยใช้ GetIt
  |
- |  ค่าที่คืนกลับ:
- |      - Future<void> เนื่องจากบาง dependency ต้องรอ async (เช่น SharedPreferences)
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 Future<void> setupLocator() async {
   await _setupDatabase();
   _setupDataSources();
@@ -30,12 +34,18 @@ Future<void> setupLocator() async {
   _setupMisc();
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupDatabase
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Database Service และ SharedPreferences
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 Future<void> _setupDatabase() async {
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => SQLiteService(locator<DatabaseService>()));
@@ -44,12 +54,18 @@ Future<void> _setupDatabase() async {
   locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences));
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupDataSources
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Data Sources ทั้งหมด (Local และ Remote)
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 void _setupDataSources() {
   locator.registerLazySingleton<CardLocalDataSource>(
     () => CardLocalDataSourceImpl(locator<SQLiteService>())
@@ -68,12 +84,18 @@ void _setupDataSources() {
   );
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupRepositories
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Repository สำหรับแต่ละ Data Source
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 void _setupRepositories() {
   locator.registerFactoryParam<GameApi, String, void>(
     (game, _) => GameFactory.createApi(game)
@@ -99,12 +121,18 @@ void _setupRepositories() {
   );
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupUseCases
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน UseCases สำหรับการจัดการข้อมูล
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 void _setupUseCases() {
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>(
     (game, _) => FetchCardByIdUseCase(locator<CardRepository>(param1: game))
@@ -131,12 +159,18 @@ void _setupUseCases() {
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupCubits
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Cubits สำหรับใช้ใน UI
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 void _setupCubits() {
   locator.registerLazySingleton(() => NFCCubit());
 
@@ -175,12 +209,18 @@ void _setupCubits() {
   locator.registerLazySingleton(() => AppCubit());
 }
 
-/*------------------------------------------------------------------------------
- |  ฟังก์ชัน _setupMisc
+/*--------------------------------------------------------------------------------
  |
- |  วัตถุประสงค์:
- |      ลงทะเบียน Dependency ที่ไม่ได้อยู่ในกลุ่มหลัก เช่น RouteObserver
- *----------------------------------------------------------------------------*/
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 void _setupMisc() {
   locator.registerLazySingleton<RouteObserver<ModalRoute>>(
     () => RouteObserver<ModalRoute>()

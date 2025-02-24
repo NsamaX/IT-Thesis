@@ -1,6 +1,18 @@
 import 'package:nfc_project/data/models/user.dart';
 import '../entities/user.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class UserMapper {
   static UserModel toModel(UserEntity entity) => UserModel(
     email: entity.email,

@@ -2,6 +2,18 @@ import 'package:nfc_project/data/models/record.dart';
 import '../entities/record.dart';
 import 'data.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class RecordMapper {
   static RecordModel toModel(RecordEntity entity) => RecordModel(
     recordId: entity.recordId,

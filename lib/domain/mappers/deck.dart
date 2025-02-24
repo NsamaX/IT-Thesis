@@ -2,6 +2,18 @@ import 'package:nfc_project/data/models/deck.dart';
 import '../entities/deck.dart';
 import 'card.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class DeckMapper {
   static DeckModel toModel(DeckEntity entity) => DeckModel(
     deckId: entity.deckId,
