@@ -1,8 +1,7 @@
 # Feature
-    [] User data
-    [] Custom card
     [] Game record
     [] Pair System
+    [] User data
     [] Sign in
 
     #optional
@@ -13,6 +12,3 @@
 # page
     [] About
     [] privacy
-
-# widget
-    [] Animations

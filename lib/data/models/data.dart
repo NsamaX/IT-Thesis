@@ -7,6 +7,7 @@ enum ActionModel {
 class DataModel {
   final String tagId;
   final String name;
+  final String imageUrl;
   final String location;
   final ActionModel action;
   final DateTime timestamp;
@@ -14,6 +15,7 @@ class DataModel {
   DataModel({
     required this.tagId,
     required this.name,
+    required this.imageUrl,
     required this.location,
     required this.action,
     required this.timestamp,
@@ -22,6 +24,7 @@ class DataModel {
   factory DataModel.fromJson(Map<String, dynamic> json) => DataModel(
     tagId: json['tagId'] as String? ?? '',
     name: json['name'] as String? ?? '',
+    imageUrl: json['imageUrl'] as String? ?? '',
     location: json['location'] as String? ?? '',
     action: ActionModel.values.firstWhere(
       (e) => e.name == json['action'],
@@ -35,6 +38,7 @@ class DataModel {
   Map<String, dynamic> toJson() => {
     'tagId': tagId,
     'name': name,
+    'imageUrl': imageUrl,
     'location': location,
     'action': action.name,
     'timestamp': timestamp.toIso8601String(),

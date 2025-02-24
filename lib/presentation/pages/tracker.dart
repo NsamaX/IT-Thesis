@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
@@ -54,32 +55,35 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
-        BlocProvider(create: (context) => TrackCubit(deck)),
+        BlocProvider(create: (context) => GetIt.instance<TrackCubit>(param1: deck)),
       ],
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<NFCCubit, NFCState>(
-            listener: (context, nfcState) {
-              if (nfcState.lastestReadTags != null && nfcState.isNFCEnabled) {
-                context.read<TrackCubit>().readTag(nfcState.lastestReadTags!);
-              }
-            },
-            listenWhen: (previous, current) {
-              return previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null;
-            },
-          ),
-        ],
-        child: BlocBuilder<TrackCubit, TrackState>(
-          builder: (context, state) {
-            if (!state.isDialogShown) {
-              _showTrackerDialog(context, locale);
-            }
-            return Scaffold(
-              appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
-              body: _buildBody(context, state),
-            );
-          },
-        ),
+      child: Builder(
+        builder: (context) {
+          context.read<TrackCubit>().fetchRecord();
+          _showTrackerDialog(context, locale);
+          return MultiBlocListener(
+            listeners: [
+              BlocListener<NFCCubit, NFCState>(
+                listener: (context, nfcState) {
+                  if (nfcState.lastestReadTags != null && nfcState.isNFCEnabled) {
+                    context.read<TrackCubit>().readTag(nfcState.lastestReadTags!);
+                  }
+                },
+                listenWhen: (previous, current) {
+                  return previous.lastestReadTags != current.lastestReadTags && current.lastestReadTags != null;
+                },
+              ),
+            ],
+            child: BlocBuilder<TrackCubit, TrackState>(
+              builder: (context, state) {
+                return Scaffold(
+                  appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
+                  body: _buildBody(context, state),
+                );
+              },
+            ),
+          );
+        }
       ),
     );
   }
@@ -124,14 +128,14 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
       {
         AppLocalizations.of(context).translate('button.reset'): {
           'onPressed': () {
-            context.read<TrackCubit>().toggleReset(deck);
+            context.read<TrackCubit>().toggleReset();
             Navigator.of(context).pop();
           },
           'isCancel': false,
         },
         AppLocalizations.of(context).translate('toggle.save'): {
           'onPressed': () {
-            // TODO: Save deck
+            context.read<TrackCubit>().toggleSaveRecord();
             Navigator.of(context).pop();
           },
           'isCancel': false,
@@ -229,14 +233,19 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => ListView(
     children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 0.0, 16.0, 0.0),
         child: DrawReturnChartWidget(cardStats: cardStats),
       ),
-      InDepthGameplayWidget(initialDeck: state.initialDeck, record: state.record, cardStats: cardStats),
+      InDepthGameplayWidget(
+        initialDeck: state.initialDeck, 
+        record: state.record, 
+        records: state.records,
+        cardStats: cardStats,
+        selectRecord: (context, recordId) => context.read<TrackCubit>().fetchRecordById(recordId),
+      ),
     ],
   );
 

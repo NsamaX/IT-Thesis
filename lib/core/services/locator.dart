@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
 import 'package:nfc_project/presentation/cubits/@export.dart';
 import '@export.dart';
@@ -21,6 +22,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<CardLocalDataSource>(() => CardLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<CollectionLocalDataSource>(() => CollectionLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<DeckLocalDataSource>(() => DeckLocalDataSourceImpl(locator<SQLiteService>()));
+  locator.registerLazySingleton<RecordLocalDataSource>(() => RecordLocalDataSourceImpl(locator<SQLiteService>()));
   locator.registerLazySingleton<SettingsLocalDataSource>(() => SettingsLocalDataSourceImpl(locator<SharedPreferencesService>()));
 
   //------------------------------ Repositories ------------------------------//
@@ -32,6 +34,7 @@ Future<void> setupLocator() async {
   ));
   locator.registerLazySingleton<CollectionRepository>(() => CollectionRepositoryImpl(locator<CollectionLocalDataSource>()));
   locator.registerLazySingleton<DeckRepository>(() => DeckRepositoryImpl(locator<DeckLocalDataSource>()));
+  locator.registerLazySingleton<RecordRepository>(() => RecordRepositoryImpl(locator<RecordLocalDataSource>()));
   locator.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(locator<SettingsLocalDataSource>()));
 
   //-------------------------------- UseCases --------------------------------//
@@ -50,7 +53,11 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => RemoveCardUseCase());
   locator.registerLazySingleton(() => SaveDeckUseCase(locator<DeckRepository>()));
   locator.registerLazySingleton(() => DeleteDeckUseCase(locator<DeckRepository>()));
-  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));
+  locator.registerLazySingleton(() => LoadDecksUseCase(locator<DeckRepository>()));  
+
+  locator.registerLazySingleton(() => SaveRecordUseCase(locator<RecordRepository>()));
+  locator.registerLazySingleton(() => RemoveRecordUseCase(locator<RecordRepository>()));
+  locator.registerLazySingleton(() => FetchRecordUseCase(locator<RecordRepository>()));
 
   locator.registerLazySingleton(() => SaveSettingUseCase(locator<SettingsRepository>()));
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
@@ -73,6 +80,13 @@ Future<void> setupLocator() async {
     saveDeckUseCase: locator<SaveDeckUseCase>(),
     deleteDeckUseCase: locator<DeleteDeckUseCase>(),
     loadDecksUseCase: locator<LoadDecksUseCase>(),
+  ));
+
+  locator.registerFactoryParam<TrackCubit, DeckEntity, void>((deck, _) => TrackCubit(
+    deck,
+    saveRecordUseCase: locator<SaveRecordUseCase>(),
+    recordUseCase: locator<RemoveRecordUseCase>(),
+    fetchRecordUseCase: locator<FetchRecordUseCase>(),
   ));
 
   locator.registerLazySingleton(() => SettingsCubit(

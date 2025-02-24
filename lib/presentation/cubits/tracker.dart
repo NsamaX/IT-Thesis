@@ -5,11 +5,13 @@ import 'package:nfc_project/domain/entities/data.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
+import 'package:nfc_project/domain/usecases/record.dart';
 
 class TrackState {
   final DeckEntity initialDeck;
   final DeckEntity currentDeck;
   final RecordEntity record;
+  final List<RecordEntity> records;
   final List<CardEntity> history;
   final Map<String, Color> cardColors;
   final bool isDialogShown;
@@ -21,6 +23,7 @@ class TrackState {
     required this.initialDeck,
     required this.currentDeck,
     required this.record,
+    this.records = const [],
     this.history = const [],
     this.cardColors = const {},
     this.isDialogShown = false,
@@ -33,6 +36,7 @@ class TrackState {
     DeckEntity? initialDeck,
     DeckEntity? deck,
     RecordEntity? record,
+    List<RecordEntity>? records,
     List<CardEntity>? history,
     Map<String, Color>? cardColors,
     bool? isDialogShown,
@@ -43,6 +47,7 @@ class TrackState {
     initialDeck: initialDeck ?? this.initialDeck,
     currentDeck: deck ?? this.currentDeck,
     record: record ?? this.record,
+    records: records ?? this.records,
     history: history ?? this.history,
     cardColors: cardColors ?? this.cardColors,
     isDialogShown: isDialogShown ?? this.isDialogShown,
@@ -53,8 +58,16 @@ class TrackState {
 }
 
 class TrackCubit extends Cubit<TrackState> {
-  TrackCubit(DeckEntity deck)
-      : super(TrackState(
+  final SaveRecordUseCase saveRecordUseCase;
+  final RemoveRecordUseCase recordUseCase;
+  final FetchRecordUseCase fetchRecordUseCase;
+
+  TrackCubit(
+    DeckEntity deck, {
+    required this.saveRecordUseCase,
+    required this.recordUseCase,
+    required this.fetchRecordUseCase,
+  }) : super(TrackState(
           initialDeck: deck,
           currentDeck: deck.copyWith(cards: Map.of(deck.cards)),
           record: RecordEntity(
@@ -71,10 +84,10 @@ class TrackCubit extends Cubit<TrackState> {
 
   void toggleAnalyzeMode() => emit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
 
-  void toggleReset(DeckEntity deck) => emit(state.copyWith(
+  void toggleReset() => emit(state.copyWith(
     isProcessing: false,
     isDialogShown: true,
-    deck: deck.copyWith(cards: Map.of(deck.cards)),
+    deck: state.initialDeck,
     record: RecordEntity(
       recordId: DateTime.now().toIso8601String(),
       createdAt: DateTime.now(),
@@ -83,6 +96,42 @@ class TrackCubit extends Cubit<TrackState> {
     history: [],
     cardColors: {},
   ));
+
+  Future<void> toggleSaveRecord() async {
+    if (state.record.data.isEmpty) return;
+    await saveRecordUseCase.call(state.record);
+    fetchRecord();
+    toggleReset();
+  }
+
+  Future<void> toggleRemoveRecord(String recordId) async {
+    await recordUseCase.call(recordId);
+  }
+
+  Future<void> fetchRecordById(String recordId) async {
+    final record = state.records.firstWhere(
+      (record) => record.recordId == recordId,
+      orElse: () => throw Exception("Record not found"),
+    );
+    final history = record.data.map((data) {
+      final card = state.initialDeck.cards.keys.firstWhere(
+        (card) => card.cardId == data.tagId,
+        orElse: () => CardEntity(
+          cardId: data.tagId,
+          game: '',
+          name: data.name,
+          description: '',
+        ),
+      );
+      return card.copyWith(description: '');
+    }).toList();
+    emit(state.copyWith(record: record, history: history));
+  }
+
+  Future<void> fetchRecord() async {
+    final records = await fetchRecordUseCase.call();
+    emit(state.copyWith(records: records.reversed.toList()));
+  }
 
   //---------------------------- update card data ----------------------------//
   void readTag(TagEntity tag) {
@@ -99,6 +148,7 @@ class TrackCubit extends Cubit<TrackState> {
         orElse: () => DataEntity(
           tagId: tag.tagId,
           name: matchingCard.name,
+          imageUrl: matchingCard.imageUrl ?? '',
           location: "deck",
           action: Action.unknown,
           timestamp: DateTime.now(),
@@ -130,6 +180,7 @@ class TrackCubit extends Cubit<TrackState> {
       DataEntity(
         tagId: tag.tagId,
         name: cardEntry.key.name,
+        imageUrl: cardEntry.key.imageUrl ?? '',
         location: location,
         action: action,
         timestamp: DateTime.now(),

@@ -8,9 +8,18 @@ import 'history.dart';
 class InDepthGameplayWidget extends StatelessWidget {
   final DeckEntity initialDeck;
   final RecordEntity record;
+  final List<RecordEntity> records;
+  final void Function(BuildContext context, String recordId)? selectRecord;
   final List<Map<String, dynamic>> cardStats;
 
-  const InDepthGameplayWidget({super.key, required this.initialDeck, required this.record, required this.cardStats});
+  const InDepthGameplayWidget({
+    super.key, 
+    required this.initialDeck, 
+    required this.record, 
+    this.selectRecord,
+    required this.records,
+    required this.cardStats,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +69,7 @@ class InDepthGameplayWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8.0),
-        HistoryWidget(),
+        if (records.isNotEmpty) HistoryWidget(records: records, selectRecord: selectRecord),
       ],
     );
   }
