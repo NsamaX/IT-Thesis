@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 
 class SwitchModeBarWidget extends StatelessWidget {

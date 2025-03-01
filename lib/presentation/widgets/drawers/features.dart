@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+
 import '../../cubits/app_state.dart';
 
 class FeaturesDrawerWidget extends StatelessWidget {

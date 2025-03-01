@@ -7,10 +7,10 @@ import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 
-import '../cubits/deck_manager.dart';
+import '../cubits/deck_management/cubit.dart';
+import '../cubits/NFC/cubit.dart';
+import '../cubits/tracker/cubit.dart';
 import '../cubits/drawer.dart';
-import '../cubits/NFC.dart';
-import '../cubits/tracker.dart';
 import '../widgets/drawers/history.dart';
 import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';

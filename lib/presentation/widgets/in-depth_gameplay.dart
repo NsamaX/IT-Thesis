@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/data.dart' as Action;
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
+
 import 'history.dart';
 
 class InDepthGameplayWidget extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 
 const _snackBarDuration = Duration(seconds: 1);

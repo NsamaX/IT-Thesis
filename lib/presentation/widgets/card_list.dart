@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+
 import 'labels/card.dart';
 
 class CardListWidget extends StatelessWidget {

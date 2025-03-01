@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/entities/record.dart';
+
 import 'labels/setting.dart';
 
 class HistoryWidget extends StatelessWidget {

@@ -5,8 +5,8 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 
+import '../cubits/NFC/cubit.dart';
 import '../cubits/drawer.dart';
-import '../cubits/NFC.dart';
 import '../cubits/scan.dart';
 import '../widgets/drawers/features.dart';
 import '../widgets/drawers/history.dart';

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
+
 import '../cubits/app_state.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {

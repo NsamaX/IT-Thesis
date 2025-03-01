@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import '../cubits/deck_manager.dart';
-import '../cubits/NFC.dart';
+
+import '../cubits/deck_management/cubit.dart';
+import '../cubits/NFC/cubit.dart';
 import 'card/edit_controls.dart';
 
 class CardWidget extends StatelessWidget {

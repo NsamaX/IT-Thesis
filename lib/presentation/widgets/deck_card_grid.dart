@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
+
 import 'card.dart';
 import 'deck.dart';
 

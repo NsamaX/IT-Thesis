@@ -1,5 +1,5 @@
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/presentation/cubits/NFC.dart';
+import 'package:nfc_project/presentation/cubits/NFC/cubit.dart';
 
 /*--------------------------------------------------------------------------------
  |

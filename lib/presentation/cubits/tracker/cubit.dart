@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
@@ -8,6 +7,9 @@ import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 import 'package:nfc_project/domain/usecases/record.dart';
+
+part 'helper.dart';
+part 'state.dart';
 
 /*--------------------------------------------------------------------------------
  |
@@ -21,56 +23,6 @@ import 'package:nfc_project/domain/usecases/record.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class TrackState {
-  final DeckEntity initialDeck;
-  final DeckEntity currentDeck;
-  final RecordEntity record;
-  final List<RecordEntity> records;
-  final List<CardEntity> history;
-  final Map<String, Color> cardColors;
-  final bool isDialogShown;
-  final bool isProcessing;
-  final bool isAdvanceModeEnabled;
-  final bool isAnalyzeModeEnabled;
-
-  TrackState({
-    required this.initialDeck,
-    required this.currentDeck,
-    required this.record,
-    this.records = const [],
-    this.history = const [],
-    this.cardColors = const {},
-    this.isDialogShown = false,
-    this.isProcessing = false,
-    this.isAdvanceModeEnabled = false,
-    this.isAnalyzeModeEnabled = false,
-  });
-
-  TrackState copyWith({
-    DeckEntity? initialDeck,
-    DeckEntity? deck,
-    RecordEntity? record,
-    List<RecordEntity>? records,
-    List<CardEntity>? history,
-    Map<String, Color>? cardColors,
-    bool? isDialogShown,
-    bool? isProcessing,
-    bool? isAdvanceModeEnabled,
-    bool? isAnalyzeModeEnabled,
-  }) => TrackState(
-    initialDeck: initialDeck ?? this.initialDeck,
-    currentDeck: deck ?? this.currentDeck,
-    record: record ?? this.record,
-    records: records ?? this.records,
-    history: history ?? this.history,
-    cardColors: cardColors ?? this.cardColors,
-    isDialogShown: isDialogShown ?? this.isDialogShown,
-    isProcessing: isProcessing ?? this.isProcessing,
-    isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
-    isAnalyzeModeEnabled: isAnalyzeModeEnabled ?? this.isAnalyzeModeEnabled,
-  );
-}
-
 class TrackCubit extends Cubit<TrackState> {
   final SaveRecordUseCase saveRecordUseCase;
   final RemoveRecordUseCase recordUseCase;
@@ -263,77 +215,15 @@ class TrackCubit extends Cubit<TrackState> {
         ),
       );
       if (existingData.action == Action.draw) {
-        _updateCardCount(tag, Action.returnToDeck, "deck", 1);
+        updateCardCount(tag, Action.draw, "out", -1, state, emit);
       } else {
-        _updateCardCount(tag, Action.draw, "out", -1);
+        updateCardCount(tag, Action.draw, "out", -1, state, emit);
       }
-      _moveCardToTop(tag);
+      moveCardToTop(tag, state, emit);
       emit(state.copyWith(isProcessing: false, history: updatedHistory));
     } catch (e) {
       emit(state.copyWith(isProcessing: false));
     }
-  }
-
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
-  void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
-    final cardEntry = state.currentDeck.cards.entries.firstWhere(
-      (entry) => entry.key.cardId == tag.cardId,
-      orElse: () => throw Exception("Card not found in deck"),
-    );
-    final currentCount = cardEntry.value;
-    if ((currentCount + delta) < 0) return;
-    final updatedCards = {...state.currentDeck.cards};
-    updatedCards[cardEntry.key] = (currentCount + delta).clamp(0, double.infinity).toInt();
-    final updatedData = [
-      ...state.record.data,
-      DataEntity(
-        tagId: tag.tagId,
-        name: cardEntry.key.name,
-        imageUrl: cardEntry.key.imageUrl ?? '',
-        location: location,
-        action: action,
-        timestamp: DateTime.now(),
-      ),
-    ];
-    emit(state.copyWith(
-      deck: state.currentDeck.copyWith(cards: updatedCards),
-      record: state.record.copyWith(data: updatedData),
-    ));
-  }
-
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
-  void _moveCardToTop(TagEntity tag) {
-    final updatedCards = {...state.currentDeck.cards};
-    final cardEntry = updatedCards.entries.firstWhere(
-      (entry) => entry.key.cardId == tag.cardId,
-      orElse: () => throw Exception("Card not found in deck"),
-    );
-    updatedCards.remove(cardEntry.key);
-    emit(state.copyWith(
-      deck: state.currentDeck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
-    ));
   }
 
   /*--------------------------------------------------------------------------------

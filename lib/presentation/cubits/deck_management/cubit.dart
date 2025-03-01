@@ -1,13 +1,15 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/services.dart';
 
-import 'package:nfc_project/core/utils/nfc_helper.dart';
-import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/usecases/deck.dart';
+import 'package:nfc_project/domain/entities/deck.dart';
+import 'package:nfc_project/domain/entities/card.dart';
+import 'package:nfc_project/core/utils/nfc_helper.dart';
 
-import 'NFC.dart';
+import '../NFC/cubit.dart';
+
+part 'state.dart';
 
 /*--------------------------------------------------------------------------------
  |
@@ -21,52 +23,6 @@ import 'NFC.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class DeckManagerState {
-  final List<DeckEntity> decks;
-  final DeckEntity deck;
-  final CardEntity? selectedCard;
-  final int quantity;
-  final bool isEditModeEnabled;
-  final bool isShareEnabled;
-  final bool isNFCEnabled;
-  final bool isdeleteEnabled;
-  final bool isLoading;
-
-  DeckManagerState({
-    required this.decks,
-    required this.deck,
-    this.selectedCard,
-    this.quantity = 1,
-    this.isEditModeEnabled = false,
-    this.isShareEnabled = false,
-    this.isNFCEnabled = false,
-    this.isdeleteEnabled = false,
-    this.isLoading = false,
-  });
-
-  DeckManagerState copyWith({
-    List<DeckEntity>? decks,
-    DeckEntity? deck,
-    CardEntity? selectedCard,
-    int? quantity,
-    bool? isEditModeEnabled,
-    bool? isShareEnabled,
-    bool? isNFCEnabled,
-    bool? isdeleteEnabled,
-    bool? isLoading,
-  }) => DeckManagerState(
-    decks: decks ?? this.decks,
-    deck: deck ?? this.deck,
-    selectedCard: selectedCard ?? this.selectedCard,
-    quantity: quantity ?? this.quantity,
-    isEditModeEnabled: isEditModeEnabled ?? this.isEditModeEnabled,
-    isShareEnabled: isShareEnabled ?? this.isShareEnabled,
-    isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
-    isdeleteEnabled: isdeleteEnabled ?? this.isdeleteEnabled,
-    isLoading: isLoading ?? this.isLoading,
-  );
-}
-
 class DeckManagerCubit extends Cubit<DeckManagerState> {
   final AddCardUseCase addCardUseCase;
   final RemoveCardUseCase removeCardUseCase;
@@ -81,9 +37,9 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     required this.deleteDeckUseCase,
     required this.loadDecksUseCase,
   }) : super(DeckManagerState(
-          decks: [],
-          deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
-        ));
+    decks: [],
+    deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
+  ));
 
   /*--------------------------------------------------------------------------------
    |

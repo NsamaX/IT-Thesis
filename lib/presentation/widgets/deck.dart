@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
-import '../cubits/deck_manager.dart';
+
+import '../cubits/deck_management/cubit.dart';
 
 class DeckWidget extends StatelessWidget {
   final DeckEntity deck;

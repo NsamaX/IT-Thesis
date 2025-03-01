@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:nfc_project/core/constants/api_config.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
+
 import 'labels/game.dart';
 
 class GameListWidget extends StatelessWidget {

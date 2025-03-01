@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 
-import '../cubits/deck_manager.dart';
-import '../cubits/NFC.dart';
+import '../cubits/deck_management/cubit.dart';
+import '../cubits/NFC/cubit.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/deck_card_grid.dart';
 
