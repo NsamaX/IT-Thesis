@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
+
 import '../datasources/local/card.dart';
 import '../datasources/local/collection.dart';
 import '../datasources/remote/game_factory.dart';

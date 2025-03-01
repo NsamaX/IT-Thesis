@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
+
 import '../cubits/drawer.dart';
 import '../cubits/NFC.dart';
 import '../cubits/scan.dart';

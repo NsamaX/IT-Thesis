@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
+
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
 import '../widgets/app_bar.dart';

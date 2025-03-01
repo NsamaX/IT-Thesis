@@ -1,5 +1,7 @@
 import 'dart:ui';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/data.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
@@ -7,6 +9,18 @@ import 'package:nfc_project/domain/entities/record.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 import 'package:nfc_project/domain/usecases/record.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class TrackState {
   final DeckEntity initialDeck;
   final DeckEntity currentDeck;
@@ -77,13 +91,60 @@ class TrackCubit extends Cubit<TrackState> {
           ),
         ));
 
-  //--------------------------------- toggle ---------------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void showDialog() => emit(state.copyWith(isDialogShown: true));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void toggleAdvanceMode() => emit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void toggleAnalyzeMode() => emit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void toggleReset() => emit(state.copyWith(
     isProcessing: false,
     isDialogShown: true,
@@ -97,6 +158,18 @@ class TrackCubit extends Cubit<TrackState> {
     cardColors: {},
   ));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> toggleSaveRecord() async {
     if (state.record.data.isEmpty) return;
     await saveRecordUseCase.call(state.record);
@@ -104,10 +177,34 @@ class TrackCubit extends Cubit<TrackState> {
     toggleReset();
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> toggleRemoveRecord(String recordId) async {
     await recordUseCase.call(recordId);
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> fetchRecordById(String recordId) async {
     final record = state.records.firstWhere(
       (record) => record.recordId == recordId,
@@ -133,7 +230,18 @@ class TrackCubit extends Cubit<TrackState> {
     emit(state.copyWith(records: records.reversed.toList()));
   }
 
-  //---------------------------- update card data ----------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
     emit(state.copyWith(isProcessing: true));
@@ -166,6 +274,18 @@ class TrackCubit extends Cubit<TrackState> {
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void _updateCardCount(TagEntity tag, Action action, String location, int delta) {
     final cardEntry = state.currentDeck.cards.entries.firstWhere(
       (entry) => entry.key.cardId == tag.cardId,
@@ -192,6 +312,18 @@ class TrackCubit extends Cubit<TrackState> {
     ));
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void _moveCardToTop(TagEntity tag) {
     final updatedCards = {...state.currentDeck.cards};
     final cardEntry = updatedCards.entries.firstWhere(
@@ -204,7 +336,18 @@ class TrackCubit extends Cubit<TrackState> {
     ));
   }
 
-  //-------------------------------- get data --------------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   List<Map<String, dynamic>> calculateDrawAndReturnCounts() {
     final cardNames = <String, String>{};
     final drawCounts = <String, int>{};
@@ -229,6 +372,18 @@ class TrackCubit extends Cubit<TrackState> {
     return result;
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void changeCardColor(String cardId, Color color) {
     final updatedColors = Map<String, Color>.from(state.cardColors);
     updatedColors[cardId] = color;

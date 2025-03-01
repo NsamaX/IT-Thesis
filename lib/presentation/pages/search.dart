@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/domain/usecases/card.dart';
+
 import '../cubits/collection.dart';
 import '../cubits/search.dart';
 import '../widgets/app_bar.dart';

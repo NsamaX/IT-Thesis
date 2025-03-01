@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import '../datasources/local/settings.dart';
 
 /*--------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 import 'package:nfc_project/data/models/data.dart';
+
 import '../entities/data.dart';
 
 /*--------------------------------------------------------------------------------

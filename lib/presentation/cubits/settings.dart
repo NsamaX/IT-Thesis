@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/domain/usecases/settings.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class SettingsState {
   final Locale locale;
   final bool isDarkMode;
@@ -37,6 +50,18 @@ class SettingsCubit extends Cubit<SettingsState> {
           firstLoad: true,
         ));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> initialize() async {
     try {
       final localeCode = await loadSettingUsecase('locale');
@@ -52,24 +77,72 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> updateLanguage(String languageCode) async {
     await _updateSetting('locale', languageCode, (state) {
       emit(state.copyWith(locale: Locale(languageCode)));
     });
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> updateTheme(bool isDarkMode) async {
     await _updateSetting('isDarkMode', isDarkMode, (state) {
       emit(state.copyWith(isDarkMode: isDarkMode));
     });
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> updateFirstLoad(bool firstLoad) async {
     await _updateSetting('firstLoad', firstLoad, (state) {
       emit(state.copyWith(firstLoad: firstLoad));
     });
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> _updateSetting<T>(
     String key,
     T value,

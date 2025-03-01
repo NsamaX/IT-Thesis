@@ -1,9 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nfc_manager/nfc_manager.dart';
 import 'package:logger/logger.dart';
+import 'package:nfc_manager/nfc_manager.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class NFCState {
   final TagEntity? lastestReadTags;
   final String errorMessage;
@@ -48,9 +61,32 @@ class NFCCubit extends Cubit<NFCState> {
 
   NFCCubit() : super(NFCState(isNFCEnabled: false));
 
-  //---------------------------- Logging Utilities ---------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void _addMessage(String message) => messageBuffer.add(message);
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void _flushMessages({bool isError = false}) {
     if (messageBuffer.isNotEmpty) {
       final log = messageBuffer.join('\n');
@@ -59,27 +95,109 @@ class NFCCubit extends Cubit<NFCState> {
     }
   }
 
-  //---------------------------- State Management ----------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void emitSafe(NFCState newState) {
     if (!isClosed && newState != state) {
       emit(newState);
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void toggleNFC() {
     emitSafe(state.copyWith(isNFCEnabled: !state.isNFCEnabled));
     _addMessage('[State Management] Toggled NFC state to ${state.isNFCEnabled}');
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void resetOperationStatus() => emitSafe(state.copyWith(isOperationSuccessful: false));
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void markSnackBarDisplayed() => emitSafe(state.copyWith(isSnackBarDisplayed: true));
   
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void resetSnackBarState() => emitSafe(state.copyWith(isSnackBarDisplayed: false));
   
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void clearErrorMessage() => emitSafe(state.copyWith(errorMessage: ''));
 
-  //----------------------------- Session Control ----------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> startSession({CardEntity? card}) async {
     if (state.isProcessing) return;
     emitSafe(state.copyWith(isProcessing: true));
@@ -110,6 +228,18 @@ class NFCCubit extends Cubit<NFCState> {
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> stopSession({String? reason}) async {
     try {
       await NfcManager.instance.stopSession();
@@ -123,6 +253,18 @@ class NFCCubit extends Cubit<NFCState> {
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> restartSessionIfNeeded({CardEntity? card, bool isCardChanged = false}) async {
     if (!state.isProcessing && state.isNFCEnabled) {
       try {
@@ -141,7 +283,18 @@ class NFCCubit extends Cubit<NFCState> {
     }
   }
 
-  //------------------------------- Processing -------------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> _processRead(NfcTag tag) async {
     final ndef = _validateNDEF(tag);
     final records = _parseNDEFRecords(ndef);
@@ -151,6 +304,18 @@ class NFCCubit extends Cubit<NFCState> {
     _flushMessages();
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> _processWrite(NfcTag tag, CardEntity card) async {
     final ndef = _validateNDEF(tag);
     final message = _createNDEFMessage(card);
@@ -160,7 +325,18 @@ class NFCCubit extends Cubit<NFCState> {
     _flushMessages();
   }
 
-  //--------------------------- Validation Helpers ---------------------------//
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Ndef _validateNDEF(NfcTag tag) {
     final ndef = Ndef.from(tag);
     if (ndef == null) {
@@ -172,6 +348,18 @@ class NFCCubit extends Cubit<NFCState> {
     return ndef;
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   List<String> _parseNDEFRecords(Ndef ndef) {
     final message = ndef.cachedMessage;
     if (message == null || message.records.isEmpty) {
@@ -180,6 +368,18 @@ class NFCCubit extends Cubit<NFCState> {
     return message.records.map((record) => String.fromCharCodes(record.payload).substring(3)).toList();
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   TagEntity _createTagEntity(NfcTag tag, List<String> records) {
     final game = records.firstWhere((r) => r.startsWith('game:'), orElse: () => '').split(': ').last;
     final cardId = records.firstWhere((r) => r.startsWith('id:'), orElse: () => '').split(': ').last;
@@ -192,6 +392,18 @@ class NFCCubit extends Cubit<NFCState> {
     return TagEntity(tagId: tagId, cardId: cardId, game: game);
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   NdefMessage _createNDEFMessage(CardEntity card) {
     final message = NdefMessage([
       NdefRecord.createText('game: ${card.game}'),

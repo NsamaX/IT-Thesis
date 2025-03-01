@@ -1,7 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/card.dart';
 
+/*--------------------------------------------------------------------------------
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ |
+ *-------------------------------------------------------------------------------*/
 class SearchState {
   final List<CardEntity> cards;
   final List<CardEntity> searchedCards;
@@ -33,12 +46,36 @@ class SearchCubit extends Cubit<SearchState> {
 
   SearchCubit(this.syncCardsUseCase) : super(SearchState());
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void safeEmit(SearchState newState) {
     if (!isClosed) {
       emit(newState);
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> syncCards(String game) async {
     if (state.isLoading || isClosed) return;
     safeEmit(state.copyWith(isLoading: true, errorMessage: null));
@@ -50,6 +87,18 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void searchCards(String query) {
     if (isClosed) return;
     safeEmit(state.copyWith(
@@ -59,5 +108,17 @@ class SearchCubit extends Cubit<SearchState> {
     ));
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   void clearSearch() => safeEmit(state.copyWith(searchedCards: state.cards));
 }

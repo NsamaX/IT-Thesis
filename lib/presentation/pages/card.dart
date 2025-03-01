@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/arguments.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import 'package:nfc_project/domain/entities/card.dart';
+
 import '../cubits/collection.dart';
 import '../cubits/deck_manager.dart';
 import '../cubits/NFC.dart';
