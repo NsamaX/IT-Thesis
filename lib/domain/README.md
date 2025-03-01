@@ -1,14 +1,12 @@
-### 📂 Domain 🌐
+<h1 align="center">📂 Domain 🌐</h1>
+
+## Overview  
+
+The `domain/` directory serves as the middle layer between **UI** and **Data**, focusing on **Business Logic** and core functionalities independent of presentation or data sources. This separation enhances maintainability and scalability.  
 
 ---
 
-## ภาพรวม
-
-`domain/` เป็นเลเยอร์กลางที่เชื่อมระหว่าง **UI** และ **Data** โดยมุ่งเน้นการจัดการ **Business Logic** และฟังก์ชันหลักที่ไม่ขึ้นกับการแสดงผลหรือแหล่งข้อมูล ทำให้สามารถดูแลและขยายตัวได้อย่างง่ายดาย
-
----
-
-## โครงสร้างไฟล์ (File Structure)
+## **File Structure**  
 
 ```plaintext
 domain/
@@ -19,22 +17,22 @@ domain/
 
 ---
 
-## รายละเอียดโฟลเดอร์
+## **Folder Details**  
 
-### **1. entities/**
-- **วัตถุประสงค์**:  
-  เก็บโครงสร้างข้อมูลเชิงนามธรรม (Abstract Data Structures) ที่ไม่ผูกกับฐานข้อมูลหรือ API
-
----
-
-### **2. mappers/**
-- **วัตถุประสงค์**:  
-  ใช้สำหรับแปลงข้อมูลระหว่าง `entities` และ `models` เช่น จากข้อมูลใน Data Layer ไปยัง Domain Layer
+### **1. entities/**  
+- **Purpose**:  
+  Stores abstract data structures that are not directly tied to a database or API.  
 
 ---
 
-### **3. usecases/**
-- **วัตถุประสงค์**:  
-  เก็บฟังก์ชันหรือกระบวนการที่เป็นแกนหลักของ Business Logic โดยรวมการประมวลผลจากหลายแหล่งข้อมูล
+### **2. mappers/**  
+- **Purpose**:  
+  Contains functions for converting data between Data Models and Entities.  
+
+---
+
+### **3. usecases/**  
+- **Purpose**:  
+  Stores core Business Logic processes, integrating data from multiple sources.  
 
 ---

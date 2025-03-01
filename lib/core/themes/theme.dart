@@ -33,17 +33,17 @@ ThemeData themeData({required bool isDarkMode}) {
         ? AppColors.DarkModeBackground_lv2
         : AppColors.LightModeBackground_lv2,
     primaryColor: AppColors.PrimaryColor,
-    colorScheme: ColorScheme(
-      brightness: Brightness.light,
-      primary: AppColors.PrimaryColor,
-      secondary: AppColors.SecondaryColor,
-      tertiary: AppColors.TertiaryColor,
-      surface: AppColors.LightModeBackground_lv2,
-      onPrimary: Colors.white,
-      onSecondary: Colors.white,
-      onSurface: Colors.white,
-      error: CupertinoColors.systemRed,
-      onError: Colors.white,
+    colorScheme:    ColorScheme(
+      brightness:   Brightness.light,
+      primary:    AppColors.PrimaryColor,
+      secondary:  AppColors.SecondaryColor,
+      tertiary:   AppColors.TertiaryColor,
+      surface:    AppColors.LightModeBackground_lv2,
+      onPrimary:  Colors.white,
+      onSecondary:Colors.white,
+      onSurface:  Colors.white,
+      error:      CupertinoColors.systemRed,
+      onError:    Colors.white,
     ),
     iconTheme: iconThemes.defaultIcon,
     textTheme: TextTheme(

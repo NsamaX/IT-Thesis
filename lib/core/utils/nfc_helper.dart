@@ -55,7 +55,6 @@ class NFCHelper {
    *-------------------------------------------------------------------------------*/
   static Future<void> _enableNFC(NFCCubit cubit, CardEntity? card) async {
     if (!_isNFCEnabled(cubit)) cubit.toggleNFC();
-
     if (!_isProcessing(cubit)) {
       await cubit.startSession(card: card);
     } else if (card != null) {

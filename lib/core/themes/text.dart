@@ -19,6 +19,7 @@ class AppTextStyles {
   TextStyle get bodyMedium  => _textStyle(_textColor, 14, false);
   TextStyle get bodySmall   => _textStyle(_textColor, 10, false);
 
+  /*------------------------------ Other Styles ------------------------------*/
   TextStyle _textStyle(Color color, double fontSize, bool isBold) => TextStyle(
     color: color,
     fontSize: fontSize,

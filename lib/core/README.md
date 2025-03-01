@@ -1,87 +1,88 @@
-### 📂 Core 🛠️
+<h1 align="center">📂 Core 🛠️</h1>
+
+## Overview  
+
+The `core/` directory serves as the backbone of the application, managing essential configurations, services, navigation, themes, and utilities. It provides a structured foundation to ensure the application's maintainability and scalability.  
 
 ---
 
-## ภาพรวม
-
-`core/` เป็นศูนย์รวมของฟังก์ชันหลักที่ช่วยในการทำงานของแอปพลิเคชัน โดยมีบทบาทสำคัญดังนี้:
-- จัดเก็บค่าคงที่และการตั้งค่าเริ่มต้น
-- จัดการฐานข้อมูลและการเก็บข้อมูลภายในเครื่อง
-- ดูแลการนำทางและธีม UI
-- จัดการเซสชันและฟังก์ชันเสริม เช่น NFC
-
----
-
-## โครงสร้างไฟล์ (File Structure)
+## **File Structure**  
 
 ```plaintext
 core/
 ├── constants/
-│   ├── api_config.dart          # การตั้งค่า API
-│   ├── images.dart              # การอ้างอิงไฟล์รูปภาพ
+│   ├── api_config.dart          # API configuration settings
+│   ├── images.dart              # Image file references
 ├── locales/
-│   ├── localizations.dart       # การจัดการการแปลข้อความ
+│   ├── localizations.dart       # Text translation management
 ├── routes/
-│   ├── routes.dart              # การกำหนดเส้นทางนำทางในแอป
+│   ├── routes.dart              # Application navigation routes
 ├── services/
-│   ├── database.dart            # การจัดการ SQLite
-│   ├── locator.dart             # ตัวจัดการ dependency injection
-│   ├── shared_preferences.dart  # การจัดเก็บข้อมูลแบบชั่วคราว
-│   ├── sqlite.dart              # การทำงานกับ SQLite
+│   ├── locator.dart             # Dependency injection handler
+├── storages/
+│   ├── database.dart            # SQLite database management
+│   ├── shared_preferences.dart  # Temporary data storage
+│   ├── sqlite.dart              # SQLite operations
 ├── themes/
-│   ├── app_theme.dart           # ธีม UI หลักของแอป
+│   ├── app_theme.dart           # Main UI theme of the application
 ├── utils/
-│   ├── nfc_helper.dart          # ตัวช่วยจัดการการใช้งาน NFC
-│   ├── nfc_session_handler.dart # การจัดการเซสชัน NFC
+│   ├── nfc_helper.dart          # NFC utility functions
+│   ├── nfc_session_handler.dart # NFC session management
 ```
 
 ---
 
-## รายละเอียดโฟลเดอร์
+## **Folder Details**  
 
-### **1. constants/**
-- **วัตถุประสงค์**: เก็บค่าคงที่ที่ใช้ทั่วทั้งแอป
-- **ไฟล์สำคัญ**:
-  - `api_config.dart`: กำหนดค่าคงที่สำหรับ API เช่น `baseUrl`, `environment`
-  - `images.dart`: การอ้างอิงไฟล์รูปภาพ เช่น `assets/images/logo.png`
-
----
-
-### **2. locales/**
-- **วัตถุประสงค์**: รองรับการแปลข้อความในแอป (Localization)
-- **ไฟล์สำคัญ**:
-  - `localizations.dart`: โหลดและแปลข้อความตามภาษาของผู้ใช้งาน
+### **1. constants/**  
+- **Purpose**: Manages constants and default settings.  
+- **Key Files**:  
+  - `api_config.dart`: API configuration settings.  
+  - `images.dart`: References for image files.  
 
 ---
 
-### **3. routes/**
-- **วัตถุประสงค์**: กำหนดเส้นทางการนำทาง (Routing)
-- **ไฟล์สำคัญ**:
-  - `routes.dart`: รวมเส้นทางทั้งหมด เช่น `/home`, `/settings`
+### **2. locales/**  
+- **Purpose**: Supports multilingual text translations in the application.  
+- **Key Files**:  
+  - `localizations.dart`: Loads and translates text based on the user's language settings.  
 
 ---
 
-### **4. services/**
-- **วัตถุประสงค์**: จัดการฟังก์ชันหลัก เช่น ฐานข้อมูลและการเก็บข้อมูล
-- **ไฟล์สำคัญ**:
-  - `database.dart`: จัดการการเชื่อมต่อและการสร้างฐานข้อมูล SQLite
-  - `locator.dart`: ตัวจัดการ dependency injection โดยใช้ GetIt เพื่อลดการผูกมัดระหว่าง object
-  - `shared_preferences.dart`: บริการสำหรับเก็บข้อมูลชั่วคราว เช่น token, settings
-  - `sqlite.dart`: การทำงานกับ SQLite โดยใช้ abstraction layer
+### **3. routes/**  
+- **Purpose**: Defines application navigation routes.  
+- **Key Files**:  
+  - `routes.dart`: Contains all route definitions.  
 
 ---
 
-### **5. themes/**
-- **วัตถุประสงค์**: จัดการธีม UI
-- **ไฟล์สำคัญ**:
-  - `theme.dart`: ธีมหลักของแอป เช่น สีตัวอักษร, พื้นหลัง
+### **4. services/**  
+- **Purpose**: Manages application services and dependencies.  
+- **Key Files**:  
+  - `locator.dart`: Handles dependency injection using GetIt to decouple object dependencies.  
 
 ---
 
-### **6. utils/**
-- **วัตถุประสงค์**: เก็บตัวช่วยเฉพาะด้าน
-- **ไฟล์สำคัญ**:
-  - `nfc_helper.dart`: จัดการการทำงานของ NFC เช่น เริ่ม/หยุดเซสชัน
-  - `nfc_session_handler.dart`: ดูแล NFC lifecycle ตามการเปลี่ยนแปลงสถานะของแอป
+### **5. storages/**  
+- **Purpose**: Manages database operations and data storage.  
+- **Key Files**:  
+  - `database.dart`: Handles SQLite database connection and creation.  
+  - `shared_preferences.dart`: Provides temporary data storage services.  
+  - `sqlite.dart`: Manages SQLite-related operations.  
+
+---
+
+### **6. themes/**  
+- **Purpose**: Manages the UI theme of the application.  
+- **Key Files**:  
+  - `app_theme.dart`: The main theme configuration of the application.  
+
+---
+
+### **7. utils/**  
+- **Purpose**: Stores utility functions for specific tasks.  
+- **Key Files**:  
+  - `nfc_helper.dart`: Manages NFC operations.  
+  - `nfc_session_handler.dart`: Handles NFC lifecycle according to app state changes.  
 
 ---

@@ -1,76 +1,74 @@
-### 📂 lib 🛠️
+<h1 align="center">📂 lib 🛠️</h1>
+
+## Overview  
+
+The `lib` folder serves as the core of the application, structured according to the **Clean Architecture** principles. This approach ensures a well-organized design, scalability, and maintainability. By systematically dividing the application into distinct layers, it helps separate concerns, reduce direct dependencies, and increase development flexibility.  
 
 ---
 
-## ภาพรวม
+## **Structure & Responsibilities**  
 
-โฟลเดอร์ `lib` เป็นศูนย์กลางของแอปพลิเคชัน โดยพัฒนาโครงสร้างตามหลักการ **Clean Architecture** ซึ่งช่วยให้แอปพลิเคชันมีการออกแบบที่ชัดเจน, รองรับการขยายตัว, และดูแลรักษาได้ง่าย หลักการนี้แบ่งเลเยอร์การทำงานอย่างเป็นระบบเพื่อแยกความรับผิดชอบของแต่ละส่วน ลดการพึ่งพาโดยตรง และเพิ่มความยืดหยุ่นในการพัฒนา
-
----
-
-## **โครงสร้างและหน้าที่**
-
-### **Clean Architecture**
-โครงสร้างแบ่งออกเป็น 5 เลเยอร์หลัก:
-1. **Presentation**: จัดการ UI และการโต้ตอบของผู้ใช้งาน
-2. **Domain**: แกนกลางของตรรกะธุรกิจ
-3. **Data**: จัดการแหล่งข้อมูล ทั้ง Local และ Remote
-4. **Core**: รวม utilities, services, และค่าคงที่ที่ใช้ร่วมกัน
-5. **Assets**: เก็บทรัพยากรคงที่ เช่น รูปภาพและไฟล์แปลภาษา
+### **Clean Architecture**  
+The structure is divided into five main layers:  
+1. **Presentation**: Manages UI and user interactions.  
+2. **Domain**: Contains the core business logic.  
+3. **Data**: Handles data sources, both Local and Remote.  
+4. **Core**: Stores utilities, services, and shared constants.  
+5. **Assets**: Contains static resources.  
 
 ---
 
-## **โครงสร้างไฟล์ (File Structure)**
+## **File Structure**  
 
 ```plaintext
 lib/
-├── assets/                      # ทรัพยากรคงที่
-├── core/                        # เครื่องมือและทรัพยากรสำหรับทุกเลเยอร์
-├── data/                        # การจัดการข้อมูลจาก Local/Remote
-├── domain/                      # ตรรกะธุรกิจและโครงสร้างข้อมูลนามธรรม
-├── presentation/                # การแสดงผล UI และการจัดการสถานะ
+├── assets/                      # Static resources
+├── core/                        # Utilities and shared resources
+├── data/                        # Data management from Local/Remote sources
+├── domain/                      # Business logic and abstract data structures
+├── presentation/                # UI rendering and state management
 ```
 
 ---
 
-## **รายละเอียดแต่ละโฟลเดอร์**
+## **Folder Details**  
 
-### **1. assets/**
-- **บทบาท**: จัดเก็บทรัพยากรคงที่ เช่น รูปภาพ, ข้อความแปลภาษา, และไฟล์ JSON
-- **ดูเพิ่มเติม**: [README ของ assets](./assets/README.md)
-
----
-
-### **2. core/**
-- **บทบาท**: รวม utilities, services, และค่าคงที่ที่ใช้ร่วมกันในทุกเลเยอร์ เช่น การจัดการฐานข้อมูล, การตั้งค่า API, และการจัดการธีม UI
-- **ดูเพิ่มเติม**: [README ของ core](./core/README.md)
+### **1. assets/**  
+- **Role**: Stores shared static resources used across all layers.  
+- **See More**: [README for assets](./assets/README.md)  
 
 ---
 
-### **3. data/**
-- **บทบาท**: จัดการข้อมูลจากแหล่งต่าง ๆ ทั้ง Local และ Remote โดยทำงานร่วมกับ Repositories และ Data Sources
-- **การใช้งาน**:
-  - `datasources/`: จัดการข้อมูลจาก Local Storage หรือ API
-  - `repositories/`: รวมข้อมูลจากแหล่งต่าง ๆ และแปลงให้อยู่ในรูปแบบที่ใช้งานได้
-- **ดูเพิ่มเติม**: [README ของ data](./data/README.md)
+### **2. core/**  
+- **Role**: Contains utilities, services, and shared constants used across all layers.  
+- **See More**: [README for core](./core/README.md)  
 
 ---
 
-### **4. domain/**
-- **บทบาท**: เป็นเลเยอร์ที่รวมตรรกะธุรกิจและโครงสร้างข้อมูลเชิงนามธรรม
-- **การใช้งาน**:
-  - `entities/`: เก็บโครงสร้างข้อมูลที่ไม่ผูกกับฐานข้อมูลหรือ API
-  - `usecases/`: ดำเนินการตรรกะธุรกิจ เช่น การสร้างเด็คหรือซิงค์การ์ด
-- **ดูเพิ่มเติม**: [README ของ domain](./domain/README.md)
+### **3. data/**  
+- **Role**: Manages data from various sources, both Local and Remote, working with Repositories and Data Sources.  
+- **Usage**:  
+  - `datasources/`: Manages data from local storage or APIs.  
+  - `repositories/`: Combines data from multiple sources and transforms it into a usable format.  
+- **See More**: [README for data](./data/README.md)  
 
 ---
 
-### **5. presentation/**
-- **บทบาท**: ดูแล UI และการโต้ตอบของผู้ใช้งาน โดยแสดงข้อมูลจาก `domain` และควบคุมสถานะผ่าน Cubits หรือ BLoC
-- **การใช้งาน**:
-  - `cubits/`: จัดการสถานะและตรรกะของ UI
-  - `pages/`: เก็บโค้ดสำหรับหน้าจอของแอปพลิเคชัน
-  - `widgets/`: ส่วนประกอบ UI ย่อยที่นำกลับมาใช้ซ้ำได้
-- **ดูเพิ่มเติม**: [README ของ presentation](./presentation/README.md)
+### **4. domain/**  
+- **Role**: The core layer containing business logic and abstract data structures.  
+- **Usage**:  
+  - `entities/`: Stores abstract data structures independent of databases or APIs.  
+  - `usecases/`: Contains business logic operations and processes.  
+- **See More**: [README for domain](./domain/README.md)  
+
+---
+
+### **5. presentation/**  
+- **Role**: Manages UI and user interactions, displaying data from `domain` and handling state through Cubits or BLoC.  
+- **Usage**:  
+  - `cubits/`: Manages UI state and logic.  
+  - `pages/`: Contains the main screens of the application.  
+  - `widgets/`: Stores reusable UI components.  
+- **See More**: [README for presentation](./presentation/README.md)  
 
 ---
