@@ -35,7 +35,7 @@ lib/
 
 ### **1. assets/**  
 - **Role**: Stores shared static resources used across all layers.  
-- **See More**: [README for assets](./assets/README.md)  
+- **See More**: [README for assets](../assets/README.md)  
 
 ---
 
