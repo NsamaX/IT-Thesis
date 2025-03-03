@@ -1,17 +1,5 @@
 part of 'cubit.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class NFCState extends Equatable {
   final TagEntity? lastestReadTags;
   final String errorMessage;

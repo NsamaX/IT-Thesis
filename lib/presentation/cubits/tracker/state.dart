@@ -1,17 +1,5 @@
 part of 'cubit.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class TrackState extends Equatable {
   final DeckEntity initialDeck;
   final DeckEntity currentDeck;
