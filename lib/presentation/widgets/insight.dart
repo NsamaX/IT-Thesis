@@ -7,14 +7,14 @@ import 'package:nfc_project/domain/entities/record.dart';
 
 import 'history.dart';
 
-class InDepthGameplayWidget extends StatelessWidget {
+class InsightWidget extends StatelessWidget {
   final DeckEntity initialDeck;
   final RecordEntity record;
   final List<RecordEntity> records;
   final void Function(BuildContext context, String recordId)? selectRecord;
   final List<Map<String, dynamic>> cardStats;
 
-  const InDepthGameplayWidget({
+  const InsightWidget({
     super.key, 
     required this.initialDeck, 
     required this.record, 
@@ -71,11 +71,12 @@ class InDepthGameplayWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8.0),
-        if (records.isNotEmpty) HistoryWidget(records: records, selectRecord: selectRecord),
+        if (records.isNotEmpty) _buildHistoryWidget(),
       ],
     );
   }
 
+  /// Info Text Widget
   Widget _buildInfoText(ThemeData theme, String content) => Opacity(
     opacity: 0.6,
     child: Text(
@@ -84,8 +85,13 @@ class InDepthGameplayWidget extends StatelessWidget {
     ),
   );
 
+  /// History Widget
+  Widget _buildHistoryWidget() => HistoryWidget(records: records, selectRecord: selectRecord);
+
+  /// Calculate Total Draw/Return
   int _calculateTotal(String key) => cardStats.fold(0, (total, card) => total + (card[key] as int));
 
+  /// Calculate Percentage Played
   double _calculatePercentagePlayed() {
     final totalCardsInDeck = initialDeck.cards.entries.fold<int>(0, (sum, entry) => sum + entry.value);
     final usedCardNames = record.data
@@ -97,6 +103,7 @@ class InDepthGameplayWidget extends StatelessWidget {
     return (totalUsedCards / totalCardsInDeck) * 100;
   }
 
+  /// Calculate Unused Cards
   int _calculateUnusedCards() {
     final drawnCardName = record.data
         .where((data) => data.action == Action.Action.draw)

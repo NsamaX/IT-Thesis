@@ -23,6 +23,7 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final deckManagerState = context.watch<DeckManagerCubit>().state;
+
     return Stack(
       children: [
         _buildCardContainer(
@@ -31,40 +32,45 @@ class CardWidget extends StatelessWidget {
           deckManagerState.selectedCard == card,
           deckManagerState.isNFCEnabled,
         ),
-        if (deckManagerState.isEditModeEnabled && !deckManagerState.isNFCEnabled) buildEditControls(context, card, count),
+        if (deckManagerState.isEditModeEnabled && !deckManagerState.isNFCEnabled) 
+          buildEditControls(context, card, count),
       ],
     );
   }
 
-  Widget _buildCardContainer(BuildContext context, ThemeData theme,  bool isSelected, bool isNFCEnabled) => GestureDetector(
-    onTap: () => _handleCardTap(context, isNFCEnabled),
-    child: AspectRatio(
-      aspectRatio: 3 / 4,
-      child: Opacity(
-        opacity: _calculateOpacity(isNFCEnabled, isSelected),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: theme.appBarTheme.backgroundColor,
-          ),
-          child: Card(
-            color: Colors.transparent,
-            child: ClipRRect(
+  /// Card container with gesture detection
+  Widget _buildCardContainer(BuildContext context, ThemeData theme, bool isSelected, bool isNFCEnabled) {
+    return GestureDetector(
+      onTap: () => _handleCardTap(context, isNFCEnabled),
+      child: AspectRatio(
+        aspectRatio: 3 / 4,
+        child: Opacity(
+          opacity: _calculateOpacity(isNFCEnabled, isSelected),
+          child: Container(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              child: card.imageUrl != null
-                  ? Image.network(
-                      card.imageUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => _buildImageError(),
-                    )
-                  : _buildImageError(),
+              color: theme.appBarTheme.backgroundColor,
+            ),
+            child: Card(
+              color: Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: card.imageUrl != null
+                    ? Image.network(
+                        card.imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => _buildImageError(),
+                      )
+                    : _buildImageError(),
+              ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 
+  /// Handle card tap actions
   void _handleCardTap(BuildContext context, bool isNFCEnabled) {
     final cubit = context.read<DeckManagerCubit>();
     if (isNFCEnabled) {
@@ -78,6 +84,7 @@ class CardWidget extends StatelessWidget {
     }
   }
 
+  /// Handle NFC toggle action
   void _handleNfcToggle(BuildContext context, DeckManagerCubit cubit) {
     final selectedCard = cubit.state.selectedCard;
     if (selectedCard != null) {
@@ -91,8 +98,10 @@ class CardWidget extends StatelessWidget {
     }
   }
 
+  /// Calculate opacity for card
   double _calculateOpacity(bool isNFCEnabled, bool isSelected) => isNFCEnabled ? (isSelected ? 1.0 : 0.4) : 1.0;
 
+  /// Error widget for image loading
   Widget _buildImageError() => const Center(
     child: Icon(
       Icons.image_not_supported,

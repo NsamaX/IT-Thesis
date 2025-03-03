@@ -9,6 +9,7 @@ class PlayerDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return SizedBox(
       width: 160.0,
       height: 90.0,
@@ -34,39 +35,11 @@ class PlayerDrawerWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(width: 16.0),
-                      Icon(
-                        Icons.qr_code_rounded,
-                        color: Colors.black,
-                        size: 24.0,
-                      ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        locale.translate('toggle.create_room'),
-                        style: theme.textTheme.titleSmall?.copyWith(color: Colors.black),
-                      ),
-                    ],
-                  ),
+                  _buildRow(context, locale, theme, Icons.qr_code_rounded, 'toggle.create_room'),
                   const SizedBox(height: 8.0),
                   Divider(height: 1, color: Colors.grey[300]),
                   const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      SizedBox(width: 16.0),
-                      Icon(
-                        Icons.qr_code_scanner_rounded,
-                        color: Colors.black,
-                        size: 24.0,
-                      ),
-                      SizedBox(width: 8.0),
-                      Text(
-                        locale.translate('toggle.join_room'),
-                        style: theme.textTheme.titleSmall?.copyWith(color: Colors.black),
-                      ),
-                    ],
-                  ),
+                  _buildRow(context, locale, theme, Icons.qr_code_scanner_rounded, 'toggle.join_room'),
                 ],
               ),
             ),
@@ -82,6 +55,25 @@ class PlayerDrawerWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  /// Helper method to build a row for the drawer items
+  Widget _buildRow(BuildContext context, AppLocalizations locale, ThemeData theme, IconData icon, String translationKey) {
+    return Row(
+      children: [
+        const SizedBox(width: 16.0),
+        Icon(
+          icon,
+          color: Colors.black,
+          size: 24.0,
+        ),
+        const SizedBox(width: 8.0),
+        Text(
+          locale.translate(translationKey),
+          style: theme.textTheme.titleSmall?.copyWith(color: Colors.black),
+        ),
+      ],
     );
   }
 }

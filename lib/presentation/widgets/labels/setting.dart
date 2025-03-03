@@ -8,6 +8,7 @@ class SettingLabelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(top: 2.0),
       child: Column(
@@ -27,6 +28,7 @@ class SettingLabelWidget extends StatelessWidget {
     );
   }
 
+  /// Title section
   Widget _buildTitle(ThemeData theme, String title) => Padding(
     padding: const EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
     child: Text(
@@ -35,17 +37,24 @@ class SettingLabelWidget extends StatelessWidget {
     ),
   );
 
-  List<Widget> _buildContentList(BuildContext context, ThemeData theme, List<dynamic> content) => content.map((item) {
-    final icon = item['icon'] as IconData?;
-    final text = item['text'] as String;
-    final info = item['info'] as String?;
-    final select = item['select'] as bool?;
-    final arrow = item['arrow'] as bool?;
-    final onTap = item['onTap'];
-    return _buildContentItem(context, theme, onTap, icon, text, info, select, arrow);
-  }).toList();
+  /// Content list for settings items
+  List<Widget> _buildContentList(BuildContext context, ThemeData theme, List<dynamic> content) {
+    return content.map((item) {
+      final icon = item['icon'] as IconData?;
+      final text = item['text'] as String;
+      final info = item['info'] as String?;
 
-  Widget _buildContentItem(BuildContext context, ThemeData theme, dynamic onTap, IconData? icon, String text, String? info, bool? select, bool? arrow) {
+      final select = item['select'] as bool?;
+      final show = item['arrow'] as bool?;
+
+      final onTap = item['onTap'];
+
+      return _buildContentItem(context, theme, onTap, icon, text, info, select, show);
+    }).toList();
+  }
+
+  /// Individual content item (like a setting option)
+  Widget _buildContentItem(BuildContext context, ThemeData theme, dynamic onTap, IconData? icon, String text, String? info, bool? select, bool? show) {
     final hasRoute = onTap is String;
     return GestureDetector(
       onTap: () => _handleOnTap(context, onTap),
@@ -75,9 +84,10 @@ class SettingLabelWidget extends StatelessWidget {
               children: [
                 if (info != null) Text(info, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey)),
                 if (info != null) const SizedBox(width: 6.0),
+                
                 if (hasRoute) const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey),
-                if (select == true) const Icon(Icons.check_rounded, size: 18.0),
-                if (arrow == true) const Icon(Icons.arrow_outward_rounded, size: 16.0, color: Colors.grey),
+                if (select == true) const Icon(Icons.check_rounded, size: 18.0, color: Colors.grey),
+                if (show == true) const Icon(Icons.arrow_outward_rounded, size: 16.0, color: Colors.grey),
               ],
             ),
           ],
@@ -86,7 +96,9 @@ class SettingLabelWidget extends StatelessWidget {
     );
   }
 
+  /// Handle tap actions (route or callback)
   void _handleOnTap(BuildContext context, dynamic onTap) {
+    if (onTap == null) return;
     if (onTap is String) {
       Navigator.pushNamed(context, onTap);
     } else if (onTap is VoidCallback) {

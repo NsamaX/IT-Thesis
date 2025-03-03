@@ -15,9 +15,11 @@ class CardQuantityWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     const double borderRadiusValue = 12.0;
     const double boxWidth = 60.0;
     const double boxHeight = 40.0;
+
     return Column(
       children: [
         const SizedBox(height: 24),
@@ -36,6 +38,7 @@ class CardQuantityWidget extends StatelessWidget {
     );
   }
 
+  /// The background container
   Widget _buildBackground(ThemeData theme, int count, double width, double height, double borderRadius) => Container(
     width: width * count + 20.0,
     height: height,
@@ -45,6 +48,7 @@ class CardQuantityWidget extends StatelessWidget {
     ),
   );
 
+  /// The selected box that highlights the current selection
   Widget _buildSelectedBox(double width, double height, double borderRadius) => AnimatedPositioned(
     duration: const Duration(milliseconds: 200),
     curve: Curves.easeInOut,
@@ -60,6 +64,7 @@ class CardQuantityWidget extends StatelessWidget {
     ),
   );
 
+  /// The quantity box with available options
   Widget _buildQuantityBox(ThemeData theme, int count, double width, double height) => Container(
     width: width * count + 20.0,
     child: Row(

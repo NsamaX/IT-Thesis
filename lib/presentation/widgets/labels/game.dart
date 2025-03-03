@@ -30,6 +30,7 @@ class GameLabelWidget extends StatelessWidget {
     );
   }
 
+  /// Navigate to the search page
   void _navigateToSearch(BuildContext context) {
     final cubit = context.read<AppCubit>();
     final String selectedGame = isCustom ? 'my_collection' : game;
@@ -40,6 +41,7 @@ class GameLabelWidget extends StatelessWidget {
     );
   }
 
+  /// The container widget that wraps the entire card
   Widget _buildContainer(ThemeData theme) => Container(
     margin: const EdgeInsets.only(bottom: 6.0),
     height: 60.0,
@@ -67,6 +69,7 @@ class GameLabelWidget extends StatelessWidget {
     ),
   );
 
+  /// The image (or default icon if no image is provided)
   Widget _buildImage() => Container(
     width: 36.0,
     height: 36.0,
@@ -86,6 +89,7 @@ class GameLabelWidget extends StatelessWidget {
     ),
   );
 
+  /// The game info section (game name and description)
   Widget _buildGameInfo(ThemeData theme) => Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,5 +112,6 @@ class GameLabelWidget extends StatelessWidget {
     ),
   );
 
+  /// Extract description (split at `//` if applicable)
   String _extractDescription(String description) => description.split('//').length > 1 ? description.split('//')[1] : description;
 }

@@ -11,21 +11,26 @@ class BottomNavigationBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
+
     final navigationItems = [
       {'icon': Icons.web_stories_rounded, 'label': 'navigation.decks'},
       {'icon': Icons.insert_page_break_outlined, 'label': 'navigation.read'},
       {'icon': Icons.settings, 'label': 'navigation.settings'},
     ];
+
     return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) => BottomNavigationBar(
-        currentIndex: state.currentPageIndex,
-        elevation: 8.0,
-        onTap: (index) => _navigateToPage(context, index),
-        items: _buildNavigationItems(navigationItems, locale),
-      ),
+      builder: (context, state) {
+        return BottomNavigationBar(
+          currentIndex: state.currentPageIndex,
+          elevation: 8.0,
+          onTap: (index) => _navigateToPage(context, index),
+          items: _buildNavigationItems(navigationItems, locale),
+        );
+      },
     );
   }
 
+  /// Navigate to the selected page
   void _navigateToPage(BuildContext context, int index) {
     final cubit = context.read<AppCubit>();
     if (index != cubit.state.currentPageIndex) {
@@ -38,15 +43,18 @@ class BottomNavigationBarWidget extends StatelessWidget {
     }
   }
 
+  /// Navigation items for BottomNavigationBar
   List<BottomNavigationBarItem> _buildNavigationItems(
     List<Map<String, Object>> items,
     AppLocalizations locale,
-  ) => items
-          .map(
-            (item) => BottomNavigationBarItem(
-              icon: Icon(item['icon'] as IconData),
-              label: locale.translate(item['label'] as String),
-            ),
-          )
-          .toList();
+  ) {
+    return items
+        .map(
+          (item) => BottomNavigationBarItem(
+            icon: Icon(item['icon'] as IconData),
+            label: locale.translate(item['label'] as String),
+          ),
+        )
+        .toList();
+  }
 }

@@ -22,6 +22,7 @@ class CardInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -32,18 +33,22 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
+  /// The title (either description or card name)
   Widget _buildTitle(AppLocalizations locale, ThemeData theme) {
     final title = isCustom
         ? locale.translate('text.description')
         : card?.name ?? locale.translate('text.no_card_name');
+
     return Text(
       title,
       style: theme.textTheme.titleSmall,
     );
   }
 
+  /// Editable description for custom cards
   Widget _buildEditableDescription(BuildContext context, ThemeData theme) {
     final collectionCubit = context.watch<CollectionCubit>();
+
     return Opacity(
       opacity: 0.8,
       child: TextField(
@@ -63,6 +68,7 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
+  /// Description based on whether it's custom or not
   Widget _buildDescription(AppLocalizations locale, ThemeData theme) {
     if (card != null) {
       return card?.additionalData != null
@@ -72,6 +78,7 @@ class CardInfoWidget extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
+  /// Display additional data if available
   Widget _buildAdditionalData(ThemeData theme, Map<String, dynamic> additionalData) {
     final List<Widget> dataEntries = additionalData.entries.map((entry) {
       final value = entry.value;
@@ -105,6 +112,7 @@ class CardInfoWidget extends StatelessWidget {
     );
   }
 
+  /// Default description if no additional data
   Widget _buildDefaultDescription(AppLocalizations locale, ThemeData theme, CardEntity card) {
     return Opacity(
       opacity: 0.6,

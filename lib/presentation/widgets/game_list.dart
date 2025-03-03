@@ -19,32 +19,43 @@ class GameListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: gameKeys.isEmpty
-          ? Container()
-          : ListView.builder(
-              itemCount: gameKeys.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return GameLabelWidget(
-                    game: locale.translate('text.my_collection'),
-                    description: locale.translate('text.collection_description'),
-                    isAdd: isAdd,
-                    isCustom: true,
-                  );
-                }
-                final actualIndex = index - 1;
-                final description = ApiConfig.baseUrls[gameKeys[actualIndex]] ?? '';
-                return GameLabelWidget(
-                  game: gameKeys[actualIndex],
-                  imagePath: gameImages[actualIndex],
-                  description: description,
-                  isAdd: isAdd,
-                );
-              },
-            ),
+      child: gameKeys.isEmpty ? Container() : _buildGameList(context),
+    );
+  }
+
+  /// Create a list of all games
+  Widget _buildGameList(BuildContext context) {
+    return ListView.builder(
+      itemCount: gameKeys.length + 1,
+      itemBuilder: (context, index) {
+        return index == 0 ? _buildGameLabel(context) : _buildGameItem(index - 1);
+      },
+    );
+  }
+
+  /// Game: "My Collection"
+  Widget _buildGameLabel(BuildContext context) {
+    final locale = AppLocalizations.of(context);
+
+    return GameLabelWidget(
+      game: locale.translate('text.my_collection'),
+      description: locale.translate('text.collection_description'),
+      isAdd: isAdd,
+      isCustom: true,
+    );
+  }
+
+  /// Each game list
+  Widget _buildGameItem(int index) {
+    final description = ApiConfig.baseUrls[gameKeys[index]] ?? '';
+
+    return GameLabelWidget(
+      game: gameKeys[index],
+      imagePath: gameImages[index],
+      description: description,
+      isAdd: isAdd,
     );
   }
 }

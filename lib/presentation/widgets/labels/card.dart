@@ -33,7 +33,9 @@ class CardLabelWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     final color = lightTheme ? Colors.black : null;
+
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         AppRoutes.card,
@@ -43,9 +45,11 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
+  /// The container that holds the entire card item
   Widget _buildContainer(BuildContext context, AppLocalizations locale, ThemeData theme, Color? color) {
     final backgroundColor = lightTheme ? Colors.white : theme.appBarTheme.backgroundColor;
     final pinColor = cardColors ?? backgroundColor;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 6.0),
       height: 60.0,
@@ -86,6 +90,7 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
+  /// Actions for the Slidable widget (edit color or delete)
   ActionPane? _buildSlidableActions(BuildContext context, ThemeData theme, Color? backgroundColor) {
     if (isTrack) {
       final colors = [
@@ -122,10 +127,12 @@ class CardLabelWidget extends StatelessWidget {
     } else return null;
   }
 
+  /// Toggle the color of the card
   void _toggleColor(Color targetColor, Color? backgroundColor) {
     changeCardColor?.call(cardColors == targetColor ? backgroundColor! : targetColor);
   }
 
+  /// The image widget (either from a file, network, or fallback icon)
   Widget _buildImage(ThemeData theme, Color pinColor, Color? color) {
     final imageUrl = card?.imageUrl;
     final isNetworkImage = imageUrl?.startsWith('http') ?? false;
@@ -151,8 +158,10 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
+  /// Fallback icon when image cannot be loaded
   Widget _buildFallbackIcon(Color? color) => Icon(Icons.image_not_supported, size: 36.0, color: color);
 
+  /// The card information (name and description)
   Widget _buildCardInfo(AppLocalizations locale, ThemeData theme, Color? color) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
@@ -173,6 +182,7 @@ class CardLabelWidget extends StatelessWidget {
     ],
   );
 
+  /// The count of the card (if provided)
   Widget _buildCount(ThemeData theme, Color? color) => Padding(
     padding: const EdgeInsets.only(right: 22.0),
     child: Text(count.toString(), style: theme.textTheme.titleMedium?.copyWith(color: color)),

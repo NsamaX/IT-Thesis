@@ -117,7 +117,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   void _toggleAdd(AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
     if (_card != null) {
       deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
-      await snackBar(
+      snackBar(
         context,
         locale.translate('snack_bar.card.add_success'),
       );
@@ -127,7 +127,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
 
   void _toggleCreate(AppLocalizations locale) async {
     context.read<CollectionCubit>().addCard();
-    await snackBar(
+    snackBar(
       context,
       locale.translate('snack_bar.card.add_success'),
     );

@@ -14,24 +14,24 @@ class DeckCardGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) return Container();
+
     final itemType = _getItemType(items.first);
     final gridConfig = _getGridConfig(itemType);
+
     return GridView.builder(
       padding: const EdgeInsets.all(16.0),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: gridConfig['spacing'] as double,
-        crossAxisSpacing: gridConfig['spacing'] as double,
-        childAspectRatio: gridConfig['aspectRatio'] as double,
+        mainAxisSpacing: gridConfig['spacing']!,
+        crossAxisSpacing: gridConfig['spacing']!,
+        childAspectRatio: gridConfig['aspectRatio']!,
       ),
       itemCount: items.length,
-      itemBuilder: (context, index) => _buildGridItem(
-        items[index],
-        itemType,
-      ),
+      itemBuilder: (context, index) => _buildGridItem(items[index], itemType),
     );
   }
 
+  /// Determine the type of item (deck, card, or card with count)
   String _getItemType(dynamic item) {
     if (item is DeckEntity) return 'deck';
     if (item is CardEntity) return 'card';
@@ -39,10 +39,14 @@ class DeckCardGridWidget extends StatelessWidget {
     return 'unknown';
   }
 
-  Map<String, double> _getGridConfig(String itemType) => {
-    'deck': {'spacing': 12.0, 'aspectRatio': 1.0},
-  }[itemType] ?? {'spacing': 8.0, 'aspectRatio': 3 / 4};
+  /// Get grid configuration based on item type
+  Map<String, double> _getGridConfig(String itemType) {
+    return {
+      'deck': {'spacing': 12.0, 'aspectRatio': 1.0},
+    }[itemType] ?? {'spacing': 8.0, 'aspectRatio': 3 / 4};
+  }
 
+  /// The appropriate widget for each grid item
   Widget _buildGridItem(dynamic item, String itemType) {
     switch (itemType) {
       case 'deck':

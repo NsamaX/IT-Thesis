@@ -16,7 +16,7 @@ import '../widgets/drawers/player.dart';
 import '../widgets/labels/card.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/draw_return_chart.dart';
-import '../widgets/in-depth_gameplay.dart';
+import '../widgets/insight.dart';
 import '../widgets/notifications.dart';
 import '../widgets/switch_mode_bar.dart';
 
@@ -241,7 +241,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
         padding: const EdgeInsets.fromLTRB(6.0, 0.0, 16.0, 0.0),
         child: DrawReturnChartWidget(cardStats: cardStats),
       ),
-      InDepthGameplayWidget(
+      InsightWidget(
         initialDeck: state.initialDeck, 
         record: state.record, 
         records: state.records,

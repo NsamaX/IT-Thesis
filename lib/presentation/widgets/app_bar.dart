@@ -11,6 +11,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return AppBar(
       automaticallyImplyLeading: false,
       title: menu.length == 1
@@ -38,17 +39,21 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, ThemeData theme, menuKey, onTapFunction, bool isTitle) => GestureDetector(
-    onTap: () => _handleMenuTap(context, onTapFunction),
-    child: SizedBox(
-      width: isTitle ? 142.0 : 42.0,
-      height: kToolbarHeight,
-      child: Center(
-        child: _getMenuItemWidget(theme, menuKey, isTitle),
+  /// Single menu item (icon or text)
+  Widget _buildMenuItem(BuildContext context, ThemeData theme, menuKey, onTapFunction, bool isTitle) {
+    return GestureDetector(
+      onTap: () => _handleMenuTap(context, onTapFunction),
+      child: SizedBox(
+        width: isTitle ? 142.0 : 42.0,
+        height: kToolbarHeight,
+        child: Center(
+          child: _getMenuItemWidget(theme, menuKey, isTitle),
+        ),
       ),
-    ),
-  );
+    );
+  }
 
+  /// Handle rendering of the menu item (Icon, Text, or Custom Widget)
   Widget _getMenuItemWidget(ThemeData theme, dynamic menuKey, bool isTitle) {
     if (menuKey == null) {
       return const SizedBox.shrink();
@@ -69,6 +74,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return const Icon(Icons.error_outline);
   }
 
+  /// Handle tap event for menu items
   void _handleMenuTap(BuildContext context, dynamic onTapFunction) {
     if (onTapFunction == null) return;
     if (onTapFunction is String) {
@@ -88,5 +94,6 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
+  /// Check if the menu item should be the title
   bool _isTitle(dynamic menuKey) => menuKey == menu.keys.elementAt(menu.length ~/ 2);
 }

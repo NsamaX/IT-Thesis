@@ -13,19 +13,22 @@ class DrawReturnChartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     final data = _generateData(context);
     final drawCounts = data.map((stat) => stat['draw'] as int).toList();
     final returnCounts = data.map((stat) => stat['return'] as int).toList();
+
     return Column(
       children: [
         const SizedBox(height: 8.0),
-        _buildLabel(locale, theme),
+        _buildLegend(locale, theme),
         const SizedBox(height: 8.0),
         _buildChart(theme, drawCounts, returnCounts, data),
       ],
     );
   }
 
+  /// Generate aggregated data for the chart
   List<Map<String, dynamic>> _generateData(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const double barWidth = 40.0;
@@ -44,7 +47,7 @@ class DrawReturnChartWidget extends StatelessWidget {
       aggregatedData[cardName]!['draw'] += stat['draw'] as int;
       aggregatedData[cardName]!['return'] += stat['return'] as int;
     }
-    
+
     final data = aggregatedData.values.toList();
     if (data.length < maxDummy) {
       data.addAll(
@@ -54,38 +57,45 @@ class DrawReturnChartWidget extends StatelessWidget {
         ),
       );
     }
-
     return data;
   }
 
-  Widget _buildLabel(AppLocalizations locale, ThemeData theme) => Align(
-    alignment: Alignment.centerRight,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        _buildLegend(theme, locale.translate('text.draw'), CupertinoColors.activeBlue),
-        const SizedBox(width: 12.0),
-        _buildLegend(theme, locale.translate('text.return'), CupertinoColors.destructiveRed),
-      ],
-    ),
-  );
-
-  Widget _buildLegend(ThemeData theme, String label, Color color) => Row(
-    children: [
-      Container(
-        width: 12.0,
-        height: 12.0,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  /// Legend for the chart
+  Widget _buildLegend(AppLocalizations locale, ThemeData theme) {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _buildLegendItem(theme, locale.translate('text.draw'), CupertinoColors.activeBlue),
+          const SizedBox(width: 12.0),
+          _buildLegendItem(theme, locale.translate('text.return'), CupertinoColors.destructiveRed),
+        ],
       ),
-      const SizedBox(width: 8.0),
-      Text(label, style: theme.textTheme.bodySmall),
-    ],
-  );
+    );
+  }
 
+  /// Create individual legend items
+  Widget _buildLegendItem(ThemeData theme, String label, Color color) {
+    return Row(
+      children: [
+        Container(
+          width: 12.0,
+          height: 12.0,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 8.0),
+        Text(label, style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+
+  /// Chart with bars
   Widget _buildChart(ThemeData theme, List<int> drawCounts, List<int> returnCounts, List<Map<String, dynamic>> data) {
     final color = theme.appBarTheme.backgroundColor ?? Colors.grey;
     final maxY = 10;
     final double width = 40.0 * drawCounts.length;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -97,42 +107,53 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
+  /// Y-axis labels
   Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
     const double chartHeight = 400.0;
     final double spacerHeight = chartHeight / maxY - 24.0;
+
     return Padding(
       padding: const EdgeInsets.only(top: 30.0),
-      child: Container(
-        height: chartHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: List.generate(
-            maxY,
-            (index) => Column(
-              children: [
-                Text((maxY - index).toString(), style: theme.textTheme.bodySmall),
-                SizedBox(height: spacerHeight),
-              ],
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: List.generate(
+          maxY,
+          (index) => Column(
+            children: [
+              Text((maxY - index).toString(), style: theme.textTheme.bodySmall),
+              SizedBox(height: spacerHeight),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildLeftBorder(Color color) => Container(
-    width: 1.2,
-    height: 346.0,
-    color: color,
-  );
+  /// The left border of the chart
+  Widget _buildLeftBorder(Color color) {
+    return Container(
+      width: 1.2,
+      height: 346.0,
+      color: color,
+    );
+  }
 
-  Widget _buildChartBody(ThemeData theme, double width, double maxY, List<int> drawCounts, List<int> returnCounts, List<Map<String, dynamic>> data, Color color) {
+  /// The main chart body
+  Widget _buildChartBody(
+    ThemeData theme,
+    double width,
+    double maxY,
+    List<int> drawCounts,
+    List<int> returnCounts,
+    List<Map<String, dynamic>> data,
+    Color color,
+  ) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(top: 6.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
+          child: SizedBox(
             width: width,
             height: 400.0,
             child: BarChart(
@@ -176,8 +197,10 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
+  /// Bottom labels for each bar
   Widget _buildBottomTitle(ThemeData theme, String cardName) {
     final truncatedName = cardName.length > 10 ? '${cardName.substring(0, 10)}...' : cardName;
+
     return Padding(
       padding: const EdgeInsets.only(top: 18.0),
       child: Transform.rotate(
@@ -191,30 +214,28 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  BarChartGroupData _buildBarGroup(double maxY, int index, int drawCount, int returnCount) => BarChartGroupData(
-    x: index,
-    barsSpace: 6.0,
-    barRods: [
-      BarChartRodData(
-        toY: drawCount > maxY ? maxY : drawCount.toDouble(),
-        color: CupertinoColors.activeBlue,
-        width: 4.0,
-      ),
-      BarChartRodData(
-        toY: returnCount > maxY ? maxY : returnCount.toDouble(),
-        color: CupertinoColors.destructiveRed,
-        width: 4.0,
-      ),
-    ],
-  );
+  /// Individual bar groups
+  BarChartGroupData _buildBarGroup(double maxY, int index, int drawCount, int returnCount) {
+    return BarChartGroupData(
+      x: index,
+      barsSpace: 6.0,
+      barRods: [
+        BarChartRodData(toY: drawCount > maxY ? maxY : drawCount.toDouble(), color: CupertinoColors.activeBlue, width: 4.0),
+        BarChartRodData(toY: returnCount > maxY ? maxY : returnCount.toDouble(), color: CupertinoColors.destructiveRed, width: 4.0),
+      ],
+    );
+  }
 
-  FlGridData _buildGrid(Color color) => FlGridData(
-    show: true,
-    drawVerticalLine: true,
-    drawHorizontalLine: true,
-    verticalInterval: 1.0,
-    horizontalInterval: 1.0,
-    getDrawingHorizontalLine: (value) => FlLine(color: color, strokeWidth: 1.2),
-    getDrawingVerticalLine: (value) => FlLine(color: color, strokeWidth: 1.2),
-  );
+  /// Grid lines for the chart
+  FlGridData _buildGrid(Color color) {
+    return FlGridData(
+      show: true,
+      drawVerticalLine: true,
+      drawHorizontalLine: true,
+      verticalInterval: 1.0,
+      horizontalInterval: 1.0,
+      getDrawingHorizontalLine: (value) => FlLine(color: color, strokeWidth: 1.2),
+      getDrawingVerticalLine: (value) => FlLine(color: color, strokeWidth: 1.2),
+    );
+  }
 }

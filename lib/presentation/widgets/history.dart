@@ -18,22 +18,28 @@ class HistoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return SettingLabelWidget(
+      label: _buildHistoryList(context),
+    );
+  }
+
+  /// History list
+  List<Map<String, dynamic>> _buildHistoryList(BuildContext context) {
     final locale = AppLocalizations.of(context);
+
     final dateFormatter = DateFormat('yyyy-MM-dd');
     final timeFormatter = DateFormat('HH:mm:ss');
 
-    return SettingLabelWidget(
-      label: [
-        {
-          'title': locale.translate('settings.account.label'),
-          'content': records.map((record) => {
-            'onTap': () => selectRecord?.call(context, record.recordId),
-            'text': dateFormatter.format(record.createdAt),
-            'info': timeFormatter.format(record.createdAt),
-            'arrow': true,
-          }).toList(),
-        },
-      ],
-    );
+    return [
+      {
+        'title': locale.translate('settings.account.label'),
+        'content': records.map((record) => {
+          'onTap': () => selectRecord?.call(context, record.recordId),
+          'text': dateFormatter.format(record.createdAt),
+          'info': timeFormatter.format(record.createdAt),
+          'arrow': true,
+        }).toList(),
+      },
+    ];
   }
 }

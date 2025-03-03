@@ -7,18 +7,13 @@ const _snackBarDuration = Duration(seconds: 1);
 const _dialogTransitionDuration = Duration(milliseconds: 200);
 
 /// Displays a Snackbar notification
-Future<void> snackBar(BuildContext context, String content, {bool isError = false}) async {
-  return Future.delayed(
-    _snackBarDuration,
-    () => ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(content, style: const TextStyle(color: Colors.white)),
-        duration: _snackBarDuration,
-        backgroundColor: isError 
-            ? CupertinoColors.destructiveRed 
-            : CupertinoColors.activeGreen,
-        behavior: SnackBarBehavior.floating,
-      ),
+void snackBar(BuildContext context, String content, {bool isError = false}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(content, style: const TextStyle(color: Colors.white)),
+      duration: _snackBarDuration,
+      backgroundColor: isError ? CupertinoColors.destructiveRed : CupertinoColors.activeGreen,
+      behavior: SnackBarBehavior.floating,
     ),
   );
 }
@@ -32,7 +27,8 @@ void cupertinoAlertDialog(BuildContext context, String title, String content) {
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
     barrierColor: Colors.black.withOpacity(0.5),
-    pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
+    transitionDuration: _dialogTransitionDuration,
+    pageBuilder: (_, __, ___) => CupertinoAlertDialog(
       title: _buildDialogTitleText(title),
       content: _buildDialogContentText(content),
       actions: [
@@ -43,7 +39,6 @@ void cupertinoAlertDialog(BuildContext context, String title, String content) {
         ),
       ],
     ),
-    transitionDuration: _dialogTransitionDuration,
   );
 }
 
@@ -56,7 +51,8 @@ void cupertinoAlertDialogAction(BuildContext context, String title, String conte
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
     barrierColor: Colors.black.withOpacity(0.5),
-    pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
+    transitionDuration: _dialogTransitionDuration,
+    pageBuilder: (_, __, ___) => CupertinoAlertDialog(
       title: _buildDialogTitleText(title),
       content: _buildDialogContentText(content),
       actions: [
@@ -90,18 +86,24 @@ void cupertinoMultipleChoicesDialog(
     barrierDismissible: false,
     barrierLabel: 'Dismiss',
     barrierColor: Colors.black.withAlpha((0.2 * 255).toInt()),
-    pageBuilder: (context, animation1, animation2) => CupertinoAlertDialog(
+    transitionDuration: _dialogTransitionDuration,
+    pageBuilder: (_, __, ___) => CupertinoAlertDialog(
       title: _buildDialogTitleText(title),
       content: _buildDialogContentText(content),
-      actions: choices.entries.map((entry) {
-        final isCancel = entry.value['isCancel'] ?? false;
-        final callback = entry.value['onPressed'] as VoidCallback;
-        return _buildDialogAction(
-          entry.key,
-          callback,
-          isCancel ? CupertinoColors.destructiveRed : CupertinoColors.activeBlue,
-        );
-      }).toList(),
+      actions: List.generate(
+        choices.length,
+        (index) {
+          final entry = choices.entries.elementAt(index);
+          final isCancel = entry.value['isCancel'] ?? false;
+          final callback = entry.value['onPressed'] as VoidCallback;
+
+          return _buildDialogAction(
+            entry.key,
+            callback,
+            isCancel ? CupertinoColors.destructiveRed : CupertinoColors.activeBlue,
+          );
+        },
+      ),
     ),
   );
 }
@@ -136,8 +138,7 @@ Widget _buildDialogAction(String label, VoidCallback onPressed, Color color) {
     onPressed: onPressed,
     child: Text(
       label,
-      style: TextStyle(
-        color: color,
+      style: const TextStyle(
         fontSize: 12.0,
         fontWeight: FontWeight.w100,
       ),

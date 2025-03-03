@@ -180,14 +180,14 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     _nfcCubit.markSnackBarDisplayed();
     if (state.isOperationSuccessful) {
       final successMessage = locale.translate('snack_bar.nfc.write_success');
-      await snackBar(
+      snackBar(
         context,
         successMessage,
       );
       _nfcCubit.resetOperationStatus();
     } else if (state.errorMessage.isNotEmpty) {
       final errorMessage = locale.translate('snack_bar.nfc.write_failed');
-      await snackBar(
+      snackBar(
         context,
         errorMessage,
         isError: true,

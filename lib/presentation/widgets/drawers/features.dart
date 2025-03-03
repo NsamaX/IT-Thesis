@@ -14,6 +14,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
         final currentGame = state.selectedGame;
@@ -22,13 +23,12 @@ class FeaturesDrawerWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (currentGame != null)...[
+              if (currentGame != null) 
                 _buildFeatureItem(
                   theme,
                   onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
                   image: AppImages.game.containsKey(currentGame) ? AppImages.game[currentGame] : 'my_collection',
                 ),
-              ],
               _buildFeatureItem(
                 theme,
                 onTap: () => _navigateToRoute(context, AppRoutes.games),
@@ -46,10 +46,12 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
+  /// Navigate to a route
   void _navigateToRoute(BuildContext context, String route, [Map<String, dynamic>? arguments]) {
     Navigator.of(context).pushNamed(route, arguments: arguments);
   }
 
+  /// The feature item
   Widget _buildFeatureItem(ThemeData theme, {VoidCallback? onTap, String? image, String? label}) => Padding(
     padding: const EdgeInsets.only(bottom: 20.0),
     child: GestureDetector(
@@ -74,6 +76,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
     ),
   );
 
+  /// The content of the feature item
   Widget _buildFeatureContent(ThemeData theme, String? image, String? label) {
     if (image != null) {
       return image == 'my_collection' 
