@@ -90,7 +90,7 @@ class SettingsPage extends StatelessWidget {
 
   //--------------------------------- Feature --------------------------------//
   void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
-    cubit.updateFirstLoad(true);
+    cubit.updateSetting('firstLoad', true);
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
   }
 }

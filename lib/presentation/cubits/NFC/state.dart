@@ -12,7 +12,7 @@ part of 'cubit.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class NFCState {
+class NFCState extends Equatable {
   final TagEntity? lastestReadTags;
   final String errorMessage;
   final bool isNFCEnabled;
@@ -21,7 +21,7 @@ class NFCState {
   final bool isSnackBarDisplayed;
   final bool isOperationSuccessful;
 
-  NFCState({
+  const NFCState({
     this.lastestReadTags,
     this.errorMessage = '',
     required this.isNFCEnabled,
@@ -39,13 +39,26 @@ class NFCState {
     bool? isWriteOperation,
     bool? isSnackBarDisplayed,
     bool? isOperationSuccessful,
-  }) => NFCState(
-    lastestReadTags: lastestReadTags ?? this.lastestReadTags,
-    errorMessage: errorMessage ?? this.errorMessage,
-    isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
-    isProcessing: isProcessing ?? this.isProcessing,
-    isWriteOperation: isWriteOperation ?? this.isWriteOperation,
-    isSnackBarDisplayed: isSnackBarDisplayed ?? this.isSnackBarDisplayed,
-    isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
-  );
+  }) {
+    return NFCState(
+      lastestReadTags: lastestReadTags ?? this.lastestReadTags,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isNFCEnabled: isNFCEnabled ?? this.isNFCEnabled,
+      isProcessing: isProcessing ?? this.isProcessing,
+      isWriteOperation: isWriteOperation ?? this.isWriteOperation,
+      isSnackBarDisplayed: isSnackBarDisplayed ?? this.isSnackBarDisplayed,
+      isOperationSuccessful: isOperationSuccessful ?? this.isOperationSuccessful,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        lastestReadTags,
+        errorMessage,
+        isNFCEnabled,
+        isProcessing,
+        isWriteOperation,
+        isSnackBarDisplayed,
+        isOperationSuccessful,
+      ];
 }

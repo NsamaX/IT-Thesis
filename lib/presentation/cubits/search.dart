@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
@@ -15,13 +16,13 @@ import 'package:nfc_project/domain/usecases/card.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class SearchState {
+class SearchState extends Equatable {
   final List<CardEntity> cards;
   final List<CardEntity> searchedCards;
   final String? errorMessage;
   final bool isLoading;
 
-  SearchState({
+  const SearchState({
     this.cards = const [],
     this.searchedCards = const [],
     this.errorMessage,
@@ -33,18 +34,23 @@ class SearchState {
     List<CardEntity>? searchedCards,
     String? errorMessage,
     bool? isLoading,
-  }) => SearchState(
-    cards: cards ?? this.cards,
-    searchedCards: searchedCards ?? this.searchedCards,
-    errorMessage: errorMessage ?? this.errorMessage,
-    isLoading: isLoading ?? this.isLoading,
-  );
+  }) {
+    return SearchState(
+      cards: cards ?? this.cards,
+      searchedCards: searchedCards ?? this.searchedCards,
+      errorMessage: errorMessage,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
+
+  @override
+  List<Object?> get props => [cards, searchedCards, errorMessage, isLoading];
 }
 
 class SearchCubit extends Cubit<SearchState> {
   final SyncCardsUseCase syncCardsUseCase;
 
-  SearchCubit(this.syncCardsUseCase) : super(SearchState());
+  SearchCubit(this.syncCardsUseCase) : super(const SearchState());
 
   /*--------------------------------------------------------------------------------
    |
@@ -59,7 +65,7 @@ class SearchCubit extends Cubit<SearchState> {
    |
    *-------------------------------------------------------------------------------*/
   void safeEmit(SearchState newState) {
-    if (!isClosed) {
+    if (!isClosed && state != newState) {
       emit(newState);
     }
   }
@@ -79,11 +85,19 @@ class SearchCubit extends Cubit<SearchState> {
   Future<void> syncCards(String game) async {
     if (state.isLoading || isClosed) return;
     safeEmit(state.copyWith(isLoading: true, errorMessage: null));
+
     try {
       final syncedCards = await syncCardsUseCase(game);
-      safeEmit(state.copyWith(cards: syncedCards, searchedCards: syncedCards, isLoading: false));
+      safeEmit(state.copyWith(
+        cards: syncedCards,
+        searchedCards: syncedCards,
+        isLoading: false,
+      ));
     } catch (e) {
-      safeEmit(state.copyWith(errorMessage: 'Failed to sync cards: $e', isLoading: false));
+      safeEmit(state.copyWith(
+        errorMessage: 'Failed to sync cards: $e',
+        isLoading: false,
+      ));
     }
   }
 
@@ -101,11 +115,18 @@ class SearchCubit extends Cubit<SearchState> {
    *-------------------------------------------------------------------------------*/
   void searchCards(String query) {
     if (isClosed) return;
-    safeEmit(state.copyWith(
-      searchedCards: state.cards
-          .where((card) => card.name.toLowerCase().contains(query.toLowerCase()))
-          .toList(),
-    ));
+
+    final trimmedQuery = query.trim();
+    if (trimmedQuery.isEmpty) {
+      clearSearch();
+      return;
+    }
+
+    final filteredCards = state.cards
+        .where((card) => card.name.toLowerCase().contains(trimmedQuery.toLowerCase()))
+        .toList();
+
+    safeEmit(state.copyWith(searchedCards: filteredCards));
   }
 
   /*--------------------------------------------------------------------------------

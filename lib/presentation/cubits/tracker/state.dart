@@ -12,7 +12,7 @@ part of 'cubit.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class TrackState {
+class TrackState extends Equatable {
   final DeckEntity initialDeck;
   final DeckEntity currentDeck;
   final RecordEntity record;
@@ -24,7 +24,7 @@ class TrackState {
   final bool isAdvanceModeEnabled;
   final bool isAnalyzeModeEnabled;
 
-  TrackState({
+  const TrackState({
     required this.initialDeck,
     required this.currentDeck,
     required this.record,
@@ -39,7 +39,7 @@ class TrackState {
 
   TrackState copyWith({
     DeckEntity? initialDeck,
-    DeckEntity? deck,
+    DeckEntity? currentDeck,
     RecordEntity? record,
     List<RecordEntity>? records,
     List<CardEntity>? history,
@@ -48,16 +48,32 @@ class TrackState {
     bool? isProcessing,
     bool? isAdvanceModeEnabled,
     bool? isAnalyzeModeEnabled,
-  }) => TrackState(
-    initialDeck: initialDeck ?? this.initialDeck,
-    currentDeck: deck ?? this.currentDeck,
-    record: record ?? this.record,
-    records: records ?? this.records,
-    history: history ?? this.history,
-    cardColors: cardColors ?? this.cardColors,
-    isDialogShown: isDialogShown ?? this.isDialogShown,
-    isProcessing: isProcessing ?? this.isProcessing,
-    isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
-    isAnalyzeModeEnabled: isAnalyzeModeEnabled ?? this.isAnalyzeModeEnabled,
-  );
+  }) {
+    return TrackState(
+      initialDeck: initialDeck ?? this.initialDeck,
+      currentDeck: currentDeck ?? this.currentDeck,
+      record: record ?? this.record,
+      records: records ?? this.records,
+      history: history ?? this.history,
+      cardColors: cardColors ?? this.cardColors,
+      isDialogShown: isDialogShown ?? this.isDialogShown,
+      isProcessing: isProcessing ?? this.isProcessing,
+      isAdvanceModeEnabled: isAdvanceModeEnabled ?? this.isAdvanceModeEnabled,
+      isAnalyzeModeEnabled: isAnalyzeModeEnabled ?? this.isAnalyzeModeEnabled,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        initialDeck,
+        currentDeck,
+        record,
+        records,
+        history,
+        cardColors,
+        isDialogShown,
+        isProcessing,
+        isAdvanceModeEnabled,
+        isAnalyzeModeEnabled,
+      ];
 }

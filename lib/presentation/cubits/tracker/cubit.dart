@@ -1,4 +1,6 @@
 import 'dart:ui';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
@@ -55,7 +57,11 @@ class TrackCubit extends Cubit<TrackState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void showDialog() => emit(state.copyWith(isDialogShown: true));
+  void safeEmit(TrackState newState) {
+    if (!isClosed && state != newState) {
+      emit(newState);
+    }
+  }
 
   /*--------------------------------------------------------------------------------
    |
@@ -69,7 +75,7 @@ class TrackCubit extends Cubit<TrackState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void toggleAdvanceMode() => emit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
+  void showDialog() => safeEmit(state.copyWith(isDialogShown: true));
 
   /*--------------------------------------------------------------------------------
    |
@@ -83,7 +89,7 @@ class TrackCubit extends Cubit<TrackState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void toggleAnalyzeMode() => emit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
+  void toggleAdvanceMode() => safeEmit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
 
   /*--------------------------------------------------------------------------------
    |
@@ -97,18 +103,34 @@ class TrackCubit extends Cubit<TrackState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void toggleReset() => emit(state.copyWith(
-    isProcessing: false,
-    isDialogShown: true,
-    deck: state.initialDeck,
-    record: RecordEntity(
-      recordId: DateTime.now().toIso8601String(),
-      createdAt: DateTime.now(),
-      data: [],
-    ),
-    history: [],
-    cardColors: {},
-  ));
+  void toggleAnalyzeMode() => safeEmit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
+
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
+  void toggleReset() {
+    safeEmit(state.copyWith(
+      isProcessing: false,
+      isDialogShown: true,
+      currentDeck: state.initialDeck,
+      record: RecordEntity(
+        recordId: DateTime.now().toIso8601String(),
+        createdAt: DateTime.now(),
+        data: [],
+      ),
+      history: [],
+      cardColors: {},
+    ));
+  }
 
   /*--------------------------------------------------------------------------------
    |
@@ -124,9 +146,13 @@ class TrackCubit extends Cubit<TrackState> {
    *-------------------------------------------------------------------------------*/
   Future<void> toggleSaveRecord() async {
     if (state.record.data.isEmpty) return;
-    await saveRecordUseCase.call(state.record);
-    fetchRecord();
-    toggleReset();
+    try {
+      await saveRecordUseCase.call(state.record);
+      await fetchRecord();
+      toggleReset();
+    } catch (e) {
+      print('Error saving record: $e');
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -142,7 +168,11 @@ class TrackCubit extends Cubit<TrackState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> toggleRemoveRecord(String recordId) async {
-    await recordUseCase.call(recordId);
+    try {
+      await recordUseCase.call(recordId);
+    } catch (e) {
+      print('Error removing record: $e');
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -158,28 +188,54 @@ class TrackCubit extends Cubit<TrackState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> fetchRecordById(String recordId) async {
-    final record = state.records.firstWhere(
-      (record) => record.recordId == recordId,
-      orElse: () => throw Exception("Record not found"),
-    );
-    final history = record.data.map((data) {
-      final card = state.initialDeck.cards.keys.firstWhere(
-        (card) => card.cardId == data.tagId,
-        orElse: () => CardEntity(
-          cardId: data.tagId,
-          game: '',
-          name: data.name,
-          description: '',
+    try {
+      final record = state.records.firstWhere(
+        (record) => record.recordId == recordId,
+        orElse: () => RecordEntity(
+          recordId: recordId,
+          createdAt: DateTime.now(),
+          data: [],
         ),
       );
-      return card.copyWith(description: '');
-    }).toList();
-    emit(state.copyWith(record: record, history: history));
+
+      final history = record.data.map((data) {
+        final card = state.initialDeck.cards.keys.firstWhere(
+          (card) => card.cardId == data.tagId,
+          orElse: () => CardEntity(
+            cardId: data.tagId,
+            game: '',
+            name: data.name,
+            description: '',
+          ),
+        );
+        return card.copyWith(description: '');
+      }).toList();
+
+      safeEmit(state.copyWith(record: record, history: history));
+    } catch (e) {
+      print('Error fetching record by ID: $e');
+    }
   }
 
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
   Future<void> fetchRecord() async {
-    final records = await fetchRecordUseCase.call();
-    emit(state.copyWith(records: records.reversed.toList()));
+    try {
+      final records = await fetchRecordUseCase.call();
+      safeEmit(state.copyWith(records: records.reversed.toList()));
+    } catch (e) {
+      print('Error fetching records: $e');
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -196,13 +252,16 @@ class TrackCubit extends Cubit<TrackState> {
    *-------------------------------------------------------------------------------*/
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
-    emit(state.copyWith(isProcessing: true));
+    safeEmit(state.copyWith(isProcessing: true));
+
     try {
       final matchingCard = state.currentDeck.cards.keys.firstWhere(
         (card) => card.cardId == tag.cardId,
         orElse: () => throw Exception("Card not found in deck"),
       );
+
       final updatedHistory = [...state.history, matchingCard];
+
       final existingData = state.record.data.lastWhere(
         (data) => data.tagId == tag.tagId,
         orElse: () => DataEntity(
@@ -214,15 +273,20 @@ class TrackCubit extends Cubit<TrackState> {
           timestamp: DateTime.now(),
         ),
       );
+
       if (existingData.action == Action.draw) {
+        updateCardCount(tag, Action.returnToDeck, "in", 1, state, emit);
+      } else if (existingData.action == Action.returnToDeck) {
         updateCardCount(tag, Action.draw, "out", -1, state, emit);
       } else {
         updateCardCount(tag, Action.draw, "out", -1, state, emit);
       }
+
       moveCardToTop(tag, state, emit);
-      emit(state.copyWith(isProcessing: false, history: updatedHistory));
+      safeEmit(state.copyWith(isProcessing: false, history: updatedHistory));
     } catch (e) {
-      emit(state.copyWith(isProcessing: false));
+      safeEmit(state.copyWith(isProcessing: false));
+      print('Error reading tag: $e');
     }
   }
 
@@ -239,19 +303,22 @@ class TrackCubit extends Cubit<TrackState> {
    |
    *-------------------------------------------------------------------------------*/
   List<Map<String, dynamic>> calculateDrawAndReturnCounts() {
-    final cardNames = <String, String>{};
+    final result = <Map<String, dynamic>>[];
     final drawCounts = <String, int>{};
     final returnCounts = <String, int>{};
+    final cardNames = <String, String>{};
+
     for (final data in state.record.data) {
       final tagId = data.tagId;
       cardNames[tagId] = data.name;
+
       if (data.action == Action.draw) {
         drawCounts[tagId] = (drawCounts[tagId] ?? 0) + 1;
       } else if (data.action == Action.returnToDeck) {
         returnCounts[tagId] = (returnCounts[tagId] ?? 0) + 1;
       }
     }
-    final result = <Map<String, dynamic>>[];
+
     for (final tagId in cardNames.keys) {
       result.add({
         "CardName": cardNames[tagId] ?? "Unknown",
@@ -259,6 +326,7 @@ class TrackCubit extends Cubit<TrackState> {
         "return": returnCounts[tagId] ?? 0,
       });
     }
+
     return result;
   }
 
@@ -277,6 +345,6 @@ class TrackCubit extends Cubit<TrackState> {
   void changeCardColor(String cardId, Color color) {
     final updatedColors = Map<String, Color>.from(state.cardColors);
     updatedColors[cardId] = color;
-    emit(state.copyWith(cardColors: updatedColors));
+    safeEmit(state.copyWith(cardColors: updatedColors));
   }
 }

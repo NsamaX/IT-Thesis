@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
@@ -15,31 +16,37 @@ import 'package:nfc_project/domain/usecases/collection.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class CollectionState {
+class CollectionState extends Equatable {
   final List<CardEntity> collection;
   final String name;
   final String description;
   final String? imageUrl;
-  final bool isValid;
-  
-  CollectionState({
-    required this.collection,
+
+  const CollectionState({
+    this.collection = const [],
     this.name = '',
     this.description = '',
-    this.imageUrl = '',
-  }) : isValid = name.isNotEmpty && description.isNotEmpty;
+    this.imageUrl,
+  });
+
+  bool get isValid => name.isNotEmpty && description.isNotEmpty;
 
   CollectionState copyWith({
     List<CardEntity>? collection,
     String? name,
     String? description,
     String? imageUrl,
-  }) => CollectionState(
-    collection: collection ?? this.collection,
-    name: name ?? this.name,
-    description: description ?? this.description,
-    imageUrl: imageUrl ?? this.imageUrl,
-  );
+  }) {
+    return CollectionState(
+      collection: collection ?? this.collection,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
+
+  @override
+  List<Object?> get props => [collection, name, description, imageUrl];
 }
 
 class CollectionCubit extends Cubit<CollectionState> {
@@ -51,7 +58,7 @@ class CollectionCubit extends Cubit<CollectionState> {
     required this.addCardUseCase,
     required this.removeCardUseCase,
     required this.fetchCollectionUseCase,
-  }) : super(CollectionState(collection: []));
+  }) : super(const CollectionState());
 
   /*--------------------------------------------------------------------------------
    |
@@ -65,7 +72,11 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void setName(String name) => emit(state.copyWith(name: name));
+  void safeEmit(CollectionState newState) {
+    if (!isClosed && state != newState) {
+      emit(newState);
+    }
+  }
 
   /*--------------------------------------------------------------------------------
    |
@@ -79,7 +90,7 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void setDescription(String description) => emit(state.copyWith(description: description));
+  void setName(String name) => safeEmit(state.copyWith(name: name));
 
   /*--------------------------------------------------------------------------------
    |
@@ -93,7 +104,21 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void setImageUrl(String? imageUrl) => emit(state.copyWith(imageUrl: imageUrl));
+  void setDescription(String description) => safeEmit(state.copyWith(description: description));
+
+  /*--------------------------------------------------------------------------------
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   |
+   *-------------------------------------------------------------------------------*/
+  void setImageUrl(String? imageUrl) => safeEmit(state.copyWith(imageUrl: imageUrl));
 
   /*--------------------------------------------------------------------------------
    |
@@ -108,12 +133,7 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    *-------------------------------------------------------------------------------*/
   void clear() {
-    if (!isClosed) 
-      emit(state.copyWith(
-        name: '',
-        description: '',
-        imageUrl: '',
-      ));
+    safeEmit(const CollectionState());
   }
 
   /*--------------------------------------------------------------------------------
@@ -130,16 +150,22 @@ class CollectionCubit extends Cubit<CollectionState> {
    *-------------------------------------------------------------------------------*/
   Future<void> addCard() async {
     if (!state.isValid) return;
-    final newCardId = await _generateNewCardId();
-    final newCard = CardEntity(
-      cardId: newCardId,
-      game: 'my_collection',
-      name: state.name,
-      imageUrl: state.imageUrl,
-      description: state.description,
-    );
-    await addCardUseCase(newCard);
-    await fetchCollection();
+
+    try {
+      final newCardId = await _generateNewCardId();
+      final newCard = CardEntity(
+        cardId: newCardId,
+        game: 'my_collection',
+        name: state.name,
+        imageUrl: state.imageUrl,
+        description: state.description,
+      );
+
+      await addCardUseCase(newCard);
+      await fetchCollection();
+    } catch (e) {
+      print('Error adding card: $e');
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -155,11 +181,13 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> removeCard(String cardId) async {
-    await removeCardUseCase(cardId);
-    if (!isClosed) {
-      emit(state.copyWith(
+    try {
+      await removeCardUseCase(cardId);
+      safeEmit(state.copyWith(
         collection: state.collection.where((card) => card.cardId != cardId).toList(),
       ));
+    } catch (e) {
+      print('Error removing card: $e');
     }
   }
 
@@ -176,8 +204,12 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> fetchCollection() async {
-    final cards = await fetchCollectionUseCase();
-    emit(state.copyWith(collection: cards));
+    try {
+      final cards = await fetchCollectionUseCase();
+      safeEmit(state.copyWith(collection: cards));
+    } catch (e) {
+      print('Error fetching collection: $e');
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -193,12 +225,17 @@ class CollectionCubit extends Cubit<CollectionState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<String> _generateNewCardId() async {
-    final cards = await fetchCollectionUseCase();
-    final existingIds = cards.map((card) => int.tryParse(card.cardId) ?? 0).toSet();
-    int newId = 1;
-    while (existingIds.contains(newId)) {
-      newId++;
+    try {
+      final cards = await fetchCollectionUseCase();
+      final existingIds = cards.map((card) => int.tryParse(card.cardId) ?? 0).toSet();
+      int newId = 1;
+      while (existingIds.contains(newId)) {
+        newId++;
+      }
+      return newId.toString();
+    } catch (e) {
+      print('Error generating new card ID: $e');
+      return '1';
     }
-    return newId.toString();
   }
 }

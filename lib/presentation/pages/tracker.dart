@@ -154,10 +154,10 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget _buildBody(BuildContext context, TrackState state) => GestureDetector(
     onTap: () => context.read<DrawerCubit>().closeDrawer(),
     behavior: HitTestBehavior.opaque,
-    child: BlocBuilder<DrawerCubit, Map<String, bool>>(
+    child: BlocBuilder<DrawerCubit, DrawerState>(
       builder: (context, drawerState) {
-        final isDrawerOpen = drawerState['history'] ?? false;
-        final isFeatureOpen = drawerState['feature'] ?? false;
+        final isDrawerOpen = drawerState.isDrawerVisible('history');
+        final isFeatureOpen = drawerState.isDrawerVisible('feature');
         return Stack(
           children: [
             AbsorbPointer(
@@ -263,12 +263,12 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
-    return BlocBuilder<DrawerCubit, Map<String, bool>>(
-      buildWhen: (previous, current) => previous['history'] != current['history'],
-      builder: (context, drawerState) => AnimatedPositioned(
+    return BlocBuilder<DrawerCubit, DrawerState>(
+      buildWhen: (previous, current) => previous.isDrawerVisible('history') != current.isDrawerVisible('history'),
+      builder: (context, state) => AnimatedPositioned(
         duration: const Duration(milliseconds: 200),
         top: 0,
-        left: drawerState['history']! ? 0.0 : -200.0,
+        left: state.isDrawerVisible('history') ? 0.0 : -200.0,
         child: BlocBuilder<TrackCubit, TrackState>(
           builder: (context, trackState) => HistoryDrawerWidget(
             cards: trackState.history,
@@ -279,15 +279,17 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildPlayerHistoryDrawer(BuildContext context) => BlocBuilder<DrawerCubit, Map<String, bool>>(
-    buildWhen: (previous, current) => previous['feature'] != current['feature'],
-    builder: (context, drawerState) => AnimatedPositioned(
-      duration: const Duration(milliseconds: 160),
-      top: drawerState['feature']! ? 0.0 : -160.0,
-      left: 0,
-      child: BlocBuilder<TrackCubit, TrackState>(
-        builder: (context, trackState) => PlayerDrawerWidget(),
+  Widget _buildPlayerHistoryDrawer(BuildContext context) {
+    return BlocBuilder<DrawerCubit, DrawerState>(
+      buildWhen: (previous, current) => previous.isDrawerVisible('feature') != current.isDrawerVisible('feature'),
+      builder: (context, state) => AnimatedPositioned(
+        duration: const Duration(milliseconds: 160),
+        top: state.isDrawerVisible('feature') ? 0.0 : -160.0,
+        left: 0,
+        child: BlocBuilder<TrackCubit, TrackState>(
+          builder: (context, trackState) => PlayerDrawerWidget(),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

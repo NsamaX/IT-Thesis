@@ -175,8 +175,8 @@ void _setupUseCases() {
 void _setupCubits() {
   locator.registerLazySingleton(() => NFCCubit());
 
-  locator.registerFactoryParam<ScanCubit, String, void>(
-    (game, _) => ScanCubit(fetchCardByIdUseCase: locator<FetchCardByIdUseCase>(param1: game))
+  locator.registerFactoryParam<ReaderCubit, String, void>(
+    (game, _) => ReaderCubit(fetchCardByIdUseCase: locator<FetchCardByIdUseCase>(param1: game))
   );
 
   locator.registerLazySingleton(() => CollectionCubit(

@@ -12,15 +12,25 @@ part of 'cubit.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-void updateCardCount(TagEntity tag, Action action, String location, int delta, TrackState state, Function emit) {
+void updateCardCount(TagEntity tag, Action action, String location, int delta, TrackState state, void Function(TrackState) safeEmit) {
+  final defaultEntry = MapEntry(CardEntity(cardId: tag.cardId, game: '', name: 'Unknown'), 0);
+  
   final cardEntry = state.currentDeck.cards.entries.firstWhere(
     (entry) => entry.key.cardId == tag.cardId,
-    orElse: () => throw Exception("Card not found in deck"),
+    orElse: () => defaultEntry,
   );
+
+  if (!state.currentDeck.cards.containsKey(cardEntry.key)) {
+    print("Warning: Card not found in deck (${tag.cardId})");
+    return;
+  }
+
   final currentCount = cardEntry.value;
-  if ((currentCount + delta) < 0) return;
-  final updatedCards = {...state.currentDeck.cards};
-  updatedCards[cardEntry.key] = (currentCount + delta).clamp(0, double.infinity).toInt();
+  final newCount = (currentCount + delta).clamp(0, double.infinity).toInt();
+
+  if (newCount == currentCount) return;
+
+  final updatedCards = {...state.currentDeck.cards}..[cardEntry.key] = newCount;
   final updatedData = [
     ...state.record.data,
     DataEntity(
@@ -32,8 +42,9 @@ void updateCardCount(TagEntity tag, Action action, String location, int delta, T
       timestamp: DateTime.now(),
     ),
   ];
-  emit(state.copyWith(
-    deck: state.currentDeck.copyWith(cards: updatedCards),
+
+  safeEmit(state.copyWith(
+    currentDeck: state.currentDeck.copyWith(cards: updatedCards),
     record: state.record.copyWith(data: updatedData),
   ));
 }
@@ -50,14 +61,21 @@ void updateCardCount(TagEntity tag, Action action, String location, int delta, T
  |
  |
  *-------------------------------------------------------------------------------*/
-void moveCardToTop(TagEntity tag, TrackState state, Function emit) {
-  final updatedCards = {...state.currentDeck.cards};
-  final cardEntry = updatedCards.entries.firstWhere(
+void moveCardToTop(TagEntity tag, TrackState state, void Function(TrackState) safeEmit) {
+  final defaultEntry = MapEntry(CardEntity(cardId: tag.cardId, game: '', name: 'Unknown'), 0);
+  
+  final cardEntry = state.currentDeck.cards.entries.firstWhere(
     (entry) => entry.key.cardId == tag.cardId,
-    orElse: () => throw Exception("Card not found in deck"),
+    orElse: () => defaultEntry,
   );
-  updatedCards.remove(cardEntry.key);
-  emit(state.copyWith(
-    deck: state.currentDeck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
+
+  if (!state.currentDeck.cards.containsKey(cardEntry.key)) {
+    print("Warning: Card not found in deck (${tag.cardId})");
+    return;
+  }
+
+  final updatedCards = {...state.currentDeck.cards}..remove(cardEntry.key);
+  safeEmit(state.copyWith(
+    currentDeck: state.currentDeck.copyWith(cards: {cardEntry.key: cardEntry.value, ...updatedCards}),
   ));
 }

@@ -34,7 +34,7 @@ class LanguagePage extends StatelessWidget {
     }).toList();
     return {
       'content': supportedLanguages.map((lang) => {
-        'onTap': () => cubit.updateLanguage(lang['code']!),
+        'onTap': () => cubit.updateSetting('locale', lang['code']!),
         'text': lang['name']!,
         'select': lang['code'] == locale.locale.languageCode,
       }).toList(),

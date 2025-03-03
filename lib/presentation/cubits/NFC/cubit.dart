@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:nfc_manager/nfc_manager.dart';
@@ -166,12 +167,15 @@ class NFCCubit extends Cubit<NFCState> {
   Future<void> startSession({CardEntity? card}) async {
     if (state.isProcessing) return;
     emitSafe(state.copyWith(isProcessing: true));
+
     _addMessage('[Session Control] Starting NFC session: ${card == null ? "Read" : "Write"} mode');
     _flushMessages();
+
     try {
       if (!await NfcManager.instance.isAvailable()) {
         throw Exception('NFC is not available.');
       }
+
       await NfcManager.instance.startSession(onDiscovered: (tag) async {
         try {
           if (card == null) {
@@ -186,6 +190,7 @@ class NFCCubit extends Cubit<NFCState> {
         }
       });
     } catch (e) {
+      emitSafe(state.copyWith(errorMessage: 'NFC session failed: $e'));
       _addMessage('[Session Control] Error initializing NFC session: $e');
       _flushMessages(isError: true);
     } finally {
@@ -236,8 +241,6 @@ class NFCCubit extends Cubit<NFCState> {
         if (isCardChanged) {
           _addMessage('[Error Recovery] Card changed. Restarting NFC session...');
           await stopSession(reason: 'Card changed, restarting session...');
-        } else {
-          _addMessage('[Error Recovery] Restarting NFC session...');
         }
         await startSession(card: card);
       } catch (e) {
@@ -261,12 +264,24 @@ class NFCCubit extends Cubit<NFCState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> _processRead(NfcTag tag) async {
-    final ndef = validateNDEF(tag);
-    final records = parseNDEFRecords(ndef);
-    final tagEntity = createTagEntity(tag, records);
-    emitSafe(state.copyWith(lastestReadTags: tagEntity, isOperationSuccessful: true, isWriteOperation: false));
-    _addMessage('[Processing] Tag read successfully for card id[${tagEntity.cardId}]');
-    _flushMessages();
+    try {
+      final ndef = validateNDEF(tag);
+      final records = parseNDEFRecords(ndef);
+      final tagEntity = createTagEntity(tag, records);
+
+      emitSafe(state.copyWith(
+        lastestReadTags: tagEntity,
+        isOperationSuccessful: true,
+        isWriteOperation: false,
+      ));
+
+      _addMessage('[Processing] Tag read successfully for card id[${tagEntity.cardId}]');
+      _flushMessages();
+    } catch (e) {
+      emitSafe(state.copyWith(errorMessage: 'Error reading tag: $e'));
+      _addMessage('[Processing] Error reading tag: $e');
+      _flushMessages(isError: true);
+    }
   }
 
   /*--------------------------------------------------------------------------------
@@ -282,11 +297,23 @@ class NFCCubit extends Cubit<NFCState> {
    |
    *-------------------------------------------------------------------------------*/
   Future<void> _processWrite(NfcTag tag, CardEntity card) async {
-    final ndef = validateNDEF(tag);
-    final message = createNDEFMessage(card);
-    await ndef.write(message);
-    emitSafe(state.copyWith(errorMessage: '', isOperationSuccessful: true, isWriteOperation: true));
-    _addMessage('[Processing] Tag written successfully for card id[${card.cardId}]');
-    _flushMessages();
+    try {
+      final ndef = validateNDEF(tag);
+      final message = createNDEFMessage(card);
+      await ndef.write(message);
+
+      emitSafe(state.copyWith(
+        errorMessage: '',
+        isOperationSuccessful: true,
+        isWriteOperation: true,
+      ));
+
+      _addMessage('[Processing] Tag written successfully for card id[${card.cardId}]');
+      _flushMessages();
+    } catch (e) {
+      emitSafe(state.copyWith(errorMessage: 'Error writing to tag: $e'));
+      _addMessage('[Processing] Error writing to tag: $e');
+      _flushMessages(isError: true);
+    }
   }
 }
