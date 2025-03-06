@@ -4,10 +4,10 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 
-class DrawReturnChartWidget extends StatelessWidget {
+class DeckInsightChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardStats;
 
-  const DrawReturnChartWidget({
+  const DeckInsightChartWidget({
     super.key, 
     required this.cardStats,
   });

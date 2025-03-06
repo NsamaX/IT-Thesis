@@ -1,5 +1,6 @@
 export 'about.dart';
 export 'card.dart';
+export 'deck_tracker.dart';
 export 'game.dart';
 export 'index.dart';
 export 'language.dart';
@@ -11,4 +12,3 @@ export 'read.dart';
 export 'search.dart';
 export 'settings.dart';
 export 'sign_in.dart';
-export 'tracker.dart';

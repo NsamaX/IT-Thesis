@@ -6,16 +6,16 @@ import 'package:nfc_project/domain/entities/data.dart' as Action;
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
 
-import 'history.dart';
+import 'game_history.dart';
 
-class InsightWidget extends StatelessWidget {
+class DeckInsightWidget extends StatelessWidget {
   final DeckEntity initialDeck;
   final RecordEntity record;
   final List<RecordEntity> records;
   final void Function(BuildContext context, String recordId)? selectRecord;
   final List<Map<String, dynamic>> cardStats;
 
-  const InsightWidget({
+  const DeckInsightWidget({
     super.key, 
     required this.initialDeck, 
     required this.record, 
@@ -98,7 +98,7 @@ class InsightWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryWidget() => HistoryWidget(records: records, selectRecord: selectRecord);
+  Widget _buildHistoryWidget() => GameHistoryWidget(records: records, selectRecord: selectRecord);
 
   int _calculateTotal(String key) => cardStats.fold(0, (total, card) => total + (card[key] as int));
 

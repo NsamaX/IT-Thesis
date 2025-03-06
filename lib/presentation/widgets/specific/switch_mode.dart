@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 
-class SwitchModeBarWidget extends StatelessWidget {
+class SwitchModeWidget extends StatelessWidget {
   final bool isAnalyzeModeEnabled;
   final ValueChanged<bool> onSelected;
 
-  const SwitchModeBarWidget({
+  const SwitchModeWidget({
     Key? key,
     required this.isAnalyzeModeEnabled,
     required this.onSelected,

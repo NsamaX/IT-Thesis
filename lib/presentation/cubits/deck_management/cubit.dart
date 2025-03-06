@@ -2,10 +2,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart';
 
+import 'package:nfc_project/core/utils/nfc_helper.dart';
+
 import 'package:nfc_project/domain/usecases/deck.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/card.dart';
-import 'package:nfc_project/core/utils/nfc_helper.dart';
 
 import '../NFC/cubit.dart';
 

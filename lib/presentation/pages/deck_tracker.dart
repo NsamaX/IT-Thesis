@@ -18,17 +18,17 @@ import '../widgets/shared/card_label.dart';
 import '../widgets/shared/history_drawer.dart';
 import '../widgets/shared/notifications.dart';
 
-import '../widgets/specific/draw_return_chart.dart';
-import '../widgets/specific/insight.dart';
+import '../widgets/specific/deck_insight_chart.dart';
+import '../widgets/specific/deck_insight.dart';
 import '../widgets/specific/player_drawer.dart';
-import '../widgets/specific/switch_mode_bar.dart';
+import '../widgets/specific/switch_mode.dart';
 
-class TrackerPage extends StatefulWidget {
+class DeckTrackerPage extends StatefulWidget {
   @override
-  State<TrackerPage> createState() => _TrackerPageState();
+  State<DeckTrackerPage> createState() => _DeckTrackerPageState();
 }
 
-class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
+class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingObserver {
   //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
@@ -180,7 +180,7 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
   Widget _buildBodyByMode(BuildContext context, TrackState state) => Column(
     children: [
       const SizedBox(height: 16.0),
-      SwitchModeBarWidget(
+      SwitchModeWidget(
         isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
         onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
       ),
@@ -242,9 +242,9 @@ class _TrackerPageState extends State<TrackerPage> with WidgetsBindingObserver {
     children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 0.0, 16.0, 0.0),
-        child: DrawReturnChartWidget(cardStats: cardStats),
+        child: DeckInsightChartWidget(cardStats: cardStats),
       ),
-      InsightWidget(
+      DeckInsightWidget(
         initialDeck: state.initialDeck, 
         record: state.record, 
         records: state.records,

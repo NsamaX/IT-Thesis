@@ -5,7 +5,7 @@ import 'package:nfc_project/domain/entities/card.dart';
 
 import '../../cubits/deck_management/cubit.dart';
 
-Widget buildEditControls(
+Widget buildCardEditor(
   BuildContext context, 
   CardEntity card, 
   int count,

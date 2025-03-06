@@ -119,7 +119,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
             Icons.arrow_back_ios_new_rounded: '/back',
             Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
             state.deck.deckName: null,
-            Icons.play_arrow_rounded: AppRoutes.tracker,
+            Icons.play_arrow_rounded: AppRoutes.deckTracker,
             locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
           };
   }

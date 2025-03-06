@@ -13,8 +13,8 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
 import '../widgets/shared/history_drawer.dart';
 
-import '../widgets/specific/features_drawer.dart';
-import '../widgets/specific/nfc.dart';
+import '../widgets/specific/feature_drawer.dart';
+import '../widgets/specific/NFC_reader.dart';
 
 class ReadPage extends StatefulWidget {
   @override
@@ -92,7 +92,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
       child: BlocBuilder<ReaderCubit, ReaderCubitState>(
         builder: (context, scanState) => Stack(
           children: [
-            const Center(child: NFCWidget()),
+            const Center(child: NFCReaderWidget()),
             _buildHistoryDrawer(context),
             _buildFeaturesDrawer(context),
           ],
@@ -130,7 +130,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
         duration: const Duration(milliseconds: 200),
         top: 20,
         right: state.isDrawerVisible('feature') ? 0 : -200,
-        child: const FeaturesDrawerWidget(),
+        child: const FeatureDrawerWidget(),
       ),
     );
   }

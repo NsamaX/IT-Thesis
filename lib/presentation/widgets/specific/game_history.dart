@@ -7,11 +7,11 @@ import 'package:nfc_project/domain/entities/record.dart';
 
 import '../shared/setting_label.dart';
 
-class HistoryWidget extends StatelessWidget {
+class GameHistoryWidget extends StatelessWidget {
   final List<RecordEntity> records;
   final void Function(BuildContext context, String recordId)? selectRecord;
 
-  const HistoryWidget({
+  const GameHistoryWidget({
     super.key,
     required this.records,
     this.selectRecord,

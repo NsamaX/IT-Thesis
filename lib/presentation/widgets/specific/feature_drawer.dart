@@ -7,8 +7,8 @@ import 'package:nfc_project/core/routes/routes.dart';
 
 import '../../cubits/app_state.dart';
 
-class FeaturesDrawerWidget extends StatelessWidget {
-  const FeaturesDrawerWidget({
+class FeatureDrawerWidget extends StatelessWidget {
+  const FeatureDrawerWidget({
     super.key,
   });
 

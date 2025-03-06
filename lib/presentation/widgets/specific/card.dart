@@ -9,7 +9,7 @@ import 'package:nfc_project/domain/entities/card.dart';
 import '../../cubits/deck_management/cubit.dart';
 import '../../cubits/NFC/cubit.dart';
 
-import 'card_edit_controls.dart';
+import 'card_editor.dart';
 
 class CardWidget extends StatelessWidget {
   final CardEntity card;
@@ -32,7 +32,7 @@ class CardWidget extends StatelessWidget {
     return Stack(
       children: [
         _buildCardContainer(context, theme, isSelected, isNFCEnabled),
-        if (isEditMode) buildEditControls(context, card, count),
+        if (isEditMode) buildCardEditor(context, card, count),
       ],
     );
   }

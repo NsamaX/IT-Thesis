@@ -5,8 +5,8 @@ import 'package:nfc_project/core/utils/nfc_helper.dart';
 
 import '../../cubits/NFC/cubit.dart';
 
-class NFCWidget extends StatelessWidget {
-  const NFCWidget({
+class NFCReaderWidget extends StatelessWidget {
+  const NFCReaderWidget({
     super.key,
   });
 
