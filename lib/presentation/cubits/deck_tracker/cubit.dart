@@ -13,18 +13,6 @@ import 'package:nfc_project/domain/usecases/record.dart';
 part 'helper.dart';
 part 'state.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DeckTrackCubit extends Cubit<DeckTrackState> {
   final SaveRecordUseCase saveRecordUseCase;
   final RemoveRecordUseCase recordUseCase;
@@ -45,78 +33,18 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
           ),
         ));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void safeEmit(DeckTrackState newState) {
     if (!isClosed && state != newState) {
       emit(newState);
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void showDialog() => safeEmit(state.copyWith(isDialogShown: true));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleAdvanceMode() => safeEmit(state.copyWith(isAdvanceModeEnabled: !state.isAdvanceModeEnabled));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleAnalyzeMode() => safeEmit(state.copyWith(isAnalyzeModeEnabled: !state.isAnalyzeModeEnabled));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleReset() {
     safeEmit(state.copyWith(
       isProcessing: false,
@@ -132,18 +60,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     ));
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> toggleSaveRecord() async {
     if (state.record.data.isEmpty) return;
     try {
@@ -155,18 +71,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> toggleRemoveRecord(String recordId) async {
     try {
       await recordUseCase.call(recordId);
@@ -175,18 +79,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> fetchRecordById(String recordId) async {
     try {
       final record = state.records.firstWhere(
@@ -217,18 +109,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> fetchRecord() async {
     try {
       final records = await fetchRecordUseCase.call();
@@ -238,18 +118,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void readTag(TagEntity tag) {
     if (state.isProcessing) return;
     safeEmit(state.copyWith(isProcessing: true));
@@ -290,18 +158,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   List<Map<String, dynamic>> calculateDrawAndReturnCounts() {
     final result = <Map<String, dynamic>>[];
     final drawCounts = <String, int>{};
@@ -330,18 +186,6 @@ class DeckTrackCubit extends Cubit<DeckTrackState> {
     return result;
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void changeCardColor(String cardId, Color color) {
     final updatedColors = Map<String, Color>.from(state.cardColors);
     updatedColors[cardId] = color;

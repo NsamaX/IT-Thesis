@@ -4,18 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/usecases/collection.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class CollectionState extends Equatable {
   final List<CardEntity> collection;
   final String name;
@@ -60,94 +48,22 @@ class CollectionCubit extends Cubit<CollectionState> {
     required this.fetchCollectionUseCase,
   }) : super(const CollectionState());
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void safeEmit(CollectionState newState) {
     if (!isClosed && state != newState) {
       emit(newState);
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void setName(String name) => safeEmit(state.copyWith(name: name));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void setDescription(String description) => safeEmit(state.copyWith(description: description));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void setImageUrl(String? imageUrl) => safeEmit(state.copyWith(imageUrl: imageUrl));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void clear() {
     safeEmit(const CollectionState());
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> addCard() async {
     if (!state.isValid) return;
 
@@ -168,18 +84,6 @@ class CollectionCubit extends Cubit<CollectionState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> removeCard(String cardId) async {
     try {
       await removeCardUseCase(cardId);
@@ -191,18 +95,6 @@ class CollectionCubit extends Cubit<CollectionState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> fetchCollection() async {
     try {
       final cards = await fetchCollectionUseCase();
@@ -212,18 +104,6 @@ class CollectionCubit extends Cubit<CollectionState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<String> _generateNewCardId() async {
     try {
       final cards = await fetchCollectionUseCase();

@@ -5,18 +5,6 @@ import 'package:nfc_project/core/routes/routes.dart';
 import 'package:nfc_project/core/services/locator.dart';
 import 'package:nfc_project/core/storage/shared_preferences.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class AppState extends Equatable {
   final int currentPageIndex;
   final String? selectedGame;
@@ -45,36 +33,12 @@ class AppCubit extends Cubit<AppState> {
 
   AppCubit() : super(AppState(selectedGame: locator<SharedPreferencesService>().getSelectedGame()));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void safeEmit(AppState newState) {
     if (!isClosed && state != newState) {
       emit(newState);
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   String getRouteForIndex(int index) {
     return const {
       0: AppRoutes.myDecks,
@@ -83,32 +47,8 @@ class AppCubit extends Cubit<AppState> {
     }[index] ?? AppRoutes.index;
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void updatePageIndex(int index) => safeEmit(state.copyWith(currentPageIndex: index));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> updateSelectedGame(String game) async {
     try {
       await _sharedPreferencesService.saveSelectedGame(game);

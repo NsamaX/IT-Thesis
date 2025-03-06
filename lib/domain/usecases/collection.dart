@@ -3,18 +3,6 @@ import 'package:nfc_project/data/repositories/collection.dart';
 import '../entities/card.dart';
 import '../mappers/card.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class AddCardToCollectionUseCase {
   final CollectionRepository repository;
 
@@ -26,18 +14,6 @@ class AddCardToCollectionUseCase {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class RemoveCardFromCollectionUseCase {
   final CollectionRepository repository;
 
@@ -48,18 +24,6 @@ class RemoveCardFromCollectionUseCase {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class FetchCollectionUseCase {
   final CollectionRepository repository;
 

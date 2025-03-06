@@ -2,49 +2,13 @@ import 'package:sqflite/sqflite.dart';
 
 import 'database.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class SQLiteService {
   late final DatabaseService _databaseService;
 
   SQLiteService(this._databaseService);
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<Database> getDatabase() async => await _databaseService.database;
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<List<Map<String, dynamic>>> query(
     String table, {
     String? where,
@@ -67,18 +31,6 @@ class SQLiteService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> insert(String table, Map<String, dynamic> data) async {
     try {
       final Database db = await getDatabase();
@@ -93,18 +45,6 @@ class SQLiteService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> insertBatch(String table, List<Map<String, dynamic>> dataList) async {
     const int chunkSize = 500;
     try {
@@ -124,18 +64,6 @@ class SQLiteService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> update(
     String table, 
     Map<String, dynamic> data, {
@@ -156,18 +84,6 @@ class SQLiteService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> delete(String table, String column, dynamic value) async {
     try {
       final Database db = await getDatabase();
@@ -178,18 +94,6 @@ class SQLiteService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _ensureTableExists(Database db, String table) async {
     final int? count = Sqflite.firstIntValue(await db.rawQuery(
       "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?",

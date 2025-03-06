@@ -8,7 +8,7 @@ import '../cubits/app_state.dart';
 import '../cubits/settings.dart';
 
 class SignInPage extends StatelessWidget {
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -29,7 +29,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  //--------------------------------- Widgets --------------------------------//
+  /*--------------------------------- Widgets --------------------------------*/
   Widget _buildTitle(AppLocalizations locale, ThemeData theme) => Text(
     locale.translate('title.sign_in'),
     style: theme.textTheme.titleLarge,

@@ -2,18 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 abstract class BaseApi {
   final String baseUrl;
   final http.Client client;
@@ -25,18 +13,6 @@ abstract class BaseApi {
 
   BaseApi(this.baseUrl, {http.Client? client}) : client = client ?? http.Client();
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<http.Response> getRequest(String path, [Map<String, String>? queryParams]) async {
     final url = buildUrl(path, queryParams);
     try {
@@ -48,33 +24,9 @@ abstract class BaseApi {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Uri buildUrl(String path, [Map<String, String>? queryParams]) => 
   Uri.parse('$baseUrl/$path').replace(queryParameters: queryParams);
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void validateResponse(http.Response response) {
     if (response.statusCode != 200) {
       final errorBody = decodeResponse(response);
@@ -82,18 +34,6 @@ abstract class BaseApi {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Map<String, dynamic> decodeResponse(http.Response response) {
     try {
       return json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;

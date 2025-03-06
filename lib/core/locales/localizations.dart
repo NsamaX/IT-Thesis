@@ -4,18 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class AppLocalizations {
   static AppLocalizations of(BuildContext context) => Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
@@ -30,18 +18,6 @@ class AppLocalizations {
 
   AppLocalizations(this.locale);
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<bool> load() async {
     try {
       final String jsonString = await rootBundle.loadString('$_localesPath/${locale.languageCode}.json');
@@ -52,18 +28,6 @@ class AppLocalizations {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   String translate(String key) => key.split('.').fold<dynamic>(localizedStrings, (value, k) {
     if (value is Map<String, dynamic> && value.containsKey(k)) {
       return value[k];
@@ -71,18 +35,6 @@ class AppLocalizations {
     return key;
   }).toString();
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Future<void> loadSupportedLanguages() async {
     try {
       final manifestContent = await rootBundle.loadString('AssetManifest.json');
@@ -111,33 +63,9 @@ class AppLocalizations {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static String getLanguageName(String languageCode) => languageNames[languageCode] ?? languageCode;
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 

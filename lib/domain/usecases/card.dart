@@ -3,18 +3,6 @@ import 'package:nfc_project/data/repositories/card.dart';
 import '../entities/card.dart';
 import '../mappers/card.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class FetchCardByIdUseCase {
   final CardRepository repository;
 
@@ -26,18 +14,6 @@ class FetchCardByIdUseCase {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class SyncCardsUseCase {
   final CardRepository repository;
 

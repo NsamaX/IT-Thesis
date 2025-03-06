@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:nfc_project/presentation/pages/@export.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class AppRoutes {
   static const String index        = '/';
   static const String signIn       = '/sign_in';
@@ -30,18 +18,6 @@ class AppRoutes {
   static const String privacy      = '/privacy';
   static const String language     = '/language';
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Route<dynamic> generateRoute(RouteSettings settings) {
     Widget page;
     switch (settings.name) {
@@ -64,18 +40,6 @@ class AppRoutes {
     return MaterialPageRoute(builder: (_) => page, settings: settings);
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Widget _defaultRoute(String? routeName) => Scaffold(
     body: Center(child: Text('No route defined for $routeName')),
   );

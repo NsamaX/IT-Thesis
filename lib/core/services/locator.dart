@@ -5,27 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:nfc_project/data/datasources/local/@export.dart';
 import 'package:nfc_project/data/datasources/remote/@export.dart';
 import 'package:nfc_project/data/repositories/@export.dart';
+
+import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/usecases/@export.dart';
+
 import 'package:nfc_project/presentation/cubits/@export.dart';
 
 import '../storage/@export.dart';
 
-import 'package:nfc_project/domain/entities/deck.dart';
-
 final GetIt locator = GetIt.instance;
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 Future<void> setupLocator() async {
   await _setupDatabase();
   _setupDataSources();
@@ -35,18 +24,6 @@ Future<void> setupLocator() async {
   _setupMisc();
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 Future<void> _setupDatabase() async {
   locator.registerLazySingleton(() => DatabaseService());
   locator.registerLazySingleton(() => SQLiteService(locator<DatabaseService>()));
@@ -55,18 +32,6 @@ Future<void> _setupDatabase() async {
   locator.registerLazySingleton(() => SharedPreferencesService(sharedPreferences));
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void _setupDataSources() {
   locator.registerLazySingleton<CardLocalDataSource>(
     () => CardLocalDataSourceImpl(locator<SQLiteService>())
@@ -85,18 +50,6 @@ void _setupDataSources() {
   );
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void _setupRepositories() {
   locator.registerFactoryParam<GameApi, String, void>(
     (game, _) => GameFactory.createApi(game)
@@ -122,18 +75,6 @@ void _setupRepositories() {
   );
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void _setupUseCases() {
   locator.registerFactoryParam<FetchCardByIdUseCase, String, void>(
     (game, _) => FetchCardByIdUseCase(locator<CardRepository>(param1: game))
@@ -160,18 +101,6 @@ void _setupUseCases() {
   locator.registerLazySingleton(() => LoadSettingUseCase(locator<SettingsRepository>()));
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void _setupCubits() {
   locator.registerLazySingleton(() => NFCCubit());
 
@@ -210,18 +139,6 @@ void _setupCubits() {
   locator.registerLazySingleton(() => AppCubit());
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void _setupMisc() {
   locator.registerLazySingleton<RouteObserver<ModalRoute>>(
     () => RouteObserver<ModalRoute>()

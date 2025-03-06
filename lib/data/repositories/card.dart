@@ -7,45 +7,8 @@ import '../datasources/local/collection.dart';
 import '../datasources/remote/game_factory.dart';
 import '../models/card.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 abstract class CardRepository {
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<CardModel> fetchCardById(String game, String id);
-
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<List<CardModel>> syncCards(String game);
 }
 
@@ -92,18 +55,6 @@ class CardRepositoryImpl implements CardRepository {
     return updatedCards;
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<int> _getLastPageFromApi(int startPage, {int batchSize = 30}) async {
     int currentPage = startPage;
     while (true) {
@@ -125,18 +76,6 @@ class CardRepositoryImpl implements CardRepository {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<Map<int, List<CardModel>>> _fetchCardsPageWithPageNumber(int page) async {
     try {
       return {page: await gameApi.fetchCardsPage(page)};
@@ -145,18 +84,6 @@ class CardRepositoryImpl implements CardRepository {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<List<CardModel>> _parallelLoadAndSaveCards(
     String game, {
     required int startPage,
@@ -174,18 +101,6 @@ class CardRepositoryImpl implements CardRepository {
     return cardDatasource.fetchCards(game);
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _loadPageAndSave(String game, int page, {int maxRetries = 3}) async {
     if (await cardDatasource.isPageExists(game, page)) return;
 

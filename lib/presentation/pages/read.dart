@@ -16,7 +16,7 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
 
 import '../widgets/specific/NFC_reader.dart';
-//
+
 class ReadPage extends StatefulWidget {
   @override
   State<ReadPage> createState() => _ReaderPageState();
@@ -26,6 +26,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
+  /*-------------------------------- Lifecycle -------------------------------*/
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     _nfcSessionHandler.initNFCSessionHandler();
   }
 
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -79,12 +81,14 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     );
   }
 
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) => {
     Icons.history_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
     locale.translate('title.read'): null,
     Icons.search_rounded: () => context.read<DrawerCubit>().toggleDrawer('feature'),
   };
 
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context, AppLocalizations locale) => Scaffold(
     appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale)),
     body: GestureDetector(
@@ -103,6 +107,7 @@ class _ReaderPageState extends State<ReadPage> with WidgetsBindingObserver, Rout
     bottomNavigationBar: const BottomNavigationBarWidget(),
   );
 
+  /*--------------------------------- Widgets --------------------------------*/
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     final double bottomNavBarHeight = kBottomNavigationBarHeight;

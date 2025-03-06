@@ -25,17 +25,17 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
 
 import '../widgets/specific/switch_mode.dart';
-//
+
 class DeckTrackerPage extends StatefulWidget {
   @override
   State<DeckTrackerPage> createState() => _DeckTrackerPageState();
 }
 
 class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingObserver {
-  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
 
+  /*-------------------------------- Lifecycle -------------------------------*/
   @override
   void initState() {
     super.initState();
@@ -56,7 +56,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     super.dispose();
   }
 
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final deck = context.read<DeckManagerCubit>().state.deck;
@@ -96,7 +96,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale, DeckEntity deck) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
@@ -127,7 +127,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
           };
   }
 
-  //-------------------------------- Features --------------------------------//
+  /*--------------------------------- Feature --------------------------------*/
   void _resetMultipleChoicesDialog(BuildContext context, DeckEntity deck) {
     cupertinoMultipleChoicesDialog(
       context,
@@ -156,7 +156,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     );
   }
 
-  //--------------------------------- Body ---------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context, DeckTrackState state) => GestureDetector(
     onTap: () => context.read<DrawerCubit>().closeDrawer(),
     behavior: HitTestBehavior.opaque,
@@ -179,7 +179,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     ),
   );
 
-  //--------------------------------- Widgets ---------------------------------//
+  /*--------------------------------- Widgets --------------------------------*/
   Widget _buildBodyByMode(BuildContext context, DeckTrackState state) => Column(
     children: [
       const SizedBox(height: 16.0),
@@ -266,7 +266,6 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     );
   });
 
-  //----------------------------- Drawer Widgets -----------------------------//
   Widget _buildHistoryDrawer(BuildContext context) {
     final double appBarHeight = AppBar().preferredSize.height;
     return BlocBuilder<DrawerCubit, DrawerState>(

@@ -5,7 +5,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import '../widgets/shared/app_bar.dart';
 
 class PrivacyPage extends StatelessWidget {
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -14,7 +14,7 @@ class PrivacyPage extends StatelessWidget {
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
     Icons.arrow_back_ios_new_rounded: '/back',
     locale.translate('title.privacy'): null,

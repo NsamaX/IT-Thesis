@@ -1,18 +1,6 @@
 import '../../../models/card.dart';
 import '../game_factory.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DummyApi implements GameApi {
   @override
   Future<CardModel> fetchCardsById(String id) async {

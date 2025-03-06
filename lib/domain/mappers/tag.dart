@@ -2,18 +2,6 @@ import 'package:nfc_project/data/models/tag.dart';
 
 import '../entities/tag.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class TagMapper {
   static TagModel toModel(TagEntity entity) => TagModel(
     tagId: entity.tagId,

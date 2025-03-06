@@ -9,18 +9,6 @@ import 'nav_bar.dart';
 import 'progress_indicator.dart';
 import 'text.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 ThemeData themeData({required bool isDarkMode}) {
   final appBarStyles = AppBarStyles(isDarkMode);
   final buttonStyles = AppButtonStyles(isDarkMode);

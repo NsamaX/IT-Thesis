@@ -11,7 +11,7 @@ import '../widgets/shared/bottom_navigation_bar.dart';
 import '../widgets/shared/general_label.dart';
 
 class SettingsPage extends StatelessWidget {
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -23,10 +23,16 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {locale.translate('title.settings'): null};
+
+  /*--------------------------------- Feature --------------------------------*/
+  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
+    cubit.updateSetting('firstLoad', true);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
+  }
   
-  //---------------------------------- Body ----------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => GeneralLabelWidget(
     label: [
       _buildAccountSettings(locale),
@@ -88,10 +94,4 @@ class SettingsPage extends StatelessWidget {
       // },
     ],
   };
-
-  //--------------------------------- Feature --------------------------------//
-  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
-    cubit.updateSetting('firstLoad', true);
-    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
-  }
 }

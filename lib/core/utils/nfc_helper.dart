@@ -1,31 +1,8 @@
 import 'package:nfc_project/domain/entities/card.dart';
+
 import 'package:nfc_project/presentation/cubits/NFC/cubit.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class NFCHelper {
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Future<void> handleToggleNFC(
     NFCCubit cubit, {
     required bool enable,
@@ -41,18 +18,6 @@ class NFCHelper {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Future<void> _enableNFC(NFCCubit cubit, CardEntity? card) async {
     if (!_isNFCEnabled(cubit)) cubit.toggleNFC();
     if (!_isProcessing(cubit)) {
@@ -62,49 +27,13 @@ class NFCHelper {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Future<void> _disableNFC(NFCCubit cubit, String? reason) async {
     final String defaultReason = reason ?? 'User toggled off NFC';
     await cubit.stopSession(reason: defaultReason);
     await Future.delayed(const Duration(milliseconds: 300));
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static bool _isNFCEnabled(NFCCubit cubit) => cubit.state.isNFCEnabled;
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static bool _isProcessing(NFCCubit cubit) => cubit.state.isProcessing;
 }

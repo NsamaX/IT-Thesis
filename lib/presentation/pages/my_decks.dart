@@ -14,16 +14,16 @@ import '../widgets/deck/deck_card_grid.dart';
 
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
-//
+
 class MyDecksPage extends StatefulWidget {
   @override
   State<MyDecksPage> createState() => _MyDecksPageState();
 }
 
 class _MyDecksPageState extends State<MyDecksPage> {
-  //-------------------------------- Lifecycle -------------------------------//
   late final DeckManagerCubit _DeckManagerCubit;
 
+  /*-------------------------------- Lifecycle -------------------------------*/
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     }
   }
 
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -46,7 +46,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final state = context.watch<DeckManagerCubit>().state;
     return {
@@ -56,7 +56,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     };
   }
 
-  //-------------------------------- Features --------------------------------//
+  /*--------------------------------- Feature --------------------------------*/
   void _createNewDeck(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) async {
     final newDeck = DeckEntity(
       deckId: const Uuid().v4(),
@@ -71,7 +71,7 @@ class _MyDecksPageState extends State<MyDecksPage> {
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
 
-  //---------------------------------- Body ----------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context) => BlocBuilder<DeckManagerCubit, DeckManagerState>(
     builder: (context, state) {
       final decks = state.decks;

@@ -3,18 +3,6 @@ import 'package:nfc_project/data/repositories/record.dart';
 import '../entities/record.dart';
 import '../mappers/record.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class SaveRecordUseCase {
   final RecordRepository repository;
 
@@ -26,18 +14,6 @@ class SaveRecordUseCase {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class RemoveRecordUseCase {
   final RecordRepository repository;
 
@@ -48,18 +24,6 @@ class RemoveRecordUseCase {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class FetchRecordUseCase {
   final RecordRepository repository;
 

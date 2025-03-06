@@ -2,36 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class ApiConfig {
   static late String currentEnvironment;
   static late Map<String, String> baseUrls;
 
   static const String _configPath = 'assets/configs/api.json';
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static Future<void> loadConfig({String environment = 'development'}) async {
     try {
       final String jsonString = await rootBundle.loadString(_configPath);
@@ -49,18 +25,6 @@ class ApiConfig {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static String getBaseUrl(String key) => baseUrls[key] ?? (
     throw Exception('Base URL not found for key "$key" in Environment "$currentEnvironment"')
   );

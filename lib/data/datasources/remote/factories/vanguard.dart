@@ -2,18 +2,6 @@ import '../../../models/card.dart';
 import '../game_factory.dart';
 import '3ase_api.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class VanguardApi extends BaseApi implements GameApi {
   VanguardApi(String baseUrl) : super(baseUrl);
 
@@ -32,18 +20,6 @@ class VanguardApi extends BaseApi implements GameApi {
     return _filterCardData(data);
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   List<CardModel> _filterCardData(List<dynamic> cardsData) => cardsData
       .where((card) =>
           card['sets'] != null &&
@@ -52,18 +28,6 @@ class VanguardApi extends BaseApi implements GameApi {
       .map((cardData) => _parseCardData(cardData))
       .toList();
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   CardModel _parseCardData(Map<String, dynamic> cardData) => CardModel(
     cardId: cardData['id']?.toString() ?? '',
     game: 'vanguard',

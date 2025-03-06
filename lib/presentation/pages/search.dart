@@ -17,7 +17,7 @@ import '../widgets/specific/search_bar.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key? key}) : super(key: key);
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -54,14 +54,14 @@ class SearchPage extends StatelessWidget {
     return {'game': '', 'isAdd': false};
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {
     Icons.arrow_back_ios_new_rounded: '/back',
     locale.translate('title.search'): null,
     null: null,
   };
   
-  //---------------------------------- Body ----------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context, Map<String, dynamic> arguments) => BlocBuilder<SearchCubit, SearchState>(
     builder: (context, state) {
       if (state.isLoading) {

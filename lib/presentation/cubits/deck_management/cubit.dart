@@ -12,18 +12,6 @@ import '../NFC/cubit.dart';
 
 part 'state.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DeckManagerCubit extends Cubit<DeckManagerState> {
   final AddCardUseCase addCardUseCase;
   final RemoveCardUseCase removeCardUseCase;
@@ -42,32 +30,8 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     deck: DeckEntity(deckId: Uuid().v4(), deckName: 'Default Deck', cards: {}),
   ));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleEditMode() => emit(state.copyWith(isEditModeEnabled: !state.isEditModeEnabled, isNFCEnabled: false));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleShare() {
     Clipboard.setData(ClipboardData(
       text: [
@@ -79,18 +43,6 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     emit(state.copyWith(isShareEnabled: true));
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleNFC(NFCCubit nfcCubit) {
     final enabled = !state.isNFCEnabled;
     emit(state.copyWith(isNFCEnabled: enabled));
@@ -99,116 +51,20 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleSelectCard(CardEntity card) => emit(state.copyWith(selectedCard: state.selectedCard == card ? null : card));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleDelete() => emit(state.copyWith(deck: state.deck.copyWith(cards: {})));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void setQuantity(int quantity) => emit(state.copyWith(quantity: quantity));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void addCard(CardEntity card, int count) => emit(state.copyWith(deck: addCardUseCase(state.deck, card, count)));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void removeCard(CardEntity card) => emit(state.copyWith(deck: removeCardUseCase(state.deck, card)));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void setDeck(DeckEntity deck) => emit(state.copyWith(deck: deck));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void renameDeck(String newDeckName) => emit(state.copyWith(deck: state.deck.copyWith(deckName: newDeckName)));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> saveDeck(NFCCubit nfcCubit) async {
     await _performWithLoading(() async {
       await saveDeckUseCase(state.deck);
@@ -223,18 +79,6 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     });
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> deleteDeck(DeckEntity deckToDelete) async {
     await deleteDeckUseCase(deckToDelete.deckId);
     final updatedDecks = state.decks.where((d) => d.deckId != deckToDelete.deckId).toList();
@@ -246,18 +90,6 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     ));
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> loadDecks() async {
     final decks = await loadDecksUseCase.call();
     if (!isClosed) {
@@ -265,18 +97,6 @@ class DeckManagerCubit extends Cubit<DeckManagerState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _performWithLoading(Future<void> Function() task) async {
     emit(state.copyWith(isLoading: true));
     try {

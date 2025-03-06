@@ -2,18 +2,6 @@ import 'package:nfc_project/data/models/data.dart';
 
 import '../entities/data.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DataMapper {
   static DataModel toModel(DataEntity entity) => DataModel(
     tagId: entity.tagId,

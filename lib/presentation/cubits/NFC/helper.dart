@@ -1,17 +1,5 @@
 part of 'cubit.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 Ndef validateNDEF(NfcTag tag) {
   try {
     final ndef = Ndef.from(tag);
@@ -23,18 +11,6 @@ Ndef validateNDEF(NfcTag tag) {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 List<String> parseNDEFRecords(Ndef ndef) {
   try {
     final message = ndef.cachedMessage;
@@ -49,18 +25,6 @@ List<String> parseNDEFRecords(Ndef ndef) {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 TagEntity createTagEntity(NfcTag tag, List<String> records) {
   try {
     final game = records.firstWhere((r) => r.startsWith('game:'), orElse: () => 'game:').split(': ').last;
@@ -80,18 +44,6 @@ TagEntity createTagEntity(NfcTag tag, List<String> records) {
   }
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 NdefMessage createNDEFMessage(CardEntity card) {
   try {
     final records = [

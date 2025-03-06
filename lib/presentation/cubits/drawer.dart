@@ -1,18 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DrawerState extends Equatable {
   final Map<String, bool> drawers;
 
@@ -31,36 +19,12 @@ class DrawerState extends Equatable {
 class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit() : super(const DrawerState());
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void toggleDrawer(String drawerName) {
     final updatedDrawers = Map<String, bool>.from(state.drawers);
     updatedDrawers[drawerName] = !(updatedDrawers[drawerName] ?? false);
     emit(state.copyWith(drawers: updatedDrawers));
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void closeDrawer() {
     emit(state.copyWith(
       drawers: state.drawers.map((key, _) => MapEntry(key, false)),

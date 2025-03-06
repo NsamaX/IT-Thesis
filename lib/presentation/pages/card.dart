@@ -18,14 +18,13 @@ import '../widgets/card/card_quantity.dart';
 
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
-//
+
 class CardPage extends StatefulWidget {
   @override
   _CardInfoPageState createState() => _CardInfoPageState();
 }
 
 class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
-  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
   late TextEditingController _cardNameController;
@@ -36,6 +35,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
   bool _isAdd = false;
   bool _isCustom = false;
 
+  /*-------------------------------- Lifecycle -------------------------------*/
   @override
   void initState() {
     super.initState();
@@ -64,7 +64,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -74,7 +74,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale) {
     final deckManagerCubit = context.read<DeckManagerCubit>();
     final nfcCubit = context.watch<NFCCubit>();
@@ -99,7 +99,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     };
   }
 
-  //-------------------------------- Features --------------------------------//
+  /*--------------------------------- Feature --------------------------------*/
   Widget _buildTextField(BuildContext context, AppLocalizations locale) {
     final collectionCubit = context.watch<CollectionCubit>();
     return TextField(
@@ -143,7 +143,7 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     reason: 'User toggled NFC in Card Page',
   );
 
-  //--------------------------------- Body -----------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody() => BlocBuilder<DeckManagerCubit, DeckManagerState>(
     builder: (context, state) => ListView(
       padding: const EdgeInsets.all(40),

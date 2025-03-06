@@ -2,45 +2,8 @@ import 'dart:collection';
 
 import '../datasources/local/settings.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 abstract class SettingsRepository {
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> saveSetting(String key, dynamic value);
-
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<dynamic> loadSetting(String key);
 }
 
@@ -67,18 +30,6 @@ class SettingsRepositoryImpl implements SettingsRepository {
     return settings.containsKey(key) ? settings[key] : _getDefaultSetting(key);
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   dynamic _getDefaultSetting(String key) {
     if (!_defaultSettings.containsKey(key)) {
       throw Exception('Invalid key: $key');

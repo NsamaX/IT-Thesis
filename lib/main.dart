@@ -8,22 +8,11 @@ import 'core/locales/localizations.dart';
 import 'core/routes/routes.dart';
 import 'core/services/locator.dart';
 import 'core/themes/theme.dart';
+
 import 'presentation/cubits/@export.dart';
 
 // import 'package:nfc_project/core/services/database.dart'; // debug mode
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
@@ -41,18 +30,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -70,32 +47,8 @@ class MyApp extends StatelessWidget {
     },
   );
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _initializeApp() async => await locator<SettingsCubit>().initialize();
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Widget _buildLoadingScreen() => const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
@@ -103,18 +56,6 @@ class MyApp extends StatelessWidget {
     ),
   );
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Widget _buildErrorScreen(Object? error) => MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
@@ -127,18 +68,6 @@ class MyApp extends StatelessWidget {
     ),
   );
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Widget _buildApp() => MultiBlocProvider(
     providers: [
       BlocProvider(create: (_) => locator<NFCCubit>()),
@@ -161,46 +90,10 @@ class MyApp extends StatelessWidget {
     ),
   );
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   String _getInitialRoute(SettingsState state) => state.firstLoad ? AppRoutes.index : AppRoutes.myDecks;
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static final List<Locale> _supportedLocales = AppLocalizations.supportedLanguages.map((lang) => Locale(lang)).toList();
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   static const _localizationsDelegates = [
     AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,

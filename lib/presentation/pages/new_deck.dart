@@ -13,18 +13,18 @@ import '../widgets/deck/deck_card_grid.dart';
 
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
-//
+
 class NewDeckPage extends StatefulWidget {
   @override
   State<NewDeckPage> createState() => _NewDeckPageState();
 }
 
 class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, RouteAware {
-  //-------------------------------- Lifecycle -------------------------------//
   late final NFCCubit _nfcCubit;
   late final NFCSessionHandler _nfcSessionHandler;
   late TextEditingController _deckNameController;
 
+  /*-------------------------------- Lifecycle -------------------------------*/
   @override
   void initState() {
     super.initState();
@@ -47,7 +47,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     super.dispose();
   }
 
-  //------------------------------ RouteObserver -----------------------------//
   @override
   void didPushNext() {
     _nfcSessionHandler.disposeNFCSessionHandler();
@@ -58,7 +57,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     _nfcSessionHandler.initNFCSessionHandler();
   }
 
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -80,7 +79,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     );
   }
 
-  //--------------------------------- App Bar --------------------------------//
+  /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale, TextEditingController deckNameController) {
     final state = context.watch<DeckManagerCubit>().state;
     final bool isEditModeEnabled = state.isEditModeEnabled;
@@ -125,7 +124,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
           };
   }
 
-  //-------------------------------- Features --------------------------------//
+  /*--------------------------------- Feature --------------------------------*/
   void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     cupertinoAlertDialogAction(
       context,
@@ -162,7 +161,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     );
   }
 
-  //---------------------------------- Body ----------------------------------//
+  /*---------------------------------- Body ----------------------------------*/
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final deckCards = cubit.state.deck.cards;
     if (deckCards.isEmpty) {
@@ -176,7 +175,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     return DeckCardGridWidget(items: deckCards.entries.toList());
   }
 
-  //----------------------------- Snackbar Widget ----------------------------//
+  /*--------------------------------- Widgets --------------------------------*/
   void _handleSnackBar(BuildContext context, DeckManagerCubit cubit, NFCState state) async {
     final locale = AppLocalizations.of(context);
     _nfcCubit.markSnackBarDisplayed();

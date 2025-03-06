@@ -2,18 +2,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
   factory DatabaseService() => _instance;
@@ -24,35 +12,11 @@ class DatabaseService {
 
   static const String _dbName = 'nfc_project.db';
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<Database> get database async {
     _database ??= _initDatabase();
     return _database!;
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<Database> _initDatabase() async {
     try {
       final String dbPath = await getDatabasesPath();
@@ -71,18 +35,6 @@ class DatabaseService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _createTables(Database db, int version) async {
     final List<String> tables = [
       '''
@@ -138,18 +90,6 @@ class DatabaseService {
     await batch.commit();
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _migrate(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       debugPrint('Migrating database from v$oldVersion to v$newVersion...');
@@ -186,18 +126,6 @@ class DatabaseService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> _configureDatabase(Database db) async {
     try {
       await db.rawQuery('PRAGMA foreign_keys = ON');
@@ -210,18 +138,6 @@ class DatabaseService {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> printTables() async {
     final Database db = await database;
     final List<Map<String, dynamic>> tables = await db.rawQuery(

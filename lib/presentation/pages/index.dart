@@ -4,7 +4,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 
 class IndexPage extends StatelessWidget {
-  //---------------------------------- Build ---------------------------------//
+  /*---------------------------------- Build ---------------------------------*/
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
@@ -28,7 +28,7 @@ class IndexPage extends StatelessWidget {
     );
   }
 
-  //--------------------------------- Widgets --------------------------------//
+  /*--------------------------------- Widgets --------------------------------*/
   Widget _buildTitle(AppLocalizations locale, ThemeData theme) => Text(
     locale.translate('title.index'),
     style: theme.textTheme.titleLarge,

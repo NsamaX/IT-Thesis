@@ -4,18 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/domain/usecases/settings.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class SettingsState extends Equatable {
   final Locale locale;
   final bool isDarkMode;
@@ -56,18 +44,6 @@ class SettingsCubit extends Cubit<SettingsState> {
           firstLoad: true,
         ));
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> initialize() async {
     try {
       final localeCode = await loadSettingUsecase('locale') ?? 'en';
@@ -84,18 +60,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> updateSetting<T>(String key, T value) async {
     try {
       await saveSettingUsecase(key, value);
@@ -105,18 +69,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   SettingsState _mapUpdatedState<T>(String key, T value) {
     switch (key) {
       case 'locale':

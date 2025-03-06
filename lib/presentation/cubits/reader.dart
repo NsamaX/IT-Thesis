@@ -5,18 +5,6 @@ import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/tag.dart';
 import 'package:nfc_project/domain/usecases/card.dart';
 
-/*--------------------------------------------------------------------------------
- |
- |
- |
- |
- |
- |
- |
- |
- |
- |
- *-------------------------------------------------------------------------------*/
 class ReaderCubitState extends Equatable {
   final List<CardEntity> cards;
   final String? currentGame;
@@ -53,36 +41,12 @@ class ReaderCubit extends Cubit<ReaderCubitState> {
 
   ReaderCubit({required this.fetchCardByIdUseCase}) : super(const ReaderCubitState());
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   void safeEmit(ReaderCubitState newState) {
     if (!isClosed && state != newState) {
       emit(newState);
     }
   }
 
-  /*--------------------------------------------------------------------------------
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   |
-   *-------------------------------------------------------------------------------*/
   Future<void> fetchCardById(TagEntity tag) async {
     safeEmit(state.copyWith(isLoading: true, errorMessage: null));
 
