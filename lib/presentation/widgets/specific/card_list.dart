@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 
-import 'labels/card.dart';
+import '../shared/card_label.dart';
 
 class CardListWidget extends StatelessWidget {
   final List<CardEntity> cards;
@@ -12,22 +13,32 @@ class CardListWidget extends StatelessWidget {
   final void Function(String cardId)? onDelete;
 
   const CardListWidget({
-    Key? key,
+    super.key,
     required this.cards,
     this.isAdd = false,
     this.isCustom = false,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (cards.isEmpty) {
-      return Center(
-        child: Text(AppLocalizations.of(context).translate('text.no_results')),
-      );
-    }
+    final String noResultsText = AppLocalizations.of(context).translate('text.no_results');
 
-    return ListView.builder(
+    return cards.isEmpty
+        ? _buildNoResults(noResultsText)
+        : _buildListView();
+  }
+
+  Widget _buildNoResults(
+    String text,
+  ) {
+    return Center(
+      child: Text(text, style: const TextStyle(fontSize: 16.0, color: Colors.grey)),
+    );
+  }
+
+  Widget _buildListView() {
+    return ListView.separated(
       itemCount: cards.length,
       itemBuilder: (context, index) => CardLabelWidget(
         card: cards[index],
@@ -35,6 +46,7 @@ class CardListWidget extends StatelessWidget {
         isCustom: isCustom,
         onDelete: onDelete,
       ),
+      separatorBuilder: (context, index) => const SizedBox(height: 2.0),
       cacheExtent: 1000,
     );
   }

@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 
-import '../cubits/NFC/cubit.dart';
+import '../../cubits/NFC/cubit.dart';
 
 class NFCWidget extends StatelessWidget {
-  const NFCWidget({Key? key}) : super(key: key);
+  const NFCWidget({
+    super.key,
+  });
 
   static const Duration animationDuration = Duration(milliseconds: 600);
   static const double iconSize = 40.0;
@@ -20,9 +22,9 @@ class NFCWidget extends StatelessWidget {
     return BlocSelector<NFCCubit, NFCState, bool>(
       selector: (state) => state.isNFCEnabled,
       builder: (context, isNFCEnabled) {
-        final activeColor = theme.primaryColor;
-        final inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
-        final currentColor = isNFCEnabled ? activeColor : inactiveColor;
+        final Color activeColor = theme.primaryColor;
+        final Color inactiveColor = theme.appBarTheme.backgroundColor ?? Colors.grey;
+        final Color currentColor = isNFCEnabled ? activeColor : inactiveColor;
 
         return GestureDetector(
           onTap: () => NFCHelper.handleToggleNFC(cubit, enable: !isNFCEnabled),
@@ -42,27 +44,29 @@ class NFCWidget extends StatelessWidget {
     );
   }
 
-  /// Rotating WiFi Icon
-  Widget _buildRotatingIcon(double angle, Offset offset, Color color) {
+  Widget _buildRotatingIcon(
+    double angle, 
+    Offset offset, 
+    Color color,
+  ) {
     return Transform.translate(
       offset: offset,
-      child: Transform.rotate(
-        angle: angle * 3.14 / 180.0,
-        child: AnimatedContainer(
-          curve: Curves.easeInOut,
-          duration: animationDuration,
-          child: Icon(
-            Icons.wifi_rounded,
-            size: largeIconSize,
-            color: color,
-          ),
+      child: AnimatedRotation(
+        duration: animationDuration,
+        turns: angle / 360,
+        curve: Curves.easeInOut,
+        child: Icon(
+          Icons.wifi_rounded,
+          size: largeIconSize,
+          color: color,
         ),
       ),
     );
   }
 
-  /// Animated Circle Icon
-  Widget _buildCircleIcon(Color color) {
+  Widget _buildCircleIcon(
+    Color color,
+  ) {
     return AnimatedContainer(
       curve: Curves.easeInOut,
       duration: animationDuration,

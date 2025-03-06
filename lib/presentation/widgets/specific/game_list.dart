@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/core/constants/api_config.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
-import 'labels/game.dart';
+import 'game_label.dart';
 
 class GameListWidget extends StatelessWidget {
   final List<String> gameKeys;
@@ -11,32 +11,35 @@ class GameListWidget extends StatelessWidget {
   final bool isAdd;
 
   const GameListWidget({
-    Key? key,
+    super.key,
     required this.gameKeys,
     required this.gameImages,
     this.isAdd = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (gameKeys.isEmpty) return const SizedBox.shrink();
+
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: gameKeys.isEmpty ? Container() : _buildGameList(context),
+      child: _buildGameList(context),
     );
   }
 
-  /// Create a list of all games
-  Widget _buildGameList(BuildContext context) {
-    return ListView.builder(
+  Widget _buildGameList(
+    BuildContext context,
+  ) {
+    return ListView.separated(
       itemCount: gameKeys.length + 1,
-      itemBuilder: (context, index) {
-        return index == 0 ? _buildGameLabel(context) : _buildGameItem(index - 1);
-      },
+      itemBuilder: (context, index) => index == 0 ? _buildGameLabel(context) : _buildGameItem(index - 1),
+      separatorBuilder: (_, __) => const SizedBox(height: 2.0),
     );
   }
 
-  /// Game: "My Collection"
-  Widget _buildGameLabel(BuildContext context) {
+  Widget _buildGameLabel(
+    BuildContext context,
+  ) {
     final locale = AppLocalizations.of(context);
 
     return GameLabelWidget(
@@ -47,14 +50,13 @@ class GameListWidget extends StatelessWidget {
     );
   }
 
-  /// Each game list
-  Widget _buildGameItem(int index) {
-    final description = ApiConfig.baseUrls[gameKeys[index]] ?? '';
-
+  Widget _buildGameItem(
+    int index,
+  ) {
     return GameLabelWidget(
       game: gameKeys[index],
       imagePath: gameImages[index],
-      description: description,
+      description: ApiConfig.baseUrls[gameKeys[index]] ?? '',
       isAdd: isAdd,
     );
   }

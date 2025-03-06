@@ -5,9 +5,10 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
 
 import '../cubits/settings.dart';
-import '../widgets/labels/setting.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/bottom_navigation_bar.dart';
+
+import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/bottom_navigation_bar.dart';
+import '../widgets/shared/setting_label.dart';
 
 class SettingsPage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//

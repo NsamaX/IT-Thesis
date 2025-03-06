@@ -8,11 +8,13 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/NFC/cubit.dart';
 import '../cubits/drawer.dart';
 import '../cubits/reader.dart';
-import '../widgets/drawers/features.dart';
-import '../widgets/drawers/history.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/nfc.dart';
+
+import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/bottom_navigation_bar.dart';
+import '../widgets/shared/history_drawer.dart';
+
+import '../widgets/specific/features_drawer.dart';
+import '../widgets/specific/nfc.dart';
 
 class ReadPage extends StatefulWidget {
   @override

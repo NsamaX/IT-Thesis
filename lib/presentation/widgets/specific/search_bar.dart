@@ -1,36 +1,24 @@
 import 'package:flutter/material.dart';
-
 import 'package:nfc_project/core/locales/localizations.dart';
 
-class SearchBarWidget extends StatefulWidget {
+class SearchBarWidget extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onSearchCleared;
-
-  const SearchBarWidget({
+  
+  SearchBarWidget({
     Key? key,
     required this.onSearchChanged,
     required this.onSearchCleared,
   }) : super(key: key);
 
-  @override
-  _SearchBarWidgetState createState() => _SearchBarWidgetState();
-}
-
-class _SearchBarWidgetState extends State<SearchBarWidget> {
   final TextEditingController _searchController = TextEditingController();
-  bool isSearch = false;
+  final ValueNotifier<bool> isSearch = ValueNotifier(false);
 
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  void _toggleSearch({required bool startSearch}) {
-    setState(() => isSearch = startSearch);
+  void _toggleSearch(bool startSearch) {
+    isSearch.value = startSearch;
     if (!startSearch) {
       _searchController.clear();
-      widget.onSearchCleared();
+      onSearchCleared();
     }
   }
 
@@ -45,16 +33,21 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _SearchInputField(
-            controller: _searchController,
-            onTap: () => _toggleSearch(startSearch: true),
-            onChanged: widget.onSearchChanged,
-            hintText: locale.translate('text.hint_text'),
+          Expanded(
+            child: _SearchInputField(
+              controller: _searchController,
+              onTap: () => _toggleSearch(true),
+              onChanged: onSearchChanged,
+              hintText: locale.translate('text.hint_text'),
+            ),
           ),
-          _ClearButton(
-            isVisible: isSearch,
-            onPressed: () => _toggleSearch(startSearch: false),
-            label: locale.translate('button.cancel'),
+          ValueListenableBuilder<bool>(
+            valueListenable: isSearch,
+            builder: (context, value, child) => _ClearButton(
+              isVisible: value,
+              onPressed: () => _toggleSearch(false),
+              label: locale.translate('button.cancel'),
+            ),
           ),
         ],
       ),
@@ -80,26 +73,24 @@ class _SearchInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Expanded(
-      child: Container(
-        height: 32.0,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12.0),
+    return Container(
+      height: 32.0,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: TextField(
+        controller: controller,
+        onTap: onTap,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
+          hintText: hintText,
+          hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          contentPadding: const EdgeInsets.only(bottom: 12.0),
         ),
-        child: TextField(
-          controller: controller,
-          onTap: onTap,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            prefixIcon: const Icon(Icons.search, color: Colors.grey),
-            hintText: hintText,
-            hintStyle: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-            contentPadding: const EdgeInsets.only(bottom: 12.0),
-          ),
-          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
-        ),
+        style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black),
       ),
     );
   }

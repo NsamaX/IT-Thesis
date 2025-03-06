@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 
-import '../widgets/app_bar.dart';
+import '../widgets/shared/app_bar.dart';
 
 class PrivacyPage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//

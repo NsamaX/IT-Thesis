@@ -8,7 +8,9 @@ import 'package:nfc_project/core/routes/routes.dart';
 import '../../cubits/app_state.dart';
 
 class FeaturesDrawerWidget extends StatelessWidget {
-  const FeaturesDrawerWidget({Key? key}) : super(key: key);
+  const FeaturesDrawerWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,8 @@ class FeaturesDrawerWidget extends StatelessWidget {
 
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
-        final currentGame = state.selectedGame;
+        final String? currentGame = state.selectedGame;
+
         return Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Column(
@@ -27,7 +30,7 @@ class FeaturesDrawerWidget extends StatelessWidget {
                 _buildFeatureItem(
                   theme,
                   onTap: () => _navigateToRoute(context, AppRoutes.search, {'game': currentGame}),
-                  image: AppImages.game.containsKey(currentGame) ? AppImages.game[currentGame] : 'my_collection',
+                  image: AppImages.game[currentGame] ?? 'my_collection',
                 ),
               _buildFeatureItem(
                 theme,
@@ -46,45 +49,57 @@ class FeaturesDrawerWidget extends StatelessWidget {
     );
   }
 
-  /// Navigate to a route
-  void _navigateToRoute(BuildContext context, String route, [Map<String, dynamic>? arguments]) {
+  void _navigateToRoute(
+    BuildContext context, 
+    String route, 
+    [
+      Map<String, dynamic>? arguments,
+    ]
+  ) {
     Navigator.of(context).pushNamed(route, arguments: arguments);
   }
 
-  /// The feature item
-  Widget _buildFeatureItem(ThemeData theme, {VoidCallback? onTap, String? image, String? label}) => Padding(
-    padding: const EdgeInsets.only(bottom: 20.0),
-    child: GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 60.0,
-        height: 60.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha((0.2 * 255).toInt()),
-              blurRadius: 4.0,
-              spreadRadius: 1.0,
-              offset: const Offset(0, 2),
-            ),
-          ],
+  Widget _buildFeatureItem(
+    ThemeData theme, 
+    {
+      VoidCallback? onTap, 
+      String? image, 
+      String? label,
+    }
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 60.0,
+          height: 60.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withAlpha((0.2 * 255).toInt()),
+                blurRadius: 4.0,
+                spreadRadius: 1.0,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: _buildFeatureContent(theme, image, label),
         ),
-        child: _buildFeatureContent(theme, image, label),
       ),
-    ),
-  );
+    );
+  }
 
-  /// The content of the feature item
-  Widget _buildFeatureContent(ThemeData theme, String? image, String? label) {
+  Widget _buildFeatureContent(
+    ThemeData theme, 
+    String? image, 
+    String? label,
+  ) {
     if (image != null) {
-      return image == 'my_collection' 
-          ? const Icon(
-            Icons.inbox_rounded, 
-            color: Colors.black,
-            size: 36.0,
-          ) 
+      return image == 'my_collection'
+          ? const Icon(Icons.inbox_rounded, color: Colors.black, size: 36.0)
           : ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.asset(

@@ -40,8 +40,10 @@ class SwitchModeBarWidget extends StatelessWidget {
     );
   }
 
-  /// Background Bar
-  Widget _buildBackgroundBar(ThemeData theme, int itemCount) {
+  Widget _buildBackgroundBar(
+    ThemeData theme, 
+    int itemCount,
+  ) {
     return Container(
       width: _boxWidth * itemCount,
       height: _boxHeight,
@@ -52,7 +54,6 @@ class SwitchModeBarWidget extends StatelessWidget {
     );
   }
 
-  /// Animated Switcher
   Widget _buildAnimatedSwitch() {
     return AnimatedAlign(
       duration: const Duration(milliseconds: 200),
@@ -69,8 +70,10 @@ class SwitchModeBarWidget extends StatelessWidget {
     );
   }
 
-  /// Toggle Buttons
-  Widget _buildButtons(List<String> items, ThemeData theme) {
+  Widget _buildButtons(
+    List<String> items, 
+    ThemeData theme,
+  ) {
     return Row(
       children: List.generate(items.length, (index) {
         final isSelected = (index == 1) == isAnalyzeModeEnabled;

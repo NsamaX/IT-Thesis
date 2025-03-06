@@ -5,20 +5,23 @@ import 'package:get_it/get_it.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
+
 import 'package:nfc_project/domain/entities/deck.dart';
 
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 import '../cubits/tracker/cubit.dart';
 import '../cubits/drawer.dart';
-import '../widgets/drawers/history.dart';
-import '../widgets/drawers/player.dart';
-import '../widgets/labels/card.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/draw_return_chart.dart';
-import '../widgets/insight.dart';
-import '../widgets/notifications.dart';
-import '../widgets/switch_mode_bar.dart';
+
+import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/card_label.dart';
+import '../widgets/shared/history_drawer.dart';
+import '../widgets/shared/notifications.dart';
+
+import '../widgets/specific/draw_return_chart.dart';
+import '../widgets/specific/insight.dart';
+import '../widgets/specific/player_drawer.dart';
+import '../widgets/specific/switch_mode_bar.dart';
 
 class TrackerPage extends StatefulWidget {
   @override

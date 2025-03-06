@@ -4,8 +4,9 @@ import 'package:nfc_project/core/constants/images.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/arguments.dart';
 
-import '../widgets/app_bar.dart';
-import '../widgets/game_list.dart';
+import '../widgets/shared/app_bar.dart';
+
+import '../widgets/specific/game_list.dart';
 
 class GamePage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//

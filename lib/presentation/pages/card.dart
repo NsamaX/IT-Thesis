@@ -5,16 +5,19 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/arguments.dart';
 import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 import '../cubits/collection.dart';
-import '../widgets/card/image.dart';
-import '../widgets/card/info.dart';
-import '../widgets/card/quantity.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/notifications.dart';
+
+import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/notifications.dart';
+
+import '../widgets/specific/card_image.dart';
+import '../widgets/specific/card_info.dart';
+import '../widgets/specific/card_quantity.dart';
 
 class CardPage extends StatefulWidget {
   @override

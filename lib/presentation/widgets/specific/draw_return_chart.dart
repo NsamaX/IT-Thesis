@@ -7,16 +7,19 @@ import 'package:nfc_project/core/locales/localizations.dart';
 class DrawReturnChartWidget extends StatelessWidget {
   final List<Map<String, dynamic>> cardStats;
 
-  const DrawReturnChartWidget({super.key, required this.cardStats});
+  const DrawReturnChartWidget({
+    super.key, 
+    required this.cardStats,
+  });
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
+    final List<Map<String, dynamic>> data = _generateData(context);
 
-    final data = _generateData(context);
-    final drawCounts = data.map((stat) => stat['draw'] as int).toList();
-    final returnCounts = data.map((stat) => stat['return'] as int).toList();
+    final List<int> drawCounts = data.map((stat) => stat['draw'] as int).toList();
+    final List<int> returnCounts = data.map((stat) => stat['return'] as int).toList();
 
     return Column(
       children: [
@@ -28,40 +31,38 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Generate aggregated data for the chart
-  List<Map<String, dynamic>> _generateData(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+  List<Map<String, dynamic>> _generateData(
+    BuildContext context,
+  ) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     const double barWidth = 40.0;
-    const int minDummy = 8;
+    const int minBars = 8;
 
-    int maxDummy = (screenWidth / barWidth).floor();
-    maxDummy = maxDummy < minDummy ? minDummy : maxDummy;
+    int maxBars = (screenWidth / barWidth).floor();
+    maxBars = maxBars < minBars ? minBars : maxBars;
 
-    final aggregatedData = <String, Map<String, dynamic>>{};
+    final Map<String, Map<String, dynamic>> aggregatedData = {};
     for (final stat in cardStats) {
-      final cardName = stat['CardName'];
+      final String cardName = stat['CardName'];
       if (cardName.isEmpty) continue;
-      if (!aggregatedData.containsKey(cardName)) {
-        aggregatedData[cardName] = {'CardName': cardName, 'draw': 0, 'return': 0};
-      }
+
+      aggregatedData.putIfAbsent(cardName, () => {'CardName': cardName, 'draw': 0, 'return': 0});
       aggregatedData[cardName]!['draw'] += stat['draw'] as int;
       aggregatedData[cardName]!['return'] += stat['return'] as int;
     }
 
-    final data = aggregatedData.values.toList();
-    if (data.length < maxDummy) {
-      data.addAll(
-        List.generate(
-          maxDummy - data.length,
-          (index) => {'CardName': '', 'draw': 0, 'return': 0},
-        ),
-      );
+    final List<Map<String, dynamic>> data = aggregatedData.values.toList();
+    while (data.length < maxBars) {
+      data.add({'CardName': '', 'draw': 0, 'return': 0});
     }
+
     return data;
   }
 
-  /// Legend for the chart
-  Widget _buildLegend(AppLocalizations locale, ThemeData theme) {
+  Widget _buildLegend(
+    AppLocalizations locale, 
+    ThemeData theme,
+  ) {
     return Align(
       alignment: Alignment.centerRight,
       child: Row(
@@ -75,23 +76,26 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Create individual legend items
-  Widget _buildLegendItem(ThemeData theme, String label, Color color) {
+  Widget _buildLegendItem(
+    ThemeData theme, 
+    String label, 
+    Color color,
+  ) {
     return Row(
       children: [
-        Container(
-          width: 12.0,
-          height: 12.0,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-        ),
+        Container(width: 12.0, height: 12.0, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
         const SizedBox(width: 8.0),
         Text(label, style: theme.textTheme.bodySmall),
       ],
     );
   }
 
-  /// Chart with bars
-  Widget _buildChart(ThemeData theme, List<int> drawCounts, List<int> returnCounts, List<Map<String, dynamic>> data) {
+  Widget _buildChart(
+    ThemeData theme, 
+    List<int> drawCounts, 
+    List<int> returnCounts, 
+    List<Map<String, dynamic>> data,
+  ) {
     final color = theme.appBarTheme.backgroundColor ?? Colors.grey;
     final maxY = 10;
     final double width = 40.0 * drawCounts.length;
@@ -107,8 +111,11 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Y-axis labels
-  Widget _buildYAxis(ThemeData theme, int maxY, Color color) {
+  Widget _buildYAxis(
+    ThemeData theme, 
+    int maxY, 
+    Color color,
+  ) {
     const double chartHeight = 400.0;
     final double spacerHeight = chartHeight / maxY - 24.0;
 
@@ -129,8 +136,9 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// The left border of the chart
-  Widget _buildLeftBorder(Color color) {
+  Widget _buildLeftBorder(
+    Color color,
+  ) {
     return Container(
       width: 1.2,
       height: 346.0,
@@ -138,7 +146,6 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// The main chart body
   Widget _buildChartBody(
     ThemeData theme,
     double width,
@@ -197,8 +204,10 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Bottom labels for each bar
-  Widget _buildBottomTitle(ThemeData theme, String cardName) {
+  Widget _buildBottomTitle(
+    ThemeData theme, 
+    String cardName,
+  ) {
     final truncatedName = cardName.length > 10 ? '${cardName.substring(0, 10)}...' : cardName;
 
     return Padding(
@@ -214,8 +223,12 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Individual bar groups
-  BarChartGroupData _buildBarGroup(double maxY, int index, int drawCount, int returnCount) {
+  BarChartGroupData _buildBarGroup(
+    double maxY, 
+    int index, 
+    int drawCount, 
+    int returnCount,
+  ) {
     return BarChartGroupData(
       x: index,
       barsSpace: 6.0,
@@ -226,8 +239,9 @@ class DrawReturnChartWidget extends StatelessWidget {
     );
   }
 
-  /// Grid lines for the chart
-  FlGridData _buildGrid(Color color) {
+  FlGridData _buildGrid(
+    Color color,
+  ) {
     return FlGridData(
       show: true,
       drawVerticalLine: true,

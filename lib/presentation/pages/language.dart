@@ -4,8 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nfc_project/core/locales/localizations.dart';
 
 import '../cubits/settings.dart';
-import '../widgets/labels/setting.dart';
-import '../widgets/app_bar.dart';
+
+import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/setting_label.dart';
 
 class LanguagePage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//

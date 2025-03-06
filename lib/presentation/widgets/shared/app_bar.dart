@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final Map<dynamic, dynamic> menu;
 
-  const AppBarWidget({Key? key, required this.menu}) : super(key: key);
+  const AppBarWidget({
+    super.key, 
+    required this.menu,
+  });
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -27,20 +30,27 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: menu.entries
-                  .map((entry) => _buildMenuItem(
-                        context,
-                        theme,
-                        entry.key,
-                        entry.value,
-                        _isTitle(entry.key),
-                      ))
+                  .map(
+                    (entry) => _buildMenuItem(
+                      context,
+                      theme,
+                      entry.key,
+                      entry.value,
+                      _isTitle(entry.key),
+                    ),
+                  )
                   .toList(),
             ),
     );
   }
 
-  /// Single menu item (icon or text)
-  Widget _buildMenuItem(BuildContext context, ThemeData theme, menuKey, onTapFunction, bool isTitle) {
+  Widget _buildMenuItem(
+    BuildContext context,
+    ThemeData theme,
+    dynamic menuKey,
+    dynamic onTapFunction,
+    bool isTitle,
+  ) {
     return GestureDetector(
       onTap: () => _handleMenuTap(context, onTapFunction),
       child: SizedBox(
@@ -53,11 +63,13 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  /// Handle rendering of the menu item (Icon, Text, or Custom Widget)
-  Widget _getMenuItemWidget(ThemeData theme, dynamic menuKey, bool isTitle) {
-    if (menuKey == null) {
-      return const SizedBox.shrink();
-    }
+  Widget _getMenuItemWidget(
+    ThemeData theme, 
+    dynamic menuKey, 
+    bool isTitle,
+  ) {
+    if (menuKey == null) return const SizedBox.shrink();
+
     if (menuKey is IconData) {
       return Icon(menuKey);
     } else if (menuKey is String) {
@@ -65,18 +77,24 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         menuKey,
         style: isTitle
             ? theme.textTheme.titleMedium
-            : theme.textTheme.bodyMedium?.copyWith(color: theme.appBarTheme.iconTheme?.color),
+            : theme.textTheme.bodyMedium?.copyWith(
+                color: theme.appBarTheme.iconTheme?.color,
+              ),
         textAlign: TextAlign.center,
       );
     } else if (menuKey is Widget) {
       return menuKey;
     }
+
     return const Icon(Icons.error_outline);
   }
 
-  /// Handle tap event for menu items
-  void _handleMenuTap(BuildContext context, dynamic onTapFunction) {
+  void _handleMenuTap(
+    BuildContext context, 
+    dynamic onTapFunction,
+  ) {
     if (onTapFunction == null) return;
+
     if (onTapFunction is String) {
       if (onTapFunction.startsWith('/back')) {
         Navigator.pop(context);
@@ -94,6 +112,5 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     }
   }
 
-  /// Check if the menu item should be the title
   bool _isTitle(dynamic menuKey) => menuKey == menu.keys.elementAt(menu.length ~/ 2);
 }

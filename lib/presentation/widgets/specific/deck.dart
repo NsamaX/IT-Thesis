@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/core/routes/routes.dart';
+
 import 'package:nfc_project/domain/entities/deck.dart';
 
-import '../cubits/deck_management/cubit.dart';
+import '../../cubits/deck_management/cubit.dart';
 
 class DeckWidget extends StatelessWidget {
   final DeckEntity deck;
 
-  const DeckWidget({Key? key, required this.deck}) : super(key: key);
+  const DeckWidget({
+    super.key, 
+    required this.deck,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cubit = context.read<DeckManagerCubit>();
-    final isEditModeEnabled = context.watch<DeckManagerCubit>().state.isEditModeEnabled;
+    final bool isEditModeEnabled = context.watch<DeckManagerCubit>().state.isEditModeEnabled;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -27,13 +31,14 @@ class DeckWidget extends StatelessWidget {
           },
           child: _buildDeckContainer(theme),
         ),
-        if (isEditModeEnabled) _buildDeleteButton(theme, cubit),
+        _buildDeleteButton(theme, cubit, isEditModeEnabled),
       ],
     );
   }
 
-  /// Deck container UI
-  Widget _buildDeckContainer(ThemeData theme) {
+  Widget _buildDeckContainer(
+    ThemeData theme,
+  ) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),
@@ -43,7 +48,6 @@ class DeckWidget extends StatelessWidget {
             color: Colors.black54,
             offset: Offset(3.0, 4.0),
             blurRadius: 6.0,
-            spreadRadius: 0.0,
           ),
         ],
       ),
@@ -60,30 +64,34 @@ class DeckWidget extends StatelessWidget {
     );
   }
 
-  /// Delete button (Only visible when edit mode is enabled)
-  Widget _buildDeleteButton(ThemeData theme, DeckManagerCubit cubit) {
+  Widget _buildDeleteButton(
+    ThemeData theme, 
+    DeckManagerCubit cubit, 
+    bool isEditModeEnabled,
+  ) {
     return Positioned(
       top: -2.0,
       right: -2.0,
-      child: AnimatedOpacity(
-        opacity: 1.0,
+      child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: GestureDetector(
-          onTap: () => cubit.deleteDeck(deck),
-          child: Container(
-            width: 30.0,
-            height: 30.0,
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.close_rounded,
-              color: theme.primaryColor,
-              size: 26.0,
-            ),
-          ),
-        ),
+        child: isEditModeEnabled
+            ? GestureDetector(
+                onTap: () => cubit.deleteDeck(deck),
+                child: Container(
+                  width: 30.0,
+                  height: 30.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.close_rounded,
+                    color: theme.primaryColor,
+                    size: 26.0,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }

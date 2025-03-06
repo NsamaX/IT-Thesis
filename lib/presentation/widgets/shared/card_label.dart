@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/routes/routes.dart';
+
 import 'package:nfc_project/domain/entities/card.dart';
 
 class CardLabelWidget extends StatelessWidget {
@@ -16,7 +17,7 @@ class CardLabelWidget extends StatelessWidget {
   final void Function(String cardId)? onDelete;
 
   const CardLabelWidget({
-    Key? key,
+    super.key,
     this.card,
     this.count,
     this.isNFC = true,
@@ -27,13 +28,12 @@ class CardLabelWidget extends StatelessWidget {
     this.cardColors,
     this.changeCardColor,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context);
     final theme = Theme.of(context);
-
     final color = lightTheme ? Colors.black : null;
 
     return GestureDetector(
@@ -45,8 +45,12 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
-  /// The container that holds the entire card item
-  Widget _buildContainer(BuildContext context, AppLocalizations locale, ThemeData theme, Color? color) {
+  Widget _buildContainer(
+    BuildContext context,
+    AppLocalizations locale,
+    ThemeData theme,
+    Color? color,
+  ) {
     final backgroundColor = lightTheme ? Colors.white : theme.appBarTheme.backgroundColor;
     final pinColor = cardColors ?? backgroundColor;
 
@@ -90,14 +94,14 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
-  /// Actions for the Slidable widget (edit color or delete)
-  ActionPane? _buildSlidableActions(BuildContext context, ThemeData theme, Color? backgroundColor) {
+  ActionPane? _buildSlidableActions(
+    BuildContext context, 
+    ThemeData theme, 
+    Color? backgroundColor,
+  ) {
     if (isTrack) {
-      final colors = [
-        theme.colorScheme.primary,
-        theme.colorScheme.secondary,
-        theme.colorScheme.tertiary,
-      ];
+      const colors = [Colors.blue, Colors.green, Colors.orange];
+
       return ActionPane(
         motion: const StretchMotion(),
         extentRatio: (60.0 * colors.length) / MediaQuery.of(context).size.width,
@@ -110,8 +114,7 @@ class CardLabelWidget extends StatelessWidget {
                 ))
             .toList(),
       );
-    }
-    else if (onDelete != null) {
+    } else if (onDelete != null) {
       return ActionPane(
         motion: const StretchMotion(),
         extentRatio: 0.25,
@@ -124,16 +127,22 @@ class CardLabelWidget extends StatelessWidget {
           ),
         ],
       );
-    } else return null;
+    }
+    return null;
   }
 
-  /// Toggle the color of the card
-  void _toggleColor(Color targetColor, Color? backgroundColor) {
+  void _toggleColor(
+    Color targetColor, 
+    Color? backgroundColor,
+  ) {
     changeCardColor?.call(cardColors == targetColor ? backgroundColor! : targetColor);
   }
 
-  /// The image widget (either from a file, network, or fallback icon)
-  Widget _buildImage(ThemeData theme, Color pinColor, Color? color) {
+  Widget _buildImage(
+    ThemeData theme, 
+    Color pinColor, 
+    Color? color,
+  ) {
     final imageUrl = card?.imageUrl;
     final isNetworkImage = imageUrl?.startsWith('http') ?? false;
     final isLocalFile = imageUrl != null && File(imageUrl).existsSync();
@@ -158,33 +167,44 @@ class CardLabelWidget extends StatelessWidget {
     );
   }
 
-  /// Fallback icon when image cannot be loaded
   Widget _buildFallbackIcon(Color? color) => Icon(Icons.image_not_supported, size: 36.0, color: color);
 
-  /// The card information (name and description)
-  Widget _buildCardInfo(AppLocalizations locale, ThemeData theme, Color? color) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        card?.name ?? locale.translate('text.no_card_name'),
-        style: theme.textTheme.bodyMedium?.copyWith(color: color),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
-      const SizedBox(height: 4.0),
-      Text(
-        card?.description ?? locale.translate('text.no_card_description'),
-        style: theme.textTheme.bodySmall?.copyWith(color: color),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
-    ],
-  );
+  Widget _buildCardInfo(
+    AppLocalizations locale, 
+    ThemeData theme, 
+    Color? color,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          card?.name ?? locale.translate('text.no_card_name'),
+          style: theme.textTheme.bodyMedium?.copyWith(color: color),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        const SizedBox(height: 4.0),
+        Text(
+          card?.description ?? locale.translate('text.no_card_description'),
+          style: theme.textTheme.bodySmall?.copyWith(color: color),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+      ],
+    );
+  }
 
-  /// The count of the card (if provided)
-  Widget _buildCount(ThemeData theme, Color? color) => Padding(
-    padding: const EdgeInsets.only(right: 22.0),
-    child: Text(count.toString(), style: theme.textTheme.titleMedium?.copyWith(color: color)),
-  );
+  Widget _buildCount(
+    ThemeData theme, 
+    Color? color,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 22.0),
+      child: Text(
+        count.toString(),
+        style: theme.textTheme.titleMedium?.copyWith(color: color),
+      ),
+    );
+  }
 }
