@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -11,21 +15,23 @@ import 'core/themes/theme.dart';
 
 import 'presentation/cubits/@export.dart';
 
-// import 'package:nfc_project/core/services/database.dart'; // debug mode
+// import 'core/services/database.dart'; // debug mode
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // await DatabaseService().printTables(); // Uncomment for debugging
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  await AppLocalizations.loadSupportedLanguages();
   await ApiConfig.loadConfig(environment: 'development');
+  await AppLocalizations.loadSupportedLanguages();
   await setupLocator();
+
+  // await DatabaseService().printTables(); // Uncomment for debugging
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
