@@ -10,7 +10,7 @@ import 'package:nfc_project/domain/entities/deck.dart';
 
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
-import '../cubits/tracker/cubit.dart';
+import '../cubits/deck_tracker/cubit.dart';
 import '../cubits/drawer.dart';
 
 import '../widgets/card/card_label.dart';
@@ -25,7 +25,7 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
 
 import '../widgets/specific/switch_mode.dart';
-
+//
 class DeckTrackerPage extends StatefulWidget {
   @override
   State<DeckTrackerPage> createState() => _DeckTrackerPageState();
@@ -63,18 +63,18 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DrawerCubit()),
-        BlocProvider(create: (context) => GetIt.instance<TrackCubit>(param1: deck)),
+        BlocProvider(create: (context) => GetIt.instance<DeckTrackCubit>(param1: deck)),
       ],
       child: Builder(
         builder: (context) {
-          context.read<TrackCubit>().fetchRecord();
+          context.read<DeckTrackCubit>().fetchRecord();
           _showTrackerDialog(context, locale);
           return MultiBlocListener(
             listeners: [
               BlocListener<NFCCubit, NFCState>(
                 listener: (context, nfcState) {
                   if (nfcState.lastestReadTags != null && nfcState.isNFCEnabled) {
-                    context.read<TrackCubit>().readTag(nfcState.lastestReadTags!);
+                    context.read<DeckTrackCubit>().readTag(nfcState.lastestReadTags!);
                   }
                 },
                 listenWhen: (previous, current) {
@@ -82,7 +82,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
                 },
               ),
             ],
-            child: BlocBuilder<TrackCubit, TrackState>(
+            child: BlocBuilder<DeckTrackCubit, DeckTrackState>(
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBarWidget(menu: _buildAppBarMenu(context, locale, deck)),
@@ -100,7 +100,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
   Map<dynamic, dynamic> _buildAppBarMenu(BuildContext context, AppLocalizations locale, DeckEntity deck) {
     final nfcCubit = context.watch<NFCCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
-    return context.watch<TrackCubit>().state.isAdvanceModeEnabled
+    return context.watch<DeckTrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
             Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
@@ -111,7 +111,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
                 () => NFCHelper.handleToggleNFC(nfcCubit,
                     enable: !isNFCEnabled,
                     reason: 'User toggled NFC in Tracker Page'),
-            Icons.build_rounded: () => context.read<TrackCubit>().toggleAdvanceMode(),
+            Icons.build_rounded: () => context.read<DeckTrackCubit>().toggleAdvanceMode(),
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
@@ -123,7 +123,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
                 () => NFCHelper.handleToggleNFC(nfcCubit,
                     enable: !isNFCEnabled,
                     reason: 'User toggled NFC in Tracker Page'),
-            Icons.build_outlined: () => context.read<TrackCubit>().toggleAdvanceMode(),
+            Icons.build_outlined: () => context.read<DeckTrackCubit>().toggleAdvanceMode(),
           };
   }
 
@@ -136,14 +136,14 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
       {
         AppLocalizations.of(context).translate('button.reset'): {
           'onPressed': () {
-            context.read<TrackCubit>().toggleReset();
+            context.read<DeckTrackCubit>().toggleReset();
             Navigator.of(context).pop();
           },
           'isCancel': false,
         },
         AppLocalizations.of(context).translate('toggle.save'): {
           'onPressed': () {
-            context.read<TrackCubit>().toggleSaveRecord();
+            context.read<DeckTrackCubit>().toggleSaveRecord();
             Navigator.of(context).pop();
           },
           'isCancel': false,
@@ -157,7 +157,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
   }
 
   //--------------------------------- Body ---------------------------------//
-  Widget _buildBody(BuildContext context, TrackState state) => GestureDetector(
+  Widget _buildBody(BuildContext context, DeckTrackState state) => GestureDetector(
     onTap: () => context.read<DrawerCubit>().closeDrawer(),
     behavior: HitTestBehavior.opaque,
     child: BlocBuilder<DrawerCubit, DrawerState>(
@@ -180,22 +180,22 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
   );
 
   //--------------------------------- Widgets ---------------------------------//
-  Widget _buildBodyByMode(BuildContext context, TrackState state) => Column(
+  Widget _buildBodyByMode(BuildContext context, DeckTrackState state) => Column(
     children: [
       const SizedBox(height: 16.0),
       SwitchModeWidget(
         isAnalyzeModeEnabled: state.isAnalyzeModeEnabled,
-        onSelected: (isAnalysis) => context.read<TrackCubit>().toggleAnalyzeMode(),
+        onSelected: (isAnalysis) => context.read<DeckTrackCubit>().toggleAnalyzeMode(),
       ),
       const SizedBox(height: 8.0),
       Expanded(
-        child: BlocBuilder<TrackCubit, TrackState>(
-          builder: (context, trackState) {
-            if (trackState.isAnalyzeModeEnabled) {
-              final List<Map<String, dynamic>> cardStats = context.read<TrackCubit>().calculateDrawAndReturnCounts();
+        child: BlocBuilder<DeckTrackCubit, DeckTrackState>(
+          builder: (context, DecktrackState) {
+            if (DecktrackState.isAnalyzeModeEnabled) {
+              final List<Map<String, dynamic>> cardStats = context.read<DeckTrackCubit>().calculateDrawAndReturnCounts();
               return _buildAnalyzeInfo(state, cardStats);
             } else {
-              return _buildCardList(context, trackState);
+              return _buildCardList(context, DecktrackState);
             }
           },
         ),
@@ -203,7 +203,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     ],
   );
 
-  Widget _buildCardList(BuildContext context, TrackState state) {
+  Widget _buildCardList(BuildContext context, DeckTrackState state) {
     final totalCards = state.currentDeck.cards.values.fold<int>(0, (sum, count) => sum + count);
     return Column(
       children: [
@@ -232,7 +232,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
                 isTrack: true,
                 lightTheme: count > 0,
                 cardColors: state.cardColors[card.cardId],
-                changeCardColor: (color) => context.read<TrackCubit>().changeCardColor(card.cardId, color),
+                changeCardColor: (color) => context.read<DeckTrackCubit>().changeCardColor(card.cardId, color),
               );
             },
           ),
@@ -241,7 +241,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     );
   }
 
-  Widget _buildAnalyzeInfo(TrackState state, List<Map<String, dynamic>> cardStats) => ListView(
+  Widget _buildAnalyzeInfo(DeckTrackState state, List<Map<String, dynamic>> cardStats) => ListView(
     children: [
       Padding(
         padding: const EdgeInsets.fromLTRB(6.0, 0.0, 16.0, 0.0),
@@ -252,13 +252,13 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
         record: state.record, 
         records: state.records,
         cardStats: cardStats,
-        selectRecord: (context, recordId) => context.read<TrackCubit>().fetchRecordById(recordId),
+        selectRecord: (context, recordId) => context.read<DeckTrackCubit>().fetchRecordById(recordId),
       ),
     ],
   );
 
   void _showTrackerDialog(BuildContext context, AppLocalizations locale) => Future.microtask(() {
-    context.read<TrackCubit>().showDialog();
+    context.read<DeckTrackCubit>().showDialog();
     cupertinoAlertDialog(
       context,
       locale.translate('dialog.tracker_tutorial.title'),
@@ -275,9 +275,9 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
         duration: const Duration(milliseconds: 200),
         top: 0,
         left: state.isDrawerVisible('history') ? 0.0 : -200.0,
-        child: BlocBuilder<TrackCubit, TrackState>(
-          builder: (context, trackState) => HistoryDrawerWidget(
-            cards: trackState.history,
+        child: BlocBuilder<DeckTrackCubit, DeckTrackState>(
+          builder: (context, DecktrackState) => HistoryDrawerWidget(
+            cards: DecktrackState.history,
             height: MediaQuery.of(context).size.height - appBarHeight - 30.0,
           ),
         ),
@@ -292,8 +292,8 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
         duration: const Duration(milliseconds: 160),
         top: state.isDrawerVisible('feature') ? 0.0 : -160.0,
         left: 0,
-        child: BlocBuilder<TrackCubit, TrackState>(
-          builder: (context, trackState) => PlayerDrawerWidget(),
+        child: BlocBuilder<DeckTrackCubit, DeckTrackState>(
+          builder: (context, DecktrackState) => PlayerDrawerWidget(),
         ),
       ),
     );

@@ -12,7 +12,7 @@ part of 'cubit.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-void updateCardCount(TagEntity tag, Action action, String location, int delta, TrackState state, void Function(TrackState) safeEmit) {
+void updateCardCount(TagEntity tag, Action action, String location, int delta, DeckTrackState state, void Function(DeckTrackState) safeEmit) {
   final defaultEntry = MapEntry(CardEntity(cardId: tag.cardId, game: '', name: 'Unknown'), 0);
   
   final cardEntry = state.currentDeck.cards.entries.firstWhere(
@@ -61,7 +61,7 @@ void updateCardCount(TagEntity tag, Action action, String location, int delta, T
  |
  |
  *-------------------------------------------------------------------------------*/
-void moveCardToTop(TagEntity tag, TrackState state, void Function(TrackState) safeEmit) {
+void moveCardToTop(TagEntity tag, DeckTrackState state, void Function(DeckTrackState) safeEmit) {
   final defaultEntry = MapEntry(CardEntity(cardId: tag.cardId, game: '', name: 'Unknown'), 0);
   
   final cardEntry = state.currentDeck.cards.entries.firstWhere(

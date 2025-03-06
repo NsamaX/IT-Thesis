@@ -18,7 +18,7 @@ import '../widgets/card/card_quantity.dart';
 
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
-
+//
 class CardPage extends StatefulWidget {
   @override
   _CardInfoPageState createState() => _CardInfoPageState();

@@ -193,8 +193,8 @@ void _setupCubits() {
     loadDecksUseCase: locator<LoadDecksUseCase>(),
   ));
 
-  locator.registerFactoryParam<TrackCubit, DeckEntity, void>(
-    (deck, _) => TrackCubit(
+  locator.registerFactoryParam<DeckTrackCubit, DeckEntity, void>(
+    (deck, _) => DeckTrackCubit(
       deck,
       saveRecordUseCase: locator<SaveRecordUseCase>(),
       recordUseCase: locator<RemoveRecordUseCase>(),

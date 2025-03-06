@@ -1,6 +1,6 @@
 part of 'cubit.dart';
 
-class TrackState extends Equatable {
+class DeckTrackState extends Equatable {
   final DeckEntity initialDeck;
   final DeckEntity currentDeck;
   final RecordEntity record;
@@ -12,7 +12,7 @@ class TrackState extends Equatable {
   final bool isAdvanceModeEnabled;
   final bool isAnalyzeModeEnabled;
 
-  const TrackState({
+  const DeckTrackState({
     required this.initialDeck,
     required this.currentDeck,
     required this.record,
@@ -25,7 +25,7 @@ class TrackState extends Equatable {
     this.isAnalyzeModeEnabled = false,
   });
 
-  TrackState copyWith({
+  DeckTrackState copyWith({
     DeckEntity? initialDeck,
     DeckEntity? currentDeck,
     RecordEntity? record,
@@ -37,7 +37,7 @@ class TrackState extends Equatable {
     bool? isAdvanceModeEnabled,
     bool? isAnalyzeModeEnabled,
   }) {
-    return TrackState(
+    return DeckTrackState(
       initialDeck: initialDeck ?? this.initialDeck,
       currentDeck: currentDeck ?? this.currentDeck,
       record: record ?? this.record,

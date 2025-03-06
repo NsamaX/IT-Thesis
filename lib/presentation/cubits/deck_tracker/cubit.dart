@@ -25,17 +25,17 @@ part 'state.dart';
  |
  |
  *-------------------------------------------------------------------------------*/
-class TrackCubit extends Cubit<TrackState> {
+class DeckTrackCubit extends Cubit<DeckTrackState> {
   final SaveRecordUseCase saveRecordUseCase;
   final RemoveRecordUseCase recordUseCase;
   final FetchRecordUseCase fetchRecordUseCase;
 
-  TrackCubit(
+  DeckTrackCubit(
     DeckEntity deck, {
     required this.saveRecordUseCase,
     required this.recordUseCase,
     required this.fetchRecordUseCase,
-  }) : super(TrackState(
+  }) : super(DeckTrackState(
           initialDeck: deck,
           currentDeck: deck.copyWith(cards: Map.of(deck.cards)),
           record: RecordEntity(
@@ -57,7 +57,7 @@ class TrackCubit extends Cubit<TrackState> {
    |
    |
    *-------------------------------------------------------------------------------*/
-  void safeEmit(TrackState newState) {
+  void safeEmit(DeckTrackState newState) {
     if (!isClosed && state != newState) {
       emit(newState);
     }

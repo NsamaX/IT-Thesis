@@ -16,7 +16,7 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
 
 import '../widgets/specific/NFC_reader.dart';
-
+//
 class ReadPage extends StatefulWidget {
   @override
   State<ReadPage> createState() => _ReaderPageState();
