@@ -8,6 +8,8 @@ import '../cubits/settings.dart';
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/general_label.dart';
 
+import 'features/language.dart';
+
 class LanguagePage extends StatelessWidget {
   /*---------------------------------- Build ---------------------------------*/
   @override
@@ -16,7 +18,7 @@ class LanguagePage extends StatelessWidget {
     final cubit = context.read<SettingsCubit>();
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: GeneralLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
+      body: GeneralLabelWidget(label: [buildSupportedLanguages(locale, cubit)]),
     );
   }
 
@@ -26,19 +28,4 @@ class LanguagePage extends StatelessWidget {
     locale.translate('title.language'): null,
     null: null,
   };
-
-  /*--------------------------------- Feature --------------------------------*/
-  Map<String, dynamic> _buildSupportedLanguages(AppLocalizations locale, SettingsCubit cubit) {
-    final supportedLanguages = AppLocalizations.languageNames.entries.map((entry) => {
-      'code': entry.key,
-      'name': entry.value,
-    }).toList();
-    return {
-      'content': supportedLanguages.map((lang) => {
-        'onTap': () => cubit.updateSetting('locale', lang['code']!),
-        'text': lang['name']!,
-        'select': lang['code'] == locale.locale.languageCode,
-      }).toList(),
-    };
-  }
 }

@@ -13,6 +13,8 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/deck_card_grid.dart';
 import '../widgets/shared/notifications.dart';
 
+import 'features/new_deck.dart';
+
 class NewDeckPage extends StatefulWidget {
   @override
   State<NewDeckPage> createState() => _NewDeckPageState();
@@ -93,7 +95,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
     return isEditModeEnabled
         ? {
             Icons.nfc_rounded: () => cubit.toggleNFC(_nfcCubit),
-            Icons.delete_outline_rounded: () => _showDeleteDialog(context, cubit, locale),
+            Icons.delete_outline_rounded: () => showDeleteDialog(context, cubit, locale),
             TextField(
               controller: _deckNameController,
               textAlign: TextAlign.center,
@@ -103,7 +105,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
                 hintText: locale.translate('title.new_deck'),
               ),
               onChanged: (value) => cubit.renameDeck(value.trim().isNotEmpty ? value.trim() : locale.translate('title.new_deck')),
-              onSubmitted: (value) => _renameDeck(cubit, _deckNameController, locale, value),
+              onSubmitted: (value) => renameDeck(cubit, _deckNameController, locale, value),
             ): null,
             Icons.add_rounded: {
               'route': AppRoutes.games,
@@ -116,7 +118,7 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
           }
         : {
             Icons.arrow_back_ios_new_rounded: '/back',
-            Icons.ios_share_rounded: () => _toggleShare(context, cubit, locale),
+            Icons.ios_share_rounded: () => toggleShare(context, cubit, locale),
             state.deck.deckName: null,
             Icons.play_arrow_rounded: AppRoutes.deckTracker,
             locale.translate('toggle.edit'): () => cubit.toggleEditMode(),
@@ -159,42 +161,5 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
       await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
     }
     _nfcCubit.resetSnackBarState();
-  }
-
-  /*--------------------------------- Feature --------------------------------*/
-  void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
-    cupertinoAlertDialogAction(
-      context,
-      locale.translate('dialog.delete_deck.title'),
-      locale.translate('dialog.delete_deck.content'),
-      () {
-        cubit.toggleDelete();
-        snackBar(
-          context,
-          locale.translate('snack_bar.deck.deleted'),
-        );
-      },
-    );
-  }
-
-  void _renameDeck(
-    DeckManagerCubit cubit,
-    TextEditingController controller,
-    AppLocalizations locale,
-    String value,
-  ) {
-    final newName = value.trim().isNotEmpty
-        ? value.trim()
-        : locale.translate('title.new_deck');
-    cubit.renameDeck(newName);
-    controller.text = newName;
-  }
-
-  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
-    cubit.toggleShare();
-    snackBar(
-      context,
-      locale.translate('snack_bar.deck.share'),
-    );
   }
 }

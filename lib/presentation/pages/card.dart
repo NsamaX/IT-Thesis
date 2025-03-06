@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:nfc_project/core/locales/localizations.dart';
 import 'package:nfc_project/core/utils/arguments.dart';
-import 'package:nfc_project/core/utils/nfc_helper.dart';
 import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
@@ -13,11 +12,12 @@ import '../cubits/NFC/cubit.dart';
 import '../cubits/collection.dart';
 
 import '../widgets/shared/app_bar.dart';
-import '../widgets/shared/notifications.dart';
 
 import '../widgets/specific/card_image.dart';
 import '../widgets/specific/card_info.dart';
 import '../widgets/specific/card_quantity.dart';
+
+import 'features/card.dart';
 
 class CardPage extends StatefulWidget {
   @override
@@ -81,20 +81,15 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     final collectionCubit = context.watch<CollectionCubit>();
     final isNFCEnabled = nfcCubit.state.isNFCEnabled;
     final isValid = collectionCubit.state.isValid;
+
     return {
       Icons.arrow_back_ios_new_rounded: '/back',
-      _isCustom
-          ? _buildTextField(context, locale)
-          : locale.translate('title.card'): null,
-      if (_isAdd)locale.translate('toggle.add') : () => _toggleAdd(locale, deckManagerCubit)
-      else if (_isCustom) 
-        isValid 
-          ? locale.translate('toggle.done')
-          : null : () => _toggleCreate(locale)
+      _isCustom ? buildTextField(context, locale) : locale.translate('title.card'): null,
+      if (_isAdd) locale.translate('toggle.add') : () => toggleAdd(context, locale, deckManagerCubit, _card)
+      else if (_isCustom) isValid ? locale.translate('toggle.done') : null : () => toggleCreate(context, locale)
       else if (_isNFC) (
-        isNFCEnabled 
-            ? Icons.wifi_tethering_rounded 
-            : Icons.wifi_tethering_off_rounded): () => _toggleNFC(nfcCubit, isNFCEnabled)
+        isNFCEnabled ? Icons.wifi_tethering_rounded : Icons.wifi_tethering_off_rounded
+      ): () => toggleNFC(context, nfcCubit, isNFCEnabled, _card)
       else null: null,
     };
   }
@@ -118,49 +113,5 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
         ),
       ],
     ),
-  );
-
-  /*--------------------------------- Feature --------------------------------*/
-  Widget _buildTextField(BuildContext context, AppLocalizations locale) {
-    final collectionCubit = context.watch<CollectionCubit>();
-    return TextField(
-      controller: TextEditingController(text: collectionCubit.state.name)
-        ..selection = TextSelection.collapsed(offset: collectionCubit.state.name.length),
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.titleMedium,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: locale.translate('text.card_name'),
-      ),
-      onChanged: (value) {
-        collectionCubit.setName(value.trim());
-      },
-    );
-  }
-
-  void _toggleAdd(AppLocalizations locale, DeckManagerCubit deckManagerCubit) async {
-    if (_card != null) {
-      deckManagerCubit.addCard(_card!, deckManagerCubit.state.quantity);
-      snackBar(
-        context,
-        locale.translate('snack_bar.card.add_success'),
-      );
-      Navigator.of(context).pop();
-    }
-  }
-
-  void _toggleCreate(AppLocalizations locale) async {
-    context.read<CollectionCubit>().addCard();
-    snackBar(
-      context,
-      locale.translate('snack_bar.card.add_success'),
-    );
-  }
-
-  void _toggleNFC(NFCCubit nfcCubit, bool isNFCEnabled) => NFCHelper.handleToggleNFC(
-    nfcCubit,
-    enable: !isNFCEnabled,
-    card: _card,
-    reason: 'User toggled NFC in Card Page',
   );
 }

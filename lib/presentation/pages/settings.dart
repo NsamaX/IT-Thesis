@@ -10,6 +10,8 @@ import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
 import '../widgets/shared/general_label.dart';
 
+import 'features/settings.dart';
+
 class SettingsPage extends StatelessWidget {
   /*---------------------------------- Build ---------------------------------*/
   @override
@@ -65,7 +67,7 @@ class SettingsPage extends StatelessWidget {
         'text': locale.translate('settings.general.privacy'),
       },
       {
-        'onTap': () => _toggleSignOut(context, cubit),
+        'onTap': () => toggleSignOut(context, cubit),
         'icon': Icons.logout_rounded,
         'text': locale.translate('settings.general.sign_out'),
       },
@@ -88,10 +90,4 @@ class SettingsPage extends StatelessWidget {
       // },
     ],
   };
-
-  /*--------------------------------- Feature --------------------------------*/
-  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
-    cubit.updateSetting('firstLoad', true);
-    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
-  }
 }

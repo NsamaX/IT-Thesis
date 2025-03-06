@@ -23,6 +23,8 @@ import '../widgets/specific/deck_insight.dart';
 import '../widgets/specific/player_drawer.dart';
 import '../widgets/specific/switch_mode.dart';
 
+import 'features/deck_tracker.dart';
+
 class DeckTrackerPage extends StatefulWidget {
   @override
   State<DeckTrackerPage> createState() => _DeckTrackerPageState();
@@ -100,7 +102,7 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
     return context.watch<DeckTrackCubit>().state.isAdvanceModeEnabled
         ? {
             Icons.access_time_rounded: () => context.read<DrawerCubit>().toggleDrawer('history'),
-            Icons.refresh_rounded: () => _resetMultipleChoicesDialog(context, deck),
+            Icons.refresh_rounded: () => resetMultipleChoicesDialog(context, deck),
             locale.translate('title.tracker'): null,
             isNFCEnabled
                     ? Icons.wifi_tethering_rounded
@@ -263,35 +265,6 @@ class _DeckTrackerPageState extends State<DeckTrackerPage> with WidgetsBindingOb
           builder: (context, DecktrackState) => PlayerDrawerWidget(),
         ),
       ),
-    );
-  }
-
-  /*--------------------------------- Feature --------------------------------*/
-  void _resetMultipleChoicesDialog(BuildContext context, DeckEntity deck) {
-    cupertinoMultipleChoicesDialog(
-      context,
-      AppLocalizations.of(context).translate('dialog.reset_deck.title'),
-      AppLocalizations.of(context).translate('dialog.reset_deck.content'),
-      {
-        AppLocalizations.of(context).translate('button.reset'): {
-          'onPressed': () {
-            context.read<DeckTrackCubit>().toggleReset();
-            Navigator.of(context).pop();
-          },
-          'isCancel': false,
-        },
-        AppLocalizations.of(context).translate('toggle.save'): {
-          'onPressed': () {
-            context.read<DeckTrackCubit>().toggleSaveRecord();
-            Navigator.of(context).pop();
-          },
-          'isCancel': false,
-        },
-        AppLocalizations.of(context).translate('button.cancel'): {
-          'onPressed': () => Navigator.of(context).pop(),
-          'isCancel': true,
-        },
-      },
     );
   }
 }
