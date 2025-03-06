@@ -13,14 +13,17 @@ import '../cubits/NFC/cubit.dart';
 import '../cubits/tracker/cubit.dart';
 import '../cubits/drawer.dart';
 
+import '../widgets/card/card_label.dart';
+
+import '../widgets/deck/deck_insight_chart.dart';
+import '../widgets/deck/deck_insight.dart';
+
+import '../widgets/drawer/history_drawer.dart';
+import '../widgets/drawer/player_drawer.dart';
+
 import '../widgets/shared/app_bar.dart';
-import '../widgets/shared/card_label.dart';
-import '../widgets/shared/history_drawer.dart';
 import '../widgets/shared/notifications.dart';
 
-import '../widgets/specific/deck_insight_chart.dart';
-import '../widgets/specific/deck_insight.dart';
-import '../widgets/specific/player_drawer.dart';
 import '../widgets/specific/switch_mode.dart';
 
 class DeckTrackerPage extends StatefulWidget {

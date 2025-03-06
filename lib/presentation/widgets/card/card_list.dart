@@ -4,7 +4,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
 
-import '../shared/card_label.dart';
+import 'card_label.dart';
 
 class CardListWidget extends StatelessWidget {
   final List<CardEntity> cards;

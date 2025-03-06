@@ -9,9 +9,10 @@ import 'package:nfc_project/domain/usecases/card.dart';
 import '../cubits/collection.dart';
 import '../cubits/search.dart';
 
+import '../widgets/card/card_list.dart';
+
 import '../widgets/shared/app_bar.dart';
 
-import '../widgets/specific/card_list.dart';
 import '../widgets/specific/search_bar.dart';
 
 class SearchPage extends StatelessWidget {

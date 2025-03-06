@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SettingLabelWidget extends StatelessWidget {
+class GeneralLabelWidget extends StatelessWidget {
   final List<Map<String, dynamic>> label;
 
-  const SettingLabelWidget({
+  const GeneralLabelWidget({
     super.key, 
     required this.label,
   });

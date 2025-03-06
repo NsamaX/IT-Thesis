@@ -12,12 +12,12 @@ import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 import '../cubits/collection.dart';
 
+import '../widgets/card/card_image.dart';
+import '../widgets/card/card_info.dart';
+import '../widgets/card/card_quantity.dart';
+
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
-
-import '../widgets/specific/card_image.dart';
-import '../widgets/specific/card_info.dart';
-import '../widgets/specific/card_quantity.dart';
 
 class CardPage extends StatefulWidget {
   @override

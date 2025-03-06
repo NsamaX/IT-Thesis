@@ -6,7 +6,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import '../cubits/settings.dart';
 
 import '../widgets/shared/app_bar.dart';
-import '../widgets/shared/setting_label.dart';
+import '../widgets/shared/general_label.dart';
 
 class LanguagePage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//
@@ -16,7 +16,7 @@ class LanguagePage extends StatelessWidget {
     final cubit = context.read<SettingsCubit>();
     return Scaffold(
       appBar: AppBarWidget(menu: _buildAppBarMenu(locale)),
-      body: SettingLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
+      body: GeneralLabelWidget(label: [_buildSupportedLanguages(locale, cubit)]),
     );
   }
 

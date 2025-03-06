@@ -8,7 +8,7 @@ import '../cubits/settings.dart';
 
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
-import '../widgets/shared/setting_label.dart';
+import '../widgets/shared/general_label.dart';
 
 class SettingsPage extends StatelessWidget {
   //---------------------------------- Build ---------------------------------//
@@ -27,7 +27,7 @@ class SettingsPage extends StatelessWidget {
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {locale.translate('title.settings'): null};
   
   //---------------------------------- Body ----------------------------------//
-  Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => SettingLabelWidget(
+  Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => GeneralLabelWidget(
     label: [
       _buildAccountSettings(locale),
       _buildGeneralSettings(context, locale, cubit),

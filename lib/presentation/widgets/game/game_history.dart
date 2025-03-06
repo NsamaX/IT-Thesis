@@ -5,7 +5,7 @@ import 'package:nfc_project/core/locales/localizations.dart';
 
 import 'package:nfc_project/domain/entities/record.dart';
 
-import '../shared/setting_label.dart';
+import '../shared/general_label.dart';
 
 class GameHistoryWidget extends StatelessWidget {
   final List<RecordEntity> records;
@@ -21,7 +21,7 @@ class GameHistoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (records.isEmpty) return const SizedBox.shrink();
 
-    return SettingLabelWidget(
+    return GeneralLabelWidget(
       label: _buildHistoryList(context),
     );
   }
