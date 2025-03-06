@@ -12,12 +12,12 @@ import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 import '../cubits/collection.dart';
 
-import '../widgets/card/card_image.dart';
-import '../widgets/card/card_info.dart';
-import '../widgets/card/card_quantity.dart';
-
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/notifications.dart';
+
+import '../widgets/specific/card_image.dart';
+import '../widgets/specific/card_info.dart';
+import '../widgets/specific/card_quantity.dart';
 
 class CardPage extends StatefulWidget {
   @override
@@ -99,6 +99,27 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     };
   }
 
+  /*---------------------------------- Body ----------------------------------*/
+  Widget _buildBody() => BlocBuilder<DeckManagerCubit, DeckManagerState>(
+    builder: (context, state) => ListView(
+      padding: const EdgeInsets.all(40),
+      children: [
+        CardImageWidget(card: _card, isCustom: _isCustom),
+        const SizedBox(height: 24),
+        CardInfoWidget(
+          card: _card, 
+          isCustom: _isCustom,  
+          descriptionController: _descriptionController,
+        ),
+        if (_isAdd) CardQuantityWidget(
+          onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
+          quantityCount: 4,
+          selectedQuantity: state.quantity,
+        ),
+      ],
+    ),
+  );
+
   /*--------------------------------- Feature --------------------------------*/
   Widget _buildTextField(BuildContext context, AppLocalizations locale) {
     final collectionCubit = context.watch<CollectionCubit>();
@@ -141,26 +162,5 @@ class _CardInfoPageState extends State<CardPage> with WidgetsBindingObserver {
     enable: !isNFCEnabled,
     card: _card,
     reason: 'User toggled NFC in Card Page',
-  );
-
-  /*---------------------------------- Body ----------------------------------*/
-  Widget _buildBody() => BlocBuilder<DeckManagerCubit, DeckManagerState>(
-    builder: (context, state) => ListView(
-      padding: const EdgeInsets.all(40),
-      children: [
-        CardImageWidget(card: _card, isCustom: _isCustom),
-        const SizedBox(height: 24),
-        CardInfoWidget(
-          card: _card, 
-          isCustom: _isCustom,  
-          descriptionController: _descriptionController,
-        ),
-        if (_isAdd) CardQuantityWidget(
-          onSelected: (quantity) => context.read<DeckManagerCubit>().setQuantity(quantity),
-          quantityCount: 4,
-          selectedQuantity: state.quantity,
-        ),
-      ],
-    ),
   );
 }

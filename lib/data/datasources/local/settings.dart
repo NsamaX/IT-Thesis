@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:nfc_project/core/storage/shared_preferences.dart';
+import 'package:nfc_project/core/services/shared_preferences.dart';
 
 abstract class SettingsLocalDataSource {
   Future<void> saveSettings(Map<String, dynamic> settings);

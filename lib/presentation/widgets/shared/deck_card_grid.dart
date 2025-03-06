@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:nfc_project/domain/entities/card.dart';
 import 'package:nfc_project/domain/entities/deck.dart';
 
-import '../card/card.dart';
-import 'deck.dart';
+import '../specific/card.dart';
+import '../specific/deck.dart';
 
 class DeckCardGridWidget extends StatelessWidget {
   final List<dynamic> items;

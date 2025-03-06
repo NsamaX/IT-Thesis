@@ -10,10 +10,9 @@ import 'package:nfc_project/domain/entities/deck.dart';
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 
-import '../widgets/deck/deck_card_grid.dart';
-
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
+import '../widgets/shared/deck_card_grid.dart';
 
 class MyDecksPage extends StatefulWidget {
   @override
@@ -56,6 +55,14 @@ class _MyDecksPageState extends State<MyDecksPage> {
     };
   }
 
+  /*---------------------------------- Body ----------------------------------*/
+  Widget _buildBody(BuildContext context) => BlocBuilder<DeckManagerCubit, DeckManagerState>(
+    builder: (context, state) {
+      final decks = state.decks;
+      return DeckCardGridWidget(items: decks);
+    },
+  );
+
   /*--------------------------------- Feature --------------------------------*/
   void _createNewDeck(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) async {
     final newDeck = DeckEntity(
@@ -70,12 +77,4 @@ class _MyDecksPageState extends State<MyDecksPage> {
     }
     Navigator.of(context).pushNamed(AppRoutes.newDeck);
   }
-
-  /*---------------------------------- Body ----------------------------------*/
-  Widget _buildBody(BuildContext context) => BlocBuilder<DeckManagerCubit, DeckManagerState>(
-    builder: (context, state) {
-      final decks = state.decks;
-      return DeckCardGridWidget(items: decks);
-    },
-  );
 }

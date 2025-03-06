@@ -11,7 +11,7 @@ import 'package:nfc_project/domain/usecases/@export.dart';
 
 import 'package:nfc_project/presentation/cubits/@export.dart';
 
-import '../storage/@export.dart';
+import '@export.dart';
 
 final GetIt locator = GetIt.instance;
 

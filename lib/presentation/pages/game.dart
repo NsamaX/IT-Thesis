@@ -6,7 +6,7 @@ import 'package:nfc_project/core/utils/arguments.dart';
 
 import '../widgets/shared/app_bar.dart';
 
-import '../widgets/game/game_list.dart';
+import '../widgets/specific/game_list.dart';
 
 class GamePage extends StatelessWidget {
   /*---------------------------------- Build ---------------------------------*/

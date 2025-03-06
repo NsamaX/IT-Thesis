@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nfc_project/domain/entities/card.dart';
 
-import '../card/card_label.dart';
+import '../specific/card_label.dart';
 
 class HistoryDrawerWidget extends StatelessWidget {
   final List<CardEntity> cards;

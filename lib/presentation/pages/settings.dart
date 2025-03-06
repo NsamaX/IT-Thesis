@@ -25,12 +25,6 @@ class SettingsPage extends StatelessWidget {
 
   /*--------------------------------- App Bar --------------------------------*/
   Map<dynamic, dynamic> _buildAppBarMenu(AppLocalizations locale) => {locale.translate('title.settings'): null};
-
-  /*--------------------------------- Feature --------------------------------*/
-  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
-    cubit.updateSetting('firstLoad', true);
-    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
-  }
   
   /*---------------------------------- Body ----------------------------------*/
   Widget _buildBody(BuildContext context, AppLocalizations locale, SettingsCubit cubit) => GeneralLabelWidget(
@@ -94,4 +88,10 @@ class SettingsPage extends StatelessWidget {
       // },
     ],
   };
+
+  /*--------------------------------- Feature --------------------------------*/
+  void _toggleSignOut(BuildContext context, SettingsCubit cubit) {
+    cubit.updateSetting('firstLoad', true);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.signIn, (route) => false);
+  }
 }

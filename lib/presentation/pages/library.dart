@@ -6,9 +6,8 @@ import 'package:nfc_project/core/locales/localizations.dart';
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 
-import '../widgets/deck/deck_card_grid.dart';
-
 import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/deck_card_grid.dart';
 
 class LibraryPage extends StatelessWidget {
   /*---------------------------------- Build ---------------------------------*/

@@ -9,12 +9,11 @@ import '../cubits/NFC/cubit.dart';
 import '../cubits/drawer.dart';
 import '../cubits/reader.dart';
 
-import '../widgets/drawer/feature_drawer.dart';
-import '../widgets/drawer/history_drawer.dart';
-
 import '../widgets/shared/app_bar.dart';
 import '../widgets/shared/bottom_navigation_bar.dart';
+import '../widgets/shared/history_drawer.dart';
 
+import '../widgets/specific/feature_drawer.dart';
 import '../widgets/specific/NFC_reader.dart';
 
 class ReadPage extends StatefulWidget {

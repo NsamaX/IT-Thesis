@@ -6,7 +6,7 @@ import 'package:nfc_project/domain/entities/data.dart' as Action;
 import 'package:nfc_project/domain/entities/deck.dart';
 import 'package:nfc_project/domain/entities/record.dart';
 
-import '../game/game_history.dart';
+import 'game_history.dart';
 
 class DeckInsightWidget extends StatelessWidget {
   final DeckEntity initialDeck;

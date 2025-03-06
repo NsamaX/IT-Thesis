@@ -9,9 +9,8 @@ import 'package:nfc_project/core/utils/nfc_session_handler.dart';
 import '../cubits/deck_management/cubit.dart';
 import '../cubits/NFC/cubit.dart';
 
-import '../widgets/deck/deck_card_grid.dart';
-
 import '../widgets/shared/app_bar.dart';
+import '../widgets/shared/deck_card_grid.dart';
 import '../widgets/shared/notifications.dart';
 
 class NewDeckPage extends StatefulWidget {
@@ -124,43 +123,6 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
           };
   }
 
-  /*--------------------------------- Feature --------------------------------*/
-  void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
-    cupertinoAlertDialogAction(
-      context,
-      locale.translate('dialog.delete_deck.title'),
-      locale.translate('dialog.delete_deck.content'),
-      () {
-        cubit.toggleDelete();
-        snackBar(
-          context,
-          locale.translate('snack_bar.deck.deleted'),
-        );
-      },
-    );
-  }
-
-  void _renameDeck(
-    DeckManagerCubit cubit,
-    TextEditingController controller,
-    AppLocalizations locale,
-    String value,
-  ) {
-    final newName = value.trim().isNotEmpty
-        ? value.trim()
-        : locale.translate('title.new_deck');
-    cubit.renameDeck(newName);
-    controller.text = newName;
-  }
-
-  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
-    cubit.toggleShare();
-    snackBar(
-      context,
-      locale.translate('snack_bar.deck.share'),
-    );
-  }
-
   /*---------------------------------- Body ----------------------------------*/
   Widget _buildGridView(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
     final deckCards = cubit.state.deck.cards;
@@ -197,5 +159,42 @@ class _NewDeckPageState extends State<NewDeckPage> with WidgetsBindingObserver, 
       await _nfcCubit.restartSessionIfNeeded(card: cubit.state.selectedCard);
     }
     _nfcCubit.resetSnackBarState();
+  }
+
+  /*--------------------------------- Feature --------------------------------*/
+  void _showDeleteDialog(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+    cupertinoAlertDialogAction(
+      context,
+      locale.translate('dialog.delete_deck.title'),
+      locale.translate('dialog.delete_deck.content'),
+      () {
+        cubit.toggleDelete();
+        snackBar(
+          context,
+          locale.translate('snack_bar.deck.deleted'),
+        );
+      },
+    );
+  }
+
+  void _renameDeck(
+    DeckManagerCubit cubit,
+    TextEditingController controller,
+    AppLocalizations locale,
+    String value,
+  ) {
+    final newName = value.trim().isNotEmpty
+        ? value.trim()
+        : locale.translate('title.new_deck');
+    cubit.renameDeck(newName);
+    controller.text = newName;
+  }
+
+  void _toggleShare(BuildContext context, DeckManagerCubit cubit, AppLocalizations locale) {
+    cubit.toggleShare();
+    snackBar(
+      context,
+      locale.translate('snack_bar.deck.share'),
+    );
   }
 }
